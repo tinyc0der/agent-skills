@@ -240,6 +240,40 @@ Review -> Resolve Critical/Required findings with TDD
 
 Shipping is the production-release gate, not a duplicate of the PR review. Reuse recent review evidence when the release diff has not changed; rerun affected checks when it has.
 
+### Automatic release discovery
+
+The normal interface is zero-argument `/ship`. The main agent discovers and
+pins the release boundary before evaluating readiness; users should not need to
+copy commit SHAs, artifact digests, or PR numbers from the feature worktree.
+
+1. Resolve the remote default branch and fetch its current head and release
+   tags without switching or mutating the user's worktree. Pin that head as the
+   target revision for the entire decision.
+2. Detect the last successful production ship from the project's authoritative
+   source, in order: deployment record for a configured production environment,
+   latest published non-draft release, latest reachable release tag, then an
+   explicitly documented project release-state file.
+3. Require the baseline to be an ancestor of the target. If sources disagree,
+   no baseline exists, or history diverged, stop for clarification instead of
+   guessing. If baseline and target match, report that there is nothing to ship.
+4. Build the release range from the pinned baseline and target. Associate its
+   commits with merged PRs, and separately surface direct commits, reverts, and
+   unmatched or ambiguous commits. Merge dates may find candidate PRs but do
+   not prove membership in the release.
+5. Present the detected baseline, target, included PRs, direct commits, and
+   material release risks for human confirmation before specialist checks or
+   any deployment action.
+
+The discovery must work from any worktree because its identities are the
+remote release boundary and pinned target revision, not the current branch or a
+prior agent session. Project-specific overrides are recovery mechanisms, not
+required arguments for the ordinary `/ship` path.
+
+Feature review evidence remains scoped to the reviewed PR revision and may be
+reused when the merged patch is demonstrably unchanged. Release-wide CI,
+integration, configuration, migration, and environment evidence belongs to the
+pinned target revision and must be refreshed after merge.
+
 **Skills**
 
 - `shipping-and-launch`
@@ -249,6 +283,8 @@ Shipping is the production-release gate, not a duplicate of the PR review. Reuse
 
 **Artifacts**
 
+- Release discovery preview with baseline source, pinned target, included PRs,
+  direct commits, reverts, and ambiguity warnings
 - Go/no-go decision
 - Launch checklist and acknowledged risks
 - Rollback triggers, exact rollback steps, owner, and recovery-time target

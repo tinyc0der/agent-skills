@@ -385,3 +385,46 @@ not a remote mutation. The implementation was split into reviewable commits:
 - [x] **Review remediation — PR readiness:** `eb0c0ef`
 - [x] **Review remediation — verification evidence:** `b4e106e`
 - [x] **Review remediation — specification evals:** `b7ddb12`
+
+## Task 13: Make `/ship` discover the release automatically
+
+**Dependencies:** Tasks 8, 11, and 12
+
+**Checklist**
+
+- [ ] Make zero-argument `/ship` the normal interface in all command variants.
+- [ ] Pin the remote default-branch head without requiring the main worktree.
+- [ ] Detect the last ship from an authoritative deployment, published release,
+  reachable release tag, or explicit project release-state source.
+- [ ] Stop on a missing, conflicting, non-ancestor, or divergent baseline; do
+  not silently choose the root commit.
+- [ ] Discover included PRs from the baseline-to-target commit range and report
+  direct commits, reverts, and ambiguous commits separately.
+- [ ] Report nothing to ship when the release boundary is empty.
+- [ ] Show the discovery preview and require confirmation before specialist
+  checks or deployment-affecting actions.
+- [ ] Distinguish reusable PR-scoped review evidence from release-scoped checks
+  that must run on the pinned post-merge target.
+- [ ] Keep manual baseline or target overrides optional and recovery-only.
+- [ ] Add structural and behavioral regression coverage.
+
+**Likely files**
+
+- `skills/shipping-and-launch/SKILL.md`
+- `.claude/commands/ship.md`
+- `.gemini/commands/ship.toml`
+- `commands/ship.toml`
+- `docs/feature-development-workflow.md`
+- `docs/feature-development-workflow-release-notes.md`
+- `evals/cases/shipping-and-launch.json`
+- `scripts/validate-lifecycle-contracts.js`
+- `scripts/validate-lifecycle-contracts-test.js`
+
+**Verification**
+
+- [ ] The lifecycle validator fails when any ship consumer loses automatic
+  baseline, target, range, PR, or ambiguity handling.
+- [ ] Command parity and description synchronization pass.
+- [ ] Shipping behavioral cases cover automatic discovery and unsafe-history
+  refusal.
+- [ ] Full deterministic repository validation passes.
