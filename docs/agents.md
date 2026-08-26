@@ -41,7 +41,7 @@ Pick this when there's a repeatable workflow you'd otherwise re-explain every ti
 ### Slash command (orchestrator — fan-out)
 Pick this only when **independent** investigations can run in parallel and produce reports that a single agent then merges.
 
-- `/ship` → fans out to `code-reviewer` + `security-auditor` + `test-engineer` in parallel, then synthesizes their reports into a go/no-go decision
+- `/ship` → reuses current specialist evidence and, when two or more reports are stale or missing, refreshes `code-reviewer`, `security-auditor`, and `test-engineer` in parallel before synthesizing a go/no-go decision
 
 This is the only orchestration pattern this repo endorses. See [references/orchestration-patterns.md](../references/orchestration-patterns.md) for the full pattern catalog and anti-patterns.
 
@@ -51,13 +51,13 @@ This is the only orchestration pattern this repo endorses. See [references/orche
 Is the work a single perspective on a single artifact?
 ├── Yes → Direct persona invocation
 └── No  → Are the sub-tasks independent (no shared mutable state, no ordering)?
-         ├── Yes → Slash command with parallel fan-out (e.g. /ship)
+         ├── Yes → Slash command with conditional parallel fan-out (e.g. /ship when multiple reports are stale)
          └── No  → Sequential slash commands run by the user (/spec → /plan → /pr draft → /build → /verify → /pr ready → /review)
 ```
 
 ## Worked example: valid orchestration
 
-`/ship` is the canonical fan-out orchestrator in this repo:
+When all three specialist reports are stale or missing, `/ship` is the canonical fan-out orchestrator in this repo:
 
 ```
 /ship
@@ -71,6 +71,7 @@ Is the work a single perspective on a single artifact?
 ```
 
 Why this works:
+- Fresh reports for the exact release revision are reused instead of repeated
 - Each sub-agent operates on the same diff but produces a **different perspective**
 - They have no dependencies on each other → genuine parallelism, real wall-clock savings
 - Each runs in a fresh context window → main session stays uncluttered

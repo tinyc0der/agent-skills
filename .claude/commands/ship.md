@@ -27,7 +27,7 @@ Constraints (from Claude Code's subagent model):
 
 ## Phase B — Merge in main context
 
-Once all three reports are back, the main agent (not a sub-persona) synthesizes them:
+Once all required reports are collected—reused when current, refreshed when stale—the main agent (not a sub-persona) synthesizes them:
 
 1. **Code Quality** — Aggregate Critical/Required findings from revision-matched `code-reviewer` and verification evidence. Resolve duplicates between reviewers.
 2. **Security** — Promote any Critical/High `security-auditor` findings to launch blockers. Cross-reference with `code-reviewer`'s security axis.
@@ -60,10 +60,10 @@ Produce a single output:
 - Rollback procedure: [exact steps]
 - Recovery time objective: [target]
 
-### Specialist reports (full)
-- [code-reviewer report]
-- [security-auditor report]
-- [test-engineer report]
+### Specialist evidence
+- [code-reviewer report: reused/refreshed/not applicable + revision]
+- [security-auditor report: reused/refreshed/not applicable + revision]
+- [test-engineer report: reused/refreshed/not applicable + revision]
 ```
 
 ## Rules

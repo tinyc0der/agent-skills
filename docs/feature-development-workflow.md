@@ -1,8 +1,8 @@
 # Feature Development Workflow
 
-**Status:** Draft
+**Status:** Implemented
 
-This document defines the proposed canonical workflow for developing a feature with Agent Skills. It makes the pull-request boundary explicit, separates test-driven implementation from post-build validation, and treats git, security, documentation, CI, and observability as cross-cutting disciplines rather than end-of-lifecycle cleanup.
+This document defines the canonical workflow for developing a feature with Agent Skills. It makes the pull-request boundary explicit, separates test-driven implementation from post-build validation, and treats git, security, documentation, CI, and observability as cross-cutting disciplines rather than end-of-lifecycle cleanup.
 
 ## Workflow
 
@@ -176,7 +176,7 @@ Feature verification proves that the integrated result satisfies the approved sp
 
 **Skills**
 
-- A proposed `verification-and-validation` skill as the owner of this phase
+- `verification-and-validation` as the owner of this phase
 - `browser-testing-with-devtools` for browser-visible behavior
 - `security-and-hardening`, `performance-optimization`, and accessibility checks when applicable
 - `debugging-and-error-recovery` only when verification exposes a failure
@@ -300,7 +300,7 @@ Some disciplines do not belong to a single late phase:
 
 ## Canonical Command Sequence
 
-The proposed user-facing sequence is:
+The user-facing sequence is:
 
 ```text
 /spec -> /plan -> /pr draft -> /build -> /verify
