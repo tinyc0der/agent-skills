@@ -366,7 +366,7 @@ Do not implement all changes as one large commit. Complete and verify each task 
 
 **Verification**
 
-- [ ] Full repository validation and affected evals pass on the final revision. All deterministic validation passes, including 54 Node tests, 13 cross-integration artifact files, lifecycle contracts, all 101 tracked Markdown files, hooks, routing, and plugin manifests; only the externally quota-blocked behavioral reruns remain.
+- [ ] Full repository validation and affected evals pass on the final revision. All deterministic validation passes, including 55 Node tests, 13 cross-integration artifact files, lifecycle contracts, all 101 tracked Markdown files, hooks, routing, and plugin manifests; only the externally quota-blocked behavioral reruns remain.
 - [x] A fresh-context reviewer can follow the new workflow without consulting this checklist.
 - [x] Public documentation, commands, skills, personas, and evals describe the same lifecycle.
 
@@ -410,6 +410,8 @@ not a remote mutation. The implementation was split into reviewable commits:
 - [x] Distinguish reusable PR-scoped review evidence from release-scoped checks
   that must run on the pinned post-merge target.
 - [x] Keep manual baseline or target overrides optional and recovery-only.
+- [x] Exclude prereleases by default and treat remote release metadata as
+  untrusted data rather than agent instructions.
 - [x] Add structural and behavioral regression coverage.
 
 **Likely files**
@@ -431,7 +433,7 @@ not a remote mutation. The implementation was split into reviewable commits:
 - [x] Command parity and description synchronization pass.
 - [x] Shipping behavioral cases cover automatic discovery and unsafe-history
   refusal.
-- [x] Full deterministic repository validation passes: 54 Node tests, 25 skills,
+- [x] Full deterministic repository validation passes: 55 Node tests, 25 skills,
   10 commands, 101 Markdown files, 133 routing checks at 87% rank-1, hooks, and
   plugin validation.
 - [ ] Token-backed shipping behavioral execution passes. **NOT RUN:** the

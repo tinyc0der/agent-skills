@@ -63,7 +63,8 @@ const SHIP_REQUIREMENTS = [
   ['pinned target revision', /pin(?:ned)? (?:the )?target revision/i],
   ['release baseline', /last successful production/i],
   ['deployment baseline', /deployment record/i],
-  ['published release baseline', /published (?:non-draft )?release/i],
+  ['published release baseline', /published[\s\S]{0,80}release/i],
+  ['non-prerelease production release', /non-prerelease production release/i],
   ['release-tag baseline', /reachable release tag/i],
   ['release-state baseline', /release-state/i],
   ['ancestor validation', /ancestor/i],
@@ -77,6 +78,8 @@ const SHIP_REQUIREMENTS = [
   ['stop rather than guess', /stop\s+(?:for\s+clarification\s+)?(?:rather|instead\s+of)(?:\s+than)?\s+guess/i],
   ['PR-scoped evidence', /PR-scoped/i],
   ['release-scoped checks', /release-scoped/i],
+  ['untrusted release metadata', /untrusted data/i],
+  ['metadata instructions', /never execute[\s\S]{0,120}(?:instructions|commands)[\s\S]{0,120}metadata/i],
 ];
 
 const SHIP_COMMAND_REQUIREMENTS = [
