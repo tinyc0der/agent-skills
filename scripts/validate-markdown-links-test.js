@@ -28,6 +28,10 @@ function writeFile(root, relativePath, content) {
 }
 
 function run(root) {
+  const init = spawnSync('git', ['init', '--quiet'], { cwd: root, encoding: 'utf8' });
+  assert.equal(init.status, 0, init.stdout + init.stderr);
+  const add = spawnSync('git', ['add', '--all'], { cwd: root, encoding: 'utf8' });
+  assert.equal(add.status, 0, add.stdout + add.stderr);
   return spawnSync(process.execPath, [path.join(root, 'scripts', 'validate-markdown-links.js')], {
     cwd: root,
     encoding: 'utf8',
@@ -76,6 +80,18 @@ test('fails a stale heading anchor', () => {
   assert.equal(result.status, 1, result.stdout + result.stderr);
   assert.match(result.stdout, /all-24-skills/);
   assert.match(result.stdout, /anchor does not exist/);
+});
+
+test('checks tracked Markdown outside the original documentation roots', () => {
+  const root = makeSandbox();
+  writeFile(root, 'CONTRIBUTING.md', '# Contributing\n');
+  writeFile(root, '.claude/commands/example.md', 'See [missing](../../docs/missing.md).\n');
+
+  const result = run(root);
+
+  assert.equal(result.status, 1, result.stdout + result.stderr);
+  assert.match(result.stdout, /\.claude\/commands\/example\.md/);
+  assert.match(result.stdout, /does not exist/);
 });
 
 test('ignores external links and links inside fenced examples', () => {

@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Validate local Markdown links and heading anchors in public repository docs.
+ * Validate local Markdown links and heading anchors in tracked repository docs.
  * External URLs and fenced examples are intentionally out of scope.
  */
 
@@ -8,31 +8,25 @@
 
 const fs = require('node:fs');
 const path = require('node:path');
+const { spawnSync } = require('node:child_process');
 
 const ROOT = path.resolve(__dirname, '..');
-const DOC_ROOTS = [
-  'README.md',
-  'AGENTS.md',
-  'CLAUDE.md',
-  'docs',
-  'skills',
-  'agents',
-  'references',
-  'tasks',
-];
 const LINK_RE = /\[[^\]]*\]\(([^)]+)\)/g;
 
-function markdownFiles(relativePath) {
-  const absolutePath = path.join(ROOT, relativePath);
-  if (!fs.existsSync(absolutePath)) return [];
-  const stat = fs.statSync(absolutePath);
-  if (stat.isFile()) return absolutePath.endsWith('.md') ? [absolutePath] : [];
-
-  const files = [];
-  for (const entry of fs.readdirSync(absolutePath).sort()) {
-    files.push(...markdownFiles(path.join(relativePath, entry)));
+function trackedMarkdownFiles() {
+  const result = spawnSync('git', ['ls-files', '-z', '--', '*.md'], {
+    cwd: ROOT,
+    encoding: 'utf8',
+  });
+  if (result.status !== 0) {
+    const detail = (result.stderr || result.error?.message || 'unknown error').trim();
+    throw new Error(`Unable to list tracked Markdown files: ${detail}`);
   }
-  return files;
+  return result.stdout
+    .split('\0')
+    .filter(Boolean)
+    .sort()
+    .map(relativePath => path.join(ROOT, relativePath));
 }
 
 function visibleMarkdown(content) {
@@ -91,7 +85,7 @@ function anchorsFor(markdownFile) {
 
 function main() {
   console.log('Checking local Markdown links and anchors...\n');
-  const files = DOC_ROOTS.flatMap(markdownFiles);
+  const files = trackedMarkdownFiles();
   const errors = [];
 
   for (const sourceFile of files) {

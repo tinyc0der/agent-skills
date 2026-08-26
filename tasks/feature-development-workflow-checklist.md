@@ -354,7 +354,7 @@ Do not implement all changes as one large commit. Complete and verify each task 
 
 - [x] Review the complete change across correctness, readability, architecture, security, and performance.
 - [x] Verify documentation links and relative paths.
-- [ ] Confirm all Critical and Required findings are resolved. The fixes are implemented and awaiting fresh-agent rereview of the new revision.
+- [x] Confirm all Critical and Required findings are resolved. A fresh-context reviewer approved revision `6a9967d`; its sole additional Optional Markdown-coverage finding was then remediated and sent for final exact-revision review.
 - [x] Confirm the final diff remains reviewable; split the work into stacked PRs if necessary.
 - [x] Prepare release notes and compatibility guidance for new or renamed commands.
 - [x] Run the shipping checklist with a rollback plan for plugin/package publication.
@@ -365,7 +365,7 @@ Do not implement all changes as one large commit. Complete and verify each task 
 
 **Verification**
 
-- [ ] Full repository validation and affected evals pass on the final revision. All deterministic validation passes, including 49 Node tests, 13 cross-integration artifact files, lifecycle contracts, 59 Markdown files, hooks, routing, and plugin manifests; only the externally quota-blocked behavioral reruns remain.
+- [ ] Full repository validation and affected evals pass on the final revision. All deterministic validation passes, including 50 Node tests, 13 cross-integration artifact files, lifecycle contracts, all 99 tracked Markdown files, hooks, routing, and plugin manifests; only the externally quota-blocked behavioral reruns remain.
 - [x] A fresh-context reviewer can follow the new workflow without consulting this checklist.
 - [x] Public documentation, commands, skills, personas, and evals describe the same lifecycle.
 
