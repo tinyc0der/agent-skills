@@ -69,6 +69,34 @@ test('fails when a producer drifts to an unapproved artifact path (the #93 regre
   assert.match(result.stdout, /error\(s\) — FAILED/);
 });
 
+test('fails when Gemini command artifacts drift', () => {
+  const root = makeSandbox();
+  writeFile(root, '.gemini/commands/spec.toml', 'prompt = "Save to docs/SPEC.md"\n');
+  writeFile(root, '.gemini/commands/planning.toml', 'prompt = "Save to docs/plan.md"\n');
+  writeFile(root, '.gemini/commands/build.toml', 'prompt = "Read docs/SPEC-module.md"\n');
+
+  const result = run(root);
+
+  assert.equal(result.status, 1, result.stdout + result.stderr);
+  assert.match(result.stdout, /\.gemini\/commands\/spec\.toml/);
+  assert.match(result.stdout, /\.gemini\/commands\/planning\.toml/);
+  assert.match(result.stdout, /\.gemini\/commands\/build\.toml/);
+});
+
+test('fails when Antigravity command artifacts drift', () => {
+  const root = makeSandbox();
+  writeFile(root, 'commands/spec.toml', 'prompt = "Save to docs/SPEC.md"\n');
+  writeFile(root, 'commands/planning.toml', 'prompt = "Save to docs/plan.md"\n');
+  writeFile(root, 'commands/build.toml', 'prompt = "Read docs/SPEC-module.md"\n');
+
+  const result = run(root);
+
+  assert.equal(result.status, 1, result.stdout + result.stderr);
+  assert.match(result.stdout, /commands\/spec\.toml/);
+  assert.match(result.stdout, /commands\/planning\.toml/);
+  assert.match(result.stdout, /commands\/build\.toml/);
+});
+
 test('reports the offending file and line number', () => {
   const root = makeSandbox();
   writeFile(root, '.claude/commands/plan.md', 'Intro line.\nSave the plan to `plan.md` in the root.\n');

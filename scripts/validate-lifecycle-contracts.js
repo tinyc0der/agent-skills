@@ -12,9 +12,28 @@ const REQUIRED_TEXT = [
   { file: 'docs/opencode-setup.md', values: ['VERIFY → `verification-and-validation`'] },
 ];
 
-const ORDERED_LIFECYCLES = ['README.md', 'references/orchestration-patterns.md'];
 const LIFECYCLE_TOKENS = [
   '/spec', '/plan', '/pr draft', '/build', '/verify', '/pr ready', '/review', '/ship',
+];
+const ORDERED_LIFECYCLES = [
+  { file: 'README.md', tokens: LIFECYCLE_TOKENS },
+  { file: 'docs/feature-development-workflow.md', tokens: LIFECYCLE_TOKENS, section: '## Canonical Command Sequence' },
+  { file: 'references/orchestration-patterns.md', tokens: LIFECYCLE_TOKENS },
+  {
+    file: 'skills/using-agent-skills/SKILL.md',
+    section: '## Lifecycle Sequence',
+    tokens: [
+      'spec-driven-development',
+      'planning-and-task-breakdown',
+      'Draft PR',
+      'incremental-implementation',
+      'verification-and-validation',
+      'Ready PR',
+      'code-review-and-quality',
+      'Merge',
+      'shipping-and-launch',
+    ],
+  },
 ];
 
 const REVIEW_PRODUCERS = [
@@ -52,6 +71,14 @@ function missingOrderedTokens(content, tokens) {
   return missing;
 }
 
+function readSection(content, heading) {
+  if (!heading) return content;
+  const start = content.indexOf(heading);
+  if (start === -1) return null;
+  const nextHeading = content.indexOf('\n## ', start + heading.length);
+  return nextHeading === -1 ? content.slice(start) : content.slice(start, nextHeading);
+}
+
 function main() {
   console.log('Checking lifecycle contracts...\n');
   let errors = 0;
@@ -76,13 +103,18 @@ function main() {
     else pass(file);
   }
 
-  for (const file of ORDERED_LIFECYCLES) {
+  for (const { file, tokens, section } of ORDERED_LIFECYCLES) {
     const content = read(file);
     if (content === null) {
       fail(file, 'required lifecycle file is missing');
       continue;
     }
-    const missing = missingOrderedTokens(content, LIFECYCLE_TOKENS);
+    const contract = readSection(content, section);
+    if (contract === null) {
+      fail(file, `missing lifecycle section: ${section}`);
+      continue;
+    }
+    const missing = missingOrderedTokens(contract, tokens);
     if (missing.length) fail(file, `missing or out-of-order lifecycle tokens: ${missing.join(', ')}`);
     else pass(file);
   }
@@ -104,8 +136,14 @@ function main() {
       fail(file, 'required ship consumer is missing');
       continue;
     }
-    const missing = ['Critical', 'Required'].filter(value => !content.includes(value));
-    if (!/revision/i.test(content)) missing.push('revision');
+    const requirements = [
+      ['Critical', /Critical/],
+      ['Required', /Required/],
+      ['exact release revision', /exact release revision/i],
+      ['reuse', /reuse/i],
+      ['stale', /stale/i],
+    ];
+    const missing = requirements.filter(([, pattern]) => !pattern.test(content)).map(([label]) => label);
     if (missing.length) fail(file, `missing blocking or freshness contract: ${missing.join(', ')}`);
     else pass(file);
   }

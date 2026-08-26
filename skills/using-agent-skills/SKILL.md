@@ -148,6 +148,7 @@ Plan:               planning-and-task-breakdown
 Draft PR:           git-workflow-and-versioning
 Build:              incremental-implementation + test-driven-development
 Verify:             verification-and-validation
+Ready PR:           git-workflow-and-versioning
 Review:             code-review-and-quality -> fix -> reverify -> rereview
 Merge:              human approval + CI + git-workflow-and-versioning
 Ship:               shipping-and-launch
