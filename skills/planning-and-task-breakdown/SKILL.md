@@ -122,6 +122,8 @@ Add explicit checkpoints to the task list target:
 - [ ] Review with human before proceeding
 ```
 
+In normal incremental mode, keep the human review item. In an explicitly approved `/build auto` run, routine checkpoints become automated verification gates; failures and high-risk or irreversible work still stop for the human.
+
 ## Task Sizing Guidelines
 
 | Size | Files | Scope | Example |

@@ -21,14 +21,14 @@ Write a structured specification before writing any code. The spec is the shared
 
 ## The Gated Workflow
 
-Spec-driven development has four phases, preceded by a scope check (Phase 0) that activates only when one request bundles several independently testable capabilities. Do not advance to the next phase until the current one is validated.
+Spec-driven development owns the approved specification, not the implementation plan or code. It has one required Specify phase, preceded by a scope check that activates only when one request bundles several independently testable capabilities.
 
 ```
-SPECIFY ──→ PLAN ──→ TASKS ──→ IMPLEMENT
-   │          │        │          │
-   ▼          ▼        ▼          ▼
- Human      Human    Human      Human
- reviews    reviews  reviews    reviews
+SCOPE CHECK (when needed) -> SPECIFY -> HAND OFF TO PLAN
+          │                    │
+          ▼                    ▼
+        Human                Human
+        reviews              reviews
 ```
 
 ### Phase 0: Scope Check
@@ -62,7 +62,7 @@ Build order: identity → billing, notifications → reporting
 
 **The map is gated like every phase.** The human reviews module boundaries, dependency direction, and build order before any module spec is written. Getting the map wrong is expensive; reviewing ten lines is not.
 
-**Then recurse per module.** Run Specify → Plan → Tasks → Implement for each module in dependency order. Each module gets its own spec, scoped to that module's objective, boundaries, and success criteria. Save the approved map at the project root and each module's spec alongside it, named by module id (`SPEC-identity.md`, `SPEC-billing.md`) — the map, not filename guessing, is the index of what exists.
+**Then specify per module.** Each module gets its own spec, scoped to that module's objective, boundaries, contracts, and success criteria. Save the approved map as `specs/capability-map.md` and module specs as `specs/SPEC-<module-id>.md` — the map, not filename guessing, is the index of what exists. If a capability map already exists, update the owning module spec rather than creating a duplicate feature spec.
 
 ### Phase 1: Specify
 
@@ -81,11 +81,11 @@ ASSUMPTIONS I'M MAKING:
 
 Don't silently fill in ambiguous requirements. The spec's entire purpose is to surface misunderstandings *before* code gets written — assumptions are the most dangerous form of misunderstanding.
 
-**Write a spec document covering these six core areas:**
+**Write a spec document covering these core areas:**
 
 1. **Objective** — What are we building and why? Who is the user? What does success look like?
 
-2. **Commands** — Full executable commands with flags, not just tool names.
+2. **Project conventions** — Reference the repository's existing rules for commands, structure, and code style. Include those details only for a new project or when this feature changes them. Full executable commands use flags, not just tool names.
    ```
    Build: npm run build
    Test: npm test -- --coverage
@@ -93,7 +93,7 @@ Don't silently fill in ambiguous requirements. The spec's entire purpose is to s
    Dev: npm run dev
    ```
 
-3. **Project Structure** — Where source code lives, where tests go, where docs belong.
+3. **Affected structure** — Where feature code, tests, migrations, and documentation belong.
    ```
    src/           → Application source code
    src/components → React components
@@ -103,11 +103,9 @@ Don't silently fill in ambiguous requirements. The spec's entire purpose is to s
    docs/          → Documentation
    ```
 
-4. **Code Style** — One real code snippet showing your style beats three paragraphs describing it. Include naming conventions, formatting rules, and examples of good output.
+4. **Testing and verification strategy** — Which test levels and runtime evidence prove each class of behavior.
 
-5. **Testing Strategy** — What framework, where tests live, coverage expectations, which test levels for which concerns.
-
-6. **Boundaries** — Three-tier system:
+5. **Boundaries** — Three-tier system:
    - **Always do:** Run tests before commits, follow naming conventions, validate inputs
    - **Ask first:** Database schema changes, adding dependencies, changing CI config
    - **Never do:** Commit secrets, edit vendor directories, remove failing tests without approval
@@ -120,17 +118,17 @@ Don't silently fill in ambiguous requirements. The spec's entire purpose is to s
 ## Objective
 [What we're building and why. User stories or acceptance criteria.]
 
+## Non-Goals
+[What this feature explicitly will not do.]
+
 ## Tech Stack
 [Framework, language, key dependencies with versions]
 
-## Commands
-[Build, test, lint, dev — full commands]
+## Project Conventions
+[Link to existing project rules; include only feature-specific changes.]
 
-## Project Structure
-[Directory layout with descriptions]
-
-## Code Style
-[Example snippet + key conventions]
+## Affected Structure
+[Likely source, test, migration, and documentation locations.]
 
 ## Testing Strategy
 [Framework, test locations, coverage requirements, test levels]
@@ -161,45 +159,9 @@ REFRAMED SUCCESS CRITERIA:
 
 This lets you loop, retry, and problem-solve toward a clear goal rather than guessing what "faster" means.
 
-### Phase 2: Plan
+### Hand Off to Planning
 
-With the validated spec, generate a technical implementation plan:
-
-1. Identify the major components and their dependencies
-2. Determine the implementation order (what must be built first)
-3. Note risks and mitigation strategies
-4. Identify what can be built in parallel vs. what must be sequential
-5. Define verification checkpoints between phases
-
-> Follow `planning-and-task-breakdown` for the dependency-graph mapping and vertical-slicing mechanics behind these steps; it is the canonical source. The bullets above are a lightweight summary; if they ever diverge, `planning-and-task-breakdown` takes precedence.
->
-> **Output convention:** Save the plan to `tasks/plan.md` and record the task list in the task list target defined by `planning-and-task-breakdown` (default `tasks/todo.md`; projects may designate an external tracker instead). Create `tasks/` if it does not exist. Downstream commands (`/build`, etc.) expect these defaults.
-
-The plan should be reviewable: the human should be able to read it and say "yes, that's the right approach" or "no, change X."
-
-### Phase 3: Tasks
-
-Break the plan into discrete, implementable tasks:
-
-- Each task should be completable in a single focused session
-- Each task has explicit acceptance criteria
-- Each task includes a verification step (test, build, manual check)
-- Tasks are ordered by dependency, not by perceived importance
-- No task should require changing more than ~5 files
-
-> Follow `planning-and-task-breakdown` for the full task-sizing and dependency-ordering mechanics; it is the canonical source. The template below is a lightweight inline form; if they ever diverge, `planning-and-task-breakdown` takes precedence.
-
-**Task template:**
-```markdown
-- [ ] Task: [Description]
-  - Acceptance: [What must be true when done]
-  - Verify: [How to confirm — test command, build, manual check]
-  - Files: [Which files will be touched]
-```
-
-### Phase 4: Implement
-
-Execute tasks one at a time following `skills/incremental-implementation/SKILL.md` (`incremental-implementation`) and `skills/test-driven-development/SKILL.md` (`test-driven-development`). Use `skills/context-engineering/SKILL.md` (`context-engineering`) to load the right spec sections and source files at each step rather than flooding the agent with the entire spec.
+After human approval, save a single-capability spec as `specs/SPEC.md`, or use the approved capability-map layout for a multi-capability initiative. Then invoke `planning-and-task-breakdown`; do not create tasks or implementation code in this skill.
 
 ## Keeping the Spec Alive
 
@@ -207,7 +169,7 @@ The spec is a living document, not a one-time artifact:
 
 - **Update when decisions change** — If you discover the data model needs to change, update the spec first, then implement.
 - **Update when scope changes** — Features added or cut should be reflected in the spec.
-- **Commit the spec** — The spec belongs in version control alongside the code.
+- **Commit the spec** — The approved spec belongs in version control before implementation begins.
 - **Reference the spec in PRs** — Link back to the spec section that each PR implements.
 
 ## Common Rationalizations
@@ -231,15 +193,19 @@ The spec is a living document, not a one-time artifact:
 - Skipping the spec because "it's obvious what to build"
 - One spec whose requirements span several independently testable capabilities
 - Module boundaries or build order decided implicitly during implementation because no capability map was approved up front
+- Planning tasks or implementation code produced before the specification is approved
+- A new feature spec created for behavior already owned by an existing module spec
 
 ## Verification
 
 Before proceeding to implementation, confirm:
 
-- [ ] The spec covers all six core areas
+- [ ] The spec covers objective, non-goals, project context, affected structure, testing and verification, boundaries, and success criteria
 - [ ] The human has reviewed and approved the spec
 - [ ] Success criteria are specific and testable
 - [ ] Boundaries (Always/Ask First/Never) are defined
 - [ ] The spec is saved to a file in the repository
 - [ ] If the request bundles several independently testable capabilities, a capability map (module ids, dependency direction, build order) was approved before any module spec was written
 - [ ] Every module spec traces to a module id in the approved map
+- [ ] The approved spec is saved under `specs/` and committed before implementation
+- [ ] The next step is explicitly handed to `planning-and-task-breakdown`

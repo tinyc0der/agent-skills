@@ -1,0 +1,46 @@
+{
+  "skill_name": "verification-and-validation",
+  "trigger": {
+    "positive": [
+      {
+        "prompt": "Verify this completed feature against every acceptance criterion before I mark the PR ready",
+        "top_k": 1
+      },
+      {
+        "prompt": "Run the final build, lint, typecheck, integration checks, and give me a readiness verdict",
+        "top_k": 3
+      },
+      {
+        "prompt": "Validate that the assembled change actually works end to end without adding more behavior",
+        "top_k": 3
+      }
+    ],
+    "negative": [
+      {
+        "prompt": "Implement this parser using red-green-refactor",
+        "owner": "test-driven-development"
+      },
+      {
+        "prompt": "The verification command failed; find and fix the root cause",
+        "owner": "debugging-and-error-recovery"
+      }
+    ]
+  },
+  "evals": [
+    {
+      "id": 1,
+      "kind": "execution",
+      "prompt": "The slug feature is implemented. Verify it against SPEC.md and report whether it is ready for review. Do not add new production behavior.",
+      "expected_output": "A revision-scoped verification report tracing both acceptance criteria to evidence, running the repository-owned test/build/lint/typecheck commands, and making an honest PASS/FAIL/INCOMPLETE decision without editing production code",
+      "files": [
+        "verification-and-validation"
+      ],
+      "expectations": [
+        "Both acceptance criteria in SPEC.md are mapped to concrete evidence and explicit evidence states",
+        "The repository-owned test, build, lint, and typecheck commands are discovered from package.json and run",
+        "The final verdict follows the skill's PASS, FAIL, or INCOMPLETE rules",
+        "No production file under src/ is modified during verification"
+      ]
+    }
+  ]
+}

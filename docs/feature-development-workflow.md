@@ -70,8 +70,8 @@ Specify what will be built without duplicating the planning or implementation ph
 
 **Artifacts**
 
-- `SPEC.md` for a single-capability feature
-- `CAPABILITY-MAP.md` plus `SPEC-<module-id>.md` for a multi-capability initiative
+- `specs/SPEC.md` for a single-capability feature
+- `specs/capability-map.md` plus `specs/SPEC-<module-id>.md` for a multi-capability initiative
 - Acceptance criteria, non-goals, boundaries, success measures, and open questions
 
 Feature specs should reference project-wide commands, structure, and style rules rather than copying them unless the feature changes those conventions.

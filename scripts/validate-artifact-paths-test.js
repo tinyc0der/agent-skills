@@ -42,9 +42,9 @@ afterEach(() => {
 
 test('passes when producers and consumers use the canonical artifact paths', () => {
   const root = makeSandbox();
-  writeFile(root, '.claude/commands/spec.md', 'Save the spec as `SPEC.md` in the project root.\n');
+  writeFile(root, '.claude/commands/spec.md', 'Save the spec as `specs/SPEC.md`.\n');
   writeFile(root, '.claude/commands/plan.md', 'Save the plan to `tasks/plan.md` and task list to `tasks/todo.md`.\n');
-  writeFile(root, '.claude/commands/build.md', 'Look for a spec at `SPEC.md`, `docs/SPEC.md`, or under `spec/`. Require `tasks/plan.md`.\n');
+  writeFile(root, '.claude/commands/build.md', 'Look for `specs/SPEC.md` or `specs/capability-map.md`. Require `tasks/plan.md`.\n');
   writeFile(root, 'skills/spec-driven-development/SKILL.md', 'Save the plan to `tasks/plan.md` and the task list to `tasks/todo.md`.\n');
   writeFile(root, 'skills/planning-and-task-breakdown/SKILL.md', 'Save to `tasks/plan.md` and `tasks/todo.md`.\n');
 
@@ -80,14 +80,31 @@ test('reports the offending file and line number', () => {
   assert.match(result.stdout, /L2:/);
 });
 
-test('accepts the docs/SPEC.md alternate spec location', () => {
+test('accepts the multi-capability map location', () => {
   const root = makeSandbox();
-  writeFile(root, '.claude/commands/build.md', 'Look for the spec at `docs/SPEC.md`.\n');
+  writeFile(root, '.claude/commands/build.md', 'Look for `specs/capability-map.md`.\n');
 
   const result = run(root);
 
   assert.equal(result.status, 0, result.stdout + result.stderr);
   assert.match(result.stdout, /1 files checked — 0 error\(s\) — PASSED/);
+});
+
+test('accepts canonical module specs and rejects module specs outside specs/', () => {
+  const validRoot = makeSandbox();
+  writeFile(validRoot, '.claude/commands/build.md', 'Select `specs/SPEC-identity.md`.\n');
+
+  const validResult = run(validRoot);
+
+  assert.equal(validResult.status, 0, validResult.stdout + validResult.stderr);
+
+  const invalidRoot = makeSandbox();
+  writeFile(invalidRoot, '.claude/commands/build.md', 'Select `docs/SPEC-identity.md`.\n');
+
+  const invalidResult = run(invalidRoot);
+
+  assert.equal(invalidResult.status, 1, invalidResult.stdout + invalidResult.stderr);
+  assert.match(invalidResult.stdout, /docs\/SPEC-identity\.md/);
 });
 
 test('ignores non-artifact markdown references (no false positives)', () => {
@@ -106,7 +123,7 @@ test('ignores non-artifact markdown references (no false positives)', () => {
 
 test('skips guarded files that do not exist', () => {
   const root = makeSandbox();
-  writeFile(root, '.claude/commands/spec.md', 'Save the spec as `SPEC.md`.\n');
+  writeFile(root, '.claude/commands/spec.md', 'Save the spec as `specs/SPEC.md`.\n');
   // No other guarded files present.
 
   const result = run(root);

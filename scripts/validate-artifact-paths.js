@@ -33,8 +33,8 @@ const ROOT = path.resolve(__dirname, '..');
 // file paths the pipeline files may reference. To change the convention, edit
 // this list and update every guarded file to match — CI enforces the pairing.
 const ARTIFACT_ALLOWLIST = new Set([
-  'SPEC.md',        // spec, project root (produced by /spec, read by /build)
-  'docs/SPEC.md',   // spec, alternate location accepted by /build
+  'specs/SPEC.md',  // single-capability spec
+  'specs/capability-map.md', // multi-capability index
   'tasks/plan.md',  // plan (produced by /plan, read by /build)
   'tasks/todo.md',  // task list (produced by /plan)
 ]);
@@ -55,7 +55,12 @@ const GUARDED_FILES = [
 // including an optional directory prefix with bracket placeholders like
 // docs/features/[feature-name]/spec.md. Case-insensitive so SPEC.md and a
 // drifted spec.md are both caught, then compared against the allowlist.
-const ARTIFACT_RE = /(?:[A-Za-z0-9._[\]-]+\/)*(?:spec|plan|todo)\.md/gi;
+const ARTIFACT_RE = /(?:[A-Za-z0-9._[\]-]+\/)*(?:spec(?:-[a-z0-9-]+)?|capability-map|plan|todo)\.md/gi;
+
+function isAllowedArtifactPath(artifactPath) {
+  return ARTIFACT_ALLOWLIST.has(artifactPath)
+    || /^specs\/SPEC-[a-z0-9-]+\.md$/.test(artifactPath);
+}
 
 function findViolations(relPath) {
   const abs = path.join(ROOT, relPath);
@@ -67,7 +72,7 @@ function findViolations(relPath) {
     const matches = line.match(ARTIFACT_RE);
     if (!matches) return;
     for (const match of matches) {
-      if (!ARTIFACT_ALLOWLIST.has(match)) {
+      if (!isAllowedArtifactPath(match)) {
         violations.push({ line: i + 1, match });
       }
     }

@@ -150,7 +150,7 @@ This portability gap is tracked in
 
 ## Spec and task artifacts
 
-The `/spec` and `/plan` commands create working artifacts (`SPEC.md`, `tasks/plan.md`, `tasks/todo.md`). Treat them as **living documents** while the work is in progress:
+The `/spec` and `/plan` commands create working artifacts (`specs/SPEC.md` or `specs/capability-map.md` plus module specs, `tasks/plan.md`, and `tasks/todo.md`). Treat them as **living documents** while the work is in progress:
 
 - Keep them in version control during development so the human and the agent have a shared source of truth.
 - Update them when scope or decisions change.

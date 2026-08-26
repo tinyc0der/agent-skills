@@ -15,30 +15,35 @@ Invoke the agent-skills:incremental-implementation skill alongside agent-skills:
 
 Pick the next pending task from the plan. Then:
 
-1. Read the task's acceptance criteria
-2. Load relevant context (existing code, patterns, types)
-3. Write a failing test for the expected behavior (RED)
-4. Implement the minimum code to pass the test (GREEN)
-5. Run the full test suite to check for regressions
-6. Run the build to verify compilation
-7. Commit with a descriptive message
-8. Mark the task complete and stop
+1. Resolve the approved spec and task-list target from `tasks/plan.md`.
+2. Read the task's acceptance criteria and load only the relevant code, patterns, and types.
+3. Write and run a failing behavior test (RED). If the change has no behavioral impact, record why TDD is not applicable and identify the appropriate executable check.
+4. Implement the minimum behavior to pass (GREEN), then run the focused check.
+5. Refactor while the focused check remains green.
+6. Run the repository's affected and full regression tests, build, lint, formatting, and type-check gates where available.
+7. Verify the slice at runtime when its acceptance criteria require observable behavior.
+8. Apply the task acceptance criteria and the project-wide Definition of Done.
+9. Mark the task complete in the configured task target.
+10. Inspect and stage only the slice's files and task-status update, then commit with a descriptive message.
+11. Stop after exactly one task.
 
 ## Autonomous: the whole plan (`/build auto`)
 
 Use this once a spec exists and you want to collapse plan + build into one run. It removes the manual stepping between tasks — **not** the verification. Every task still earns a passing test and its own commit.
 
-1. **Require a spec.** Look only for a spec at a known path: `SPEC.md` at the repo root, `docs/SPEC.md`, or a file under `spec/`. A README or arbitrary doc does **not** count. If none exists, stop and tell the user to run `/spec` first — do not invent requirements.
-2. **Establish a clean baseline.** Run `git status --porcelain`. If there are uncommitted changes outside the expected planning artifacts (`SPEC.md`, `docs/SPEC.md`, `spec/*`, `tasks/plan.md`, `tasks/todo.md`), stop and ask the user to commit, stash, or confirm how to handle them. Autonomous per-task commits must not absorb unrelated local work, or the clean-rollback guarantee breaks.
-3. **Plan if needed.** If there is no `tasks/plan.md`, invoke agent-skills:planning-and-task-breakdown to generate one.
-4. **Single checkpoint.** Present the full plan and wait for an unambiguous affirmative (e.g. "approve", "go", "yes"). Treat hedged responses ("looks reasonable", "I guess") as **not** approved. This is the only human gate — after approval, run autonomously. If you generated `tasks/plan.md`, commit it as a single preparatory commit now so it doesn't bleed into the first task's commit.
-5. **Execute every task in dependency order.** Use each task's declared dependencies; if they aren't explicit, execute in the order the plan lists them. For each task, run the full default loop above (RED → GREEN → regression → build → commit → mark complete). Stage only the files that task touched plus its task-status update — never `git add -A` blindly — and make one commit per task so any point is a clean rollback.
-6. **Stop and ask the user** (do not push through) when:
+1. **Require an approved spec.** Accept `specs/SPEC.md`, or use `specs/capability-map.md` to select one `specs/SPEC-<module-id>.md`. A README or arbitrary document does not count. If no approved spec exists, stop and tell the user to run `/spec` first.
+2. **Resolve the task target.** Read `tasks/plan.md` when present. It must identify either `tasks/todo.md` or the designated external tracker. If the tracker is unavailable, stop instead of silently creating a second task list.
+3. **Establish a clean baseline.** Run `git status --porcelain`. Approved spec, plan, and task artifacts must be committed before implementation. If only newly generated approved planning artifacts are uncommitted, stage those exact files and commit them as a preparatory commit. Otherwise stop and ask how to handle the unrelated work.
+4. **Plan if needed.** If `tasks/plan.md` does not exist, invoke agent-skills:planning-and-task-breakdown, write both the plan and configured task target, present them for approval, and commit all generated planning artifacts together.
+5. **Single approval checkpoint.** Present the complete plan and wait for an unambiguous affirmative such as "approve", "go", or "yes". Hedged responses do not count. Routine plan checkpoints become automated verification checkpoints in auto mode; the risk gates below still require the human.
+6. **Execute every task in dependency order.** For each task, run steps 1-10 of the default loop above; do not apply its final stop instruction. Make one focused commit per task and never use `git add -A` blindly.
+7. **Run every planned checkpoint.** Stop immediately when an automated checkpoint fails. Record its evidence and follow agent-skills:debugging-and-error-recovery before resuming.
+8. **Stop and ask the user** (do not push through) when:
    - a test can't be made to pass or the build breaks without an obvious fix → follow agent-skills:debugging-and-error-recovery
    - the spec is ambiguous, or a task needs a decision the spec doesn't cover
    - a task is high-risk or irreversible — auth/permission changes, destructive data migrations, payments, deletions, deploys, anything touching secrets, **or anything you can't undo with `git revert`** → follow agent-skills:doubt-driven-development and get explicit sign-off before continuing
 
    After the user resolves a blocker, they re-invoke `/build auto` — it resumes from the next pending task.
-7. **Summarize at the end:** tasks completed, tests added, commits made, and anything skipped, flagged, or left for the user.
+9. **Summarize at the end:** tasks completed, verification evidence, commits made, and anything skipped, flagged, or left for the user.
 
 If any step fails, follow the agent-skills:debugging-and-error-recovery skill.

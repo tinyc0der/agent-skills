@@ -36,14 +36,14 @@ A new project is the best-case scenario: there's no legacy behavior to preserve,
 Run the lifecycle in order for the project's first real feature:
 
 ```
-/spec   →  SPEC.md            (spec-driven-development)
+/spec   →  specs/SPEC.md      (spec-driven-development)
 /plan   →  tasks/plan.md      (planning-and-task-breakdown)
 /build  →  one slice at a time (incremental-implementation + test-driven-development)
 /review →  before every merge  (code-review-and-quality)
 /ship   →  when going live     (shipping-and-launch)
 ```
 
-`/build auto` is a good fit for greenfield: you approve the plan once and every task still runs test-driven and commits individually. The spec and plan artifacts (`SPEC.md`, `tasks/`) are living documents, keep them in version control while the work is in flight.
+`/build auto` is a good fit for greenfield: you approve the plan once and every task still runs test-driven and commits individually. The spec and plan artifacts (`specs/`, `tasks/`) are living documents; keep them in version control while the work is in flight.
 
 ### From the start, treat these as always-on
 
@@ -65,7 +65,7 @@ Run the lifecycle in order for the project's first real feature:
 ### Greenfield anti-patterns
 
 - **Skipping `/spec` because "it's just a prototype."** Prototypes become products. The spec is the cheapest artifact you'll ever write for this codebase.
-- **Loading all 24 skills into every session.** It wastes context and dilutes the ones that matter. Load by phase; let `using-agent-skills` route.
+- **Loading all 25 skills into every session.** It wastes context and dilutes the ones that matter. Load by phase; let `using-agent-skills` route.
 - **Deferring observability until "there's something to observe."** Instrument as you build, retrofitting structured logging is a Path B problem you're choosing to create.
 
 ---
