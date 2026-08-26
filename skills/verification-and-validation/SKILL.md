@@ -149,7 +149,7 @@ Verdict rules:
 - **FAIL:** at least one criterion or required gate is FAIL
 - **INCOMPLETE:** nothing is known to fail, but required evidence is NOT RUN
 
-After FAIL, preserve the evidence and invoke `debugging-and-error-recovery`. Return here after the fix and verify the affected checks plus the full regression gate.
+After FAIL, preserve the evidence and invoke `debugging-and-error-recovery`. If the fix changes behavior, follow `test-driven-development` and prove the failure with a RED test before the fix. Return here afterward and verify the affected checks plus the full regression gate.
 
 ## Common Rationalizations
 
