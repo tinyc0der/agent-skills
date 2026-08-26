@@ -218,6 +218,18 @@ test('accepts thin ship command adapters when the skill owns discovery details',
   assert.equal(result.status, 0, result.stdout + result.stderr);
 });
 
+test('accepts discovery safety language across Markdown line wrapping', () => {
+  const root = makeSandbox();
+  writeCanonicalFiles(root);
+  const skillFile = path.join(root, 'skills/shipping-and-launch/SKILL.md');
+  const content = fs.readFileSync(skillFile, 'utf8');
+  fs.writeFileSync(skillFile, content.replace('stop rather than guess', 'stop rather\nthan guess'));
+
+  const result = run(root);
+
+  assert.equal(result.status, 0, result.stdout + result.stderr);
+});
+
 test('fails when automatic ship discovery guesses through unsafe history', () => {
   const root = makeSandbox();
   writeCanonicalFiles(root);

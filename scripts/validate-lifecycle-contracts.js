@@ -74,7 +74,7 @@ const SHIP_REQUIREMENTS = [
   ['ambiguity handling', /ambigu(?:ous|ity)/i],
   ['nothing to ship', /nothing to ship/i],
   ['confirmation', /confirmation/i],
-  ['stop rather than guess', /stop (?:for clarification )?(?:rather|instead of) (?:than )?guess/i],
+  ['stop rather than guess', /stop\s+(?:for\s+clarification\s+)?(?:rather|instead\s+of)(?:\s+than)?\s+guess/i],
   ['PR-scoped evidence', /PR-scoped/i],
   ['release-scoped checks', /release-scoped/i],
 ];
