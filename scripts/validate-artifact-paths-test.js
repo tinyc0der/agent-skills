@@ -42,11 +42,11 @@ afterEach(() => {
 
 test('passes when producers and consumers use the canonical artifact paths', () => {
   const root = makeSandbox();
-  writeFile(root, '.claude/commands/spec.md', 'Save the spec as `specs/SPEC.md`.\n');
-  writeFile(root, '.claude/commands/plan.md', 'Save the plan to `tasks/plan.md` and task list to `tasks/todo.md`.\n');
-  writeFile(root, '.claude/commands/build.md', 'Look for `specs/SPEC.md` or `specs/capability-map.md`. Require `tasks/plan.md`.\n');
-  writeFile(root, 'skills/spec-driven-development/SKILL.md', 'Save the plan to `tasks/plan.md` and the task list to `tasks/todo.md`.\n');
-  writeFile(root, 'skills/planning-and-task-breakdown/SKILL.md', 'Save to `tasks/plan.md` and `tasks/todo.md`.\n');
+  writeFile(root, '.claude/commands/spec.md', 'Save the spec as `docs/specs/<feature-slug>/spec.md`.\n');
+  writeFile(root, '.claude/commands/plan.md', 'Save the plan to `docs/specs/<feature-slug>/plan.md` and task list to `docs/specs/<feature-slug>/todo.md`.\n');
+  writeFile(root, '.claude/commands/build.md', 'Look for `docs/specs/<feature-slug>/spec.md` or `docs/specs/<feature-slug>/capability-map.md`. Require `docs/specs/<feature-slug>/plan.md`.\n');
+  writeFile(root, 'skills/spec-driven-development/SKILL.md', 'Save the spec to `docs/specs/<feature-slug>/spec.md`.\n');
+  writeFile(root, 'skills/planning-and-task-breakdown/SKILL.md', 'Save to `docs/specs/<feature-slug>/plan.md` and `docs/specs/<feature-slug>/todo.md`.\n');
 
   const result = run(root);
 
@@ -54,19 +54,69 @@ test('passes when producers and consumers use the canonical artifact paths', () 
   assert.match(result.stdout, /5 files checked — 0 error\(s\) — PASSED/);
 });
 
-test('fails when a producer drifts to an unapproved artifact path (the #93 regression)', () => {
+test('fails when a producer drifts outside the per-feature bundle', () => {
   const root = makeSandbox();
-  // Only the producers are changed to the per-feature layout; consumers stay on the old paths.
   writeFile(root, '.claude/commands/spec.md', 'Save the spec to `docs/features/[feature-name]/spec.md`.\n');
   writeFile(root, '.claude/commands/plan.md', 'Save the plan to `docs/features/[feature-name]/plan.md`.\n');
-  writeFile(root, '.claude/commands/build.md', 'Require a spec at `SPEC.md` and a plan at `tasks/plan.md`.\n');
+  writeFile(root, '.claude/commands/build.md', 'Require a spec at `specs/SPEC.md` and a plan at `tasks/plan.md`.\n');
 
   const result = run(root);
 
   assert.equal(result.status, 1, result.stdout + result.stderr);
   assert.match(result.stdout, /docs\/features\/\[feature-name\]\/spec\.md/);
   assert.match(result.stdout, /docs\/features\/\[feature-name\]\/plan\.md/);
+  assert.match(result.stdout, /specs\/SPEC\.md/);
+  assert.match(result.stdout, /tasks\/plan\.md/);
   assert.match(result.stdout, /error\(s\) — FAILED/);
+});
+
+test('accepts every durable artifact in a feature bundle', () => {
+  const root = makeSandbox();
+  writeFile(
+    root,
+    '.claude/commands/build.md',
+    [
+      '`docs/specs/<feature-slug>/spec.md`',
+      '`docs/specs/<feature-slug>/capability-map.md`',
+      '`docs/specs/<feature-slug>/spec-<module-id>.md`',
+      '`docs/specs/<feature-slug>/plan.md`',
+      '`docs/specs/<feature-slug>/todo.md`',
+      '`docs/specs/<feature-slug>/verification.md`',
+      '`docs/specs/<feature-slug>/review.md`',
+      '`docs/specs/<feature-slug>/memory-delta.md`',
+      '`docs/specs/<feature-slug>/ship.md`',
+    ].join('\n'),
+  );
+
+  const result = run(root);
+
+  assert.equal(result.status, 0, result.stdout + result.stderr);
+});
+
+test('accepts relative filenames only in artifact maps and overview documents', () => {
+  const root = makeSandbox();
+  writeFile(
+    root,
+    'skills/context-engineering/SKILL.md',
+    'docs/specs/<feature-slug>/\n- spec.md\n- verification.md\n- review.md\n- ship.md\n',
+  );
+
+  const result = run(root);
+
+  assert.equal(result.status, 0, result.stdout + result.stderr);
+});
+
+test('allows legacy paths only in the migration release notes', () => {
+  const root = makeSandbox();
+  writeFile(
+    root,
+    'docs/feature-development-workflow-release-notes.md',
+    'Move `specs/SPEC.md` and `tasks/plan.md` into the feature bundle.\n',
+  );
+
+  const result = run(root);
+
+  assert.equal(result.status, 0, result.stdout + result.stderr);
 });
 
 test('fails when Gemini command artifacts drift', () => {
@@ -110,7 +160,7 @@ test('reports the offending file and line number', () => {
 
 test('accepts the multi-capability map location', () => {
   const root = makeSandbox();
-  writeFile(root, '.claude/commands/build.md', 'Look for `specs/capability-map.md`.\n');
+  writeFile(root, '.claude/commands/build.md', 'Look for `docs/specs/<feature-slug>/capability-map.md`.\n');
 
   const result = run(root);
 
@@ -118,21 +168,21 @@ test('accepts the multi-capability map location', () => {
   assert.match(result.stdout, /1 files checked — 0 error\(s\) — PASSED/);
 });
 
-test('accepts canonical module specs and rejects module specs outside specs/', () => {
+test('accepts canonical module specs and rejects module specs outside the feature bundle', () => {
   const validRoot = makeSandbox();
-  writeFile(validRoot, '.claude/commands/build.md', 'Select `specs/SPEC-identity.md`.\n');
+  writeFile(validRoot, '.claude/commands/build.md', 'Select `docs/specs/user-auth/spec-identity.md`.\n');
 
   const validResult = run(validRoot);
 
   assert.equal(validResult.status, 0, validResult.stdout + validResult.stderr);
 
   const invalidRoot = makeSandbox();
-  writeFile(invalidRoot, '.claude/commands/build.md', 'Select `docs/SPEC-identity.md`.\n');
+  writeFile(invalidRoot, '.claude/commands/build.md', 'Select `docs/spec-identity.md`.\n');
 
   const invalidResult = run(invalidRoot);
 
   assert.equal(invalidResult.status, 1, invalidResult.stdout + invalidResult.stderr);
-  assert.match(invalidResult.stdout, /docs\/SPEC-identity\.md/);
+  assert.match(invalidResult.stdout, /docs\/spec-identity\.md/);
 });
 
 test('ignores non-artifact markdown references (no false positives)', () => {
@@ -140,7 +190,7 @@ test('ignores non-artifact markdown references (no false positives)', () => {
   writeFile(
     root,
     'skills/spec-driven-development/SKILL.md',
-    'See `SKILL.md` and `references/testing-patterns.md`. Save the plan to `tasks/plan.md`.\n',
+    'See `SKILL.md` and `references/testing-patterns.md`. Save the plan to `docs/specs/<feature-slug>/plan.md`.\n',
   );
 
   const result = run(root);
@@ -151,7 +201,7 @@ test('ignores non-artifact markdown references (no false positives)', () => {
 
 test('skips guarded files that do not exist', () => {
   const root = makeSandbox();
-  writeFile(root, '.claude/commands/spec.md', 'Save the spec as `specs/SPEC.md`.\n');
+  writeFile(root, '.claude/commands/spec.md', 'Save the spec as `docs/specs/<feature-slug>/spec.md`.\n');
   // No other guarded files present.
 
   const result = run(root);

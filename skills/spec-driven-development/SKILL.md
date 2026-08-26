@@ -62,7 +62,7 @@ Build order: identity → billing, notifications → reporting
 
 **The map is gated like every phase.** The human reviews module boundaries, dependency direction, and build order before any module spec is written. Getting the map wrong is expensive; reviewing ten lines is not.
 
-**Then specify per module.** Each module gets its own spec, scoped to that module's objective, boundaries, contracts, and success criteria. Save the approved map as `specs/capability-map.md` and module specs as `specs/SPEC-<module-id>.md` — the map, not filename guessing, is the index of what exists. If a capability map already exists, update the owning module spec rather than creating a duplicate feature spec.
+**Then specify per module.** Each module gets its own spec, scoped to that module's objective, boundaries, contracts, and success criteria. Save the approved map as `docs/specs/<feature-slug>/capability-map.md` and module specs as `docs/specs/<feature-slug>/spec-<module-id>.md` — the map, not filename guessing, is the index of what exists. If a capability map already exists, update the owning module spec rather than creating a duplicate feature spec.
 
 ### Phase 1: Specify
 
@@ -161,7 +161,9 @@ This lets you loop, retry, and problem-solve toward a clear goal rather than gue
 
 ### Hand Off to Planning
 
-After human approval, save a single-capability spec as `specs/SPEC.md`, or use the approved capability-map layout for a multi-capability initiative. Then invoke `planning-and-task-breakdown`; do not create tasks or implementation code in this skill.
+Before writing an artifact, require a non-default feature branch and derive `<feature-slug>` from it: drop the leading workflow or owner namespace, lowercase the remainder, replace every run of non-alphanumeric characters (including `/`) with `-`, and trim leading or trailing `-`. Create `docs/specs/<feature-slug>/` if needed.
+
+After human approval, save a single-capability spec as `docs/specs/<feature-slug>/spec.md`, or use the approved capability-map layout for a multi-capability initiative. Then invoke `planning-and-task-breakdown`; do not create tasks or implementation code in this skill.
 
 ## Keeping the Spec Alive
 
@@ -207,5 +209,5 @@ Before proceeding to implementation, confirm:
 - [ ] The spec is saved to a file in the repository
 - [ ] If the request bundles several independently testable capabilities, a capability map (module ids, dependency direction, build order) was approved before any module spec was written
 - [ ] Every module spec traces to a module id in the approved map
-- [ ] The approved spec is saved under `specs/` and committed before implementation
+- [ ] The approved spec is saved under `docs/specs/<feature-slug>/` and committed before implementation
 - [ ] The next step is explicitly handed to `planning-and-task-breakdown`

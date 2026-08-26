@@ -85,6 +85,31 @@ Load the relevant spec section when starting a feature. Don't load the entire sp
 
 **Wasteful:** "Here's our entire 5000-word spec: [full spec]" (when only working on auth)
 
+#### Durable workflow artifacts
+
+Keep the complete feature lifecycle in one branch-scoped bundle:
+
+```text
+docs/specs/<feature-slug>/
+├── spec.md                  # Single-capability specification
+├── capability-map.md        # Multi-capability index, when needed
+├── spec-<module-id>.md       # One specification per mapped capability
+├── plan.md                  # Approved implementation plan
+├── todo.md                  # Task ledger or external-tracker index
+├── verification.md          # Revision-scoped verification evidence
+├── review.md                # Revision-scoped review findings and disposition
+├── memory-delta.md           # Candidate durable knowledge, when discovered
+└── ship.md                  # Feature launch dossier and release inclusion record
+```
+
+The feature slug is a filesystem-safe single segment derived from the current branch. Drop a leading workflow or owner namespace such as `feature/`, `fix/`, `hotfix/`, `chore/`, `task/`, `migrate/`, `perf/`, `improve/`, `spike/`, `claude/`, `codex/`, or `origin/`; lowercase the remainder; replace each run of non-alphanumeric characters, including `/`, with `-`; then trim leading and trailing `-`. For example, `feature/user-auth` resolves to `docs/specs/user-auth/` and `fix/audio/import-crash` resolves to `docs/specs/audio-import-crash/`.
+
+Create a feature branch before producing a specification; do not write feature artifacts on `main` or `master`. When reading an existing bundle, first resolve the directory from the current branch. If it does not exist and exactly one directory exists under `docs/specs/`, use that directory; otherwise stop and ask which feature is active.
+
+Artifacts are living documents and remain in version control after merge. Evidence files name the exact revision they evaluated. A later commit that only persists workflow evidence does not silently widen that evidence scope: downstream consumers must verify that any intervening diff contains only workflow artifacts before reusing it. Production-affecting changes always invalidate the affected evidence.
+
+`ship.md` is the feature-level launch dossier consumed by release-wide `/ship` discovery; the authoritative final deployment record remains in the configured release or deployment system so recording it cannot mutate the pinned release target. Persist repository-relative links only—never local absolute paths or `file://` URLs.
+
 ### Level 3: Relevant Source Files
 
 Before editing a file, read it. Before implementing a pattern, find an existing example in the codebase.

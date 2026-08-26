@@ -14,7 +14,7 @@ Invoking this command authorizes the scoped remote push and pull-request mutatio
 ## Common checks
 
 1. Resolve the current branch, default branch, remote, head SHA, working-tree state, and any existing PR. Never guess a branch or create a duplicate PR.
-2. Read the approved spec under `specs/`, `tasks/plan.md`, the relevant commits, and existing PR body.
+2. Resolve the branch-scoped bundle under `docs/specs/<feature-slug>/`; read its approved spec, `docs/specs/<feature-slug>/plan.md`, `docs/specs/<feature-slug>/todo.md`, relevant commits, and existing PR body.
 3. Do not expose secrets or include unrelated working-tree changes.
 
 ## Draft mode
@@ -27,8 +27,8 @@ Invoking this command authorizes the scoped remote push and pull-request mutatio
 
 ## Ready mode
 
-1. Require an existing draft PR and a clean working tree.
-2. Require a `/verify` PASS report for the exact current head SHA. Reject stale, FAIL, or INCOMPLETE evidence.
+1. Require an existing draft PR and a clean working tree. If the only uncommitted change is the newly generated `docs/specs/<feature-slug>/verification.md`, stage that exact file and commit it as verification evidence before continuing; otherwise stop on unrelated changes.
+2. Require `docs/specs/<feature-slug>/verification.md` to contain a `/verify` PASS report for the current implementation revision. Reject stale, FAIL, or INCOMPLETE evidence. A later evidence-only commit is acceptable only when the complete intervening diff is confined to workflow artifacts in this same bundle.
 3. Require the PR description and task state to be current, the pre-review Definition of Done profile to pass, and no known Critical or Required findings to remain.
 4. Push the exact current branch if local commits are not on the remote, update the PR body with final evidence, then run `gh pr ready`.
 5. Report the PR URL and head revision. Do not merge.

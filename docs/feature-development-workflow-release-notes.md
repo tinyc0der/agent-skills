@@ -29,8 +29,17 @@ next release before applying revision-scoped launch gates.
   rather than creating a duplicate.
 - Reviews now use `Critical`, `Required`, `Optional`, `Nit`, and `FYI`.
   Former `Important` blockers map to `Required`.
-- Single-capability specs use `specs/SPEC.md`. Multi-capability work uses
-  `specs/capability-map.md` and `specs/SPEC-<module-id>.md`.
+- Feature lifecycle artifacts now live together under
+  `docs/specs/<feature-slug>/`. Single-capability specs use `spec.md`;
+  multi-capability work uses `capability-map.md` and
+  `spec-<module-id>.md`; planning, task, verification, review, candidate-memory,
+  and launch evidence remain beside them.
+- Existing in-flight artifacts migrate by deriving the feature slug from their
+  branch, moving `specs/SPEC.md` to the bundle's `spec.md`, moving capability
+  files into the same directory with lowercase names, and moving
+  `tasks/plan.md` and `tasks/todo.md` beside them. Do not auto-migrate when the
+  old directories contain artifacts for more than one feature; resolve the
+  ownership first.
 - Per-skill installs remain usable without repo-root references; those links are
   supplemental whole-pack guidance.
 - `/ship` no longer requires users to transfer a candidate digest, main SHA,
@@ -73,12 +82,13 @@ If command discovery, routing, or lifecycle behavior regresses after publication
 1. Stop further rollout or marketplace promotion.
 2. Restore the previous published plugin/package version.
 3. Tell users to continue using `/test` as their validation entry point until the
-   corrected release is available; no user artifact migration is destructive.
+   corrected release is available; existing legacy artifacts remain readable
+   but new workflow commands should not create a second bundle for the same feature.
 4. Revert the lifecycle release commit(s), reproduce the failing integration, and
    add a regression case before republishing.
 5. Verify skill and command counts, command parity, routing, and hook behavior in a
    clean install before resuming rollout.
 
 Rollback is complete when the previous command set is discoverable, existing
-spec/task artifacts still load, and no published guide points users at an
+feature bundles still load, and no published guide points users at an
 unavailable command.

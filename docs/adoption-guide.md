@@ -36,8 +36,8 @@ A new project is the best-case scenario: there's no legacy behavior to preserve,
 Run the lifecycle in order for the project's first real feature:
 
 ```
-/spec   →  specs/SPEC.md      (spec-driven-development)
-/plan   →  tasks/plan.md      (planning-and-task-breakdown)
+/spec   →  docs/specs/<feature-slug>/spec.md  (spec-driven-development)
+/plan   →  docs/specs/<feature-slug>/plan.md  (planning-and-task-breakdown)
 /pr draft → early collaboration artifact (git-workflow-and-versioning)
 /build  →  one slice at a time (incremental-implementation + test-driven-development)
 /verify →  assembled feature evidence (verification-and-validation)
@@ -46,7 +46,7 @@ Run the lifecycle in order for the project's first real feature:
 /ship   →  when going live     (shipping-and-launch)
 ```
 
-`/build auto` is a good fit for greenfield: you approve the plan once and every task still runs test-driven and commits individually. The spec and plan artifacts (`specs/`, `tasks/`) are living documents; keep them in version control while the work is in flight.
+`/build auto` is a good fit for greenfield: you approve the plan once and every task still runs test-driven and commits individually. The complete lifecycle bundle under `docs/specs/<feature-slug>/` is living, revision-aware documentation; keep it in version control through and after the feature.
 
 ### From the start, treat these as always-on
 

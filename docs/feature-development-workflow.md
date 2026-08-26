@@ -16,6 +16,27 @@ Discover -> Define -> Plan -> Draft PR -> Build slices -> Verify
 
 The workflow is sequential at its major decision gates. Inside a phase, conditional skills may run together when their concerns are independent.
 
+## Durable Artifact Structure
+
+Every feature branch owns one durable lifecycle bundle:
+
+```text
+docs/specs/<feature-slug>/
+├── spec.md
+├── capability-map.md       # Multi-capability initiatives only
+├── spec-<module-id>.md      # Multi-capability initiatives only
+├── plan.md
+├── todo.md
+├── verification.md
+├── review.md
+├── memory-delta.md          # Only when candidate durable knowledge exists
+└── ship.md                  # Production-affecting features
+```
+
+Derive `<feature-slug>` from the feature branch by dropping a leading workflow or owner namespace, lowercasing, replacing runs of non-alphanumeric characters (including `/`) with `-`, and trimming leading or trailing `-`. For example, `feature/user-auth` becomes `user-auth`, while `fix/audio/import-crash` becomes `audio-import-crash`. Create the feature branch before `/spec`; never create a feature bundle on `main` or `master`.
+
+When resolving an existing bundle, prefer the directory matching the current branch. If it is absent and exactly one directory exists, use that directory; otherwise ask which feature is active. Keep persisted links repository-relative. Evidence artifacts record the exact implementation revision they evaluate; a later evidence-only commit does not expand that scope, and any production-affecting change invalidates affected evidence.
+
 ## Phase 1: Discover
 
 Use this phase when the request does not yet express a sufficiently clear problem or outcome. Skip it when the feature request is already concrete.
@@ -70,8 +91,8 @@ Specify what will be built without duplicating the planning or implementation ph
 
 **Artifacts**
 
-- `specs/SPEC.md` for a single-capability feature
-- `specs/capability-map.md` plus `specs/SPEC-<module-id>.md` for a multi-capability initiative
+- `docs/specs/<feature-slug>/spec.md` for a single-capability feature
+- `docs/specs/<feature-slug>/capability-map.md` plus `docs/specs/<feature-slug>/spec-<module-id>.md` for a multi-capability initiative
 - Acceptance criteria, non-goals, boundaries, success measures, and open questions
 
 Feature specs should reference project-wide commands, structure, and style rules rather than copying them unless the feature changes those conventions.
@@ -95,8 +116,9 @@ Convert the approved specification into small, dependency-ordered, vertically sl
 
 **Artifacts**
 
-- `tasks/plan.md`
-- `tasks/todo.md`, or task records in the repository's designated external tracker
+- `docs/specs/<feature-slug>/plan.md`
+- `docs/specs/<feature-slug>/todo.md`, containing the task checklist or a durable index to the designated external tracker
+- `docs/specs/<feature-slug>/ship.md` initialized for production-affecting work
 - ADRs following the repository's existing convention
 - Test, migration, rollout, observability, and rollback requirements embedded in the relevant tasks
 
@@ -161,6 +183,7 @@ Read acceptance criteria
 - Small, independently revertible commits
 - Updated task state and living specification
 - Documentation, ADR, migration, feature-flag, and telemetry changes owned by the slice
+- Updated `docs/specs/<feature-slug>/ship.md` launch facts and `docs/specs/<feature-slug>/memory-delta.md` candidate knowledge when applicable
 
 **Exit gate**
 
@@ -192,8 +215,10 @@ Feature verification proves that the integrated result satisfies the approved sp
 
 **Artifacts**
 
-- A verification section in the PR or a linked verification report
+- `docs/specs/<feature-slug>/verification.md`, copied or linked from the PR
 - CI run links, command results, screenshots, measurements, and known limitations
+
+`/pr ready` may commit a newly generated `docs/specs/<feature-slug>/verification.md` when it is the only outstanding change. The report continues to name the implementation revision; the evidence-only commit does not claim to have been part of the tested implementation.
 
 **Exit gate**
 
@@ -225,6 +250,7 @@ Review -> Resolve Critical/Required findings with TDD
 **Artifacts**
 
 - Review findings using one severity taxonomy: `Critical`, `Required`, `Optional`, `Nit`, and `FYI`
+- `docs/specs/<feature-slug>/review.md` naming the reviewed implementation revision
 - Responses or commits resolving every blocking finding
 - Final verification evidence, approval, and green CI run
 - Merge record
@@ -294,12 +320,15 @@ execute or URLs for it to follow.
 
 - Release discovery preview with baseline source, pinned target, included PRs,
   direct commits, reverts, and ambiguity warnings
+- Included feature launch dossiers from `docs/specs/<feature-slug>/ship.md`
 - Go/no-go decision
 - Launch checklist and acknowledged risks
 - Rollback triggers, exact rollback steps, owner, and recovery-time target
 - Feature-flag and staged-rollout configuration
 - Dashboards and alert links
 - Release notes, changelog, version, and deployment record where applicable
+
+The authoritative release-wide decision and deployment record stay in the configured release or deployment system so `/ship` does not mutate its pinned target. A follow-up documentation change may append the immutable deployment identifier to each included feature's `docs/specs/<feature-slug>/ship.md`.
 
 **Exit gate**
 

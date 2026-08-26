@@ -157,15 +157,17 @@ Observe:            observability-and-instrumentation -> flag/legacy cleanup
 
 Use the canonical artifacts at each transition:
 
+All repository artifacts for a feature live together under `docs/specs/<feature-slug>/`. Resolve the slug from the feature branch; do not mix lifecycle files from different bundle directories.
+
 | Transition | Required artifact or evidence |
 |---|---|
-| Define → Plan | Approved `specs/SPEC.md`, or `specs/capability-map.md` plus addressable `specs/SPEC-<module-id>.md` files |
-| Plan → Draft PR | Approved `tasks/plan.md` and local `tasks/todo.md`, or an explicitly named external task target |
+| Define → Plan | Approved `docs/specs/<feature-slug>/spec.md`, or `docs/specs/<feature-slug>/capability-map.md` plus addressable `docs/specs/<feature-slug>/spec-<module-id>.md` files |
+| Plan → Draft PR | Approved `docs/specs/<feature-slug>/plan.md`, `docs/specs/<feature-slug>/todo.md`, and `docs/specs/<feature-slug>/ship.md` when production-affecting |
 | Draft PR → Build | Draft PR body linking the spec and plan, with scope, non-goals, risks, acceptance criteria, rollout, and rollback context |
-| Build → Verify | Independently revertible implementation commits whose per-slice Definition of Done checks pass |
-| Verify → Ready PR | Acceptance-criteria trace, repository checks, runtime evidence, and a PASS verdict naming the exact revision |
-| Ready PR → Merge | Final-revision review evidence, green required CI, no Critical or Required findings, and required human approval |
-| Merge → Ship | Release-revision evidence, migration/flag/observability readiness, go/no-go decision, and rollback plan |
+| Build → Verify | Independently revertible implementation commits, current task state, launch dossier, and any candidate knowledge in `docs/specs/<feature-slug>/memory-delta.md` |
+| Verify → Ready PR | `docs/specs/<feature-slug>/verification.md` with acceptance trace, repository checks, runtime evidence, and a PASS verdict naming the implementation revision |
+| Ready PR → Merge | `docs/specs/<feature-slug>/review.md`, green required CI, no Critical or Required findings, and required human approval |
+| Merge → Ship | Release-revision evidence plus included feature `docs/specs/<feature-slug>/ship.md` dossiers, migration/flag/observability readiness, go/no-go decision, and rollback plan |
 
 `debugging-and-error-recovery` is entered from any failed check and returns to the phase that failed. It is not the ordinary Verify phase.
 

@@ -63,7 +63,7 @@ jobs:
       - name: Test command validator
         run: node --test scripts/validate-commands-test.js
 
-      - name: Validate spec/plan/todo artifact paths
+      - name: Validate durable workflow artifact paths
         run: node scripts/validate-artifact-paths.js
 
       - name: Test artifact-path validator

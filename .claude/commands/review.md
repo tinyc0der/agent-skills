@@ -13,4 +13,4 @@ Review the current pull request when one exists; otherwise review the staged cha
 5. **Performance** — No N+1 queries? No unbounded ops? (Use performance-optimization skill)
 
 Categorize every finding as Critical, Required, Optional, Nit, or FYI. Critical and Required findings block approval.
-Output a structured review with specific file:line references and fix recommendations. After fixes, require affected behavior to be reverified and rereview the final revision before approval.
+Persist the structured review to `docs/specs/<feature-slug>/review.md` with specific file:line references, fix recommendations, dispositions, and the exact implementation revision. Copy or link it from the PR. After fixes, require affected behavior to be reverified and rereview the final revision before approval.

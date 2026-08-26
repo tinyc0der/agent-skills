@@ -2,7 +2,7 @@
 /**
  * validate-artifact-paths.js
  *
- * Guards the spec -> plan -> build pipeline against silent artifact-path drift.
+ * Guards the durable per-feature workflow bundle against silent path drift.
  *
  * The `/spec` and `/plan` commands (producers) write their artifacts to a set
  * of paths that the `/build` command and the spec/plan skills (consumers) read
@@ -11,13 +11,13 @@
  * `/build` still required SPEC.md and tasks/plan.md — the pipeline breaks, and
  * nothing else in CI catches it (command parity only compares descriptions).
  *
- * This validator enforces one canonical set of spec/plan/todo artifact paths
- * across every file in the pipeline. Changing the convention means updating
- * ARTIFACT_ALLOWLIST *and* every guarded file in the same change; CI fails
- * until they agree.
+ * This validator enforces one canonical per-feature directory across the
+ * lifecycle. Changing the convention means updating the allowed patterns and
+ * every guarded producer and consumer in the same change; CI fails until they
+ * agree.
  *
- * Scope is deliberately narrow: only spec/plan/todo artifacts, only the files
- * that define the pipeline. It is not a general markdown path linter.
+ * Scope is deliberately narrow: only workflow artifact filenames and only the
+ * files that define their lifecycle. It is not a general markdown path linter.
  *
  * Exit codes: 0 = all clear, 1 = one or more drifted paths.
  */
@@ -29,15 +29,14 @@ const path = require('path');
 
 const ROOT = path.resolve(__dirname, '..');
 
-// The canonical spec/plan/todo artifact paths. These are the only artifact
-// file paths the pipeline files may reference. To change the convention, edit
-// this list and update every guarded file to match — CI enforces the pairing.
-const ARTIFACT_ALLOWLIST = new Set([
-  'specs/SPEC.md',  // single-capability spec
-  'specs/capability-map.md', // multi-capability index
-  'tasks/plan.md',  // plan (produced by /plan, read by /build)
-  'tasks/todo.md',  // task list (produced by /plan)
-]);
+const FEATURE_SEGMENT = '(?:<feature-slug>|[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)';
+const FIXED_ARTIFACT = '(?:spec|capability-map|plan|todo|verification|review|memory-delta|ship)';
+const CANONICAL_ARTIFACT_RE = new RegExp(
+  `^docs/specs/${FEATURE_SEGMENT}/${FIXED_ARTIFACT}\\.md$`,
+);
+const CANONICAL_MODULE_SPEC_RE = new RegExp(
+  `^docs/specs/${FEATURE_SEGMENT}/spec-(?:<module-id>|[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)\\.md$`,
+);
 
 // The files that make up the spec -> plan -> build pipeline. Absent files are
 // skipped, not failed: this validator checks path consistency, not presence.
@@ -45,27 +44,65 @@ const GUARDED_FILES = [
   '.claude/commands/spec.md',
   '.claude/commands/plan.md',
   '.claude/commands/build.md',
+  '.claude/commands/pr.md',
+  '.claude/commands/verify.md',
+  '.claude/commands/review.md',
+  '.claude/commands/ship.md',
   '.gemini/commands/spec.toml',
   '.gemini/commands/planning.toml',
   '.gemini/commands/build.toml',
+  '.gemini/commands/pr.toml',
+  '.gemini/commands/verify.toml',
+  '.gemini/commands/review.toml',
+  '.gemini/commands/ship.toml',
   'commands/spec.toml',
   'commands/planning.toml',
   'commands/build.toml',
+  'commands/pr.toml',
+  'commands/verify.toml',
+  'commands/review.toml',
+  'commands/ship.toml',
+  'skills/context-engineering/SKILL.md',
   'skills/spec-driven-development/SKILL.md',
   'skills/planning-and-task-breakdown/SKILL.md',
+  'skills/verification-and-validation/SKILL.md',
+  'skills/code-review-and-quality/SKILL.md',
+  'skills/shipping-and-launch/SKILL.md',
+  'skills/using-agent-skills/SKILL.md',
+  'docs/feature-development-workflow.md',
+  'docs/feature-development-workflow-release-notes.md',
   'docs/getting-started.md',
   'docs/adoption-guide.md',
 ];
 
-// Matches a path-like token ending in a spec/plan/todo artifact filename,
-// including an optional directory prefix with bracket placeholders like
-// docs/features/[feature-name]/spec.md. Case-insensitive so SPEC.md and a
-// drifted spec.md are both caught, then compared against the allowlist.
-const ARTIFACT_RE = /(?:[A-Za-z0-9._[\]-]+\/)*(?:spec(?:-[a-z0-9-]+)?|capability-map|plan|todo)\.md/gi;
+// Artifact maps and overview documents may show filenames relative to the
+// canonical bundle directory. Operational producers and consumers must always
+// name the complete bundle path so they cannot accidentally read a root file.
+const RELATIVE_PATH_FILES = new Set([
+  'skills/context-engineering/SKILL.md',
+  'docs/feature-development-workflow.md',
+  'docs/feature-development-workflow-release-notes.md',
+  'docs/getting-started.md',
+  'docs/adoption-guide.md',
+]);
+const RELATIVE_ARTIFACT_RE = /^(?:spec|capability-map|plan|todo|verification|review|memory-delta|ship)\.md$/;
+const RELATIVE_MODULE_SPEC_RE = /^spec-(?:<module-id>|[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)\.md$/;
+const LEGACY_MIGRATION_FILES = new Set([
+  'docs/feature-development-workflow-release-notes.md',
+]);
+const LEGACY_ARTIFACT_RE = /^(?:specs\/(?:SPEC(?:-[a-z0-9-]+)?|capability-map)|tasks\/(?:plan|todo))\.md$/i;
 
-function isAllowedArtifactPath(artifactPath) {
-  return ARTIFACT_ALLOWLIST.has(artifactPath)
-    || /^specs\/SPEC-[a-z0-9-]+\.md$/.test(artifactPath);
+// Match full path-like tokens, including documented angle- or square-bracket
+// placeholders. Case-insensitive matching catches legacy `SPEC.md` paths;
+// canonical validation below remains lowercase and exact.
+const ARTIFACT_RE = /(?:[A-Za-z0-9._[\]<>-]+\/)*(?:spec(?:-(?:[a-z0-9-]+|<module-id>))?|capability-map|plan|todo|verification|review|memory-delta|ship)\.md/gi;
+
+function isAllowedArtifactPath(artifactPath, relPath) {
+  return CANONICAL_ARTIFACT_RE.test(artifactPath)
+    || CANONICAL_MODULE_SPEC_RE.test(artifactPath)
+    || (RELATIVE_PATH_FILES.has(relPath)
+      && (RELATIVE_ARTIFACT_RE.test(artifactPath) || RELATIVE_MODULE_SPEC_RE.test(artifactPath)))
+    || (LEGACY_MIGRATION_FILES.has(relPath) && LEGACY_ARTIFACT_RE.test(artifactPath));
 }
 
 function findViolations(relPath) {
@@ -78,7 +115,7 @@ function findViolations(relPath) {
     const matches = line.match(ARTIFACT_RE);
     if (!matches) return;
     for (const match of matches) {
-      if (!isAllowedArtifactPath(match)) {
+      if (!isAllowedArtifactPath(match, relPath)) {
         violations.push({ line: i + 1, match });
       }
     }
@@ -87,7 +124,7 @@ function findViolations(relPath) {
 }
 
 function main() {
-  console.log('Checking spec/plan/todo artifact paths...\n');
+  console.log('Checking durable workflow artifact paths...\n');
 
   let checked = 0;
   let errors = 0;
@@ -102,7 +139,7 @@ function main() {
     } else {
       console.log(`  ✗  ${relPath}`);
       for (const { line, match } of violations) {
-        console.log(`       L${line}: ${match} — not an approved spec/plan/todo artifact path`);
+        console.log(`       L${line}: ${match} — not an approved per-feature artifact path`);
         errors++;
       }
     }
@@ -112,9 +149,9 @@ function main() {
   console.log(`\n${checked} files checked — ${errors} error(s) — ${status}`);
 
   if (errors > 0) {
-    console.log('\nThe spec -> plan -> build pipeline expects one set of artifact paths.');
-    console.log('Either use a path from ARTIFACT_ALLOWLIST, or change the convention');
-    console.log('across every guarded file and update the allowlist in the same change.');
+    console.log('\nThe workflow expects artifacts under docs/specs/<feature-slug>/.');
+    console.log('Change every guarded producer and consumer together when migrating');
+    console.log('this convention.');
     process.exit(1);
   }
 }

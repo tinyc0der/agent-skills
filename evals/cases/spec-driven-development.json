@@ -49,7 +49,7 @@
       "expectations": [
         "The request is explicitly classified as single-capability or multi-capability before a full spec is written",
         "Ambiguities are surfaced as questions rather than silently resolved",
-        "If decomposition is proposed, the capability map uses stable module ids, one-way dependencies, a build order, and the canonical specs/capability-map.md location",
+        "If decomposition is proposed, the capability map uses stable module ids, one-way dependencies, a build order, and the canonical docs/specs/<feature-slug>/capability-map.md location",
         "The response stops at the next required human approval gate without creating plan or task artifacts",
         "No implementation code is written"
       ]
@@ -57,14 +57,14 @@
     {
       "id": 2,
       "prompt": "Read spec-driven-development-decomposition/portal-brief.md and produce the spec work for the customer portal initiative.",
-      "expected_output": "A specs/capability-map.md proposal with stable module ids and one-way dependency direction, gated on approval before addressable specs/SPEC-<module-id>.md files",
+      "expected_output": "A docs/specs/<feature-slug>/capability-map.md proposal with stable module ids and one-way dependency direction, gated on approval before addressable docs/specs/<feature-slug>/spec-<module-id>.md files",
       "files": [
         "spec-driven-development-decomposition"
       ],
       "expectations": [
         "A capability map with module ids and their dependencies is proposed before any full spec is written",
         "Dependency direction is one-way (no cycles) and drives the proposed build order",
-        "The proposed canonical map location is specs/capability-map.md and module artifacts use specs/SPEC-<module-id>.md",
+        "The proposed canonical map location is docs/specs/<feature-slug>/capability-map.md and module artifacts use docs/specs/<feature-slug>/spec-<module-id>.md",
         "Approval of the map is requested before per-module specs are drafted",
         "Any module spec produced is scoped to a single module rather than restating the whole initiative",
         "No implementation code is written"
@@ -73,33 +73,33 @@
     {
       "id": 3,
       "kind": "execution",
-      "prompt": "The capability map in spec-driven-development-approved-map/specs/capability-map.md is approved. Use it with spec-driven-development-approved-map/module-brief.md to write the addressable module specifications inside that fixture project, then stop at the /plan handoff. Do not create tasks, plans, or implementation code.",
-      "expected_output": "Scoped specs/SPEC-identity.md and specs/SPEC-billing.md artifacts indexed by the approved map, with explicit boundaries and testable success criteria, followed by a planning handoff",
+      "prompt": "The capability map in spec-driven-development-approved-map/docs/specs/account-billing/capability-map.md is approved. Use it with spec-driven-development-approved-map/module-brief.md to write the addressable module specifications in that bundle, then stop at the /plan handoff. Do not create tasks, plans, or implementation code.",
+      "expected_output": "Scoped docs/specs/account-billing/spec-identity.md and docs/specs/account-billing/spec-billing.md artifacts indexed by the approved map, with explicit boundaries and testable success criteria, followed by a planning handoff",
       "files": [
         "spec-driven-development-approved-map"
       ],
       "expectations": [
-        "The approved specs/capability-map.md remains the index and both specs/SPEC-identity.md and specs/SPEC-billing.md are created",
+        "The approved docs/specs/account-billing/capability-map.md remains the index and both docs/specs/account-billing/spec-identity.md and docs/specs/account-billing/spec-billing.md are created",
         "Each module spec is scoped to only its mapped responsibility, dependencies, contracts, boundaries, and success criteria",
         "The identity-to-billing account contract is defined at the provider boundary without creating a dependency cycle",
         "The response explicitly hands the approved module specs to /plan",
-        "No tasks/plan.md, tasks/todo.md, or implementation source files are created"
+        "No docs/specs/account-billing/plan.md, docs/specs/account-billing/todo.md, or implementation source files are created"
       ]
     },
     {
       "id": 4,
       "kind": "execution",
-      "prompt": "The scope and requirements in spec-driven-development-approved-single/approved-brief.md are explicitly approved. Write the final single-capability specification inside that fixture project, then stop and hand it to /plan. Do not create task, plan, or implementation artifacts.",
-      "expected_output": "A canonical specs/SPEC.md with objective, non-goals, boundaries, testable success criteria, and verification strategy, followed by an explicit /plan handoff",
+      "prompt": "The scope and requirements in spec-driven-development-approved-single/approved-brief.md are explicitly approved for feature slug approved-single. Write the final single-capability specification inside that fixture project, then stop and hand it to /plan. Do not create task, plan, or implementation artifacts.",
+      "expected_output": "A canonical docs/specs/approved-single/spec.md with objective, non-goals, boundaries, testable success criteria, and verification strategy, followed by an explicit /plan handoff",
       "files": [
         "spec-driven-development-approved-single"
       ],
       "expectations": [
-        "The final artifact is saved at spec-driven-development-approved-single/specs/SPEC.md",
+        "The final artifact is saved at spec-driven-development-approved-single/docs/specs/approved-single/spec.md",
         "The spec includes objective, non-goals, affected structure, boundaries, testable success criteria, and a testing/verification strategy",
         "The approved decisions are used without reopening or silently changing scope",
         "The response explicitly hands the approved spec to /plan",
-        "No tasks/plan.md, tasks/todo.md, or implementation source files are created"
+        "No docs/specs/approved-single/plan.md, docs/specs/approved-single/todo.md, or implementation source files are created"
       ]
     }
   ]

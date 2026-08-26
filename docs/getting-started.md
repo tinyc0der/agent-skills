@@ -150,13 +150,13 @@ without repo-level files. Links to shared `references/` are explicitly optional
 expanded guidance for whole-pack installs. Copy one into the installed skill
 only when you want that additional detail.
 
-## Spec and task artifacts
+## Durable feature artifacts
 
-The `/spec` and `/plan` commands create working artifacts (`specs/SPEC.md` or `specs/capability-map.md` plus module specs, `tasks/plan.md`, and `tasks/todo.md`). Treat them as **living documents** while the work is in progress:
+The lifecycle commands build one bundle under `docs/specs/<feature-slug>/`: `spec.md` or `capability-map.md` plus module specs, `plan.md`, `todo.md`, `verification.md`, `review.md`, optional `memory-delta.md`, and a production feature's `ship.md`. Treat them as **living documents**:
 
 - Keep them in version control during development so the human and the agent have a shared source of truth.
 - Update them when scope or decisions change.
-- If your repo doesn’t want these files long‑term, delete them before merge or add the folder to `.gitignore` — the workflow doesn’t require them to be permanent.
+- Retain shipped feature bundles after merge so later sessions can trace intent, evidence, review, and release inclusion without reconstructing them from conversation history.
 
 ## Tips
 

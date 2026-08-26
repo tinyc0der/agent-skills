@@ -45,6 +45,22 @@ const REVIEW_PRODUCERS = [
 ];
 const REVIEW_TAXONOMY = ['Critical', 'Required', 'Optional', 'Nit', 'FYI'];
 
+const DURABLE_ARTIFACT_CONTRACTS = [
+  ...[
+    'skills/verification-and-validation/SKILL.md',
+    '.claude/commands/verify.md',
+    '.gemini/commands/verify.toml',
+    'commands/verify.toml',
+  ].map(file => ({ file, artifact: 'docs/specs/<feature-slug>/verification.md' })),
+  ...REVIEW_PRODUCERS.map(file => ({ file, artifact: 'docs/specs/<feature-slug>/review.md' })),
+  ...[
+    'skills/shipping-and-launch/SKILL.md',
+    '.claude/commands/ship.md',
+    '.gemini/commands/ship.toml',
+    'commands/ship.toml',
+  ].map(file => ({ file, artifact: 'docs/specs/<feature-slug>/ship.md' })),
+];
+
 const SHIP_SKILL = 'skills/shipping-and-launch/SKILL.md';
 const SHIP_COMMANDS = [
   '.claude/commands/ship.md',
@@ -170,6 +186,16 @@ function main() {
     }
     const missing = REVIEW_TAXONOMY.filter(value => !content.includes(value));
     if (missing.length) fail(file, `missing review severities: ${missing.join(', ')}`);
+    else pass(file);
+  }
+
+  for (const { file, artifact } of DURABLE_ARTIFACT_CONTRACTS) {
+    const content = read(file);
+    if (content === null) {
+      fail(file, 'required durable-artifact producer is missing');
+      continue;
+    }
+    if (!content.includes(artifact)) fail(file, `missing durable artifact contract: ${artifact}`);
     else pass(file);
   }
 

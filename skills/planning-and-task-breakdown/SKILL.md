@@ -30,7 +30,7 @@ Before writing any code, operate in read-only mode:
 - Map dependencies between components
 - Note risks and unknowns
 
-**Do NOT write code during planning.** The output is a plan document saved to `tasks/plan.md` and a task list recorded in the task list target (see Output Files; default `tasks/todo.md`), not implementation.
+**Do NOT write code during planning.** The output is a plan document saved to `docs/specs/<feature-slug>/plan.md` and a task ledger at `docs/specs/<feature-slug>/todo.md`, not implementation.
 
 ### Step 2: Identify the Dependency Graph
 
@@ -144,19 +144,20 @@ If a task is L or larger, it should be broken into smaller tasks. An agent perfo
 
 ## Output Files
 
-- **Plan document:** Save the implementation plan to `tasks/plan.md`. This is always a markdown file — design decisions, risks, and open questions don't map cleanly onto individual tracker issues.
+- **Plan document:** Save the implementation plan to `docs/specs/<feature-slug>/plan.md`. This is always a markdown file — design decisions, risks, and open questions don't map cleanly onto individual tracker issues.
 - **Task list:** Record each task in the **task list target** (defined below).
+- **Launch dossier:** For production-affecting work, initialize `docs/specs/<feature-slug>/ship.md` with rollout prerequisites, migrations, feature flags, success thresholds, monitoring, rollback triggers and steps, and owners. Build and verification keep it current.
 
-Create the `tasks/` directory if it does not exist.
+Resolve the active bundle from the current branch using the feature-slug convention established by `spec-driven-development`. Create `docs/specs/<feature-slug>/` if it does not exist. The plan and task ledger must live beside the approved spec they implement.
 
 ### Task List Target
 
 The task list target is where tasks and checkpoints are recorded. It is defined once, here; every other reference in this skill defers to it.
 
-- **Default: a checklist-style markdown file at `tasks/todo.md`.** This is the convention the `/build` command and other downstream tooling expect. Use it unless the project says otherwise.
-- **External tracker:** if the project's agent rules (`CLAUDE.md`, `AGENTS.md`, etc.) or the user designate an issue tracker (e.g. GitHub Issues, Jira, Linear, `bd`/beads), create one tracker item per task instead of writing `tasks/todo.md`. Map the Step 4 structure onto the tracker's fields: acceptance criteria and verification steps in the item body, dependencies via the tracker's linking mechanism (`bd dep add`, "blocked by", etc.). Record Step 5 checkpoints as tracker items too, or as a checklist in the plan document if the tracker has no natural equivalent.
+- **Default:** write the complete checklist to `docs/specs/<feature-slug>/todo.md`. This is the convention `/build` and downstream tooling expect.
+- **External tracker:** if the project's agent rules (`CLAUDE.md`, `AGENTS.md`, etc.) or the user designate an issue tracker (e.g. GitHub Issues, Jira, Linear, `bd`/beads), create one tracker item per task. Map the Step 4 structure onto the tracker's fields: acceptance criteria and verification steps in the item body, dependencies via the tracker's linking mechanism (`bd dep add`, "blocked by", etc.). Keep `docs/specs/<feature-slug>/todo.md` as an ordered index of tracker item IDs or repository-relative links plus local lifecycle checkpoints; do not duplicate the full tracker bodies.
 
-When using an external tracker, note it in `tasks/plan.md` (e.g. "Tasks tracked in Linear project FOO") so downstream steps and future sessions know where to look, and keep the plan document's Task List section as an ordered index of tracker item IDs or links rather than a duplicate checklist.
+When using an external tracker, note it in `docs/specs/<feature-slug>/plan.md` (e.g. "Tasks tracked in Linear project FOO") so downstream steps and future sessions know where to look. Keep both the plan's Task List section and `docs/specs/<feature-slug>/todo.md` as compact ordered indexes rather than duplicate checklists.
 
 ## Plan Document Template
 
@@ -225,7 +226,7 @@ When multiple agents or sessions are available:
 ## Red Flags
 
 - Starting implementation without a written task list
-- Writing `tasks/todo.md` when the project has designated an external tracker (or scattering tasks across both)
+- Duplicating full external-tracker task bodies in `docs/specs/<feature-slug>/todo.md` instead of keeping a durable index
 - Tasks that say "implement the feature" without acceptance criteria
 - No verification steps in the plan
 - All tasks are XL-sized
@@ -239,7 +240,8 @@ Before starting implementation, confirm:
 - [ ] Every task has acceptance criteria
 - [ ] Every task has a verification step
 - [ ] Task dependencies are identified and ordered correctly
-- [ ] Tasks are recorded in the task list target (default `tasks/todo.md`)
+- [ ] Tasks are recorded or indexed in `docs/specs/<feature-slug>/todo.md`
+- [ ] Production-affecting work has an initialized `docs/specs/<feature-slug>/ship.md`
 - [ ] No task touches more than ~5 files
 - [ ] Checkpoints exist between major phases
 - [ ] The human has reviewed and approved the plan

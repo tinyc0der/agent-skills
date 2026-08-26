@@ -65,6 +65,8 @@ Categorize every finding:
 
 **Verdict:** APPROVE | REQUEST CHANGES
 
+**Reviewed revision:** [exact implementation revision]
+
 **Overview:** [1-2 sentences summarizing the change and overall assessment]
 
 ### Critical Issues
@@ -97,6 +99,7 @@ Categorize every finding:
 5. Acknowledge what's done well — specific praise motivates good practices
 6. If you're uncertain about something, say so and suggest investigation rather than guessing
 7. Record the reviewed revision; after fixes, reverify affected behavior and rereview the final revision
+8. Persist the final report to `docs/specs/<feature-slug>/review.md` for the reviewed feature bundle and copy or link it from the PR
 
 ## Composition
 

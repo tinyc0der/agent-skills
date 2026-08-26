@@ -149,6 +149,8 @@ Verdict rules:
 - **FAIL:** at least one criterion or required gate is FAIL
 - **INCOMPLETE:** nothing is known to fail, but required evidence is NOT RUN
 
+Persist the report to `docs/specs/<feature-slug>/verification.md` and copy or link it from the pull request. Resolve `<feature-slug>` from the current branch using the same mapping as the specification. The report names the exact implementation revision it evaluated. If committing the report creates a later evidence-only revision, record that separately; reuse remains valid only when the complete intervening diff is confined to workflow artifacts in this feature bundle.
+
 After FAIL, preserve the evidence and invoke `debugging-and-error-recovery`. If the fix changes behavior, follow `test-driven-development` and prove the failure with a RED test before the fix. Return here afterward and verify the affected checks plus the full regression gate.
 
 ## Common Rationalizations
@@ -184,3 +186,4 @@ Before declaring the feature ready for review:
 - [ ] Failed checks entered debugging and were reverified after the fix
 - [ ] No required check is FAIL or NOT RUN for a PASS verdict
 - [ ] The report contains enough evidence for a reviewer to reproduce the decision
+- [ ] The report is saved to `docs/specs/<feature-slug>/verification.md` and names its implementation revision

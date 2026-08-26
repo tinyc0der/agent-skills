@@ -1,6 +1,6 @@
 # Feature Development Workflow Implementation Checklist
 
-**Source draft:** [`docs/feature-development-workflow.md`](../docs/feature-development-workflow.md)
+**Source specification:** [`docs/feature-development-workflow.md`](../../feature-development-workflow.md)
 
 **Goal:** Make the repository expose one coherent feature-development lifecycle across skills, commands, personas, documentation, setup guides, references, and evaluations.
 
@@ -439,3 +439,28 @@ not a remote mutation. The implementation was split into reviewable commits:
 - [ ] Token-backed shipping behavioral execution passes. **NOT RUN:** the
   external Claude runner rejected eval 1 with HTTP 429 before generating any
   tokens and reports a reset at 00:00 Asia/Saigon.
+
+## Task 14: Migrate to durable per-feature artifact bundles
+
+**Dependencies:** Tasks 1 through 13
+
+**Checklist**
+
+- [x] Define `docs/specs/<feature-slug>/` and deterministic branch-to-slug resolution.
+- [x] Move specification, planning, task, verification, review, memory-candidate, and launch artifacts into the bundle contract.
+- [x] Preserve capability maps and addressable module specifications inside the bundle.
+- [x] Keep external task trackers authoritative while retaining a durable `todo.md` index.
+- [x] Preserve revision freshness across evidence-only commits without accepting production changes.
+- [x] Keep the release-wide ship decision outside the pinned release target.
+- [x] Update Claude, Gemini, and Antigravity commands, lifecycle skills, personas, docs, evals, and fixtures.
+- [x] Extend artifact-path and lifecycle validators with regression tests.
+- [x] Migrate this checklist into `docs/specs/feature-development-workflow/todo.md` and add its spec, plan, and launch dossier.
+
+**Verification**
+
+- [x] All 59 Node tests pass.
+- [x] All 25 skills and 10 command adapters validate.
+- [x] All 32 guarded artifact producers and consumers agree on the durable path.
+- [x] All 104 tracked Markdown files and local anchors validate.
+- [x] All 133 routing checks pass at 87% rank-1.
+- [x] Git diff whitespace checks pass.

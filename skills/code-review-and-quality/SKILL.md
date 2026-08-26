@@ -214,6 +214,8 @@ Review -> Fix -> Reverify affected behavior -> Rereview final revision
 
 Behavior-changing fixes follow `test-driven-development`. Do not approve based on a superseded diff or stale verification report.
 
+Persist the structured findings and final disposition to `docs/specs/<feature-slug>/review.md`, resolving `<feature-slug>` from the reviewed feature branch. Include the implementation revision, evidence sources, each finding's severity and disposition, and the final verdict. Copy or link the report from the pull request. A later commit containing only workflow evidence does not expand the reviewed scope; any production-affecting change requires reverify and rereview.
+
 ## Multi-Model Review Pattern
 
 Use different models for different review perspectives:
@@ -405,6 +407,7 @@ After review is complete:
 - [ ] Tests pass
 - [ ] Build succeeds
 - [ ] The verification story is documented (what changed, how it was verified)
+- [ ] The review is saved to `docs/specs/<feature-slug>/review.md` and names the reviewed implementation revision
 - [ ] Dependency upgrades were reviewed against their changelog, isolated per package, and verified by a green suite with the lockfile diff reviewed
 
 **Presumptive blockers:** surface and propose the simpler design for each of these; escalate to Required only when the change actively makes structure worse: a refactor that relocates complexity instead of reducing it; a change that pushes a file past the size boundary with no decomposition; feature logic added to a shared module; a near-duplicate of an existing canonical helper; a silent fallback that hides an unclear invariant.

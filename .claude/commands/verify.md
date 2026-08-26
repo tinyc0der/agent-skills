@@ -13,4 +13,6 @@ Verify the current completed change against its approved specification:
 5. Account for applicable security, accessibility, performance, migration, compatibility, documentation, feature-flag, and observability requirements.
 6. Return `PASS`, `FAIL`, or `INCOMPLETE` using the skill's verdict rules.
 
+Persist the complete report to `docs/specs/<feature-slug>/verification.md` and copy or link the same evidence from the PR. The report must name the exact implementation revision it evaluates; do not claim that a later evidence-only commit was part of that verification.
+
 Do not add production behavior during verification. If a check fails, preserve the evidence, invoke agent-skills:debugging-and-error-recovery, and return to `/verify` after the fix.

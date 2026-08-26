@@ -14,4 +14,4 @@ Then generate a structured spec covering objective, non-goals, project context, 
 
 If the request bundles several independently testable capabilities, first propose a capability map (module ids, dependency direction, build order) per the skill's Phase 0 and get it approved, then spec each module in dependency order.
 
-Save a single-capability spec as `specs/SPEC.md`. For a multi-capability initiative, save the approved map as `specs/capability-map.md` and each module spec as `specs/SPEC-<module-id>.md`. Confirm approval, then stop and hand off to `/plan`; do not create tasks or implementation code.
+Require a non-default feature branch and derive a filesystem-safe `<feature-slug>` from it using the skill's branch mapping. Save a single-capability spec as `docs/specs/<feature-slug>/spec.md`. For a multi-capability initiative, save the approved map as `docs/specs/<feature-slug>/capability-map.md` and each module spec as `docs/specs/<feature-slug>/spec-<module-id>.md`. Confirm approval, then stop and hand off to `/plan`; do not create tasks or implementation code.
