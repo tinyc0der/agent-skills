@@ -44,17 +44,21 @@ The depth behind these items lives in `code-review-and-quality` (the five-axis r
 - [ ] Architectural decisions worth preserving are recorded (see `documentation-and-adrs`)
 - [ ] Documentation describes the current state in timeless language, not the change history
 
-### Ship-readiness
+### Operational readiness
 - [ ] Security implications reviewed for any untrusted input, auth, or data handling (see `security-and-hardening`)
 - [ ] Observability in place for new critical paths (logs, metrics, traces) (see `observability-and-instrumentation`)
 - [ ] Rollback path exists for anything risky (see `shipping-and-launch`)
+
+### Merge readiness
+- [ ] Required CI checks pass for the exact revision being approved
 - [ ] The human has reviewed and approved before merge or deploy
 - [ ] Pull-request verification and review evidence name the exact revision being approved
 
 ## How to Apply
 
 - **Per task**: confirm the Correctness and Quality sections before checking the task off.
-- **Per feature**: confirm Integration and Documentation before considering the feature complete.
+- **Before review**: confirm Correctness, Quality, Integration, Documentation, and Operational readiness, plus a `verification-and-validation` PASS report for the exact PR head. Review evidence, green merge CI, and human approval are intentionally not part of this pre-review profile.
+- **Before merge**: confirm the pre-review profile plus every Merge readiness item.
 - **Per release**: the full checklist is the floor; `shipping-and-launch` adds the deploy-specific gates on top.
 - **Per pull request**: mark ready only after feature verification passes for the current head; merge only after Critical and Required findings are resolved, CI is green, and required approval is present.
 

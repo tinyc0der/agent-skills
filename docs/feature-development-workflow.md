@@ -198,7 +198,7 @@ Feature verification proves that the integrated result satisfies the approved sp
 **Exit gate**
 
 - Every acceptance criterion has concrete evidence
-- The complete Definition of Done passes
+- The pre-review Definition of Done profile passes; review evidence, merge CI, and human approval are evaluated after `/pr ready`
 - No unexplained failing or skipped checks remain
 - The draft PR is ready to be marked for review
 

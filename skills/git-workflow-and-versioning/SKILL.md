@@ -216,6 +216,15 @@ A pull request is the durable handoff between implementation, verification, revi
 
 Create or update one PR for the current feature branch. Before mutating the remote, resolve the exact branch, remote, default branch, head revision, working-tree state, and any existing PR. Never create a duplicate because lookup was skipped.
 
+Apply this state matrix after lookup:
+
+| Existing PR state | `/pr draft` behavior |
+|---|---|
+| No PR | Create a new draft PR |
+| Draft | Update the existing draft idempotently |
+| Ready/open | Update it and explicitly convert it back to draft; editing the body alone is not a state transition |
+| Closed or merged | Stop without reopening or creating a duplicate; report the state and ask whether to start a new branch/PR |
+
 The draft body should stand alone:
 
 ```markdown
@@ -230,12 +239,18 @@ The draft body should stand alone:
 - Spec: ...
 - Plan/tasks: ...
 
+## Acceptance criteria
+- [Criterion + current evidence state]
+
 ## Design and risks
 [Decisions, migrations, flags, compatibility, observability]
 
 ## Verification
 - Current revision: ...
 - Planned or completed evidence: ...
+
+## Visual evidence
+[Screenshots or before/after evidence for user-facing changes, otherwise why not applicable]
 
 ## Rollback
 [When applicable]
@@ -249,7 +264,7 @@ Mark a draft ready only when:
 
 - The working tree is clean and the remote contains the exact local head
 - A `verification-and-validation` PASS report names that head revision
-- Acceptance criteria and the project-wide Definition of Done are satisfied
+- Acceptance criteria and the pre-review Definition of Done profile are satisfied
 - The PR body, task state, screenshots, migration notes, and risk notes are current
 - No known Critical or Required finding remains
 

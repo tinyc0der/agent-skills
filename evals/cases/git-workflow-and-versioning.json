@@ -53,7 +53,8 @@
         "The draft body includes the spec and plan, scope and non-goals, risks, acceptance criteria, verification status, migrations, flags, screenshots when applicable, and rollback notes",
         "The PR may be updated as commits and evidence arrive without implying readiness",
         "/pr ready is refused because the verification report does not name the current head revision",
-        "Readiness also requires complete required CI/review prerequisites and preserves human merge approval"
+        "Readiness uses the pre-review Definition of Done profile and preserves required CI, final review, and human approval for the later merge gate",
+        "Existing PR state is handled explicitly: create when absent, update a draft, convert a ready PR back to draft, and stop on closed or merged PRs without creating a duplicate"
       ]
     }
   ]
