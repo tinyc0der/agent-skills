@@ -42,6 +42,19 @@
         "Commit messages are imperative and standalone",
         "Each commit leaves the tree in a working state"
       ]
+    },
+    {
+      "id": 2,
+      "kind": "dialogue",
+      "prompt": "The spec and plan are approved and the user explicitly authorizes remote PR changes. Explain `/pr draft` now, then evaluate `/pr ready` after two more commits when the only verification report names the older commit. Include the PR body, state transitions, and readiness verdict.",
+      "expected_output": "An authorized draft-PR transition with a cold-readable body, followed by refusal to mark the newer head ready until revision-matched verification exists",
+      "expectations": [
+        "The draft PR is created only because the user explicitly authorized the remote mutation",
+        "The draft body includes the spec and plan, scope and non-goals, risks, acceptance criteria, verification status, migrations, flags, screenshots when applicable, and rollback notes",
+        "The PR may be updated as commits and evidence arrive without implying readiness",
+        "/pr ready is refused because the verification report does not name the current head revision",
+        "Readiness also requires complete required CI/review prerequisites and preserves human merge approval"
+      ]
     }
   ]
 }

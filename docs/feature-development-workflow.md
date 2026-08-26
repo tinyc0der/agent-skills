@@ -308,3 +308,6 @@ The user-facing sequence is:
 ```
 
 `/test` remains available as a focused TDD entry point but is not presented as the post-build lifecycle phase. `/build auto` may remove routine human pauses between tasks only after its checkpoint, artifact, and risk semantics are explicitly aligned with this workflow.
+
+Compatibility guidance, publication checks, and rollback steps are recorded in
+[Feature Development Workflow Release Notes](feature-development-workflow-release-notes.md).

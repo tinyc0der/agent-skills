@@ -52,6 +52,19 @@
         "The work is decomposed into independently useful vertical slices",
         "Verification is required before each slice is committed"
       ]
+    },
+    {
+      "id": 3,
+      "kind": "dialogue",
+      "prompt": "Explain how `/build auto` should execute an approved capability map with specs/SPEC-auth.md and specs/SPEC-billing.md when tasks live in an external tracker. Include planning-artifact commits, dependency order, checkpoint semantics, stop-the-line cases, TDD, Definition of Done checks, and commit hygiene.",
+      "expected_output": "A precise auto-build contract for multi-capability specs and external tasks that preserves approval boundaries, safety checkpoints, per-slice verification, and independently revertible commits",
+      "expectations": [
+        "Auto mode selects module specs through specs/capability-map.md and resolves external tracker items without assuming tasks/todo.md",
+        "Generated or changed spec, plan, and task artifacts are committed together before implementation so they cannot leak into the first code commit",
+        "Safe tasks run in dependency order without pausing after every task, but planned high-risk checkpoints and ambiguous, destructive, irreversible, or failing work stop the line",
+        "Each behavioral slice follows RED-GREEN-REFACTOR and then focused tests, regression checks, build, lint, type checking, and applicable runtime checks",
+        "Each completed task satisfies the canonical Definition of Done and leaves a clean independently revertible commit"
+      ]
     }
   ]
 }
