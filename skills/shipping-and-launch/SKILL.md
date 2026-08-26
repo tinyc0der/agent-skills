@@ -19,13 +19,99 @@ Ship with confidence. The goal is not just to deploy — it's to deploy safely, 
 
 ## Evidence Freshness
 
-Shipping consumes merge-review and verification evidence; it does not repeat those phases merely for ceremony. Record the exact release revision and reuse an existing report only when:
+Shipping consumes merge-review and verification evidence; it does not repeat those phases merely for ceremony. Record each report's evidence scope. Reuse PR-scoped review evidence only when the reviewed patch maps unchanged into the release. Reuse a release-scoped report only when:
 
 - It names that exact revision
 - No environment, configuration, migration, feature-flag, or dependency change invalidates it
 - Its required checks completed successfully
 
 Rerun every stale, missing, or release-specific check. When several independent specialist checks are needed and parallel execution is available, run them concurrently and merge their reports. Any unresolved Critical or Required finding is a NO-GO.
+
+## Automatic Release Discovery
+
+The normal interface is zero-argument `/ship`. Automatically discover the
+release boundary and included changes; do not require the user to copy a
+candidate digest, revision, tag, or PR list from another worktree. Manual
+baseline or target overrides are recovery-only inputs when discovery is
+ambiguous or project metadata is incorrect.
+
+### 1. Pin the release target
+
+- Resolve the repository's remote default branch. Fetch that branch and release
+  tags without switching branches, cleaning files, or otherwise mutating the
+  user's worktree.
+- Pin the fetched remote default branch head as the target revision for this
+  ship decision and record its full commit ID. Do not use a possibly stale local
+  `main` merely because it is checked out.
+- If the remote or default branch cannot be resolved, stop for clarification
+  rather than guess. The command may run from any worktree; the current branch
+  is not the release identity.
+
+### 2. Detect the last successful production ship
+
+Use an explicitly configured authoritative release source when present.
+Otherwise select the first available and resolvable source in this order:
+
+1. The last successful production deployment record for the configured
+   environment
+2. The latest published non-draft release
+3. The latest reachable release tag that matches the project's release pattern
+4. An explicitly documented project release-state file
+
+Resolve the selected record to a commit. Lower-priority sources are
+corroborating context, not an automatic veto when they represent a different
+release mechanism. Stop only when the configured source is invalid or sources
+at the selected authority level conflict. The baseline must exist in the
+fetched repository and be an ancestor of the pinned target revision. A missing
+baseline, conflicting sources, rewritten or divergent history, or an
+unresolvable deployment target is `INCOMPLETE`: stop for clarification instead
+of guessing the root commit.
+If baseline and target are identical, report **nothing to ship** and stop before
+specialist checks.
+
+### 3. Discover the release range and recent changes
+
+- Build the exact commit range `baseline..target`.
+- Associate commits in that release range with merged PRs using repository or
+  forge metadata. A merge-date query may produce candidates, but membership in
+  the pinned range is the deciding evidence.
+- List direct commits, reverts, and unmatched or ambiguous commits separately;
+  never hide them merely because most changes map to PRs.
+- Derive the changed paths and flag release-specific risks such as migrations,
+  dependency or lockfile changes, environment configuration, infrastructure,
+  feature flags, public contracts, and deployment workflows.
+
+### 4. Confirm the detected release
+
+Before specialist checks or any deployment-affecting action, present a release
+discovery preview and request human confirmation:
+
+```markdown
+## Release Discovery
+- Baseline: [revision + source]
+- Target: [pinned remote default-branch revision]
+- Range: [baseline..target]
+- Included PRs: [number, title, merge revision]
+- Direct commits: [...]
+- Reverts: [...]
+- Ambiguous commits: [...]
+- Material release risks: [...]
+```
+
+Refetch before the final GO decision. If the remote default branch moved, keep
+the original target pinned and stop for confirmation: either restart discovery
+for the new head or explicitly ship the already-reviewed candidate. Never
+silently expand the release range.
+
+### Evidence scope after merge
+
+- **PR-scoped evidence** belongs to the reviewed PR revision. Reuse it when the
+  merged patch is demonstrably unchanged and its required checks passed, even
+  if the forge created a different merge or squash commit ID.
+- **Release-scoped checks**—post-merge CI, integration, dependency, migration,
+  configuration, infrastructure, staging, and environment checks—belong to the
+  pinned target revision. Reuse them only when they name the exact release
+  revision and remain valid; rerun stale or missing checks.
 
 ## The Pre-Launch Checklist
 

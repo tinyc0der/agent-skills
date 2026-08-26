@@ -249,13 +249,16 @@ copy commit SHAs, artifact digests, or PR numbers from the feature worktree.
 1. Resolve the remote default branch and fetch its current head and release
    tags without switching or mutating the user's worktree. Pin that head as the
    target revision for the entire decision.
-2. Detect the last successful production ship from the project's authoritative
-   source, in order: deployment record for a configured production environment,
-   latest published non-draft release, latest reachable release tag, then an
-   explicitly documented project release-state file.
-3. Require the baseline to be an ancestor of the target. If sources disagree,
-   no baseline exists, or history diverged, stop for clarification instead of
-   guessing. If baseline and target match, report that there is nothing to ship.
+2. Detect the last successful production ship from an explicitly configured
+   authoritative source, or the first available and resolvable source in this
+   order: deployment record for a configured production environment, latest
+   published non-draft release, latest reachable release tag, then an explicitly
+   documented project release-state file. Lower-priority sources are context,
+   not a veto when they represent a different release mechanism.
+3. Require the baseline to be an ancestor of the target. If the configured
+   source is invalid, equally authoritative sources conflict, no baseline
+   exists, or history diverged, stop for clarification instead of guessing. If
+   baseline and target match, report that there is nothing to ship.
 4. Build the release range from the pinned baseline and target. Associate its
    commits with merged PRs, and separately surface direct commits, reverts, and
    unmatched or ambiguous commits. Merge dates may find candidate PRs but do

@@ -61,12 +61,25 @@ function writeCanonicalFiles(root) {
     writeFile(root, file, taxonomy);
   }
 
+  writeFile(
+    root,
+    'skills/shipping-and-launch/SKILL.md',
+    [
+      'Critical Required exact release revision reuse stale',
+      'zero-argument /ship remote default branch pin target revision',
+      'last successful production deployment record published release reachable release tag release-state',
+      'baseline ancestor target commit range merged PRs direct commits reverts ambiguous',
+      'nothing to ship confirmation stop rather than guess',
+      'PR-scoped evidence release-scoped checks',
+    ].join('\n'),
+  );
+
   for (const file of [
     '.claude/commands/ship.md',
     '.gemini/commands/ship.toml',
     'commands/ship.toml',
   ]) {
-    writeFile(root, file, 'Critical Required exact release revision reuse stale');
+    writeFile(root, file, 'Critical Required exact release revision reuse stale zero-argument shipping-and-launch skill Automatic Release Discovery confirmation');
   }
 }
 
@@ -168,4 +181,66 @@ test('fails when ship freshness is only a generic revision mention', () => {
   assert.match(result.stdout, /exact release revision/);
   assert.match(result.stdout, /reuse/);
   assert.match(result.stdout, /stale/);
+});
+
+test('fails when a ship consumer requires manual release identifiers', () => {
+  const root = makeSandbox();
+  writeCanonicalFiles(root);
+  writeFile(
+    root,
+    '.gemini/commands/ship.toml',
+    'Critical Required exact release revision reuse stale candidate=<digest> revision=<sha> since=<tag>',
+  );
+
+  const result = run(root);
+
+  assert.equal(result.status, 1, result.stdout + result.stderr);
+  assert.match(result.stdout, /\.gemini\/commands\/ship\.toml/);
+  assert.match(result.stdout, /zero-argument/);
+  assert.match(result.stdout, /automatic release discovery/);
+});
+
+test('accepts thin ship command adapters when the skill owns discovery details', () => {
+  const root = makeSandbox();
+  writeCanonicalFiles(root);
+  writeFile(
+    root,
+    'commands/ship.toml',
+    [
+      'Critical Required exact release revision reuse stale',
+      'zero-argument /ship invokes the shipping-and-launch skill',
+      'Follow its Automatic Release Discovery and require confirmation.',
+    ].join('\n'),
+  );
+
+  const result = run(root);
+
+  assert.equal(result.status, 0, result.stdout + result.stderr);
+});
+
+test('fails when automatic ship discovery guesses through unsafe history', () => {
+  const root = makeSandbox();
+  writeCanonicalFiles(root);
+  writeFile(
+    root,
+    'skills/shipping-and-launch/SKILL.md',
+    [
+      'Critical Required exact release revision reuse stale',
+      'zero-argument /ship remote default branch pin target revision',
+      'last successful production deployment record published release reachable release tag release-state',
+      'baseline target commit range merged PRs direct commits',
+      'confirmation',
+      'PR-scoped evidence release-scoped checks',
+    ].join('\n'),
+  );
+
+  const result = run(root);
+
+  assert.equal(result.status, 1, result.stdout + result.stderr);
+  assert.match(result.stdout, /skills\/shipping-and-launch\/SKILL\.md/);
+  assert.match(result.stdout, /ancestor/);
+  assert.match(result.stdout, /reverts/);
+  assert.match(result.stdout, /ambiguity/);
+  assert.match(result.stdout, /nothing to ship/);
+  assert.match(result.stdout, /stop rather than guess/);
 });

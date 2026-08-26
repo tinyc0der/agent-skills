@@ -45,10 +45,50 @@ const REVIEW_PRODUCERS = [
 ];
 const REVIEW_TAXONOMY = ['Critical', 'Required', 'Optional', 'Nit', 'FYI'];
 
-const SHIP_CONSUMERS = [
+const SHIP_SKILL = 'skills/shipping-and-launch/SKILL.md';
+const SHIP_COMMANDS = [
   '.claude/commands/ship.md',
   '.gemini/commands/ship.toml',
   'commands/ship.toml',
+];
+
+const SHIP_REQUIREMENTS = [
+  ['Critical', /Critical/],
+  ['Required', /Required/],
+  ['exact release revision', /exact\s+release\s+revision/i],
+  ['reuse', /reuse/i],
+  ['stale', /stale/i],
+  ['zero-argument', /zero-argument/i],
+  ['remote default branch', /remote default branch/i],
+  ['pinned target revision', /pin(?:ned)? (?:the )?target revision/i],
+  ['release baseline', /last successful production/i],
+  ['deployment baseline', /deployment record/i],
+  ['published release baseline', /published (?:non-draft )?release/i],
+  ['release-tag baseline', /reachable release tag/i],
+  ['release-state baseline', /release-state/i],
+  ['ancestor validation', /ancestor/i],
+  ['release range', /(?:release|commit) range/i],
+  ['merged PR discovery', /merged PRs/i],
+  ['direct commits', /direct commits/i],
+  ['reverts', /reverts/i],
+  ['ambiguity handling', /ambigu(?:ous|ity)/i],
+  ['nothing to ship', /nothing to ship/i],
+  ['confirmation', /confirmation/i],
+  ['stop rather than guess', /stop (?:for clarification )?(?:rather|instead of) (?:than )?guess/i],
+  ['PR-scoped evidence', /PR-scoped/i],
+  ['release-scoped checks', /release-scoped/i],
+];
+
+const SHIP_COMMAND_REQUIREMENTS = [
+  ['Critical', /Critical/],
+  ['Required', /Required/],
+  ['exact release revision', /exact\s+release\s+revision/i],
+  ['reuse', /reuse/i],
+  ['stale', /stale/i],
+  ['zero-argument', /zero-argument/i],
+  ['shipping-and-launch skill', /shipping-and-launch skill/i],
+  ['automatic release discovery', /Automatic Release Discovery/i],
+  ['confirmation', /confirmation/i],
 ];
 
 function read(relativePath) {
@@ -130,19 +170,15 @@ function main() {
     else pass(file);
   }
 
-  for (const file of SHIP_CONSUMERS) {
+  for (const [file, requirements] of [
+    [SHIP_SKILL, SHIP_REQUIREMENTS],
+    ...SHIP_COMMANDS.map(file => [file, SHIP_COMMAND_REQUIREMENTS]),
+  ]) {
     const content = read(file);
     if (content === null) {
       fail(file, 'required ship consumer is missing');
       continue;
     }
-    const requirements = [
-      ['Critical', /Critical/],
-      ['Required', /Required/],
-      ['exact release revision', /exact release revision/i],
-      ['reuse', /reuse/i],
-      ['stale', /stale/i],
-    ];
     const missing = requirements.filter(([, pattern]) => !pattern.test(content)).map(([label]) => label);
     if (missing.length) fail(file, `missing blocking or freshness contract: ${missing.join(', ')}`);
     else pass(file);

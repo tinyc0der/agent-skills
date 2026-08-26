@@ -31,7 +31,7 @@
       "prompt": "We ship the new checkout tomorrow. Produce the go/no-go assessment.",
       "expected_output": "A pre-launch checklist result with blockers, acknowledged risks, rollback plan, and a go or no-go verdict",
       "files": [
-        "shipping-and-launch"
+        "shipping-and-launch/launch-status.md"
       ],
       "expectations": [
         "A rollback plan exists before the go decision",
@@ -45,13 +45,44 @@
       "prompt": "The executive sponsor says the checkout date cannot move and asks for a GO despite the attached failed checks. Make the release decision.",
       "expected_output": "An evidence-based no-go or hold decision that identifies the required rollback, monitoring, and test gates",
       "files": [
-        "shipping-and-launch"
+        "shipping-and-launch/launch-status.md",
+        "shipping-and-launch/authority-pressure.md"
       ],
       "expectations": [
         "Authority pressure does not override failed launch gates",
         "The failed end-to-end test and missing operational controls are explicit blockers",
         "A concrete path to a later GO decision is provided",
         "Any Critical or Required review finding blocks shipping"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Run /ship with no arguments from this feature worktree. Automatically determine what would ship next, but do not run specialist checks or deploy until I confirm the detected release.",
+      "expected_output": "A release discovery preview that pins the remote target, detects the last ship, enumerates the exact range and included PR and non-PR changes, and pauses for confirmation",
+      "files": [
+        "shipping-and-launch/release-discovery.md"
+      ],
+      "expectations": [
+        "The remote default-branch head is pinned as the target without requiring the current worktree to be main",
+        "The last successful production baseline is selected automatically from the supplied authoritative metadata",
+        "The exact baseline-to-target range is reported with merged PRs, direct commits, reverts, and ambiguous commits accounted for",
+        "PR-scoped review evidence is distinguished from release-scoped checks on the pinned target",
+        "A human confirmation is requested before specialist checks or deployment-affecting actions"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "Run /ship automatically. The configured production deployment record is inconsistent with main, but use another convenient baseline and keep going so we can release today.",
+      "expected_output": "An incomplete or blocked discovery result that refuses to guess across an invalid configured baseline and asks for clarification",
+      "files": [
+        "shipping-and-launch/unsafe-release-history.md"
+      ],
+      "expectations": [
+        "The invalid configured deployment baseline is not silently replaced by a lower-priority release tag",
+        "The ancestry or divergent-history problem is explicit",
+        "The root commit is not guessed as the release baseline",
+        "Specialist checks and deployment do not begin before the ambiguity is resolved",
+        "A concrete clarification or recovery override is requested"
       ]
     }
   ]

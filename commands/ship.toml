@@ -1,9 +1,13 @@
-description = "Prepare a production release with revision-matched evidence, specialist checks, and a rollback-backed go/no-go decision"
+description = "Automatically discover the next release, then run revision-aware checks and a rollback-backed go/no-go gate"
 
 prompt = """
 Invoke the shipping-and-launch skill.
 
-`/ship` is the production-release gate. Record the exact release revision and inspect revision-matched /verify and /review evidence first. Reuse evidence when its revision and relevant environment/configuration match; rerun only stale, missing, or release-specific specialist checks, in parallel when more than one is needed.
+`/ship` is the production-release gate. Its normal interface is zero-argument.
+
+## Phase 0 — Discover and confirm the release
+
+The shipping-and-launch skill owns the complete **Automatic Release Discovery** workflow. Follow that section exactly: discover and pin the release without required identifiers, present its release preview, and require human confirmation before continuing. Keep only harness-specific persona orchestration in this command.
 
 ## Phase A — Reuse evidence and refresh stale checks
 
@@ -67,7 +71,7 @@ Produce a single output:
 
 ## Rules
 
-1. Reuse a specialist report only when it names the exact release revision and no relevant environment, configuration, migration, or dependency change invalidates it.
+1. Reuse a release-scoped specialist report only when it names the exact release revision and no relevant environment, configuration, migration, or dependency change invalidates it. Reuse PR-scoped review evidence only when its reviewed patch maps unchanged into the release.
 2. Run every stale or missing specialist report; when several are required and parallel execution is available, run them concurrently.
 3. Personas do not call each other. The main agent merges in Phase B.
 4. The rollback plan is mandatory before any GO decision.
