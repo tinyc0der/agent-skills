@@ -11,7 +11,8 @@ This change aligns the skill pack around one feature lifecycle:
 
 It adds feature-level verification and explicit pull-request transitions,
 narrows specification work to approved requirements, repairs `/build auto`,
-standardizes review severities, and lets `/ship` reuse revision-matched evidence.
+standardizes review severities, and makes zero-argument `/ship` discover the
+next release before applying revision-scoped launch gates.
 
 ## Compatibility Guidance
 
@@ -32,6 +33,21 @@ standardizes review severities, and lets `/ship` reuse revision-matched evidence
   `specs/capability-map.md` and `specs/SPEC-<module-id>.md`.
 - Per-skill installs remain usable without repo-root references; those links are
   supplemental whole-pack guidance.
+- `/ship` no longer requires users to transfer a candidate digest, main SHA,
+  previous tag, or PR list from a feature worktree. The `shipping-and-launch`
+  skill pins the remote default-branch head, discovers the last successful ship,
+  maps the exact range to PRs and non-PR commits, and pauses on a preview for
+  human confirmation.
+- Deployment records, published releases, reachable release tags, and an
+  explicit project release-state file form the automatic baseline fallback.
+  Invalid configured sources, non-ancestor history, and unresolved ambiguity
+  stop for clarification rather than guessing.
+- PR-scoped review evidence can survive a merge or squash when the patch is
+  unchanged. Release-scoped integration, configuration, migration, and
+  environment checks remain tied to the pinned post-merge revision.
+- The ship commands are intentionally thin adapters. The skill owns discovery;
+  Claude, Gemini, and Antigravity commands own only invocation and
+  harness-specific specialist fan-out.
 
 ## Publication Checklist
 

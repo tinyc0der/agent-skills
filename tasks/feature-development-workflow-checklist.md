@@ -8,7 +8,8 @@
 Deterministic validation is green. Current verification and PR-transition
 behavioral cases pass; the remaining token-backed reruns are recorded below
 because the external Claude runner reached its five-hour quota again on
-2026-08-26. Dry-run/schema validation passed for every blocked case.
+2026-08-26. The four-case shipping suite and every other blocked case pass
+dry-run/schema validation.
 
 Do not implement all changes as one large commit. Complete and verify each task independently, and keep the Claude, Gemini, and Antigravity command variants semantically equivalent.
 
@@ -328,7 +329,7 @@ Do not implement all changes as one large commit. Complete and verify each task 
 - [x] Add a review-remediation eval proving that fixes are reverified and rereviewed.
 - [x] Add an auto-build eval covering multi-module specs, external task targets, checkpoints, and clean commits.
 - [x] Extend structural validation to detect contradictory lifecycle mappings and review taxonomies where practical.
-- [ ] Run all structural, command-parity, trigger/routing, behavioral, and pressure evals required by the changed files. **Blocked externally:** 55/55 current expectations pass across verification, lifecycle routing, failure re-entry, review remediation, incremental implementation, auto-build, PR transitions, atomic git history, and the first shipping case. The shipping pressure case and the redesigned four-case specification suite pass dry-run/schema validation but still need token-backed reruns after the next quota reset.
+- [ ] Run all structural, command-parity, trigger/routing, behavioral, and pressure evals required by the changed files. **Blocked externally:** 55/55 previously executed expectations pass across verification, lifecycle routing, failure re-entry, review remediation, incremental implementation, auto-build, PR transitions, atomic git history, and the prior shipping case. The shipping skill changed afterward, so its expanded four-case suite and the redesigned four-case specification suite pass dry-run/schema validation but still need token-backed reruns after the next quota reset.
 
 **Likely files**
 
@@ -343,7 +344,7 @@ Do not implement all changes as one large commit. Complete and verify each task 
 
 - [x] `node scripts/validate-skills.js` passes.
 - [x] `node scripts/validate-commands.js` passes.
-- [ ] `node scripts/run-evals.js` passes for routing and all affected behavioral cases. Routing passed 133 checks at 87% rank-1; only shipping pressure and the redesigned specification suite remain quota-blocked.
+- [ ] `node scripts/run-evals.js` passes for routing and all affected behavioral cases. Routing passed 133 checks at 87% rank-1; the expanded shipping suite and redesigned specification suite remain quota-blocked.
 - [x] The integration eval fails against the old contradictory workflow and passes against the new one.
 
 ## Task 12: Final independent review and release
@@ -365,7 +366,7 @@ Do not implement all changes as one large commit. Complete and verify each task 
 
 **Verification**
 
-- [ ] Full repository validation and affected evals pass on the final revision. All deterministic validation passes, including 50 Node tests, 13 cross-integration artifact files, lifecycle contracts, all 99 tracked Markdown files, hooks, routing, and plugin manifests; only the externally quota-blocked behavioral reruns remain.
+- [ ] Full repository validation and affected evals pass on the final revision. All deterministic validation passes, including 54 Node tests, 13 cross-integration artifact files, lifecycle contracts, all 101 tracked Markdown files, hooks, routing, and plugin manifests; only the externally quota-blocked behavioral reruns remain.
 - [x] A fresh-context reviewer can follow the new workflow without consulting this checklist.
 - [x] Public documentation, commands, skills, personas, and evals describe the same lifecycle.
 
@@ -385,6 +386,9 @@ not a remote mutation. The implementation was split into reviewable commits:
 - [x] **Review remediation — PR readiness:** `eb0c0ef`
 - [x] **Review remediation — verification evidence:** `b4e106e`
 - [x] **Review remediation — specification evals:** `b7ddb12`
+- [x] **Automatic ship discovery contract:** `484e581`
+- [x] **Automatic ship discovery implementation:** `e7214fb`
+- [x] **Wrapped-contract regression guard:** `f35fcc1`
 
 ## Task 13: Make `/ship` discover the release automatically
 
@@ -392,21 +396,21 @@ not a remote mutation. The implementation was split into reviewable commits:
 
 **Checklist**
 
-- [ ] Make zero-argument `/ship` the normal interface in all command variants.
-- [ ] Pin the remote default-branch head without requiring the main worktree.
-- [ ] Detect the last ship from an authoritative deployment, published release,
+- [x] Make zero-argument `/ship` the normal interface in all command variants.
+- [x] Pin the remote default-branch head without requiring the main worktree.
+- [x] Detect the last ship from an authoritative deployment, published release,
   reachable release tag, or explicit project release-state source.
-- [ ] Stop on a missing, conflicting, non-ancestor, or divergent baseline; do
+- [x] Stop on a missing, conflicting, non-ancestor, or divergent baseline; do
   not silently choose the root commit.
-- [ ] Discover included PRs from the baseline-to-target commit range and report
+- [x] Discover included PRs from the baseline-to-target commit range and report
   direct commits, reverts, and ambiguous commits separately.
-- [ ] Report nothing to ship when the release boundary is empty.
-- [ ] Show the discovery preview and require confirmation before specialist
+- [x] Report nothing to ship when the release boundary is empty.
+- [x] Show the discovery preview and require confirmation before specialist
   checks or deployment-affecting actions.
-- [ ] Distinguish reusable PR-scoped review evidence from release-scoped checks
+- [x] Distinguish reusable PR-scoped review evidence from release-scoped checks
   that must run on the pinned post-merge target.
-- [ ] Keep manual baseline or target overrides optional and recovery-only.
-- [ ] Add structural and behavioral regression coverage.
+- [x] Keep manual baseline or target overrides optional and recovery-only.
+- [x] Add structural and behavioral regression coverage.
 
 **Likely files**
 
@@ -422,9 +426,14 @@ not a remote mutation. The implementation was split into reviewable commits:
 
 **Verification**
 
-- [ ] The lifecycle validator fails when any ship consumer loses automatic
-  baseline, target, range, PR, or ambiguity handling.
-- [ ] Command parity and description synchronization pass.
-- [ ] Shipping behavioral cases cover automatic discovery and unsafe-history
+- [x] The lifecycle validator enforces the full discovery contract in the skill
+  and zero-argument delegation in each thin command adapter.
+- [x] Command parity and description synchronization pass.
+- [x] Shipping behavioral cases cover automatic discovery and unsafe-history
   refusal.
-- [ ] Full deterministic repository validation passes.
+- [x] Full deterministic repository validation passes: 54 Node tests, 25 skills,
+  10 commands, 101 Markdown files, 133 routing checks at 87% rank-1, hooks, and
+  plugin validation.
+- [ ] Token-backed shipping behavioral execution passes. **NOT RUN:** the
+  external Claude runner rejected eval 1 with HTTP 429 before generating any
+  tokens and reports a reset at 00:00 Asia/Saigon.
