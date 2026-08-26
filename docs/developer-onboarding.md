@@ -100,6 +100,8 @@ One point worth internalizing rather than looking up: when writing trigger promp
 - [ ] Tier 1 green: `node scripts/validate-skills.js`
 - [ ] Tier 2 green: `node scripts/run-evals.js`
 - [ ] Command parity green if you touched any command directory: `node scripts/validate-commands.js`
+- [ ] Lifecycle and artifact contracts green: `node scripts/validate-lifecycle-contracts.js && node scripts/validate-artifact-paths.js`
+- [ ] Local documentation files and anchors resolve: `node scripts/validate-markdown-links.js`
 - [ ] Hook test green if you touched `hooks/` or `using-agent-skills`
 - [ ] New skill → eval case file present with the minimum trigger/behavioral counts
 - [ ] New skill → gap justified in the PR description; catalog and open PRs checked

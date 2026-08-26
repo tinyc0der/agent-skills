@@ -20,7 +20,12 @@ standardizes review severities, and lets `/ship` reuse revision-matched evidence
 - `/plan` remains the canonical lifecycle name. Gemini and Antigravity expose the
   same command as `/planning` because `/plan` conflicts with their native command.
 - Existing draft pull requests remain valid. Use `/pr ready` only after the PR
-  head has matching verification evidence.
+  head has matching verification evidence and the pre-review Definition of Done
+  profile passes. Final review evidence, merge CI, and human approval remain
+  later merge gates.
+- Invoking `/pr draft` creates a PR when none exists, updates a draft, converts
+  an open ready PR back to draft explicitly, and stops on closed or merged PRs
+  rather than creating a duplicate.
 - Reviews now use `Critical`, `Required`, `Optional`, `Nit`, and `FYI`.
   Former `Important` blockers map to `Required`.
 - Single-capability specs use `specs/SPEC.md`. Multi-capability work uses
@@ -32,7 +37,7 @@ standardizes review severities, and lets `/ship` reuse revision-matched evidence
 
 Before publishing the plugin or package:
 
-- Run skill, command-parity, artifact-path, reference-link, and lifecycle validators.
+- Run skill, command-parity, artifact-path, reference-link, Markdown-link, and lifecycle validators.
 - Run routing evals with the enforced rank-1 floor.
 - Run affected behavioral and pressure evals.
 - Confirm the session-start hook in normal and no-`jq` environments.

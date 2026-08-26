@@ -4,9 +4,10 @@
 
 **Goal:** Make the repository expose one coherent feature-development lifecycle across skills, commands, personas, documentation, setup guides, references, and evaluations.
 
-**Implementation status:** Complete. Deterministic validation is green. Most
-affected behavioral evals passed; the remaining token-backed reruns are recorded
-below because the external Claude runner reached its five-hour quota on
+**Implementation status:** Complete with fresh-review remediation applied.
+Deterministic validation is green. Current verification and PR-transition
+behavioral cases pass; the remaining token-backed reruns are recorded below
+because the external Claude runner reached its five-hour quota again on
 2026-08-26. Dry-run/schema validation passed for every blocked case.
 
 Do not implement all changes as one large commit. Complete and verify each task independently, and keep the Claude, Gemini, and Antigravity command variants semantically equivalent.
@@ -327,7 +328,7 @@ Do not implement all changes as one large commit. Complete and verify each task 
 - [x] Add a review-remediation eval proving that fixes are reverified and rereviewed.
 - [x] Add an auto-build eval covering multi-module specs, external task targets, checkpoints, and clean commits.
 - [x] Extend structural validation to detect contradictory lifecycle mappings and review taxonomies where practical.
-- [ ] Run all structural, command-parity, trigger/routing, behavioral, and pressure evals required by the changed files. **Blocked externally:** the Claude behavioral runner reached its five-hour quota after 44/44 expectations passed across verification, lifecycle routing, failure re-entry, review remediation, incremental implementation, auto-build, atomic git history, and the first shipping case. The new PR-transition and verification-pressure cases, shipping pressure case, and spec cases passed dry-run/schema validation but still need token-backed reruns after quota reset.
+- [ ] Run all structural, command-parity, trigger/routing, behavioral, and pressure evals required by the changed files. **Blocked externally:** 55/55 current expectations pass across verification, lifecycle routing, failure re-entry, review remediation, incremental implementation, auto-build, PR transitions, atomic git history, and the first shipping case. The shipping pressure case and the redesigned four-case specification suite pass dry-run/schema validation but still need token-backed reruns after the next quota reset.
 
 **Likely files**
 
@@ -342,7 +343,7 @@ Do not implement all changes as one large commit. Complete and verify each task 
 
 - [x] `node scripts/validate-skills.js` passes.
 - [x] `node scripts/validate-commands.js` passes.
-- [ ] `node scripts/run-evals.js` passes for routing and all affected behavioral cases. Routing passed 133 checks at 87% rank-1; remaining behavioral reruns are quota-blocked as described above.
+- [ ] `node scripts/run-evals.js` passes for routing and all affected behavioral cases. Routing passed 133 checks at 87% rank-1; only shipping pressure and the redesigned specification suite remain quota-blocked.
 - [x] The integration eval fails against the old contradictory workflow and passes against the new one.
 
 ## Task 12: Final independent review and release
@@ -353,7 +354,7 @@ Do not implement all changes as one large commit. Complete and verify each task 
 
 - [x] Review the complete change across correctness, readability, architecture, security, and performance.
 - [x] Verify documentation links and relative paths.
-- [x] Confirm all Critical and Required findings are resolved.
+- [ ] Confirm all Critical and Required findings are resolved. The fixes are implemented and awaiting fresh-agent rereview of the new revision.
 - [x] Confirm the final diff remains reviewable; split the work into stacked PRs if necessary.
 - [x] Prepare release notes and compatibility guidance for new or renamed commands.
 - [x] Run the shipping checklist with a rollback plan for plugin/package publication.
@@ -364,7 +365,7 @@ Do not implement all changes as one large commit. Complete and verify each task 
 
 **Verification**
 
-- [ ] Full repository validation and affected evals pass on the final revision. All deterministic repository validation passes; only the externally quota-blocked behavioral reruns remain.
+- [ ] Full repository validation and affected evals pass on the final revision. All deterministic validation passes, including 49 Node tests, 13 cross-integration artifact files, lifecycle contracts, 59 Markdown files, hooks, routing, and plugin manifests; only the externally quota-blocked behavioral reruns remain.
 - [x] A fresh-context reviewer can follow the new workflow without consulting this checklist.
 - [x] Public documentation, commands, skills, personas, and evals describe the same lifecycle.
 
@@ -380,3 +381,7 @@ not a remote mutation. The implementation was split into reviewable commits:
 - [x] **Standalone-skill portability:** `19ac0cb`
 - [x] **Revision-aware release review:** `d4171ea`
 - [x] **Lifecycle evals and release artifacts:** final implementation commit
+- [x] **Review remediation — lifecycle validators:** `43b03c3`
+- [x] **Review remediation — PR readiness:** `eb0c0ef`
+- [x] **Review remediation — verification evidence:** `b4e106e`
+- [x] **Review remediation — specification evals:** `b7ddb12`
