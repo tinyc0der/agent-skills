@@ -110,7 +110,7 @@ Your job is surgical precision, not unsolicited renovation.
 
 Every skill includes a verification step. A task is not complete until verification passes. "Seems right" is never sufficient — there must be evidence (passing tests, build output, runtime data).
 
-Per-skill verification is the local check. The project-wide bar that applies to *every* change, regardless of which skill is active, is the Definition of Done: tests pass, no regressions, behavior verified at runtime, docs updated. See `../../references/definition-of-done.md`. It complements each task's acceptance criteria rather than replacing them.
+Per-skill verification is the local check. The project-wide bar that applies to *every* change, regardless of which skill is active, is the Definition of Done: acceptance criteria met, tests and regression checks pass, behavior verified at runtime, code remains maintainable, relevant docs and operational safeguards are updated, and required human approval is recorded. It complements each task's acceptance criteria rather than replacing them. Optional whole-pack reference: `../../references/definition-of-done.md`.
 
 ## Failure Modes to Avoid
 
@@ -153,6 +153,18 @@ Merge:              human approval + CI + git-workflow-and-versioning
 Ship:               shipping-and-launch
 Observe:            observability-and-instrumentation -> flag/legacy cleanup
 ```
+
+Use the canonical artifacts at each transition:
+
+| Transition | Required artifact or evidence |
+|---|---|
+| Define → Plan | Approved `specs/SPEC.md`, or `specs/capability-map.md` plus addressable `specs/SPEC-<module-id>.md` files |
+| Plan → Draft PR | Approved `tasks/plan.md` and local `tasks/todo.md`, or an explicitly named external task target |
+| Draft PR → Build | Draft PR body linking the spec and plan, with scope, non-goals, risks, acceptance criteria, rollout, and rollback context |
+| Build → Verify | Independently revertible implementation commits whose per-slice Definition of Done checks pass |
+| Verify → Ready PR | Acceptance-criteria trace, repository checks, runtime evidence, and a PASS verdict naming the exact revision |
+| Ready PR → Merge | Final-revision review evidence, green required CI, no Critical or Required findings, and required human approval |
+| Merge → Ship | Release-revision evidence, migration/flag/observability readiness, go/no-go decision, and rollback plan |
 
 `debugging-and-error-recovery` is entered from any failed check and returns to the phase that failed. It is not the ordinary Verify phase.
 

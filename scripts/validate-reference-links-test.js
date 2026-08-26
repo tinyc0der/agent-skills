@@ -46,7 +46,7 @@ test('passes when a skill reaches the shared checklist two levels up', () => {
   writeFile(
     root,
     'skills/using-agent-skills/SKILL.md',
-    'See `../../references/definition-of-done.md`.\n'
+    'Optional whole-pack reference: `../../references/definition-of-done.md`.\n'
   );
 
   const result = run(root);
@@ -125,7 +125,7 @@ test('ignores paths that are not references/ links', () => {
       'Save the task list to `tasks/todo.md` and the plan to `tasks/plan.md`.',
       'Record findings in `PERF.md` or `docs/ideas/[idea-name].md`.',
       'Related: `skills/incremental-implementation/SKILL.md`.',
-      'See `../../references/definition-of-done.md`.',
+      'Optional whole-pack reference: `../../references/definition-of-done.md`.',
       '',
     ].join('\n')
   );
@@ -134,6 +134,21 @@ test('ignores paths that are not references/ links', () => {
 
   assert.equal(result.status, 0, result.stdout + result.stderr);
   assert.match(result.stdout, /1 skills checked — 0 error\(s\) — PASSED/);
+});
+
+test('fails when a pack-level reference is presented as required', () => {
+  const root = makeSandbox();
+  writeFile(root, 'references/definition-of-done.md', '# Definition of Done\n');
+  writeFile(
+    root,
+    'skills/using-agent-skills/SKILL.md',
+    'Apply the required checklist at `../../references/definition-of-done.md`.\n'
+  );
+
+  const result = run(root);
+
+  assert.equal(result.status, 1, result.stdout + result.stderr);
+  assert.match(result.stdout, /repo-root references must be labeled optional or supplemental/);
 });
 
 test('reports every unresolvable link, not just the first per skill', () => {

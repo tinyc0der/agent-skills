@@ -358,10 +358,12 @@ For triaging `npm audit` findings and supply-chain risk (typosquatting, compromi
 - [ ] **Approve** — Ready to merge
 - [ ] **Request changes** — Issues must be addressed
 ```
-## See Also
+## Optional Whole-Pack References
 
-- For detailed security review guidance, see `../../references/security-checklist.md`
-- For performance review checks, see `../../references/performance-checklist.md`
+The required review axes and exit gates are embedded above. Whole-pack installs can load these supplemental checklists:
+
+- Security review guidance: `../../references/security-checklist.md`
+- Performance review guidance: `../../references/performance-checklist.md`
 
 ## Common Rationalizations
 

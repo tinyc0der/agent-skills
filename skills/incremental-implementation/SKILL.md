@@ -246,4 +246,4 @@ After completing all increments for a task:
 
 ## See Also
 
-Per-increment verification is the local check. Before declaring a task done, apply the project-wide Definition of Done as the final gate, the standing bar every increment clears regardless of the task. See `../../references/definition-of-done.md`.
+Per-increment verification is the local check. Before declaring a task done, apply the project-wide Definition of Done as the final gate: acceptance criteria met, focused and regression tests pass, runtime behavior is demonstrated, lint/build/type checks pass when applicable, relevant documentation and safeguards are updated, and the increment is independently revertible. Optional whole-pack reference: `../../references/definition-of-done.md`.

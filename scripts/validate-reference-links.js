@@ -15,10 +15,11 @@
  * Nothing else in CI catches this: validate-artifact-paths.js is scoped to
  * spec/plan/todo artifacts and is explicitly not a general markdown linter.
  *
- * The rule enforced here: every `references/*.md` link in a SKILL.md must
- * resolve to an existing file relative to that skill's own directory. This
- * accepts both conventions in CLAUDE.md — shared checklists reached via
- * `../../references/`, and a skill's own colocated `references/` directory.
+ * The rules enforced here: every `references/*.md` link in a SKILL.md must
+ * resolve to an existing file relative to that skill's own directory, and a
+ * repo-root `../../references/` link must be labeled optional or supplemental
+ * in its local paragraph/section. This keeps individually installed skills
+ * operational when pack-level references are not copied.
  *
  * Scope is deliberately narrow: only `references/*.md` links, only SKILL.md
  * files. It is not a general markdown path linter — skills legitimately
@@ -49,7 +50,15 @@ function findViolations(skillDir, skillFile) {
     for (const match of line.matchAll(REFERENCE_LINK_RE)) {
       const link = match[1];
       if (!fs.existsSync(path.resolve(skillDir, link))) {
-        violations.push({ line: i + 1, link });
+        violations.push({ line: i + 1, link, reason: 'missing' });
+        continue;
+      }
+
+      if (link.startsWith('../../references/')) {
+        const localContext = lines.slice(Math.max(0, i - 5), i + 1).join(' ');
+        if (!/optional|supplement(?:al|ary)/i.test(localContext)) {
+          violations.push({ line: i + 1, link, reason: 'not-labeled-optional' });
+        }
       }
     }
   });
@@ -81,9 +90,13 @@ function main() {
       console.log(`  ✓  skills/${name}/SKILL.md`);
     } else {
       console.log(`  ✗  skills/${name}/SKILL.md`);
-      for (const { line, link } of violations) {
-        const resolved = path.relative(ROOT, path.resolve(skillDir, link));
-        console.log(`       L${line}: ${link} — resolves to ${resolved}, which does not exist`);
+      for (const { line, link, reason } of violations) {
+        if (reason === 'not-labeled-optional') {
+          console.log(`       L${line}: ${link} — repo-root references must be labeled optional or supplemental`);
+        } else {
+          const resolved = path.relative(ROOT, path.resolve(skillDir, link));
+          console.log(`       L${line}: ${link} — resolves to ${resolved}, which does not exist`);
+        }
         errors++;
       }
     }
@@ -95,7 +108,7 @@ function main() {
   if (errors > 0) {
     console.log('\nLinks to references/ are resolved from the skill\'s own directory.');
     console.log('Shared checklists live in the repo-root references/, two levels up:');
-    console.log('use `../../references/<file>.md`, not `references/<file>.md`.');
+    console.log('use `../../references/<file>.md`, not `references/<file>.md`, and label pack-level links optional.');
     process.exit(1);
   }
 }

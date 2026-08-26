@@ -356,9 +356,9 @@ then verifies the test passes.
 
 This separation ensures the test is written without knowledge of the fix, making it more robust.
 
-## See Also
+## Optional Whole-Pack Reference
 
-For JavaScript/TypeScript testing patterns illustrating these principles — Jest, React Testing Library, Supertest, Playwright — see `../../references/testing-patterns.md`. The principles transfer to any ecosystem; the syntax and tools there are JS/TS-specific.
+The required RED-GREEN-REFACTOR process is embedded above. Whole-pack installs can load JavaScript/TypeScript examples for Jest, React Testing Library, Supertest, and Playwright from `../../references/testing-patterns.md`; the principles transfer to any ecosystem, while that syntax is JS/TS-specific.
 
 ## Common Rationalizations
 

@@ -35,6 +35,11 @@ DEFINE -> PLAN -> DRAFT PR -> BUILD -> VERIFY -> READY PR -> REVIEW -> MERGE -> 
 | Simplify the code | `/code-simplify` | Clarity over cleverness |
 | Ship to production | `/ship` | Faster is safer |
 
+Migration note: older examples used `/test` after `/build`. Keep `/test` for
+RED-GREEN-REFACTOR while implementing behavior; use `/verify` after the assembled
+feature is complete. Antigravity and Gemini name `/plan` as `/planning`, but the
+lifecycle and artifacts are identical.
+
 Want fewer manual steps once the spec exists? **`/build auto`** generates the plan and implements every task in a single approved pass — you approve the plan once, then it runs autonomously. It removes the human stepping *between* tasks, not the verification: every task is still test-driven and committed individually, and it pauses on failures or risky steps.
 
 Skills also activate automatically based on what you're doing — designing an API triggers `api-and-interface-design`, building UI triggers `frontend-ui-engineering`, and so on.
@@ -59,11 +64,10 @@ npx skills add addyosmani/agent-skills --skill test-driven-development   # red-g
 ```
 
 > **Installing one skill?** A per-skill `npx` install copies only
-> `skills/<name>/`, not the repo-level `references/` directory. The skill still
-> works, but paths to supplementary shared checklists are unavailable. Use a
-> whole-repo integration, clone the repository, or copy the needed checklist into
-> a `references/` directory inside the installed skill. This portability gap is
-> tracked in [#361](https://github.com/addyosmani/agent-skills/issues/361).
+> `skills/<name>/`, not the repo-level `references/` directory. Every skill keeps
+> its required workflow and exit criteria in `SKILL.md`; repo-level references are
+> optional, expanded guidance for whole-pack installs. Copy a shared checklist
+> into the installed skill only when you want that additional detail.
 
 Prefer a native integration? Pick your tool below.
 

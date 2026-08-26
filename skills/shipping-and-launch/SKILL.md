@@ -273,12 +273,14 @@ Every deployment needs a rollback plan before it happens:
 - Redeploy previous version: < 5 minutes
 - Database rollback: < 15 minutes
 ```
-## See Also
+## Optional Whole-Pack References
 
-- For the project-wide Definition of Done that every change must clear before this checklist, see `../../references/definition-of-done.md`
-- For security pre-launch checks, see `../../references/security-checklist.md`
-- For performance pre-launch checklist, see `../../references/performance-checklist.md`
-- For accessibility verification before launch, see `../../references/accessibility-checklist.md`
+The required release gates are embedded above. Whole-pack installs can load these supplemental checklists for extra depth:
+
+- Project-wide Definition of Done: `../../references/definition-of-done.md`
+- Security pre-launch checks: `../../references/security-checklist.md`
+- Performance pre-launch checks: `../../references/performance-checklist.md`
+- Accessibility verification: `../../references/accessibility-checklist.md`
 
 ## Common Rationalizations
 

@@ -114,9 +114,9 @@ Checklists used by more than one skill — testing, security, performance, acces
 
 This is a pack-level design choice. The Agent Skills spec describes a skill as a self-contained directory, but several skills here point at the same checklists. Colocating those would force one of two options: copy the checklist into every skill that uses it, or pick one skill to "own" it and have the others reach into that directory. Both drift over time. A single repo-root copy stays the source of truth.
 
-The tradeoff is portability: a whole-repo install (such as the Claude Code marketplace plugin) carries `references/` along, but a per-skill install that copies only `skills/<name>/` leaves the repo-root sibling behind, and those links resolve to nothing. That gap is tracked in [#361](https://github.com/addyosmani/agent-skills/issues/361).
+The portability contract is explicit: a skill's required workflow, minimum checks, and exit criteria must remain in `SKILL.md`. Repo-root references are optional expanded guidance. A whole-repo install (such as the Claude Code marketplace plugin) carries them; a per-skill install that copies only `skills/<name>/` may omit them without blocking the skill. Every repo-root link in a skill must be labeled optional or supplemental so agents do not treat a missing pack-level file as a stop condition.
 
-Current convention: material used by exactly one skill is a supporting file inside that skill's directory; material shared across skills goes in `references/`.
+Current convention: material required by exactly one skill is a supporting file inside that skill's directory; material shared across skills goes in `references/` only after each consuming skill embeds the minimum required behavior.
 
 ## Context Efficiency
 

@@ -347,9 +347,9 @@ npx bundlesize --config bundlesize.config.json
 npx lhci autorun
 ```
 
-## See Also
+## Optional Whole-Pack Reference
 
-For detailed performance checklists, optimization commands, and anti-pattern reference, see `../../references/performance-checklist.md`.
+The required measurement and optimization process is embedded above. Whole-pack installs can load the supplemental checklist at `../../references/performance-checklist.md`.
 
 
 ## Common Rationalizations
