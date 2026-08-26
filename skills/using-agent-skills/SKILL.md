@@ -20,20 +20,20 @@ Task arrives
     ├── Have a rough concept, need variants? → idea-refine
     ├── New project/feature/change? ──→ spec-driven-development
     ├── Have a spec, need tasks? ──────→ planning-and-task-breakdown
-    ├── Implementing code? ────────────→ incremental-implementation
+    ├── Implementing code? ────────────→ incremental-implementation + test-driven-development
     │   ├── UI work? ─────────────────→ frontend-ui-engineering
     │   ├── API work? ────────────────→ api-and-interface-design
     │   ├── Need better context? ─────→ context-engineering
     │   ├── Need doc-verified code? ───→ source-driven-development
     │   └── Stakes high / unfamiliar code? ──→ doubt-driven-development
-    ├── Writing/running tests? ────────→ test-driven-development
+    ├── Completed change needs proof? ─→ verification-and-validation
     │   └── Browser-based? ───────────→ browser-testing-with-devtools
     ├── Something broke? ──────────────→ debugging-and-error-recovery
     ├── Reviewing code? ───────────────→ code-review-and-quality
     │   ├── Too complex? ─────────────→ code-simplification
     │   ├── Security concerns? ───────→ security-and-hardening
     │   └── Performance concerns? ────→ performance-optimization
-    ├── Committing/branching? ─────────→ git-workflow-and-versioning
+    ├── Committing/branching/PR? ──────→ git-workflow-and-versioning
     ├── CI/CD pipeline work? ──────────→ ci-cd-and-automation
     ├── Deprecating/migrating? ────────→ deprecation-and-migration
     ├── Writing docs/ADRs? ───────────→ documentation-and-adrs
@@ -133,34 +133,37 @@ These are the subtle errors that look like productivity but create problems:
 
 2. **Skills are workflows, not suggestions.** Follow the steps in order. Don't skip verification steps.
 
-3. **Multiple skills can apply.** A feature implementation might involve `idea-refine` → `spec-driven-development` → `planning-and-task-breakdown` → `incremental-implementation` → `test-driven-development` → `code-review-and-quality` → `code-simplification` → `shipping-and-launch` in sequence.
+3. **Multiple skills can apply.** A feature commonly uses `spec-driven-development` → `planning-and-task-breakdown` → `incremental-implementation` with `test-driven-development` → `verification-and-validation` → `code-review-and-quality` → `shipping-and-launch`. Cross-cutting skills activate when their concern appears.
 
 4. **When in doubt, start with a spec.** If the task is non-trivial and there's no spec, begin with `spec-driven-development`.
 
 ## Lifecycle Sequence
 
-For a complete feature, the typical skill sequence is:
+For a complete feature, the typical lifecycle is:
 
 ```
-1.  interview-me                → Extract what the user actually wants
-2.  idea-refine                 → Refine vague ideas
-3.  spec-driven-development     → Define what we're building
-4.  planning-and-task-breakdown → Break into verifiable chunks
-5.  context-engineering         → Load the right context
-6.  source-driven-development   → Verify against official docs
-7.  incremental-implementation  → Build slice by slice
-8.  observability-and-instrumentation → Instrument as you build (runs parallel with 7-9, not after)
-9.  doubt-driven-development    → Cross-examine non-trivial decisions in-flight
-10. test-driven-development     → Prove each slice works
-11. code-review-and-quality     → Review before merge
-12. code-simplification         → Reduce unnecessary complexity while preserving behavior
-13. git-workflow-and-versioning → Clean commit history
-14. documentation-and-adrs      → Document decisions
-15. deprecation-and-migration   → Retire old systems and move users safely when needed
-16. shipping-and-launch         → Deploy safely
+Optional discovery: interview-me -> idea-refine
+Define:             spec-driven-development
+Plan:               planning-and-task-breakdown
+Draft PR:           git-workflow-and-versioning
+Build:              incremental-implementation + test-driven-development
+Verify:             verification-and-validation
+Review:             code-review-and-quality -> fix -> reverify -> rereview
+Merge:              human approval + CI + git-workflow-and-versioning
+Ship:               shipping-and-launch
+Observe:            observability-and-instrumentation -> flag/legacy cleanup
 ```
 
-Not every task needs every skill. A bug fix might only need: `debugging-and-error-recovery` → `test-driven-development` → `code-review-and-quality`.
+`debugging-and-error-recovery` is entered from any failed check and returns to the phase that failed. It is not the ordinary Verify phase.
+
+Cross-cutting skills do not wait for a late lifecycle phase:
+
+- `git-workflow-and-versioning` applies from branch creation through PR, merge, versioning, and release.
+- `security-and-hardening` applies from design through review whenever trust boundaries exist.
+- `documentation-and-adrs` applies when decisions or public behavior change.
+- `observability-and-instrumentation` is designed and built with production-critical paths.
+- `ci-cd-and-automation` enforces merge and deployment gates.
+- `context-engineering`, `source-driven-development`, and `doubt-driven-development` activate when their conditions apply.
 
 ## Quick Reference
 
@@ -171,21 +174,22 @@ Not every task needs every skill. A bug fix might only need: `debugging-and-erro
 | Define | spec-driven-development | Requirements and acceptance criteria before code |
 | Plan | planning-and-task-breakdown | Decompose into small, verifiable tasks |
 | Build | incremental-implementation | Thin vertical slices, test each before expanding |
+| Build | test-driven-development | Failing test first, then make it pass and refactor |
 | Build | source-driven-development | Verify against official docs before implementing |
 | Build | doubt-driven-development | Adversarial fresh-context review of every non-trivial decision |
 | Build | context-engineering | Right context at the right time |
 | Build | frontend-ui-engineering | Production-quality UI with accessibility |
 | Build | api-and-interface-design | Stable interfaces with clear contracts |
-| Verify | test-driven-development | Failing test first, then make it pass |
+| Verify | verification-and-validation | Acceptance trace, repository gates, runtime evidence, readiness verdict |
 | Verify | browser-testing-with-devtools | Chrome DevTools MCP for runtime verification |
-| Verify | debugging-and-error-recovery | Reproduce → localize → fix → guard |
+| Exception | debugging-and-error-recovery | Failed check: reproduce → localize → fix → guard → reverify |
 | Review | code-review-and-quality | Five-axis review with quality gates |
 | Review | code-simplification | Preserve behavior while reducing unnecessary complexity |
-| Review | security-and-hardening | OWASP prevention, input validation, least privilege |
 | Review | performance-optimization | Measure first, optimize only what matters |
-| Ship | git-workflow-and-versioning | Atomic commits, clean history |
-| Ship | ci-cd-and-automation | Automated quality gates on every change |
+| Cross-cutting | git-workflow-and-versioning | Branches, atomic commits, PR readiness, merge, and versions |
+| Cross-cutting | ci-cd-and-automation | Automated merge and deployment gates |
+| Cross-cutting | security-and-hardening | Trust boundaries, input validation, least privilege |
+| Cross-cutting | documentation-and-adrs | Document decisions and public behavior when they change |
+| Cross-cutting | observability-and-instrumentation | Instrument production-critical behavior as it is built |
 | Ship | deprecation-and-migration | Remove old systems and migrate users safely |
-| Ship | documentation-and-adrs | Document the why, not just the what |
-| Ship | observability-and-instrumentation | Structured logs, RED metrics, traces, symptom-based alerts |
 | Ship | shipping-and-launch | Pre-launch checklist, monitoring, rollback plan |

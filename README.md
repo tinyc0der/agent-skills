@@ -8,27 +8,28 @@ Skills encode the workflows, quality gates, and best practices that senior engin
 
 ![Addy's Agent Skills](https://addyosmani.com/assets/images/addys-agent-skills.jpg)
 
-```
-  DEFINE          PLAN           BUILD          VERIFY         REVIEW          SHIP
- ┌──────┐      ┌──────┐      ┌──────┐      ┌──────┐      ┌──────┐      ┌──────┐
- │ Idea │ ───▶ │ Spec │ ───▶ │ Code │ ───▶ │ Test │ ───▶ │  QA  │ ───▶ │  Go  │
- │Refine│      │  PRD │      │ Impl │      │Debug │      │ Gate │      │ Live │
- └──────┘      └──────┘      └──────┘      └──────┘      └──────┘      └──────┘
-  /spec          /plan          /build        /test         /review       /ship
+```text
+DEFINE -> PLAN -> DRAFT PR -> BUILD -> VERIFY -> READY PR -> REVIEW -> MERGE -> SHIP
+ /spec    /plan   /pr draft   /build   /verify   /pr ready    /review          /ship
+                                  ^       |
+                                  | debug |
+                                  +-------+
 ```
 
 ---
 
 ## Commands
 
-8 slash commands that map to the development lifecycle. Each one activates the right skills automatically.
+10 slash commands map to lifecycle phases or focused specialist workflows. Each activates the right skills automatically.
 
 | What you're doing | Command | Key principle |
 |-------------------|---------|---------------|
 | Define what to build | `/spec` | Spec before code |
 | Plan how to build it | `/plan` | Small, atomic tasks |
+| Open or ready a pull request | `/pr draft`, `/pr ready` | Visible early, ready only with current evidence |
 | Build incrementally | `/build` | One slice at a time |
-| Prove it works | `/test` | Tests are proof |
+| Verify the assembled feature | `/verify` | Acceptance criteria require evidence |
+| Develop behavior test-first | `/test` | Red-Green-Refactor |
 | Review before merge | `/review` | Improve code health |
 | Audit web performance | `/webperf` | Measure before you optimize |
 | Simplify the code | `/code-simplify` | Clarity over cleverness |
@@ -266,18 +267,23 @@ The commands above are entry points. The pack includes 25 skills total — 24 li
 |-------|-------------|----------|
 | [code-review-and-quality](skills/code-review-and-quality/SKILL.md) | Five-axis review, change sizing (~100 lines), severity labels (Nit/Optional/FYI), review speed norms, splitting strategies | Before merging any change |
 | [code-simplification](skills/code-simplification/SKILL.md) | Chesterton's Fence, Rule of 500, reduce complexity while preserving exact behavior | Code works but is harder to read or maintain than it should be |
-| [security-and-hardening](skills/security-and-hardening/SKILL.md) | OWASP Top 10 prevention, auth patterns, secrets management, dependency auditing, three-tier boundary system | Handling user input, auth, data storage, or external integrations |
 | [performance-optimization](skills/performance-optimization/SKILL.md) | Measure-first approach - Core Web Vitals targets, profiling workflows, bundle analysis, anti-pattern detection | Performance requirements exist or you suspect regressions |
+
+### Cross-cutting - Active when their concern appears
+
+| Skill | What It Does | Use When |
+|-------|-------------|----------|
+| [git-workflow-and-versioning](skills/git-workflow-and-versioning/SKILL.md) | Trunk-based development, atomic commits, draft/ready PR transitions, versioning | Branching, committing, opening a PR, merging, or releasing |
+| [ci-cd-and-automation](skills/ci-cd-and-automation/SKILL.md) | Shift Left, Faster is Safer, feature flags, quality gate pipelines, failure feedback loops | Setting up or modifying build and deploy pipelines |
+| [security-and-hardening](skills/security-and-hardening/SKILL.md) | OWASP Top 10 prevention, auth patterns, secrets management, dependency auditing, three-tier boundary system | Handling user input, auth, data storage, or external integrations |
+| [documentation-and-adrs](skills/documentation-and-adrs/SKILL.md) | Architecture Decision Records, API docs, inline documentation standards - document the *why* | Making architectural decisions, changing APIs, or shipping features |
+| [observability-and-instrumentation](skills/observability-and-instrumentation/SKILL.md) | Structured logging, RED metrics, OpenTelemetry tracing, symptom-based alerting - instrument as you build | Adding telemetry, or shipping anything that runs in production |
 
 ### Ship - Deploy with confidence
 
 | Skill | What It Does | Use When |
 |-------|-------------|----------|
-| [git-workflow-and-versioning](skills/git-workflow-and-versioning/SKILL.md) | Trunk-based development, atomic commits, change sizing (~100 lines), the commit-as-save-point pattern | Making any code change (always) |
-| [ci-cd-and-automation](skills/ci-cd-and-automation/SKILL.md) | Shift Left, Faster is Safer, feature flags, quality gate pipelines, failure feedback loops | Setting up or modifying build and deploy pipelines |
 | [deprecation-and-migration](skills/deprecation-and-migration/SKILL.md) | Code-as-liability mindset, compulsory vs advisory deprecation, migration patterns, zombie code removal | Removing old systems, migrating users, or sunsetting features |
-| [documentation-and-adrs](skills/documentation-and-adrs/SKILL.md) | Architecture Decision Records, API docs, inline documentation standards - document the *why* | Making architectural decisions, changing APIs, or shipping features |
-| [observability-and-instrumentation](skills/observability-and-instrumentation/SKILL.md) | Structured logging, RED metrics, OpenTelemetry tracing, symptom-based alerting - instrument as you build | Adding telemetry, or shipping anything that runs in production |
 | [shipping-and-launch](skills/shipping-and-launch/SKILL.md) | Pre-launch checklists, feature flag lifecycle, staged rollouts, rollback procedures, monitoring setup | Preparing to deploy to production |
 
 ---
@@ -362,24 +368,24 @@ agent-skills/
 │   ├── api-and-interface-design/      #   Build
 │   ├── verification-and-validation/   #   Verify
 │   ├── browser-testing-with-devtools/ #   Verify
-│   ├── debugging-and-error-recovery/  #   Verify
+│   ├── debugging-and-error-recovery/  #   Exception path
 │   ├── code-review-and-quality/       #   Review
 │   ├── code-simplification/           #   Review
-│   ├── security-and-hardening/        #   Review
+│   ├── security-and-hardening/        #   Cross-cutting
 │   ├── performance-optimization/      #   Review
-│   ├── git-workflow-and-versioning/   #   Ship
-│   ├── ci-cd-and-automation/          #   Ship
+│   ├── git-workflow-and-versioning/   #   Cross-cutting
+│   ├── ci-cd-and-automation/          #   Cross-cutting
 │   ├── deprecation-and-migration/     #   Ship
-│   ├── documentation-and-adrs/        #   Ship
-│   ├── observability-and-instrumentation/ # Ship
+│   ├── documentation-and-adrs/        #   Cross-cutting
+│   ├── observability-and-instrumentation/ # Cross-cutting
 │   ├── shipping-and-launch/           #   Ship
 │   └── using-agent-skills/            #   Meta: how to use this pack
 ├── agents/                            # 4 specialist personas
 ├── references/                        # 7 supplementary checklists
 ├── hooks/                             # Session lifecycle hooks
-├── .claude/commands/                  # 8 slash commands (Claude Code)
-├── .gemini/commands/                  # 8 slash commands (Gemini CLI)
-├── commands/                          # 8 slash commands (Antigravity CLI)
+├── .claude/commands/                  # 10 slash commands (Claude Code)
+├── .gemini/commands/                  # 10 slash commands (Gemini CLI)
+├── commands/                          # 10 slash commands (Antigravity CLI)
 ├── plugin.json                        # Antigravity plugin manifest
 └── docs/                              # Setup guides per tool
 ```

@@ -45,17 +45,19 @@ agy plugin list
 
 ## Slash Commands
 
-The plugin registers 8 custom slash commands: 7 lifecycle commands plus the `/webperf` specialist audit:
+The plugin registers 10 custom slash commands: lifecycle commands plus focused TDD, simplification, and web-performance workflows:
 
 | Command | What it does | Activated Skill |
 |---------|--------------|-----------------|
 | `/spec` | Write a structured spec before writing code | `spec-driven-development` |
 | `/planning` | Break work into small, verifiable tasks | `planning-and-task-breakdown` |
+| `/pr draft`, `/pr ready` | Create a draft PR or mark it ready with current verification | `git-workflow-and-versioning` |
 | `/build` | Implement the next task incrementally | `incremental-implementation` |
+| `/verify` | Validate the assembled feature against acceptance criteria | `verification-and-validation` |
 | `/test` | Run TDD workflow — red, green, refactor | `test-driven-development` |
 | `/review` | Five-axis code review | `code-review-and-quality` |
 | `/code-simplify` | Reduce complexity without changing behavior | `code-simplification` |
-| `/ship` | Pre-launch checklist via parallel persona fan-out | `shipping-and-launch` |
+| `/ship` | Revision-matched release evidence and rollback-backed go/no-go | `shipping-and-launch` |
 | `/webperf` | Audit browser-facing apps for Core Web Vitals and performance issues | `web-performance-auditor` |
 
 Each command automatically invokes the corresponding skill and guides the agent step-by-step.

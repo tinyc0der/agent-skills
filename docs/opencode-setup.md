@@ -66,6 +66,7 @@ The agent evaluates every request and maps it to the appropriate skill.
 Examples:
 
 - "build a feature" → `incremental-implementation` + `test-driven-development`
+- "verify this completed feature" → `verification-and-validation`
 - "design a system" → `spec-driven-development`
 - "fix a bug" → `debugging-and-error-recovery`
 - "review this code" → `code-review-and-quality`
@@ -79,7 +80,7 @@ The development lifecycle is encoded implicitly:
 - DEFINE → `spec-driven-development`
 - PLAN → `planning-and-task-breakdown`
 - BUILD → `incremental-implementation` + `test-driven-development`
-- VERIFY → `debugging-and-error-recovery`
+- VERIFY → `verification-and-validation`
 - REVIEW → `code-review-and-quality`
 - SHIP → `shipping-and-launch`
 
@@ -100,7 +101,7 @@ Agent behavior:
 - Detects feature work
 - Invokes `spec-driven-development`
 - Produces a spec before writing code
-- Moves to planning and implementation skills
+- Moves through planning, test-driven implementation, feature verification, review, and shipping gates
 
 ---
 
@@ -137,6 +138,7 @@ For OpenCode to work correctly, the agent must follow these rules:
 - Always check if a skill applies before acting
 - If a skill applies, it MUST be used
 - Never skip required workflows (spec, plan, test, etc.)
+- Treat `debugging-and-error-recovery` as the failure path and return to the failed phase after the fix
 - Do not jump directly to implementation
 
 These rules are enforced via `AGENTS.md`.

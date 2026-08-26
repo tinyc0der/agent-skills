@@ -23,13 +23,14 @@ OpenCode uses a **skill-driven execution model** powered by the `skill` tool and
 
 The agent should automatically map user intent to skills:
 
-- Feature / new functionality → `spec-driven-development`, then `incremental-implementation`, `test-driven-development`
+- Feature / new functionality → `spec-driven-development`, `planning-and-task-breakdown`, `incremental-implementation` + `test-driven-development`, then `verification-and-validation`
 - Planning / breakdown → `planning-and-task-breakdown`
 - Bug / failure / unexpected behavior → `debugging-and-error-recovery`
 - Code review → `code-review-and-quality`
 - Refactoring / simplification → `code-simplification`
 - API or interface design → `api-and-interface-design`
 - UI work → `frontend-ui-engineering`
+- Pull request / branch / commit → `git-workflow-and-versioning`
 
 ### Lifecycle Mapping (Implicit Commands)
 
@@ -40,9 +41,11 @@ Instead, the agent must internally follow this lifecycle:
 - DEFINE → `spec-driven-development`
 - PLAN → `planning-and-task-breakdown`
 - BUILD → `incremental-implementation` + `test-driven-development`
-- VERIFY → `debugging-and-error-recovery`
+- VERIFY → `verification-and-validation` (+ `browser-testing-with-devtools` when applicable)
 - REVIEW → `code-review-and-quality`
 - SHIP → `shipping-and-launch`
+
+`debugging-and-error-recovery` is the exception path for a failed check. After the fix, return to the phase that failed and rerun its evidence.
 
 ### Execution Model
 

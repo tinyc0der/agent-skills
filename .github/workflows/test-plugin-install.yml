@@ -63,6 +63,12 @@ jobs:
       - name: Test artifact-path validator
         run: node --test scripts/validate-artifact-paths-test.js
 
+      - name: Validate lifecycle contracts
+        run: node scripts/validate-lifecycle-contracts.js
+
+      - name: Test lifecycle-contract validator
+        run: node --test scripts/validate-lifecycle-contracts-test.js
+
   validate:
     name: Validate plugin structure
     needs: [validate-skills, validate-commands]

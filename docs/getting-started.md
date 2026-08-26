@@ -60,7 +60,8 @@ For comprehensive coverage, load skills by phase:
 ```
 Starting a project:  spec-driven-development → planning-and-task-breakdown
 During development:  incremental-implementation + test-driven-development
-Before merge:        code-review-and-quality + security-and-hardening
+After implementation: verification-and-validation
+Before merge:        code-review-and-quality; security-and-hardening when triggered
 Before deploy:       shipping-and-launch
 ```
 
@@ -110,8 +111,10 @@ The `.claude/commands/` directory contains slash commands for Claude Code:
 |---------|---------------|
 | `/spec` | spec-driven-development |
 | `/plan` | planning-and-task-breakdown |
+| `/pr draft`, `/pr ready` | git-workflow-and-versioning |
 | `/build` | incremental-implementation + test-driven-development |
 | `/build auto` | planning-and-task-breakdown → incremental-implementation + test-driven-development (whole plan, one approval) |
+| `/verify` | verification-and-validation |
 | `/test` | test-driven-development |
 | `/review` | code-review-and-quality |
 | `/code-simplify` | code-simplification |
@@ -160,6 +163,6 @@ The `/spec` and `/plan` commands create working artifacts (`specs/SPEC.md` or `s
 
 1. **Start with spec-driven-development** for any non-trivial work
 2. **Always load test-driven-development** when writing code
-3. **Don't skip verification steps** — they're the whole point
+3. **Run verification-and-validation** on the assembled feature before review
 4. **Load skills selectively** — more context isn't always better
 5. **Use the agents for review** — different perspectives catch different issues
