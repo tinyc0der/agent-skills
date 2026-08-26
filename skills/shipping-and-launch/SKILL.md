@@ -17,6 +17,16 @@ Ship with confidence. The goal is not just to deploy — it's to deploy safely, 
 - Opening a beta or early access program
 - Any deployment that carries risk (all of them)
 
+## Evidence Freshness
+
+Shipping consumes merge-review and verification evidence; it does not repeat those phases merely for ceremony. Record the exact release revision and reuse an existing report only when:
+
+- It names that exact revision
+- No environment, configuration, migration, feature-flag, or dependency change invalidates it
+- Its required checks completed successfully
+
+Rerun every stale, missing, or release-specific check. When several independent specialist checks are needed and parallel execution is available, run them concurrently and merge their reports. Any unresolved Critical or Required finding is a NO-GO.
+
 ## The Pre-Launch Checklist
 
 ### Code Quality

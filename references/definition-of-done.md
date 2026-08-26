@@ -49,12 +49,14 @@ The depth behind these items lives in `code-review-and-quality` (the five-axis r
 - [ ] Observability in place for new critical paths (logs, metrics, traces) (see `observability-and-instrumentation`)
 - [ ] Rollback path exists for anything risky (see `shipping-and-launch`)
 - [ ] The human has reviewed and approved before merge or deploy
+- [ ] Pull-request verification and review evidence name the exact revision being approved
 
 ## How to Apply
 
 - **Per task**: confirm the Correctness and Quality sections before checking the task off.
 - **Per feature**: confirm Integration and Documentation before considering the feature complete.
 - **Per release**: the full checklist is the floor; `shipping-and-launch` adds the deploy-specific gates on top.
+- **Per pull request**: mark ready only after feature verification passes for the current head; merge only after Critical and Required findings are resolved, CI is green, and required approval is present.
 
 Tailor the list to the project once, then reuse it unchanged. A Definition of Done that is renegotiated every sprint is not a Definition of Done.
 

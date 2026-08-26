@@ -4,7 +4,7 @@ description: Conduct a five-axis code review — correctness, readability, archi
 
 Invoke the agent-skills:code-review-and-quality skill.
 
-Review the current changes (staged or recent commits) across all five axes:
+Review the current pull request when one exists; otherwise review the staged changes or explicitly selected commits. Record the exact head revision across all five axes:
 
 1. **Correctness** — Does it match the spec? Edge cases handled? Tests adequate?
 2. **Readability** — Clear names? Straightforward logic? Well-organized?
@@ -12,5 +12,5 @@ Review the current changes (staged or recent commits) across all five axes:
 4. **Security** — Input validated? Secrets safe? Auth checked? (Use security-and-hardening skill)
 5. **Performance** — No N+1 queries? No unbounded ops? (Use performance-optimization skill)
 
-Categorize findings as Critical, Important, or Suggestion.
-Output a structured review with specific file:line references and fix recommendations.
+Categorize every finding as Critical, Required, Optional, Nit, or FYI. Critical and Required findings block approval.
+Output a structured review with specific file:line references and fix recommendations. After fixes, require affected behavior to be reverified and rereview the final revision before approval.

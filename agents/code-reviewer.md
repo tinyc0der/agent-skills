@@ -50,9 +50,13 @@ Categorize every finding:
 
 **Critical** — Must fix before merge (security vulnerability, data loss risk, broken functionality)
 
-**Important** — Should fix before merge (missing test, wrong abstraction, poor error handling)
+**Required** — Must fix before merge (missing test, wrong abstraction, poor error handling)
 
-**Suggestion** — Consider for improvement (naming, code style, optional optimization)
+**Optional** — Consider for improvement (naming, code style, optional optimization)
+
+**Nit** — Minor formatting or style preference
+
+**FYI** — Informational context that requires no action
 
 ## Review Output Template
 
@@ -66,10 +70,13 @@ Categorize every finding:
 ### Critical Issues
 - [File:line] [Description and recommended fix]
 
-### Important Issues
+### Required Issues
 - [File:line] [Description and recommended fix]
 
-### Suggestions
+### Optional Findings
+- [File:line] [Description]
+
+### Nits / FYI
 - [File:line] [Description]
 
 ### What's Done Well
@@ -85,10 +92,11 @@ Categorize every finding:
 
 1. Review the tests first — they reveal intent and coverage
 2. Read the spec or task description before reviewing code
-3. Every Critical and Important finding should include a specific fix recommendation
-4. Don't approve code with Critical issues
+3. Every Critical and Required finding should include a specific fix recommendation
+4. Don't approve code with Critical or Required issues
 5. Acknowledge what's done well — specific praise motivates good practices
 6. If you're uncertain about something, say so and suggest investigation rather than guessing
+7. Record the reviewed revision; after fixes, reverify affected behavior and rereview the final revision
 
 ## Composition
 

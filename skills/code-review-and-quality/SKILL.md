@@ -149,6 +149,8 @@ Before looking at code, understand the intent:
 - What is the expected behavior change?
 ```
 
+Record the exact revision under review. Findings and approvals are evidence for that revision; after fixes, reverify affected behavior and rereview the updated revision.
+
 ### Step 2: Review the Tests First
 
 Tests reveal intent and coverage:
@@ -180,11 +182,11 @@ Label every comment with its severity so the author knows what's required vs opt
 
 | Prefix | Meaning | Author Action |
 |--------|---------|---------------|
-| *(no prefix)* | Required change | Must address before merge |
 | **Critical:** | Blocks merge | Security vulnerability, data loss, broken functionality |
-| **Nit:** | Minor, optional | Author may ignore — formatting, style preferences |
-| **Optional:** / **Consider:** | Suggestion | Worth considering but not required |
-| **FYI** | Informational only | No action needed — context for future reference |
+| **Required:** | Blocks merge | Correctness, test, architecture, or maintainability issue introduced or exposed by the change |
+| **Optional:** | Suggestion | Worth considering but not required |
+| **Nit:** | Minor, optional | Formatting or style preference |
+| **FYI:** | Informational only | No action needed — context for future reference |
 
 This prevents authors from treating all feedback as mandatory and wasting time on optional suggestions.
 
@@ -201,6 +203,16 @@ Check the author's verification story:
 - Are there screenshots for UI changes?
 - Is there a before/after comparison?
 ```
+
+### Step 6: Remediate and Rereview
+
+Critical and Required findings enter a loop:
+
+```text
+Review -> Fix -> Reverify affected behavior -> Rereview final revision
+```
+
+Behavior-changing fixes follow `test-driven-development`. Do not approve based on a superseded diff or stale verification report.
 
 ## Multi-Model Review Pattern
 
@@ -225,7 +237,7 @@ This catches issues that a single model might miss — different models have dif
 ```
 Review this code change for correctness, security, and adherence to
 our project conventions. The spec says [X]. The change should [Y].
-Flag any issues as Critical, Required, Optional, or Nit.
+Flag every issue as Critical, Required, Optional, Nit, or FYI.
 ```
 
 ## Dead Code Hygiene
@@ -387,7 +399,7 @@ For triaging `npm audit` findings and supply-chain risk (typosquatting, compromi
 After review is complete:
 
 - [ ] All Critical issues are resolved
-- [ ] All Required (no-prefix) changes are resolved or explicitly deferred with justification
+- [ ] All Required changes are resolved
 - [ ] Tests pass
 - [ ] Build succeeds
 - [ ] The verification story is documented (what changed, how it was verified)
