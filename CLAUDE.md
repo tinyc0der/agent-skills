@@ -20,6 +20,7 @@ docs/         → Setup guides for different tools
 
 **Define:** interview-me, idea-refine, spec-driven-development
 **Plan:** planning-and-task-breakdown
+**Test design/review:** test-case-design-review
 **Build:** incremental-implementation, test-driven-development, context-engineering, source-driven-development, doubt-driven-development, frontend-ui-engineering, api-and-interface-design
 **Verify:** verification-and-validation, browser-testing-with-devtools
 **Exception:** debugging-and-error-recovery

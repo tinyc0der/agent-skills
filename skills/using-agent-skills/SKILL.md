@@ -20,6 +20,7 @@ Task arrives
     ├── Have a rough concept, need variants? → idea-refine
     ├── New project/feature/change? ──→ spec-driven-development
     ├── Have a spec, need tasks? ──────→ planning-and-task-breakdown
+    ├── Designing/reviewing/pruning tests? → test-case-design-review
     ├── Implementing code? ────────────→ incremental-implementation + test-driven-development
     │   ├── UI work? ─────────────────→ frontend-ui-engineering
     │   ├── API work? ────────────────→ api-and-interface-design
@@ -133,7 +134,7 @@ These are the subtle errors that look like productivity but create problems:
 
 2. **Skills are workflows, not suggestions.** Follow the steps in order. Don't skip verification steps.
 
-3. **Multiple skills can apply.** A feature commonly uses `spec-driven-development` → `planning-and-task-breakdown` → `incremental-implementation` with `test-driven-development` → `verification-and-validation` → `code-review-and-quality` → `shipping-and-launch`. Cross-cutting skills activate when their concern appears.
+3. **Multiple skills can apply.** A feature commonly uses `spec-driven-development` → `planning-and-task-breakdown` → `test-case-design-review` when test selection is non-trivial → `incremental-implementation` with `test-driven-development` → `verification-and-validation` → `code-review-and-quality` → `shipping-and-launch`. Cross-cutting skills activate when their concern appears.
 
 4. **When in doubt, start with a spec.** If the task is non-trivial and there's no spec, begin with `spec-driven-development`.
 
@@ -146,7 +147,7 @@ Optional discovery: interview-me -> idea-refine
 Define:             spec-driven-development
 Plan:               planning-and-task-breakdown
 Draft PR:           git-workflow-and-versioning
-Build:              incremental-implementation + test-driven-development
+Build:              incremental-implementation + test-case-design-review when needed + test-driven-development
 Verify:             verification-and-validation
 Ready PR:           git-workflow-and-versioning
 Review:             code-review-and-quality -> fix -> reverify -> rereview
@@ -178,6 +179,7 @@ Cross-cutting skills do not wait for a late lifecycle phase:
 - `documentation-and-adrs` applies when decisions or public behavior change.
 - `observability-and-instrumentation` is designed and built with production-critical paths.
 - `ci-cd-and-automation` enforces merge and deployment gates.
+- `test-case-design-review` applies wherever tests need to be selected, written without TDD sequencing, pruned, or reviewed in depth.
 - `context-engineering`, `source-driven-development`, and `doubt-driven-development` activate when their conditions apply.
 
 ## Quick Reference
@@ -188,8 +190,9 @@ Cross-cutting skills do not wait for a late lifecycle phase:
 | Define | idea-refine | Refine ideas through structured divergent and convergent thinking |
 | Define | spec-driven-development | Requirements and acceptance criteria before code |
 | Plan | planning-and-task-breakdown | Decompose into small, verifiable tasks |
+| Plan/Review | test-case-design-review | Select, write, prune, or review the minimum sufficient test set |
 | Build | incremental-implementation | Thin vertical slices, test each before expanding |
-| Build | test-driven-development | Admit the smallest distinct behavioral tests, then RED-GREEN-REFACTOR |
+| Build | test-driven-development | Execute selected behavior tests through RED-GREEN-REFACTOR |
 | Build | source-driven-development | Verify against official docs before implementing |
 | Build | doubt-driven-development | Adversarial fresh-context review of every non-trivial decision |
 | Build | context-engineering | Right context at the right time |

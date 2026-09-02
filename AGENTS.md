@@ -25,6 +25,7 @@ The agent should automatically map user intent to skills:
 
 - Feature / new functionality → `spec-driven-development`, `planning-and-task-breakdown`, `incremental-implementation` + `test-driven-development`, then `verification-and-validation`
 - Planning / breakdown → `planning-and-task-breakdown`
+- Test design, test-suite review, or pruning → `test-case-design-review`
 - Bug / failure / unexpected behavior → `debugging-and-error-recovery`
 - Code review → `code-review-and-quality`
 - Refactoring / simplification → `code-simplification`

@@ -18,6 +18,8 @@ Test generation now uses a minimum-sufficient admission rule: every proposed
 case must protect a distinct material regression that existing coverage would
 miss, at the cheapest reliable layer. Generic scenario matrices, numerical
 coverage quotas, and duplicate assertions across layers are not case requirements.
+The dedicated `test-case-design-review` skill owns that selection and focused
+review workflow; `test-driven-development` retains RED-GREEN-REFACTOR execution.
 
 ## Compatibility Guidance
 
@@ -77,7 +79,7 @@ Before publishing the plugin or package:
 - Run routing evals with the enforced rank-1 floor.
 - Run affected behavioral and pressure evals.
 - Confirm the session-start hook in normal and no-`jq` environments.
-- Confirm plugin metadata reports 25 skills and 10 commands.
+- Confirm plugin metadata reports 26 skills and 10 commands.
 - Install the built package/plugin in a clean environment and smoke-test `/spec`,
   `/plan` or `/planning`, `/pr`, `/build`, `/verify`, `/review`, and `/ship` discovery.
 - Record the exact release revision and attach the validation results.

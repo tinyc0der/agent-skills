@@ -45,28 +45,11 @@ describe('[Module/Function name]', () => {
 });
 ```
 
-### 5. Select, Don't Enumerate
+### 5. Apply the Lean Test Workflow
 
-Happy paths, empty inputs, boundaries, errors, and concurrency are prompts for risk analysis, not a mandatory matrix. Consider a category only when it changes the observable outcome or represents a credible failure for the behavior under review.
+Invoke and follow `test-case-design-review` before proposing, writing, pruning, or classifying cases. It owns the admission gate, behavior partitions, cheapest-layer decision, distinct-defect rationale, and stopping condition. Use its Keep/Merge/Rewrite/Remove/Add/Omit dispositions in the report below.
 
-| Scenario | Example |
-|----------|---------|
-| Happy path | Valid input produces expected output |
-| Empty input | Empty string, empty array, null, undefined |
-| Boundary values | Min, max, zero, negative |
-| Error paths | Invalid input, network failure, timeout |
-| Concurrency | Rapid repeated calls, out-of-order responses |
-
-Add or retain a case only when it protects a distinct observable contract against a plausible regression that existing tests would miss, at the cheapest reliable layer, with value proportionate to its maintenance and flake cost. Do not recommend cases merely for completeness, symmetry, coverage percentage, or another example from the same behavior partition.
-
-Defaults:
-
-- Bug fix: one focused reproducer; add another only for a materially different contract or known manifestation.
-- New behavior: the smallest representatives for each materially different outcome or policy transition.
-- Pure refactor: no new test unless material touched behavior lacks an adequate regression guard.
-- Integration: test the boundary risk without duplicating all lower-level cases.
-
-Stop when every materially changed contract and material risk has coverage. Report residual risk instead of padding the suite.
+For bug implementation, hand the selected focused reproducer to `test-driven-development` for RED-GREEN-REFACTOR. Do not turn a review-only request into test or production edits.
 
 ## Output Format
 
@@ -105,6 +88,6 @@ When analyzing test coverage:
 
 ## Composition
 
-- **Invoke directly when:** the user asks for test design, coverage analysis, or a Prove-It test for a specific bug.
+- **Invoke directly when:** the user asks for test design, coverage analysis, suite pruning, or a Prove-It test for a specific bug; apply `test-case-design-review` as the workflow.
 - **Invoke via:** `/test` for the TDD workflow or `/ship` when the release revision lacks current test-readiness evidence; `/ship` refreshes multiple stale specialist reports in parallel when possible.
 - **Do not invoke from another persona.** Recommendations to add tests belong in your report; the user or a slash command decides when to act on them. See [docs/agents.md](../docs/agents.md).

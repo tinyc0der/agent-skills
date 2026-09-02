@@ -2,9 +2,9 @@
 description: Run risk-based TDD — select the minimum sufficient failing tests, implement, verify. For bugs, use Prove-It.
 ---
 
-Invoke the agent-skills:test-driven-development skill.
+Invoke agent-skills:test-case-design-review to select the cases, then agent-skills:test-driven-development to execute RED-GREEN-REFACTOR.
 
-Before writing a test, inspect nearby coverage and apply the skill's test admission gate. Every new case must protect a distinct material regression at the cheapest reliable layer. Do not create cases for completeness, symmetry, numerical coverage, or a generic scenario matrix.
+Before writing a test, inspect nearby coverage and apply `test-case-design-review`'s admission gate. Every new case must protect a distinct material regression at the cheapest reliable layer. Do not create cases for completeness, symmetry, numerical coverage, or a generic scenario matrix.
 
 For new features:
 1. Map materially changed outcomes and risks to existing tests

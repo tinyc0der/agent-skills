@@ -156,6 +156,7 @@ Implement one complete slice at a time. Test-driven development is part of BUILD
 **Skills**
 
 - `incremental-implementation`
+- `test-case-design-review` when selecting, pruning, or reviewing a non-trivial case set
 - `test-driven-development`
 - `git-workflow-and-versioning`
 - `context-engineering` to load only the context needed for the current slice
@@ -368,7 +369,8 @@ Continue until the rollout is proven stable and temporary launch machinery is re
 Some disciplines do not belong to a single late phase:
 
 - `git-workflow-and-versioning` applies from the baseline through merge and release.
-- `test-driven-development` applies whenever behavior changes.
+- `test-case-design-review` applies whenever tests need non-trivial selection, writing without TDD sequencing, pruning, or focused review.
+- `test-driven-development` applies whenever behavior changes and owns RED-GREEN-REFACTOR for the selected cases.
 - `security-and-hardening` begins during specification and design when trust boundaries exist, then remains active through implementation and review.
 - `documentation-and-adrs` runs when decisions or public behavior change, not after the work is otherwise complete.
 - `observability-and-instrumentation` is designed and implemented with production-critical behavior.

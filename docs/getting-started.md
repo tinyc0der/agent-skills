@@ -59,7 +59,7 @@ For comprehensive coverage, load skills by phase:
 
 ```
 Starting a project:  spec-driven-development → planning-and-task-breakdown
-During development:  incremental-implementation + test-driven-development
+During development:  incremental-implementation + test-case-design-review when needed + test-driven-development
 After implementation: verification-and-validation
 Before merge:        code-review-and-quality; security-and-hardening when triggered
 Before deploy:       shipping-and-launch
@@ -70,6 +70,7 @@ Before deploy:       shipping-and-launch
 Don't load all skills at once — it wastes context. Load skills relevant to the current task:
 
 - Working on UI? Load `frontend-ui-engineering`
+- Designing, pruning, or reviewing tests? Load `test-case-design-review`
 - Debugging? Load `debugging-and-error-recovery`
 - Setting up CI? Load `ci-cd-and-automation`
 
@@ -115,7 +116,7 @@ The `.claude/commands/` directory contains slash commands for Claude Code:
 | `/build` | incremental-implementation + test-driven-development |
 | `/build auto` | planning-and-task-breakdown → incremental-implementation + test-driven-development (whole plan, one approval) |
 | `/verify` | verification-and-validation |
-| `/test` | test-driven-development |
+| `/test` | test-case-design-review + test-driven-development |
 | `/review` | code-review-and-quality |
 | `/code-simplify` | code-simplification |
 | `/ship` | shipping-and-launch |
@@ -161,7 +162,7 @@ The lifecycle commands build one bundle under `docs/specs/<feature-slug>/`: `spe
 ## Tips
 
 1. **Start with spec-driven-development** for any non-trivial work
-2. **Load test-driven-development** when adding or changing behavior; use its admission gate to avoid redundant cases and use proportionate executable checks for non-behavioral changes
+2. **Load test-case-design-review** when selecting, pruning, or reviewing cases; then load **test-driven-development** when implementing changed behavior through RED-GREEN-REFACTOR
 3. **Run verification-and-validation** on the assembled feature before review
 4. **Load skills selectively** — more context isn't always better
 5. **Use the agents for review** — different perspectives catch different issues

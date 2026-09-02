@@ -66,6 +66,7 @@ The agent evaluates every request and maps it to the appropriate skill.
 Examples:
 
 - "build a feature" → `incremental-implementation` + `test-driven-development`
+- "design or prune tests" → `test-case-design-review`
 - "verify this completed feature" → `verification-and-validation`
 - "design a system" → `spec-driven-development`
 - "fix a bug" → `debugging-and-error-recovery`

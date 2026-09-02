@@ -73,6 +73,7 @@ Add these as persistent context for every session:
 Install these as skills so they activate only when relevant:
 
 - `test-driven-development` — Activates when implementing logic or fixing bugs
+- `test-case-design-review` — Activates when designing, pruning, or reviewing test cases
 - `spec-driven-development` — Activates when starting a new project or feature
 - `frontend-ui-engineering` — Activates when building UI
 - `security-and-hardening` — Activates during security reviews

@@ -31,11 +31,11 @@ Pick this when you want one perspective on the current change and the user is in
 - "What tests are missing for the checkout flow?" → invoke `test-engineer` directly
 - "Audit Core Web Vitals on the product page" → invoke `web-performance-auditor` directly
 
-### Slash command (single persona behind it)
-Pick this when there's a repeatable workflow you'd otherwise re-explain every time.
+### Slash command (single workflow or persona)
+Pick this when there's a repeatable workflow or specialist perspective you'd otherwise re-explain every time.
 
 - `/review` → wraps `code-reviewer` with the project's review skill
-- `/test` → wraps `test-engineer` with TDD skill
+- `/test` → composes `test-case-design-review` for case selection with `test-driven-development` for RED-GREEN-REFACTOR
 - `/webperf` → wraps `web-performance-auditor` for performance-focused audits on web apps
 
 ### Slash command (orchestrator — fan-out)

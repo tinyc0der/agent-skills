@@ -1,7 +1,7 @@
 description = "Implement tasks incrementally — build, test, verify, commit. Add \"auto\" to run the whole plan in one approved pass."
 
 prompt = """
-Invoke the incremental-implementation skill alongside test-driven-development.
+Invoke incremental-implementation and test-driven-development. For non-trivial case selection, also invoke test-case-design-review.
 
 ## Modes
 
@@ -16,7 +16,7 @@ Pick the next pending task from the plan. Then:
 
 1. Resolve the active feature bundle and the approved spec and task-list target from docs/specs/<feature-slug>/plan.md.
 2. Read the task's acceptance criteria and load only the relevant code, patterns, and types.
-3. Apply test-driven-development's test admission gate. For each materially changed contract or credible failure risk not already covered, write and run the smallest suitable failing behavior test (RED). If no new test is warranted because the change has no behavioral impact or existing coverage is sufficient, record why and identify the appropriate focused executable check; do not invent a test so the task has one.
+3. Apply test-case-design-review's test admission gate. For each materially changed contract or credible failure risk not already covered, write and run the smallest suitable failing behavior test (RED) through test-driven-development. If no new test is warranted because the change has no behavioral impact or existing coverage is sufficient, record why and identify the appropriate focused executable check; do not invent a test so the task has one.
 4. Implement the minimum required change. For behavior, make the admitted or existing failing test pass (GREEN), then run the focused check.
 5. Refactor while the focused check remains green.
 6. Run the repository's affected and full regression tests, build, lint, formatting, and type-check gates where available.
@@ -29,7 +29,7 @@ Pick the next pending task from the plan. Then:
 
 ## Autonomous: the whole plan (`/build auto`)
 
-Use this once a spec exists and you want to collapse plan + build into one run. It removes the manual stepping between tasks — not the verification. Every behavioral task applies the test admission gate and RED-GREEN-REFACTOR; non-behavioral tasks use a proportionate executable check. Every task still earns verification evidence and its own commit.
+Use this once a spec exists and you want to collapse plan + build into one run. It removes the manual stepping between tasks — not the verification. Every behavioral task applies test-case-design-review's admission gate and test-driven-development's RED-GREEN-REFACTOR; non-behavioral tasks use a proportionate executable check. Every task still earns verification evidence and its own commit.
 
 1. Require an approved spec. Resolve the current branch to docs/specs/<feature-slug>/. Accept docs/specs/<feature-slug>/spec.md, or use docs/specs/<feature-slug>/capability-map.md to select one docs/specs/<feature-slug>/spec-<module-id>.md. A README or arbitrary document does not count. If no approved spec exists, stop and tell the user to run /spec first.
 2. Resolve the task target. Read docs/specs/<feature-slug>/plan.md when present and use docs/specs/<feature-slug>/todo.md as the durable task ledger. It may contain the checklist or an index to the designated external tracker. If the tracker is unavailable, stop instead of silently creating a second task list.

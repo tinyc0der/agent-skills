@@ -2,7 +2,7 @@
 
 How to roll out agent-skills depends heavily on where your codebase is in its life. A greenfield project can adopt the full lifecycle from commit one. A codebase with years of history needs an incremental path that respects what already exists, its conventions, its undocumented decisions, and its lack of test coverage in places you'd rather not touch blind.
 
-This guide covers both paths. For installation mechanics, see [getting-started.md](getting-started.md) and the per-tool setup guides. For what each skill does, see the [skill catalog in the README](../README.md#all-25-skills).
+This guide covers both paths. For installation mechanics, see [getting-started.md](getting-started.md) and the per-tool setup guides. For what each skill does, see the [skill catalog in the README](../README.md#all-26-skills).
 
 ---
 
@@ -39,7 +39,7 @@ Run the lifecycle in order for the project's first real feature:
 /spec   →  docs/specs/<feature-slug>/spec.md  (spec-driven-development)
 /plan   →  docs/specs/<feature-slug>/plan.md  (planning-and-task-breakdown)
 /pr draft → early collaboration artifact (git-workflow-and-versioning)
-/build  →  one slice at a time (incremental-implementation + test-driven-development)
+/build  →  one slice at a time (incremental-implementation + test-case-design-review when needed + test-driven-development)
 /verify →  assembled feature evidence (verification-and-validation)
 /pr ready → verification-matched review handoff
 /review →  before every merge  (code-review-and-quality)
@@ -50,7 +50,8 @@ Run the lifecycle in order for the project's first real feature:
 
 ### From the start, treat these as always-on
 
-- **test-driven-development**, coverage debt is cheapest to avoid at zero.
+- **test-case-design-review**, select only distinct, material regression cases before a suite accumulates redundant coverage.
+- **test-driven-development**, execute selected behavior cases through RED-GREEN-REFACTOR so coverage debt is cheapest to avoid at zero.
 - **git-workflow-and-versioning**, atomic commits and ~100-line changes are habits, not retrofits.
 - **security-and-hardening**, auth, input validation, and secrets handling are structural; bolting them on later is a migration project.
 - **documentation-and-adrs**, the first architectural decisions are exactly the ones nobody will remember the _why_ of in two years. An ADR now prevents the brownfield archaeology described in Path B.
@@ -68,7 +69,7 @@ Run the lifecycle in order for the project's first real feature:
 ### Greenfield anti-patterns
 
 - **Skipping `/spec` because "it's just a prototype."** Prototypes become products. The spec is the cheapest artifact you'll ever write for this codebase.
-- **Loading all 25 skills into every session.** It wastes context and dilutes the ones that matter. Load by phase; let `using-agent-skills` route.
+- **Loading all 26 skills into every session.** It wastes context and dilutes the ones that matter. Load by phase; let `using-agent-skills` route.
 - **Deferring observability until "there's something to observe."** Instrument as you build, retrofitting structured logging is a Path B problem you're choosing to create.
 
 ---
@@ -90,7 +91,8 @@ Goal: the agent understands the codebase before it modifies anything.
 
 Goal: every area the agent will touch gets a safety net first.
 
-- **`test-driven-development`, applied selectively.** Don't aim for global coverage; map planned changes to existing tests and add only material gaps. For untested legacy behavior, add a characterization test only when the touched behavior lacks a cheaper regression guard. The Beyonce Rule is a reminder to protect relied-on behavior, not to duplicate coverage or test every line.
+- **`test-case-design-review` before changing a legacy suite.** Map planned changes to existing tests, add only material gaps, and identify merge, rewrite, or removal candidates. For untested legacy behavior, add a characterization test only when the touched behavior lacks a cheaper regression guard.
+- **`test-driven-development` for behavior changes.** Execute the admitted regression cases through RED-GREEN-REFACTOR; do not use TDD sequencing as a reason to invent another case.
 - **`code-simplification` on the worst hotspots.** Chesterton's Fence is the operative principle: the skill forces the agent to understand _why_ code exists before removing it. Behavior-preserving simplification plus characterization tests is the lowest-risk way to make legacy code changeable.
 - **`git-workflow-and-versioning` everywhere.** Small atomic commits matter _more_ in brownfield: when a change to old code breaks something subtle, a ~100-line commit is bisectable; a 2,000-line "modernization" commit is not.
 

@@ -485,3 +485,22 @@ not a remote mutation. The implementation was split into reviewable commits:
 - [x] Routing evals pass: 133 checks at 87% rank-1, above the enforced 80% floor.
 - [x] A dry run accepts all four TDD behavioral eval cases, including the new minimum-sufficient test-design dialogue.
 - [x] Token-backed execution is **NOT RUN** for this local update because it spends external Claude tokens; it remains a publication-time confidence check.
+
+## Task 16: Add dedicated test case design and review skill
+
+**Dependencies:** Task 15
+
+**Checklist**
+
+- [x] Add `skills/test-case-design-review/SKILL.md` using the supplied lean workflow and repository-standard sections.
+- [x] Add routing and dialogue-behavior eval coverage, transferring the design-only pressure case from `test-driven-development`.
+- [x] Make the new skill canonical for case selection, pruning, and focused test review while keeping RED-GREEN-REFACTOR in `test-driven-development`.
+- [x] Align the meta-skill, project routing, test-engineer persona, review guidance, public catalog, setup counts, and skill-gap issue form.
+- [x] Record why the skill remains distinct from existing TDD coverage and open PRs #409 and #410.
+
+**Verification**
+
+- [x] Structural skill and eval validation passes.
+- [x] Deterministic routing remains above the enforced rank-1 floor with no description collision.
+- [x] The new dialogue eval dry-run is accepted.
+- [x] Full repository tests, links, hooks, plugin validation, and whitespace checks pass.

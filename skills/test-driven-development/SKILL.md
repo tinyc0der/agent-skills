@@ -35,34 +35,11 @@ Run the repository's focused-test command during the loop and its full-suite com
 
 The examples below use TypeScript for illustration; the workflow is identical in any language once you've discovered the project's own tooling.
 
-## Select the Minimum Sufficient Test Set
+## Select Cases Before RED
 
-Before RED, read the changed behavior and nearby tests. Map each materially changed observable contract or credible failure risk to existing coverage, then add only the gaps.
+Use `test-case-design-review` to select the minimum sufficient test set before RED whenever the choice is non-trivial. It owns the admission gate, behavior partitions, layer choice, test ledger, pruning decisions, and stopping condition. For an obvious one-test change, apply its core gate directly: name the distinct plausible regression, the observable contract, why existing coverage misses it, and why the selected layer is the cheapest reliable signal.
 
-Admit a test only when all of these have a specific answer:
-
-- What plausible regression would it catch?
-- What observable contract does it protect, and why does that contract matter to this change?
-- Why would the existing suite not already catch the regression?
-- Is this the cheapest reliable test layer that can observe it?
-- Is the confidence worth the runtime, maintenance, setup, and flake risk?
-
-Use these defaults:
-
-- **Bug fix:** add one focused reproduction, preferably by extending the nearest existing case. Add another only for a second materially different contract or known manifestation.
-- **New behavior:** use the smallest representatives for each materially different outcome or policy transition. Do not add nearby values or generic edge cases for symmetry.
-- **Pure refactor:** add no tests by default. Add a characterization test only when material touched behavior lacks a cheaper regression guard.
-- **Wiring or integration change:** test the boundary that can break; do not repeat all lower-level assertions end to end.
-
-Partition inputs by behavior and use one representative per partition. Test a boundary only where behavior changes. Test combinations only when their interaction creates a distinct failure mode; do not enumerate a Cartesian product. Coverage percentages and scenario labels are supporting signals, not test requirements.
-
-For a non-trivial change, record a compact test ledger in the plan or working notes:
-
-| Behavior or risk | Existing coverage | Decision | Layer and rationale |
-|---|---|---|---|
-| Distinct contract or failure | Exact test, or none | Keep, add, merge, or omit | Cheapest layer that detects it |
-
-Skip the ledger for an obviously sufficient one-test change. Stop adding tests when every materially changed contract and material risk has coverage. Report residual risk instead of padding the suite with speculative cases.
+Do not enter RED with cases justified only by completeness, symmetry, scenario labels, or numerical coverage. A pure refactor already protected by focused behavior tests needs no new case; run the relevant existing suite. Once the selected cases are clear, this skill owns their RED-GREEN-REFACTOR execution.
 
 ## The TDD Cycle
 

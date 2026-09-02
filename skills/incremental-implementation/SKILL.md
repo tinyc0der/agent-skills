@@ -36,7 +36,7 @@ Build in thin vertical slices — implement one piece, test it, verify it, then 
 For each slice:
 
 1. **Implement** the smallest complete piece of functionality
-2. **Test** — apply `test-driven-development`'s admission gate, add only the smallest missing behavioral case, and run the focused suite; when no new case is warranted, record why and run the relevant existing or executable check
+2. **Test** — apply `test-case-design-review`'s admission gate, add only the smallest missing behavioral case, then use `test-driven-development` for RED-GREEN-REFACTOR and run the focused suite; when no new case is warranted, record why and run the relevant existing or executable check
 3. **Verify** — confirm the slice works as expected (tests pass, build succeeds, manual check)
 4. **Commit** -- save your progress with a descriptive message (see `git-workflow-and-versioning` for atomic commit guidance)
 5. **Move to the next slice** — carry forward, don't restart

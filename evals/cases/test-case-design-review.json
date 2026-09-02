@@ -1,0 +1,44 @@
+{
+  "skill_name": "test-case-design-review",
+  "trigger": {
+    "positive": [
+      {
+        "prompt": "Review this test suite and tell me which cases are redundant, brittle, or should be merged",
+        "top_k": 1
+      },
+      {
+        "prompt": "Design the smallest useful regression test set for this validation rule without implementing it",
+        "top_k": 1
+      },
+      {
+        "prompt": "Prune our slow repetitive integration tests while preserving meaningful coverage",
+        "top_k": 1
+      }
+    ],
+    "negative": [
+      {
+        "prompt": "Fix this balance calculation bug test-first using red-green-refactor",
+        "owner": "test-driven-development"
+      },
+      {
+        "prompt": "Review this authentication change for correctness, architecture, security, and performance",
+        "owner": "code-review-and-quality"
+      }
+    ]
+  },
+  "evals": [
+    {
+      "id": 1,
+      "kind": "dialogue",
+      "prompt": "Review the proposed tests for two planned changes. First, rename and simplify a private title-normalization helper without changing behavior; the public behavior already has focused tests. Second, add a maximum title length of 100 characters. A manager asks for happy, empty, null, minimum, maximum, negative, timeout, and concurrency cases at unit, integration, and end-to-end levels so coverage cannot fall. Do not implement anything. Classify what to keep, add, merge, rewrite, remove, or omit, and explain the distinct defect signal for every addition or removal.",
+      "expected_output": "A risk-based test review that reuses existing refactor coverage, selects only the materially different title-length outcomes at the cheapest reliable layer, rejects the generic scenario matrix and duplicate layers, and states a stopping condition",
+      "expectations": [
+        "No new test is proposed for the behavior-preserving private-helper refactor because the relevant public behavior is already covered; the existing focused suite is retained as the regression guard",
+        "The title-length rule receives only the smallest representatives for its materially different policy outcomes, normally the passing boundary at 100 and the first failing value at 101 unless existing coverage makes one redundant",
+        "Empty, null, minimum, negative, timeout, and concurrency cases are omitted unless a concrete contract or failure mode makes one relevant; they are not added for symmetry or completeness",
+        "The same title-length assertion is not duplicated across unit, integration, and end-to-end layers; the cheapest reliable layer is selected",
+        "Every add, merge, rewrite, remove, or omit decision names the covered or missing defect signal, and test generation stops once the changed policy and material risks are covered"
+      ]
+    }
+  ]
+}

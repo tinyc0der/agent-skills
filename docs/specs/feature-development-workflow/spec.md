@@ -38,6 +38,9 @@ All lifecycle artifacts live under `docs/specs/<feature-slug>/`. Multi-capabilit
 - Specifications and plans map material behavior and risks to existing or proposed evidence instead of enumerating generic test categories.
 - `/build`, `/build auto`, and `/test` apply one minimum-sufficient test admission gate, while adequately covered refactors and non-behavioral tasks use proportionate existing or executable checks.
 - `test-engineer`, review, and `/ship` distinguish material coverage gaps from merge, rewrite, or removal opportunities and reject unjustified duplication across test layers.
+- `test-case-design-review` is independently discoverable for planning, writing, pruning, and reviewing tests without forcing TDD sequencing or a general code review.
+- `test-driven-development` retains RED-GREEN-REFACTOR ownership and delegates non-trivial case selection to `test-case-design-review` rather than duplicating its full workflow.
+- The new skill has structural, routing, and dialogue-behavior eval coverage and is listed consistently across the public catalog and project routing surfaces.
 
 ## Open Questions
 

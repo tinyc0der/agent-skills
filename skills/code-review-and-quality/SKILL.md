@@ -155,6 +155,8 @@ Record the exact revision under review. Findings and approvals are evidence for 
 
 Tests reveal intent and coverage:
 
+For substantial test-specific design, pruning, or overlap analysis, apply `test-case-design-review`. It owns the distinct-defect ledger and Keep/Merge/Rewrite/Remove/Add/Omit decisions; this skill retains the broader five-axis review and final merge assessment.
+
 ```
 - Do tests exist for the change?
 - Do they test behavior (not implementation details)?

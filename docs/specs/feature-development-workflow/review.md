@@ -1,12 +1,12 @@
-# Review: Minimum-Sufficient Test Generation
+# Review: Dedicated Test Case Design and Review Skill
 
 **Verdict:** APPROVE
 
-**Reviewed implementation target:** working tree based on `b79207d53a69c57abc2484c4ae3d45e2485d4ad2`, excluding this evidence update
+**Reviewed implementation target:** working tree based on `5c07d0fe41250a81b90cb6474242cc56ee95315f`, excluding this evidence update
 
 ## Overview
 
-The change replaces category- and coverage-driven test generation with one risk-based admission contract. It aligns planning, TDD, incremental build, review, release readiness, public documentation, and all three command adapters while preserving RED-GREEN-REFACTOR for admitted behavior changes.
+The change adds the supplied lean test-design workflow as a first-class project skill. It makes that skill the canonical owner of case selection, writing without TDD sequencing, pruning, and focused review while retaining RED-GREEN-REFACTOR in `test-driven-development` and broad merge assessment in `code-review-and-quality`.
 
 ## Critical issues
 
@@ -22,27 +22,28 @@ None.
 
 ## Nits / FYI
 
-- FYI — Three redundant validator cases were removed only after their observable contracts were retained in broader named cases.
-- FYI — Token-backed execution of the new dialogue eval remains a publication-time confidence check; deterministic, routing, and dry-run gates are green.
+- FYI — Open PR #409 proposes a much larger test-planner and case-specification system, while #410 proposes a TDD planner handoff. This skill deliberately stays at 146 lines and adds suite-pruning and focused-review behavior, but a future upstream PR should call out and coordinate the overlap.
+- FYI — Token-backed execution of the dialogue eval remains a publication-time confidence check; deterministic, routing, and dry-run gates are green.
 
 ## Five-axis assessment
 
-- Correctness: PASS — the rule covers changed contracts, credible risks, existing coverage, cheapest reliable layer, change-type defaults, and a stopping condition. Non-behavioral and adequately covered refactor paths no longer conflict with unconditional RED/GREEN wording.
-- Readability: PASS — `test-driven-development` is the canonical source; other workflow surfaces summarize or delegate to it instead of reproducing the full decision procedure.
-- Architecture: PASS — the policy follows the existing skill → commands/personas → documentation/evals layering, with harness-specific command behavior synchronized.
+- Correctness: PASS — the skill preserves the supplied admission questions, change-type defaults, behavior partitions, layer selection, writing mode, review dispositions, and stopping condition; routing distinguishes it from TDD and general code review.
+- Readability: PASS — the skill uses repository-standard sections, and duplicated selection guidance was removed from TDD and `test-engineer` in favor of explicit handoffs.
+- Architecture: PASS — skills own workflow, commands own invocation, and the persona owns perspective/output. No extra slash command, helper, fixture, dependency, or routing persona was introduced.
 - Security: PASS — no trust boundary, dependency, secret, permission, or executable-input behavior changed.
-- Performance: PASS — three process-spawning tests with duplicate defect signals were removed; the retained 56-test suite completes in under one second.
+- Performance: PASS — the design-only behavioral eval was transferred rather than copied, and no new process-spawning deterministic test was added.
 
 ## Test-case assessment
 
-- Keep — retained artifact-path coverage accepts every durable bundle artifact, including capability maps.
-- Merge completed — absent guarded-file behavior is explicit in the renamed canonical-path test and its checked-file-count assertion.
-- Merge completed — thin ship adapter behavior remains covered by the renamed aligned-lifecycle baseline.
-- Add — TDD dialogue eval 4 protects the new decision contract under explicit pressure to enumerate generic cases and duplicate layers.
+- Add — three signature positive prompts protect design, pruning, and focused test-review routing.
+- Add — two owner-backed negatives protect the TDD execution and general code-review boundaries.
+- Move completed — the existing design-only matrix-pressure dialogue now belongs to `test-case-design-review`; it was removed from the TDD eval file instead of duplicated.
+- Omit — no execution fixture or extra validator case was added because this skill's behavioral deliverable is the review conversation and existing structural/eval validators already catch packaging and routing regressions.
+- Keep — the unchanged 56-test repository suite remains the proportionate regression gate.
 
 ## Verification story
 
-- Tests reviewed: yes — each changed or removed case has a distinct-defect disposition above.
+- Tests reviewed: yes — every added, moved, or omitted eval has a distinct-defect disposition above.
 - Build verified: not applicable — the repository has no build artifact for this workflow-only change.
 - Full deterministic validation: PASS — see [verification.md](verification.md).
 - Behavioral eval: dry-run PASS; token-backed execution NOT RUN as an optional publication-time gate.

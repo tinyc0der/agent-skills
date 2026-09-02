@@ -105,7 +105,7 @@ Each task follows this structure, whether it lands in the markdown task list or 
 **Estimated scope:** [Small: 1-2 files | Medium: 3-5 files | Large: 5+ files]
 ```
 
-For a non-trivial behavioral task, use the compact test ledger from `test-driven-development`. Skip it for an obviously sufficient one-test change. Do not populate happy/empty/boundary/error/concurrency matrices unless each retained row protects a distinct material risk.
+For a non-trivial behavioral task, use the compact test ledger from `test-case-design-review`. Skip it for an obviously sufficient one-test change. Do not populate happy/empty/boundary/error/concurrency matrices unless each retained row protects a distinct material risk.
 
 ### Step 5: Order and Checkpoint
 
