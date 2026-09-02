@@ -6,13 +6,14 @@
 
 ## Objective
 
-Replace repository-global specification and task paths with one durable, branch-scoped feature bundle so concurrent work remains isolated and future sessions can trace intent, implementation, verification, review, and release preparation.
+Replace repository-global specification and task paths with one durable, branch-scoped feature bundle so concurrent work remains isolated and future sessions can trace intent, implementation, verification, review, and release preparation. Keep test generation proportionate by requiring every new case to protect a distinct material regression that existing coverage would miss, at the cheapest reliable layer.
 
 ## Non-Goals
 
 - Automatically assign ambiguous legacy artifacts to a feature.
 - Store the authoritative release-wide deployment decision in the release target itself.
 - Replace pull requests, CI, external task trackers, release systems, or deployment records.
+- Require fixed test counts, generic scenario matrices, or numerical coverage quotas.
 
 ## Affected Structure
 
@@ -34,6 +35,9 @@ All lifecycle artifacts live under `docs/specs/<feature-slug>/`. Multi-capabilit
 - Zero-argument `/ship` consumes feature launch dossiers while keeping its release-wide decision in the authoritative deployment or release system.
 - Automated validators reject path drift and missing durable verification, review, or ship contracts.
 - Documentation, eval cases, and fixtures use the durable layout.
+- Specifications and plans map material behavior and risks to existing or proposed evidence instead of enumerating generic test categories.
+- `/build`, `/build auto`, and `/test` apply one minimum-sufficient test admission gate, while adequately covered refactors and non-behavioral tasks use proportionate existing or executable checks.
+- `test-engineer`, review, and `/ship` distinguish material coverage gaps from merge, rewrite, or removal opportunities and reject unjustified duplication across test layers.
 
 ## Open Questions
 

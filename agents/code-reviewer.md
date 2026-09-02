@@ -15,6 +15,8 @@ Evaluate every change across these five dimensions:
 - Does the code do what the spec/task says it should?
 - Are edge cases handled (null, empty, boundary values, error paths)?
 - Do the tests actually verify the behavior? Are they testing the right things?
+- Does each added test protect a distinct material regression that existing coverage would miss, at the cheapest reliable layer?
+- Are any cases duplicated across behavior partitions or test layers without a distinct defect signal?
 - Are there race conditions, off-by-one errors, or state inconsistencies?
 
 ### 2. Readability

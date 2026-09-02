@@ -1,50 +1,54 @@
 # Verification: PASS
 
-**Implementation revision:** `35067b13e53ac1865902a4d8c73f07d929f71279`
+**Implementation target:** working tree based on `b79207d53a69c57abc2484c4ae3d45e2485d4ad2`, excluding this evidence update
 
 ## Acceptance trace
 
 | Criterion | Evidence | State |
 |---|---|---|
-| Every lifecycle phase uses one branch-scoped bundle | Artifact-path validator checked 32 skills, commands, and documents | PASS |
-| Multi-capability and external-tracker workflows remain supported | Updated skill contracts, fixtures, and 133 routing checks | PASS |
-| Verification, review, memory, and launch evidence have durable ownership | Lifecycle validator enforces verification, review, and ship producers; build and ship contracts cover memory candidates | PASS |
-| Evidence-only commits cannot silently cover production changes | Verification, PR readiness, review, and context contracts require an implementation revision and workflow-only intervening diff | PASS |
-| `/ship` can run from main without changing its pinned target | Feature launch dossiers are inputs; the authoritative release decision remains in the release/deployment system | PASS |
-| All harness adapters and adoption materials are aligned | Command parity, description sync, link validation, and updated eval fixtures pass | PASS |
+| Test generation admits only distinct material regressions missing from existing coverage | `test-driven-development` defines the admission questions, change-type defaults, cheapest-layer rule, compact ledger, and stopping condition | PASS |
+| Non-behavioral work and adequately covered refactors do not invent tests | `/build`, `/build auto`, `/test`, incremental implementation, and the canonical per-slice loop use existing or proportionate executable checks with an explicit rationale | PASS |
+| Generic scenario categories and numerical coverage do not become quotas | `test-engineer`, `/ship`, specifications, plans, the Definition of Done, and public adoption guidance reject blanket matrices and coverage-driven cases | PASS |
+| Review detects redundant cases as well as missing coverage | Both review instructions require a distinct defect signal and the cheapest reliable layer; `test-engineer` reports keep/add/merge/rewrite/remove/omit decisions | PASS |
+| The policy behaves consistently across supported harnesses | Claude, Gemini, and Antigravity build, test, and ship commands are aligned; command validation passes | PASS |
+| Regression coverage remains proportionate | Three redundant validator cases were folded into retained contract tests; the remaining 56-test suite passes | PASS |
+| Agent behavior has a regression specification | TDD eval 4 rejects a generic scenario matrix and duplicated layers, reuses refactor coverage, selects the 100/101 policy boundary, and defines when to stop | PASS |
 
 ## Repository gates
 
-- PASS — `node --test scripts/*-test.js`: 59 tests passed.
+- PASS — `node --test scripts/*-test.js`: 56 tests passed.
 - PASS — `node scripts/validate-skills.js`: 25 skills, 0 errors, 0 warnings.
+- PASS — skill-creator `quick_validate.py skills/test-driven-development`: skill valid.
 - PASS — `node scripts/validate-versions.js`: all manifests use version 0.6.7.
 - PASS — `node scripts/validate-reference-links.js`: 25 skills, 0 errors.
-- PASS — `node scripts/validate-markdown-links.js`: 104 Markdown files, 0 errors.
+- PASS — `node scripts/validate-markdown-links.js`: 106 Markdown files, 0 errors.
 - PASS — `node scripts/validate-commands.js`: 10 commands, parity and descriptions aligned.
 - PASS — `node scripts/validate-artifact-paths.js`: 32 guarded files, 0 errors.
 - PASS — `node scripts/validate-lifecycle-contracts.js`: 0 errors.
 - PASS — `node scripts/run-evals.js --min-rank1 80`: 133 checks passed; rank-1 rate 87%.
+- PASS — `node scripts/run-evals.js --behavioral test-driven-development --dry-run`: all four cases accepted.
+- PASS — `bash hooks/session-start-test.sh`: session payload regression passed.
 - PASS — `claude plugin validate .`: marketplace manifest valid.
-- PASS — `git diff --check`: no whitespace errors before the implementation commit.
+- PASS — `git diff --check`: no whitespace errors.
 
 ## Runtime and integration evidence
 
-- NOT APPLICABLE — This change modifies Markdown workflow contracts, JavaScript validators, and eval fixtures; it has no browser or application runtime.
-- PASS — The validators exercised producer/consumer integration across Claude, Gemini, and Antigravity adapters.
+- NOT APPLICABLE — This update changes workflow instructions, command adapters, documentation, eval specifications, and test-suite composition; it has no browser or production runtime.
+- PASS — Structural validators exercised the shared contracts across Claude, Gemini, and Antigravity adapters.
 
 ## Conditional checks
 
-- Security: NOT APPLICABLE — no authentication, secrets, permissions, or untrusted execution boundary was added.
+- Security: NOT APPLICABLE — no authentication, permissions, secrets, or execution boundary changed.
 - Accessibility: NOT APPLICABLE — no user interface changed.
-- Performance: PASS — validator and routing suites complete without a material regression; no production runtime path changed.
-- Migration/compatibility: PASS — release notes define deterministic legacy migration and stop on ambiguous ownership.
+- Performance: PASS — the complete 56-test Node suite finished in under one second; three redundant process-spawning cases were removed.
+- Migration/compatibility: PASS — existing command names and lifecycle ordering are unchanged; the release notes explain the refined test semantics.
 - Observability: NOT APPLICABLE — no production service path changed.
 
 ## Blockers and limitations
 
-- None for review readiness.
-- Token-backed behavioral execution was not run. It is a publication-time confidence gate, not a deterministic implementation requirement; the repository-required routing and structural evals passed.
+- None for this local workflow update.
+- Token-backed execution of the new behavioral eval was NOT RUN because it spends external Claude tokens. It remains a publication-time confidence check; schema, routing, and dry-run validation passed.
 
 ## Evidence commit
 
-This report is recorded by the first commit containing this file; resolve that identity with `git log -- docs/specs/feature-development-workflow/verification.md`. It intentionally evaluates the implementation revision above, and its evidence-only commit does not expand the verified scope.
+This report evaluates the working-tree implementation above. If committed as an evidence-only follow-up, that commit does not expand the implementation scope; any later non-artifact change requires affected checks to be rerun.

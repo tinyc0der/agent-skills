@@ -46,7 +46,7 @@ Run the lifecycle in order for the project's first real feature:
 /ship   →  when going live     (shipping-and-launch)
 ```
 
-`/build auto` is a good fit for greenfield: you approve the plan once and every task still runs test-driven and commits individually. The complete lifecycle bundle under `docs/specs/<feature-slug>/` is living, revision-aware documentation; keep it in version control through and after the feature.
+`/build auto` is a good fit for greenfield: you approve the plan once, behavioral tasks apply the minimum-sufficient test gate and RED-GREEN-REFACTOR, non-behavioral tasks use proportionate executable checks, and every task commits individually. The complete lifecycle bundle under `docs/specs/<feature-slug>/` is living, revision-aware documentation; keep it in version control through and after the feature.
 
 ### From the start, treat these as always-on
 
@@ -90,7 +90,7 @@ Goal: the agent understands the codebase before it modifies anything.
 
 Goal: every area the agent will touch gets a safety net first.
 
-- **`test-driven-development`, applied selectively.** Don't aim for global coverage; aim for coverage _where change is planned_. For untested legacy behavior, write characterization tests, tests that pin down what the code currently does, right or wrong, before any modification. The Beyonce Rule applies: if the agent liked a behavior enough to depend on it, it should have put a test on it.
+- **`test-driven-development`, applied selectively.** Don't aim for global coverage; map planned changes to existing tests and add only material gaps. For untested legacy behavior, add a characterization test only when the touched behavior lacks a cheaper regression guard. The Beyonce Rule is a reminder to protect relied-on behavior, not to duplicate coverage or test every line.
 - **`code-simplification` on the worst hotspots.** Chesterton's Fence is the operative principle: the skill forces the agent to understand _why_ code exists before removing it. Behavior-preserving simplification plus characterization tests is the lowest-risk way to make legacy code changeable.
 - **`git-workflow-and-versioning` everywhere.** Small atomic commits matter _more_ in brownfield: when a change to old code breaks something subtle, a ~100-line commit is bisectable; a 2,000-line "modernization" commit is not.
 
@@ -111,7 +111,7 @@ Goal: two-speed adoption, legacy code stays under the Phase 1–2 regime; **new 
 ### Brownfield anti-patterns
 
 - **"Big bang" adoption.** Loading the full lifecycle onto a legacy codebase on day one produces specs for code that already exists and refactors without safety nets. Sequence it.
-- **Letting the agent refactor untested code.** No characterization tests, no refactor. This is the single most expensive shortcut in brownfield adoption.
+- **Letting the agent refactor behavior with no regression guard.** Reuse adequate public-behavior tests when they exist; otherwise add the smallest characterization coverage for the material behavior being touched.
 - **Skipping `context-engineering` because "the code is the documentation."** The agent will infer conventions from the worst file it happens to read. Tell it the real ones.
 - **Treating the legacy system's behavior as wrong by default.** Chesterton's Fence: the weird retry loop may be load-bearing. Understand, then change.
 - **Ratcheting nothing.** Adoption should make quality monotonically better: each phase adds a gate that doesn't come back off. If a month in you can't name what's now enforced that wasn't before, the rollout has stalled.
@@ -120,13 +120,13 @@ Goal: two-speed adoption, legacy code stays under the Phase 1–2 regime; **new 
 
 ## The two paths converge
 
-Both end in the same steady state: `/spec → /plan → /pr draft → /build → /verify → /pr ready → /review → merge → /ship` for new work, always-on TDD and git discipline, review gates before merge, and skills loaded by phase rather than in bulk. Greenfield gets there in days; brownfield gets there in a quarter, and the difference is exactly the safety nets (context, characterization tests, boundaries) that the old codebase never had.
+Both end in the same steady state: `/spec → /plan → /pr draft → /build → /verify → /pr ready → /review → merge → /ship` for new work, risk-based TDD and always-on git discipline, review gates before merge, and skills loaded by phase rather than in bulk. Greenfield gets there in days; brownfield gets there in a quarter, and the difference is exactly the safety nets (context, characterization tests, boundaries) that the old codebase never had.
 
 |                        | Greenfield                     | Brownfield                               |
 | ---------------------- | ------------------------------ | ---------------------------------------- |
 | First skill loaded     | `using-agent-skills` + `/spec` | `context-engineering`                    |
 | First value delivered  | Spec'd, tested first feature   | Zero-risk reviews and safer bug fixes    |
 | TDD posture            | Universal from commit one      | Selective: tests where change is planned |
-| Refactoring rule       | Rare (little to refactor)      | Characterization tests first, always     |
+| Refactoring rule       | Rare (little to refactor)      | Reuse coverage; characterize material gaps |
 | Riskiest anti-pattern  | Skipping the spec              | Refactoring untested code                |
 | Time to full lifecycle | Day one                        | ~One quarter, two-speed in between       |

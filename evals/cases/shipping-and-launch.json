@@ -37,7 +37,8 @@
         "A rollback plan exists before the go decision",
         "Monitoring and alerting readiness is verified",
         "A clear go or no-go verdict is stated with blockers listed",
-        "Review and verification evidence is tied to the exact release revision; matching evidence may be reused and stale affected checks are rerun"
+        "Review and verification evidence is tied to the exact release revision; matching evidence may be reused and stale affected checks are rerun",
+        "Test-readiness analysis reports material uncovered regressions and redundant-case cleanup without demanding a generic scenario matrix or duplicate test layers"
       ]
     },
     {

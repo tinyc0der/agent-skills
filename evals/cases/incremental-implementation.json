@@ -62,7 +62,7 @@
         "Auto mode selects module specs through docs/specs/account-platform/capability-map.md and resolves external tracker items through docs/specs/account-platform/todo.md",
         "Generated or changed spec, plan, and task artifacts are committed together before implementation so they cannot leak into the first code commit",
         "Safe tasks run in dependency order without pausing after every task, but planned high-risk checkpoints and ambiguous, destructive, irreversible, or failing work stop the line",
-        "Each behavioral slice follows RED-GREEN-REFACTOR and then focused tests, regression checks, build, lint, type checking, and applicable runtime checks",
+        "Each behavioral slice applies the minimum-sufficient test admission gate before RED-GREEN-REFACTOR, while adequately covered or non-behavioral tasks record a rationale and use a proportionate executable check; all slices then run applicable regression, build, lint, type, and runtime checks",
         "Each completed task satisfies the canonical Definition of Done and leaves a clean independently revertible commit"
       ]
     }

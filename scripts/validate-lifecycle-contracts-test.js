@@ -107,7 +107,7 @@ afterEach(() => {
   }
 });
 
-test('passes when lifecycle and review contracts are aligned', () => {
+test('passes aligned lifecycle, review, and thin command contracts', () => {
   const root = makeSandbox();
   writeCanonicalFiles(root);
 
@@ -221,25 +221,6 @@ test('fails when a ship consumer requires manual release identifiers', () => {
   assert.match(result.stdout, /\.gemini\/commands\/ship\.toml/);
   assert.match(result.stdout, /zero-argument/);
   assert.match(result.stdout, /automatic release discovery/);
-});
-
-test('accepts thin ship command adapters when the skill owns discovery details', () => {
-  const root = makeSandbox();
-  writeCanonicalFiles(root);
-  writeFile(
-    root,
-    'commands/ship.toml',
-    [
-      'Critical Required exact release revision reuse stale',
-      'zero-argument /ship invokes the shipping-and-launch skill',
-      'Follow its Automatic Release Discovery and require confirmation.',
-      'Load docs/specs/<feature-slug>/ship.md.',
-    ].join('\n'),
-  );
-
-  const result = run(root);
-
-  assert.equal(result.status, 0, result.stdout + result.stderr);
 });
 
 test('accepts discovery safety language across Markdown line wrapping', () => {

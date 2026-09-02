@@ -161,7 +161,7 @@ The lifecycle commands build one bundle under `docs/specs/<feature-slug>/`: `spe
 ## Tips
 
 1. **Start with spec-driven-development** for any non-trivial work
-2. **Always load test-driven-development** when writing code
+2. **Load test-driven-development** when adding or changing behavior; use its admission gate to avoid redundant cases and use proportionate executable checks for non-behavioral changes
 3. **Run verification-and-validation** on the assembled feature before review
 4. **Load skills selectively** — more context isn't always better
 5. **Use the agents for review** — different perspectives catch different issues

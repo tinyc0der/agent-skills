@@ -134,7 +134,7 @@ The release-wide GO/NO-GO decision and authoritative deployment result belong to
 
 ### Code Quality
 
-- [ ] All tests pass (unit, integration, e2e)
+- [ ] All applicable test suites pass (unit, integration, and E2E where the change's material risks require them)
 - [ ] Build succeeds with no warnings
 - [ ] Lint and type checking pass
 - [ ] Code reviewed and approved

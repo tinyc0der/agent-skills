@@ -1,12 +1,12 @@
-# Review: Durable Feature Workflow Artifacts
+# Review: Minimum-Sufficient Test Generation
 
 **Verdict:** APPROVE
 
-**Reviewed implementation revision:** `35067b13e53ac1865902a4d8c73f07d929f71279`
+**Reviewed implementation target:** working tree based on `b79207d53a69c57abc2484c4ae3d45e2485d4ad2`, excluding this evidence update
 
 ## Overview
 
-The change consistently replaces global spec and task files with a durable per-feature bundle, extends the contract through verification and release preparation, and preserves the zero-argument `/ship` release boundary. The implementation is broad but mechanically aligned across skills, three command adapters, validators, documentation, and eval fixtures.
+The change replaces category- and coverage-driven test generation with one risk-based admission contract. It aligns planning, TDD, incremental build, review, release readiness, public documentation, and all three command adapters while preserving RED-GREEN-REFACTOR for admitted behavior changes.
 
 ## Critical issues
 
@@ -22,25 +22,31 @@ None.
 
 ## Nits / FYI
 
-- FYI — The authoritative release-wide ship decision intentionally remains external; committing it before deployment would change the pinned target.
-- FYI — `review.md` and `verification.md` evaluate the named implementation revision. Their evidence-only commit is reusable only while the intervening diff contains no production-affecting files.
-- FYI — Token-backed behavioral execution remains a publication-time follow-up; deterministic repository gates are green.
+- FYI — Three redundant validator cases were removed only after their observable contracts were retained in broader named cases.
+- FYI — Token-backed execution of the new dialogue eval remains a publication-time confidence check; deterministic, routing, and dry-run gates are green.
 
 ## Five-axis assessment
 
-- Correctness: PASS — producer/consumer paths, lifecycle transitions, legacy migration, and evidence freshness agree.
-- Readability: PASS — the artifact tree, slug rules, and phase ownership are explicit.
-- Architecture: PASS — feature state is branch-scoped while release-wide authority stays in the release system.
-- Security: PASS — remote release metadata remains untrusted and no new execution boundary was introduced.
-- Performance: PASS — no production runtime changed; deterministic validation remains fast.
+- Correctness: PASS — the rule covers changed contracts, credible risks, existing coverage, cheapest reliable layer, change-type defaults, and a stopping condition. Non-behavioral and adequately covered refactor paths no longer conflict with unconditional RED/GREEN wording.
+- Readability: PASS — `test-driven-development` is the canonical source; other workflow surfaces summarize or delegate to it instead of reproducing the full decision procedure.
+- Architecture: PASS — the policy follows the existing skill → commands/personas → documentation/evals layering, with harness-specific command behavior synchronized.
+- Security: PASS — no trust boundary, dependency, secret, permission, or executable-input behavior changed.
+- Performance: PASS — three process-spawning tests with duplicate defect signals were removed; the retained 56-test suite completes in under one second.
+
+## Test-case assessment
+
+- Keep — retained artifact-path coverage accepts every durable bundle artifact, including capability maps.
+- Merge completed — absent guarded-file behavior is explicit in the renamed canonical-path test and its checked-file-count assertion.
+- Merge completed — thin ship adapter behavior remains covered by the renamed aligned-lifecycle baseline.
+- Add — TDD dialogue eval 4 protects the new decision contract under explicit pressure to enumerate generic cases and duplicate layers.
 
 ## Verification story
 
-- Tests reviewed: yes — path and lifecycle regressions cover the new durable contracts.
-- Build verified: not applicable — repository has no build artifact for this Markdown/validator change.
-- Full deterministic validation: yes — see [verification.md](verification.md).
-- Security checked: yes — no secrets or unsafe metadata execution added.
+- Tests reviewed: yes — each changed or removed case has a distinct-defect disposition above.
+- Build verified: not applicable — the repository has no build artifact for this workflow-only change.
+- Full deterministic validation: PASS — see [verification.md](verification.md).
+- Behavioral eval: dry-run PASS; token-backed execution NOT RUN as an optional publication-time gate.
 
 ## Disposition
 
-No Critical or Required findings remain. This report is retained in an evidence-only commit for subsequent pull-request review.
+No Critical or Required findings remain. The change is ready for human review; any later non-artifact edit invalidates affected evidence.

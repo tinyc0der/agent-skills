@@ -112,7 +112,7 @@ Small, focused changes are easier to review, faster to merge, and safer to deplo
 
 **Watch file size, not just diff size.** A small diff can still push a file past a healthy boundary — around 1000 *total* lines in a single file (distinct from the ~1000 *changed*-lines threshold above) is a common inspection signal, not a hard cap. When a change materially grows an already-large file, ask whether to extract helpers, subcomponents, or modules *first*, before piling more on. Decompose, then add.
 
-**What counts as "one change":** A single self-contained modification that addresses one thing, includes related tests, and keeps the system functional after submission. One part of a feature — not the whole feature.
+**What counts as "one change":** A single self-contained modification that addresses one thing, includes any test changes justified by the admission gate or an explicit existing-coverage rationale, and keeps the system functional after submission. One part of a feature — not the whole feature.
 
 **Splitting strategies when a change is too large:**
 
@@ -158,7 +158,9 @@ Tests reveal intent and coverage:
 ```
 - Do tests exist for the change?
 - Do they test behavior (not implementation details)?
-- Are edge cases covered?
+- Are material edge cases and error paths covered?
+- Does each added case protect a distinct plausible regression that existing tests would miss?
+- Is the behavior tested at the cheapest reliable layer without unjustified duplication across unit, integration, and end-to-end suites?
 - Do tests have descriptive names?
 - Would the tests catch a regression if the code changed?
 ```

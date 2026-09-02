@@ -103,7 +103,7 @@ Don't silently fill in ambiguous requirements. The spec's entire purpose is to s
    docs/          → Documentation
    ```
 
-4. **Testing and verification strategy** — Which test levels and runtime evidence prove each class of behavior.
+4. **Testing and verification strategy** — Map materially changed behavior and credible risks to existing or proposed evidence. Name the cheapest reliable test level for uncovered contracts, avoid duplicate coverage across layers, and state when runtime evidence is more appropriate than another automated case. Do not turn generic scenario categories or coverage percentages into case quotas.
 
 5. **Boundaries** — Three-tier system:
    - **Always do:** Run tests before commits, follow naming conventions, validate inputs
@@ -131,7 +131,7 @@ Don't silently fill in ambiguous requirements. The spec's entire purpose is to s
 [Likely source, test, migration, and documentation locations.]
 
 ## Testing Strategy
-[Framework, test locations, coverage requirements, test levels]
+[Framework and test locations; changed contract or material risk → existing/new evidence and cheapest test level; explicit no-new-test rationale where appropriate]
 
 ## Boundaries
 - Always: [...]
@@ -205,6 +205,7 @@ Before proceeding to implementation, confirm:
 - [ ] The spec covers objective, non-goals, project context, affected structure, testing and verification, boundaries, and success criteria
 - [ ] The human has reviewed and approved the spec
 - [ ] Success criteria are specific and testable
+- [ ] The testing strategy targets material coverage gaps without generic case matrices or duplicated test layers
 - [ ] Boundaries (Always/Ask First/Never) are defined
 - [ ] The spec is saved to a file in the repository
 - [ ] If the request bundles several independently testable capabilities, a capability map (module ids, dependency direction, build order) was approved before any module spec was written

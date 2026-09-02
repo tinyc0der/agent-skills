@@ -17,7 +17,7 @@ Write a failing test before writing the code that makes it pass. For bug fixes, 
 - Adding edge case handling
 - Any change that could break existing behavior
 
-**When NOT to use:** Pure configuration changes, documentation updates, or static content changes that have no behavioral impact.
+**When NOT to use:** Pure configuration changes, documentation updates, static content changes, or behavior-preserving refactors already protected by adequate tests. For a refactor that touches material uncovered behavior, add only the characterization coverage justified by the test admission gate below.
 
 **Related:** For browser-based changes, combine TDD with runtime verification using Chrome DevTools MCP — see the Browser Testing section below.
 
@@ -34,6 +34,35 @@ The TDD cycle is universal; the commands are not. Before writing the first test,
 Run the repository's focused-test command during the loop and its full-suite command before completion. Never assume a default like `npm test` — a Gradle, Cargo, or pytest project has its own equivalent.
 
 The examples below use TypeScript for illustration; the workflow is identical in any language once you've discovered the project's own tooling.
+
+## Select the Minimum Sufficient Test Set
+
+Before RED, read the changed behavior and nearby tests. Map each materially changed observable contract or credible failure risk to existing coverage, then add only the gaps.
+
+Admit a test only when all of these have a specific answer:
+
+- What plausible regression would it catch?
+- What observable contract does it protect, and why does that contract matter to this change?
+- Why would the existing suite not already catch the regression?
+- Is this the cheapest reliable test layer that can observe it?
+- Is the confidence worth the runtime, maintenance, setup, and flake risk?
+
+Use these defaults:
+
+- **Bug fix:** add one focused reproduction, preferably by extending the nearest existing case. Add another only for a second materially different contract or known manifestation.
+- **New behavior:** use the smallest representatives for each materially different outcome or policy transition. Do not add nearby values or generic edge cases for symmetry.
+- **Pure refactor:** add no tests by default. Add a characterization test only when material touched behavior lacks a cheaper regression guard.
+- **Wiring or integration change:** test the boundary that can break; do not repeat all lower-level assertions end to end.
+
+Partition inputs by behavior and use one representative per partition. Test a boundary only where behavior changes. Test combinations only when their interaction creates a distinct failure mode; do not enumerate a Cartesian product. Coverage percentages and scenario labels are supporting signals, not test requirements.
+
+For a non-trivial change, record a compact test ledger in the plan or working notes:
+
+| Behavior or risk | Existing coverage | Decision | Layer and rationale |
+|---|---|---|---|
+| Distinct contract or failure | Exact test, or none | Keep, add, merge, or omit | Cheapest layer that detects it |
+
+Skip the ledger for an obviously sufficient one-test change. Stop adding tests when every materially changed contract and material risk has coverage. Report residual risk instead of padding the suite with speculative cases.
 
 ## The TDD Cycle
 
@@ -143,22 +172,22 @@ export async function completeTask(id: string): Promise<Task> {
 
 ## The Test Pyramid
 
-Invest testing effort according to the pyramid — most tests should be small and fast, with progressively fewer tests at higher levels:
+Invest testing effort according to the pyramid — most tests should be small and fast, with progressively fewer tests at higher levels. This is a relative shape, not a numerical coverage quota:
 
 ```
           ╱╲
-         ╱  ╲         E2E Tests (~5%)
+         ╱  ╲         E2E Tests (few critical journeys)
         ╱    ╲        Full user flows, real browser
        ╱──────╲
-      ╱        ╲      Integration Tests (~15%)
+      ╱        ╲      Integration Tests (boundary contracts)
      ╱          ╲     Component interactions, API boundaries
     ╱────────────╲
-   ╱              ╲   Unit Tests (~80%)
+   ╱              ╲   Unit Tests (many isolated decisions)
   ╱                ╲  Pure logic, isolated, milliseconds each
  ╱──────────────────╲
 ```
 
-**The Beyonce Rule:** If you liked it, you should have put a test on it. Infrastructure changes, refactoring, and migrations are not responsible for catching your bugs — your tests are. If a change breaks your code and you didn't have a test for it, that's on you.
+**The Beyonce Rule:** If behavior matters enough to depend on and no existing test would detect its regression, protect it with a test. This is a reminder to cover relied-on behavior, not a requirement to test every line or duplicate existing coverage.
 
 ### Test Sizes (Resource Model)
 
@@ -229,7 +258,7 @@ it('trims whitespace from titles', () => {
 // (Don't do this just to avoid repeating the input shape)
 ```
 
-Duplication in tests is acceptable when it makes each test independently understandable.
+Textual duplication in tests is acceptable when it makes each test independently understandable. Repeated behavioral coverage is not: merge or remove cases that catch the same defect.
 
 ### Prefer Real Implementations Over Mocks
 
@@ -263,7 +292,9 @@ it('marks overdue tasks when deadline has passed', () => {
 });
 ```
 
-### One Assertion Per Concept
+### One Behavior Per Test
+
+Keep all assertions needed to prove one behavior together. Split tests when setup, expected behavior, or likely diagnosis differs — not merely to reach one assertion per test.
 
 ```typescript
 // Good: Each test verifies one behavior
@@ -365,7 +396,7 @@ The required RED-GREEN-REFACTOR process is embedded above. Whole-pack installs c
 | Rationalization | Reality |
 |---|---|
 | "I'll write tests after the code works" | You won't. And tests written after the fact test implementation, not behavior. |
-| "This is too simple to test" | Simple code gets complicated. The test documents the expected behavior. |
+| "This is too simple to test" | Simplicity alone is not the decision. Apply the admission gate: protect a material contract or risk, and omit cases with no distinct defect signal. |
 | "Tests slow me down" | Tests slow you down now. They speed you up every time you change the code later. |
 | "I tested it manually" | Manual testing doesn't persist. Tomorrow's change might break it with no way to know. |
 | "The code is self-explanatory" | Tests ARE the specification. They document what the code should do, not what it does. |
@@ -380,6 +411,9 @@ The required RED-GREEN-REFACTOR process is embedded above. Whole-pack installs c
 - "All tests pass" but no tests were actually run
 - Bug fixes without reproduction tests
 - Tests that test framework behavior instead of application behavior
+- Multiple cases from the same behavior partition with no distinct regression history
+- The same behavioral assertion repeated at unit, integration, and end-to-end layers without a layer-specific risk
+- Cases added only for completeness or a numerical coverage target
 - Test names that don't describe the expected behavior
 - Skipping tests to make the suite pass
 - Running the same test command twice in a row without any intervening code change
@@ -388,11 +422,14 @@ The required RED-GREEN-REFACTOR process is embedded above. Whole-pack installs c
 
 After completing any implementation:
 
-- [ ] Every new behavior has a corresponding test
+- [ ] Every materially changed observable contract and material failure risk maps to existing or new coverage
+- [ ] Every new test has a distinct-defect rationale and uses the cheapest reliable layer
+- [ ] No new test duplicates an existing case or another test layer without a documented reason
+- [ ] Non-behavioral changes and adequately covered pure refactors record why no new test was needed
 - [ ] The full suite passes, run with the repository's own test command (`npm test`, `./gradlew test`, `pytest`, `go test ./...`, ...)
 - [ ] Bug fixes include a reproduction test that failed before the fix
 - [ ] Test names describe the behavior being verified
 - [ ] No tests were skipped or disabled
-- [ ] Coverage hasn't decreased (if tracked)
+- [ ] Any coverage change has been reviewed as a signal; numerical coverage alone did not force low-value cases
 
 **Note:** Run each test command after a change that could affect the result. After a clean run, don't repeat the same command unless the code has changed since — re-running on unchanged code adds no confidence.

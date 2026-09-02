@@ -110,7 +110,7 @@ Your job is surgical precision, not unsolicited renovation.
 
 Every skill includes a verification step. A task is not complete until verification passes. "Seems right" is never sufficient — there must be evidence (passing tests, build output, runtime data).
 
-Per-skill verification is the local check. The project-wide bar that applies to *every* change, regardless of which skill is active, is the Definition of Done: acceptance criteria met, tests and regression checks pass, behavior verified at runtime, code remains maintainable, relevant docs and operational safeguards are updated, and required human approval is recorded. It complements each task's acceptance criteria rather than replacing them. Optional whole-pack reference: `../../references/definition-of-done.md`.
+Per-skill verification is the local check. The project-wide bar that applies to *every* change, regardless of which skill is active, is the Definition of Done: acceptance criteria met, the minimum sufficient tests and regression checks pass, behavior is verified at runtime, code remains maintainable, relevant docs and operational safeguards are updated, and required human approval is recorded. It complements each task's acceptance criteria rather than replacing them. Optional whole-pack reference: `../../references/definition-of-done.md`.
 
 ## Failure Modes to Avoid
 
@@ -189,7 +189,7 @@ Cross-cutting skills do not wait for a late lifecycle phase:
 | Define | spec-driven-development | Requirements and acceptance criteria before code |
 | Plan | planning-and-task-breakdown | Decompose into small, verifiable tasks |
 | Build | incremental-implementation | Thin vertical slices, test each before expanding |
-| Build | test-driven-development | Failing test first, then make it pass and refactor |
+| Build | test-driven-development | Admit the smallest distinct behavioral tests, then RED-GREEN-REFACTOR |
 | Build | source-driven-development | Verify against official docs before implementing |
 | Build | doubt-driven-development | Adversarial fresh-context review of every non-trivial decision |
 | Build | context-engineering | Right context at the right time |

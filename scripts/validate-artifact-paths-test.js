@@ -40,7 +40,7 @@ afterEach(() => {
   }
 });
 
-test('passes when producers and consumers use the canonical artifact paths', () => {
+test('passes canonical artifact paths and skips absent guarded files', () => {
   const root = makeSandbox();
   writeFile(root, '.claude/commands/spec.md', 'Save the spec as `docs/specs/<feature-slug>/spec.md`.\n');
   writeFile(root, '.claude/commands/plan.md', 'Save the plan to `docs/specs/<feature-slug>/plan.md` and task list to `docs/specs/<feature-slug>/todo.md`.\n');
@@ -158,16 +158,6 @@ test('reports the offending file and line number', () => {
   assert.match(result.stdout, /L2:/);
 });
 
-test('accepts the multi-capability map location', () => {
-  const root = makeSandbox();
-  writeFile(root, '.claude/commands/build.md', 'Look for `docs/specs/<feature-slug>/capability-map.md`.\n');
-
-  const result = run(root);
-
-  assert.equal(result.status, 0, result.stdout + result.stderr);
-  assert.match(result.stdout, /1 files checked — 0 error\(s\) — PASSED/);
-});
-
 test('accepts canonical module specs and rejects module specs outside the feature bundle', () => {
   const validRoot = makeSandbox();
   writeFile(validRoot, '.claude/commands/build.md', 'Select `docs/specs/user-auth/spec-identity.md`.\n');
@@ -192,17 +182,6 @@ test('ignores non-artifact markdown references (no false positives)', () => {
     'skills/spec-driven-development/SKILL.md',
     'See `SKILL.md` and `references/testing-patterns.md`. Save the plan to `docs/specs/<feature-slug>/plan.md`.\n',
   );
-
-  const result = run(root);
-
-  assert.equal(result.status, 0, result.stdout + result.stderr);
-  assert.match(result.stdout, /1 files checked — 0 error\(s\) — PASSED/);
-});
-
-test('skips guarded files that do not exist', () => {
-  const root = makeSandbox();
-  writeFile(root, '.claude/commands/spec.md', 'Save the spec as `docs/specs/<feature-slug>/spec.md`.\n');
-  // No other guarded files present.
 
   const result = run(root);
 

@@ -21,9 +21,10 @@ Apply this to every change before declaring it done.
 ### Correctness
 - [ ] All acceptance criteria for the task are met
 - [ ] Code runs and behaves as intended, verified at runtime, not just compiled or typechecked
-- [ ] New behavior is covered by tests that fail without the change and pass with it
+- [ ] Materially changed behavior and failure risks are covered by the minimum sufficient test set; behavior-changing cases are demonstrated RED, while characterization cases pass against the pre-refactor baseline
 - [ ] Existing tests still pass; no regressions introduced
-- [ ] Edge cases and error paths are handled, not just the happy path
+- [ ] Material edge cases and error paths are handled where they change behavior or represent a credible risk
+- [ ] No new test duplicates an existing case or another layer without a distinct defect signal
 
 ### Quality
 - [ ] Code reveals intent through naming and structure; no comments needed to explain *what* it does

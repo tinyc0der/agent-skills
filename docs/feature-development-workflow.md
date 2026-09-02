@@ -120,7 +120,7 @@ Convert the approved specification into small, dependency-ordered, vertically sl
 - `docs/specs/<feature-slug>/todo.md`, containing the task checklist or a durable index to the designated external tracker
 - `docs/specs/<feature-slug>/ship.md` initialized for production-affecting work
 - ADRs following the repository's existing convention
-- Test, migration, rollout, observability, and rollback requirements embedded in the relevant tasks
+- Risk-based test decisions, migration, rollout, observability, and rollback requirements embedded in the relevant tasks; proposed cases name the existing coverage gap and distinct regression they protect
 
 **Exit gate**
 
@@ -166,10 +166,13 @@ Implement one complete slice at a time. Test-driven development is part of BUILD
 
 ```text
 Read acceptance criteria
--> Write and run a failing test (RED)
--> Implement the minimum behavior (GREEN)
--> Run the focused test
--> Refactor while tests remain green
+-> Map materially changed contracts and credible risks to existing coverage
+-> Apply the test admission gate
+-> When a gap warrants a new case, write and run the smallest failing test (RED)
+-> Otherwise record why no new test is warranted and run the focused executable check
+-> Implement the minimum required change; for behavior, make the admitted or existing failing test pass (GREEN)
+-> Run the focused check
+-> Refactor only within scope while focused checks remain green
 -> Run affected tests, build, lint, and type checking
 -> Verify runtime behavior when applicable
 -> Apply the per-task Definition of Done
@@ -179,7 +182,7 @@ Read acceptance criteria
 
 **Artifacts**
 
-- Production code and behavior-focused tests
+- Production code, the minimum sufficient behavior-focused tests, and an explicit no-new-test rationale when existing coverage or a non-behavioral check is sufficient
 - Small, independently revertible commits
 - Updated task state and living specification
 - Documentation, ADR, migration, feature-flag, and telemetry changes owned by the slice

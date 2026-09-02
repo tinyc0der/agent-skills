@@ -7,7 +7,7 @@ description: Breaks work into ordered tasks. Use when you have a spec or clear r
 
 ## Overview
 
-Decompose work into small, verifiable tasks with explicit acceptance criteria. Good task breakdown is the difference between an agent that completes work reliably and one that produces a tangled mess. Every task should be small enough to implement, test, and verify in a single focused session.
+Decompose work into small, verifiable tasks with explicit acceptance criteria. Good task breakdown is the difference between an agent that completes work reliably and one that produces a tangled mess. Every task should be small enough to implement and verify in a single focused session, using new tests only when the admission gate warrants them.
 
 ## When to Use
 
@@ -89,6 +89,8 @@ Each task follows this structure, whether it lands in the markdown task list or 
 - [ ] [Specific, testable condition]
 - [ ] [Specific, testable condition]
 
+**Test design:** [Changed contract or material risk → exact existing coverage or proposed case, cheapest layer, and distinct-defect rationale; or why no new test is warranted]
+
 **Verification:**
 - [ ] Tests pass: [the repository's focused-test command]
 - [ ] Build succeeds: [the repository's build command]
@@ -98,10 +100,12 @@ Each task follows this structure, whether it lands in the markdown task list or 
 
 **Files likely touched:**
 - `src/path/to/file.ts`
-- `tests/path/to/test.ts`
+- `tests/path/to/test.ts` — only when the admission gate warrants a new or modified case
 
 **Estimated scope:** [Small: 1-2 files | Medium: 3-5 files | Large: 5+ files]
 ```
+
+For a non-trivial behavioral task, use the compact test ledger from `test-driven-development`. Skip it for an obviously sufficient one-test change. Do not populate happy/empty/boundary/error/concurrency matrices unless each retained row protects a distinct material risk.
 
 ### Step 5: Order and Checkpoint
 
@@ -239,6 +243,7 @@ Before starting implementation, confirm:
 
 - [ ] Every task has acceptance criteria
 - [ ] Every task has a verification step
+- [ ] Every proposed test names the uncovered contract or distinct regression it protects, or the task records why existing coverage is sufficient
 - [ ] Task dependencies are identified and ordered correctly
 - [ ] Tasks are recorded or indexed in `docs/specs/<feature-slug>/todo.md`
 - [ ] Production-affecting work has an initialized `docs/specs/<feature-slug>/ship.md`

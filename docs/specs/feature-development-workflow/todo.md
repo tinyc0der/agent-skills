@@ -464,3 +464,24 @@ not a remote mutation. The implementation was split into reviewable commits:
 - [x] All 104 tracked Markdown files and local anchors validate.
 - [x] All 133 routing checks pass at 87% rank-1.
 - [x] Git diff whitespace checks pass.
+
+## Task 15: Define minimum-sufficient test generation
+
+**Dependencies:** Tasks 6, 7, 11, and 14
+
+**Checklist**
+
+- [x] Add a canonical test admission gate based on changed observable contracts, credible regression risk, existing coverage, cheapest reliable layer, and maintenance cost.
+- [x] Define defaults for bug fixes, new behavior, pure refactors, and integration wiring, plus an explicit stopping condition.
+- [x] Replace blanket happy/empty/boundary/error/concurrency requirements in `test-engineer` and `/ship` with risk prompts.
+- [x] Make `/build`, `/build auto`, and `/test` support adequately covered and non-behavioral work without inventing tests.
+- [x] Align specification, planning, Definition of Done, review, public documentation, Claude, Gemini, and Antigravity surfaces.
+- [x] Add a behavioral eval that rejects coverage pressure, generic scenario enumeration, and duplicate test layers.
+- [x] Remove three validator test cases whose distinct defect signals are already covered.
+
+**Verification**
+
+- [x] All deterministic repository validators and tests pass: 56 Node tests, 25 skills, 10 command adapters, 32 guarded artifact files, 106 Markdown files, lifecycle contracts, hook regression, plugin manifest, and whitespace checks.
+- [x] Routing evals pass: 133 checks at 87% rank-1, above the enforced 80% floor.
+- [x] A dry run accepts all four TDD behavioral eval cases, including the new minimum-sufficient test-design dialogue.
+- [x] Token-backed execution is **NOT RUN** for this local update because it spends external Claude tokens; it remains a publication-time confidence check.

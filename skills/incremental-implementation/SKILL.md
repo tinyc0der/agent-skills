@@ -36,7 +36,7 @@ Build in thin vertical slices — implement one piece, test it, verify it, then 
 For each slice:
 
 1. **Implement** the smallest complete piece of functionality
-2. **Test** — run the test suite (or write a test if none exists)
+2. **Test** — apply `test-driven-development`'s admission gate, add only the smallest missing behavioral case, and run the focused suite; when no new case is warranted, record why and run the relevant existing or executable check
 3. **Verify** — confirm the slice works as expected (tests pass, build succeeds, manual check)
 4. **Commit** -- save your progress with a descriptive message (see `git-workflow-and-versioning` for atomic commit guidance)
 5. **Move to the next slice** — carry forward, don't restart
@@ -202,6 +202,7 @@ After each increment, verify with the repository's own commands (see the test-dr
 
 - [ ] The change does one thing and does it completely
 - [ ] All existing tests still pass (the repository's test command: `npm test`, `./gradlew test`, `pytest`, ...)
+- [ ] Every new test protects a distinct material regression at the cheapest reliable layer; no test was added merely to give the increment a test
 - [ ] The build succeeds (the repository's build command)
 - [ ] Type checking passes, where the stack has one (`npx tsc --noEmit`, `mypy`, ...)
 - [ ] Linting passes (the repository's lint command)
@@ -238,7 +239,7 @@ After each increment, verify with the repository's own commands (see the test-dr
 
 After completing all increments for a task:
 
-- [ ] Each increment was individually tested and committed
+- [ ] Each increment was individually verified and committed; behavioral increments applied the test admission gate
 - [ ] The full test suite passes
 - [ ] The build is clean
 - [ ] The feature works end-to-end as specified

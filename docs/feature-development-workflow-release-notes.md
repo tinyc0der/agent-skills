@@ -14,10 +14,17 @@ narrows specification work to approved requirements, repairs `/build auto`,
 standardizes review severities, and makes zero-argument `/ship` discover the
 next release before applying revision-scoped launch gates.
 
+Test generation now uses a minimum-sufficient admission rule: every proposed
+case must protect a distinct material regression that existing coverage would
+miss, at the cheapest reliable layer. Generic scenario matrices, numerical
+coverage quotas, and duplicate assertions across layers are not case requirements.
+
 ## Compatibility Guidance
 
 - `/test` remains supported. It owns RED-GREEN-REFACTOR during implementation;
-  `/verify` is the post-build acceptance and runtime validation gate.
+  `/verify` is the post-build acceptance and runtime validation gate. Before
+  RED, `/test` maps changed contracts and material risks to existing coverage;
+  adequately covered refactors and non-behavioral work do not invent tests.
 - `/plan` remains the canonical lifecycle name. Gemini and Antigravity expose the
   same command as `/planning` because `/plan` conflicts with their native command.
 - Existing draft pull requests remain valid. Use `/pr ready` only after the PR
