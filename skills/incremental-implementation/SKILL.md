@@ -37,6 +37,8 @@ Build in thin vertical slices — implement one piece, test it, verify it, then 
 
 For each slice:
 
+Execute all slices within the user's authorized scope by default, preserving per-slice checks and commits. If the user asks for one task or stepwise review, stop at that endpoint. A normal test failure enters debugging and re-verification; a human gate is needed only for unresolved material intent, missing authority/access, or consequential risk that cannot be contained and verified autonomously. Reuse the user's existing authorization for the plan and routine implementation choices.
+
 1. **Implement** the smallest complete piece of functionality
 2. **Test** — apply `test-case-design-review`'s admission gate, add only the smallest missing behavioral case, then use `test-driven-development` for RED-GREEN-REFACTOR and run the focused suite; when no new case is warranted, record why and run the relevant existing or executable check
 3. **Verify** — confirm the slice works as expected (tests pass, build succeeds, manual check)

@@ -94,8 +94,12 @@ the workflow.
 
 ### 4. Confirm the detected release
 
-Before specialist checks or any deployment-affecting action, present a release
-discovery preview and request human confirmation:
+Present the release discovery preview and establish that the target, environment,
+scope, and deployment impact are covered by the user's release authorization.
+Reuse existing confirmation; a clear authorized release request needs no second
+permission prompt. Run discovery and checks autonomously. Before deployment,
+ask only when scope/authority is unresolved, enforced approval requires a person,
+or a material risk cannot be contained and verified with available safeguards:
 
 ```markdown
 ## Release Discovery
@@ -110,9 +114,10 @@ discovery preview and request human confirmation:
 ```
 
 Refetch before the final GO decision. If the remote default branch moved, keep
-the original target pinned and stop for confirmation: either restart discovery
-for the new head or explicitly ship the already-reviewed candidate. Never
-silently expand the release range.
+the original target pinned and report the change. Continue with that candidate
+when its authorization and checks remain valid. Restart discovery only when an
+existing release policy authorizes selecting the new head; otherwise request
+confirmation before expanding scope. Never silently expand the release range.
 
 ### Evidence scope after merge
 

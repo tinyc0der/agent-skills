@@ -31,7 +31,7 @@ Preserve trustworthy project knowledge across sessions while keeping accepted ca
 
 - Before review, reconcile implemented, verified requirement changes into the owning capability specs in the same implementation PR. Record target links or a justified no-change disposition in the track's spec or bug report.
 - Deferred, canceled, and unverified requirements remain in the track. Mark the track complete after merge and retain it as history.
-- Candidate reusable knowledge stays in the track's notes until the applicable release GO or approved closeout review for work without a production launch. Record acceptance, rejection, or deferral with rationale and target links.
+- Candidate reusable knowledge stays in the track's notes until the applicable release GO or completed closeout review for work without a production launch. Perform the review autonomously within authorization; reserve human input for unresolved critical ownership, intent, access, or authority. Record acceptance, rejection, or deferral with rationale and target links, and never label an agent review as human approval.
 - Route project constraints, deliberate decisions, declarative guidance, and repeatable procedures to their resolved canonical owners. Cite track evidence and capability specs rather than duplicating them.
 - Promote only verified, reusable lessons and durable preferences. Ineffective, reverted experiments that established no reusable constraint stay out of the knowledge bundle; retain them in track notes when they help avoid repeated work. An already-recorded fact produces a no-op with links.
 

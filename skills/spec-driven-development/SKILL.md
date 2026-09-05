@@ -23,16 +23,16 @@ Canonical capability specs live at `docs/specs/<capability>/spec.md` and describ
 
 **When NOT to use:** Single-line fixes, typo corrections, or changes where requirements are unambiguous and self-contained.
 
-## The Gated Workflow
+## Specification Readiness
 
-Spec-driven development owns the approved specification, not the implementation plan or code. It has one required Specify phase, preceded by a scope check that activates only when one request bundles several independently testable capabilities.
+Spec-driven development owns the specification within authorized scope. It has one required Specify phase, preceded by a scope check that activates only when one request bundles several independently testable capabilities. Check readiness autonomously against the user's request and established contracts; ask only for material intent or trade-offs that cannot be resolved from evidence or delegated judgment. Existing authorization counts; do not require a new approval ceremony for each artifact.
 
 ```
 SCOPE CHECK (when needed) -> SPECIFY -> HAND OFF TO PLAN
           │                    │
           ▼                    ▼
-        Human                Human
-        reviews              reviews
+        Scope                Readiness
+        check                check
 ```
 
 ### Phase 0: Scope Check
@@ -71,9 +71,9 @@ Build order: identity → billing, notifications → reporting
 - **Dependency direction, no cycles.** Arrows point one way. If two modules each need the other, they are one module.
 - **Interfaces live at the boundary.** The map records that `billing` depends on `identity`; proposed contract changes belong in the provider's track-spec section and accepted contracts in its capability spec (see `api-and-interface-design` for designing them).
 
-**The map is gated like every phase.** The human reviews capability boundaries, dependency direction, and build order before the detailed capability sections are written. Getting the map wrong is expensive; reviewing ten lines is not.
+**Check the map before detailing the spec.** Validate capability boundaries, dependency direction, and build order against the authorized outcome. Resolve routine design choices autonomously; ask only when a material scope or ownership decision requires the user. Do not infer human review from this check.
 
-**Then specify each capability's changes.** Save the approved map as `docs/tracks/<track-id>/capability-map.md`. Each row links a section in `docs/tracks/<track-id>/spec.md` and the owning `docs/specs/<capability>/spec.md` (or names its intended path for a new capability). Scope each section to that capability's objective, boundaries, contracts, and success criteria. Reuse existing capability ids across tracks; the map selects spec sections rather than separate module-spec files.
+**Then specify each capability's changes.** Save the checked, scope-authorized map as `docs/tracks/<track-id>/capability-map.md`. Each row links a section in `docs/tracks/<track-id>/spec.md` and the owning `docs/specs/<capability>/spec.md` (or names its intended path for a new capability). Scope each section to that capability's objective, boundaries, contracts, and success criteria. Reuse existing capability ids across tracks; the map selects spec sections rather than separate module-spec files.
 
 ### Phase 1: Specify
 
@@ -118,8 +118,8 @@ Don't silently fill in ambiguous requirements. The spec's entire purpose is to s
 
 5. **Boundaries** — Three-tier system:
    - **Always do:** Run tests before commits, follow naming conventions, validate inputs
-   - **Ask first:** Database schema changes, adding dependencies, changing CI config
-   - **Never do:** Commit secrets, edit vendor directories, remove failing tests without approval
+   - **Ask first:** Material unresolved intent, missing authority/access, or consequential effects and risks outside what the agent can handle within scope
+   - **Never do:** Commit secrets, bypass enforced safeguards, hide regressions by removing failing tests, or expand the task without authorization
 
 **Spec template:**
 
@@ -134,7 +134,7 @@ workflow_status: planned
 
 # Spec: [Project/Feature Name]
 
-**Approval:** [Actual approval evidence or pending review]
+**Authorization and readiness:** [User request/delegation, readiness evidence, and any actual required human approval]
 **Affected capabilities:** [Links to existing specs; intended paths for new capabilities]
 
 ## Objective
@@ -188,7 +188,7 @@ This lets you loop, retry, and problem-solve toward a clear goal rather than gue
 
 Before writing an artifact, require a non-default branch and resolve the active track. For a new track, allocate the next unused three-digit prefix above the repository's highest existing track number, starting at `001`, and append a kebab-case name. The branch can supply the suffix; it never supplies the capability id. Create `docs/tracks/<track-id>/` only for the selected or newly authorized change and preserve its id across branch renames.
 
-After human approval, save the change spec as `docs/tracks/<track-id>/spec.md`, with a section per affected capability when needed. Then invoke `planning-and-task-breakdown`; do not create tasks or implementation code in this skill. An approved proposal remains track-local until implemented and verified.
+Save the scope-authorized change spec as `docs/tracks/<track-id>/spec.md`, with a section per affected capability when needed, and check its acceptance criteria and unresolved decisions. The orchestrator continues into `planning-and-task-breakdown` when the request covers implementation; a spec-only request ends at the documented handoff. This skill produces no plan or implementation code itself. The proposal remains track-local until implemented and verified; record actual human approval only when it occurred.
 
 ## Keeping the Spec Alive
 
@@ -196,7 +196,7 @@ The track spec remains current while work proceeds:
 
 - **Update when decisions change** — If you discover the data model needs to change, update the spec first, then implement.
 - **Update when scope changes** — Features added or cut should be reflected in the spec.
-- **Commit the spec** — The approved spec belongs in version control before implementation begins.
+- **Commit the spec** — The checked specification within authorized scope belongs in version control before implementation begins.
 - **Reference the spec in PRs** — Link back to the spec section that each PR implements.
 
 **Spec reconciliation:** Before review, incorporate implemented, verified changes into each owning `docs/specs/<capability>/spec.md` in the same PR as the implementation. Canonical specs use `type: Capability Specification`; track proposals use `type: Change Specification`, both with `title` and `description`. Record the affected paths and dispositions in the track spec. Keep deferred, canceled, and unverified requirements out of canonical specs; record a justified no-change disposition for an unchanged contract. Reconcile concurrent edits against the latest accepted capability spec. Mark the track complete after merge and retain its history.
@@ -221,8 +221,8 @@ The track spec remains current while work proceeds:
 - Making architectural decisions without documenting them
 - Skipping the spec because "it's obvious what to build"
 - A multi-capability track spec without separately scoped capability sections and canonical owners
-- Module boundaries or build order decided implicitly during implementation because no capability map was approved up front
-- Planning tasks or implementation code produced before the specification is approved
+- Module boundaries or build order decided implicitly during implementation because no capability map was checked up front
+- Implementing requirements that are outside authorization or still depend on unresolved material intent
 - A new canonical capability spec created for behavior already owned by an existing capability
 - An approved but unimplemented proposal written into the canonical capability spec
 
@@ -231,12 +231,12 @@ The track spec remains current while work proceeds:
 Before proceeding to implementation, confirm:
 
 - [ ] The spec covers objective, non-goals, project context, affected structure, testing and verification, boundaries, and success criteria
-- [ ] The human has reviewed and approved the spec
+- [ ] The spec matches authorized scope; material unresolved decisions received the required input, with no invented human approval
 - [ ] Success criteria are specific and testable
 - [ ] The testing strategy targets material coverage gaps without generic case matrices or duplicated test layers
 - [ ] Boundaries (Always/Ask First/Never) are defined
 - [ ] The spec is saved to a file in the repository
-- [ ] If the request bundles several independently testable capabilities, a capability map (stable ids, dependency direction, build order) was approved before detailed capability sections were written
+- [ ] If the request bundles several independently testable capabilities, the capability map's stable ids, dependency direction, and build order were checked before detailed sections were written
 - [ ] Each proposed capability section links its canonical owner or names the intended path for a new capability
-- [ ] The approved spec is saved under `docs/tracks/<track-id>/` and committed before implementation
+- [ ] The scope-authorized spec is saved under `docs/tracks/<track-id>/` and committed before implementation
 - [ ] The next step is explicitly handed to `planning-and-task-breakdown`

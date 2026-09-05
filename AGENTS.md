@@ -8,6 +8,10 @@ This file provides guidance to AI coding agents (Claude Code, Cursor, Copilot, A
 
 A collection of skills for Claude.ai and Claude Code for senior software engineers. Skills are packaged instructions and scripts that extend Claude and your coding agents capabilities.
 
+## Workflow Autonomy
+
+Automate authorized work through its agreed endpoint, including planning, implementation, debugging, review, documentation, and local commits. Reuse existing approval and stop for a human only at a critical decision, authority, access, or risk boundary that cannot be resolved autonomously. Keep verification and enforced external approvals intact. The reusable policy is in [using-agent-skills](skills/using-agent-skills/SKILL.md#autonomous-execution-and-critical-human-gates); explicit stepwise or read-only requests still control scope.
+
 ## OpenCode Integration
 
 OpenCode uses a **skill-driven execution model** powered by the `skill` tool and this repository's `/skills` directory.

@@ -1,5 +1,7 @@
 # Feature Development Workflow Release Notes
 
+Current automation semantics supersede the original manual checkpoints described below: `/build` defaults to the authorized scope, with explicit `step` mode. Specs, plans, reviews, and release checks reuse authorization and escalate only at an unresolved critical human boundary. See the [current workflow](feature-development-workflow.md) and [autonomy policy](../skills/using-agent-skills/SKILL.md#autonomous-execution-and-critical-human-gates).
+
 ## Summary
 
 This change aligns the skill pack around one feature lifecycle:

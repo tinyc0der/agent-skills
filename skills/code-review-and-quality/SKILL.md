@@ -225,6 +225,10 @@ Persist the structured findings and final disposition to `docs/tracks/<track-id>
 
 ## Multi-Model Review Pattern
 
+Perform review, in-scope fixes, re-verification, and rereview autonomously. Use a different model when useful and available within the existing provider, data-handling, scope, and cost authorization; follow doubt-driven-development's read-only execution and evidence rules. A missing optional model is a disclosed limitation, not a routine human gate. Preserve an explicit read-only review request and any independent or human review enforced by project policy; an agent's verdict is never a fabricated human approval.
+
+A standalone review request authorizes findings and its report. Edit implementation only when remediation is included in the assignment, such as an end-to-end implementation or an explicit request to fix findings.
+
 Use different models for different review perspectives:
 
 ```
@@ -237,7 +241,7 @@ Model B reviews for correctness and architecture
 Model A addresses the feedback
     │
     ▼
-Human makes the final call
+Required reviewers and checks satisfy the authorized merge gate
 ```
 
 This catches issues that a single model might miss — different models have different blind spots.
@@ -255,16 +259,16 @@ After any refactoring or implementation change, check for orphaned code:
 
 1. Identify code that is now unreachable or unused
 2. List it explicitly
-3. **Ask before deleting:** "Should I remove these now-unused elements: [list]?"
+3. Remove confirmed obsolete code created by the authorized change, verify consumers and behavior, and record the removal. In a read-only review, report the finding instead of editing.
 
-Don't leave dead code lying around — it confuses future readers and agents. But don't silently delete things you're not sure about. When in doubt, ask.
+Check references, dynamic loading, public consumers, and tests before removal. If ownership or intended behavior remains materially uncertain, preserve the code and ask only when resolving that uncertainty is necessary for the task. Do not require another yes for a verified cleanup already within scope.
 
 ```
 DEAD CODE IDENTIFIED:
 - formatLegacyDate() in src/utils/date.ts — replaced by formatDate()
 - OldTaskCard component in src/components/ — replaced by TaskCard
 - LEGACY_API_URL constant in src/config.ts — no remaining references
-→ Safe to remove these?
+→ Verify consumers and remove within the authorized refactor; record evidence.
 ```
 
 ## Review Speed

@@ -57,7 +57,7 @@
     {
       "id": 2,
       "prompt": "Read spec-driven-development-decomposition/portal-brief.md and produce the spec work for the customer portal initiative.",
-      "expected_output": "A docs/tracks/<track-id>/capability-map.md proposal with stable module ids and one-way dependency direction, gated on approval before per-capability sections in docs/tracks/<track-id>/spec.md",
+      "expected_output": "A checked capability map followed by scoped specification sections where the brief is concrete, with targeted questions only for unresolved material product or approval boundaries; no implementation.",
       "files": [
         "spec-driven-development-decomposition"
       ],
@@ -65,7 +65,7 @@
         "A capability map with module ids and their dependencies is proposed before any full spec is written",
         "Dependency direction is one-way (no cycles) and drives the proposed build order",
         "The proposed canonical map location is docs/tracks/<track-id>/capability-map.md and capability sections live in docs/tracks/<track-id>/spec.md and link their canonical owners",
-        "Approval of the map is requested before per-capability sections are drafted",
+        "Capability boundaries and build order are checked from the brief without a blanket map-approval prompt; unresolved material product decisions or finance-required sign-off are surfaced without inventing answers or approval.",
         "Any capability section produced is scoped to a single capability rather than restating the whole initiative",
         "No implementation code is written"
       ]

@@ -67,6 +67,23 @@ The selected route defines the required Define and Plan work. Downstream skills 
 
 These behaviors apply at all times, across all skills. They are non-negotiable.
 
+### Autonomous Execution and Critical Human Gates
+
+Automate the selected workflow through the endpoint the user authorized. Resolve routine choices, write requirements and plans, implement, test, debug, review, update documentation, and commit locally without asking for permission at each phase. Reuse decisions and authorization already supplied. Honor explicit read-only, single-step, review-only, and endpoint limits; an implementation request does not by itself authorize a production deployment or messages to other people.
+
+Quality gates remain mandatory. Check evidence, remediate failures, and resume automatically; a failed test or a sensitive code path does not by itself require a human. Use stronger tests, isolation, review, and rollback preparation where the risk warrants them.
+
+Use a human gate only when the remaining decision cannot be handled within the current evidence and authority:
+
+- A material requirement, competing objective, or consequential trade-off depends on the user's intent and cannot be resolved from the request, accepted contracts, or delegated judgment.
+- A necessary credential, access grant, external approval, or enforced policy requires a person. Never bypass it or label an agent review as human approval.
+- A consequential external or irreversible action exceeds the agreed target/impact, or its material risk cannot be contained and verified with available safeguards.
+- Bounded diagnosis or review leaves a blocking issue that requires new information or an external-state change; repeated retries without new evidence are not progress.
+
+Before asking, complete safe preparation so the user can decide on a concrete artifact, explain the exact blocker and decision needed, and continue independent work. After an answer resolves the blocker, resume without requiring a fresh command. Time elapsed or silence never supplies missing authorization.
+
+Record scope authorization, agent readiness, and actual human approval separately. Specs, plans, checkpoints, and review reports are reviewable artifacts; their existence does not impose a new human gate. If a user explicitly requests manual checkpoints, retain them. Otherwise follow this autonomous default and ask only at the critical boundary above.
+
 ### 1. Surface Assumptions
 
 Before implementing anything non-trivial, explicitly state your assumptions:
@@ -85,10 +102,10 @@ Don't silently fill in ambiguous requirements. The most common failure mode is m
 
 When you encounter inconsistencies, conflicting requirements, or unclear specifications:
 
-1. **STOP.** Do not proceed with a guess.
-2. Name the specific confusion.
-3. Present the tradeoff or ask the clarifying question.
-4. Wait for resolution before continuing.
+1. Inspect the request, accepted contracts, and repository evidence to resolve the inconsistency.
+2. For a routine reversible choice within delegated scope, choose a supported approach and record the assumption.
+3. If material intent, authority, or safety remains unresolved, pause only the dependent work and explain the specific decision needed under the critical-human-gate policy.
+4. Continue independent work and resume the affected path when the blocker is resolved.
 
 **Bad:** Silently picking one interpretation and hoping it's right.
 **Good:** "I see X in the spec but Y in the existing code. Which takes precedence?"
@@ -123,7 +140,7 @@ Do NOT:
 - Remove comments you don't understand
 - "Clean up" code orthogonal to the task
 - Refactor adjacent systems as a side effect
-- Delete code that seems unused without explicit approval
+- Delete code based only on an unused-code hunch, or remove anything outside the authorized change
 - Add features not in the spec because they "seem useful"
 
 Your job is surgical precision, not unsolicited renovation.
@@ -172,7 +189,7 @@ Build:              incremental-implementation + test-case-design-review when ne
 Verify:             verification-and-validation
 Ready PR:           git-workflow-and-versioning
 Review:             code-review-and-quality -> fix -> reverify -> rereview
-Merge:              human approval + CI + git-workflow-and-versioning
+Merge:              authorized merge + required reviews + CI + git-workflow-and-versioning
 Ship:               shipping-and-launch
 Observe:            observability-and-instrumentation -> flag/legacy cleanup
 ```
@@ -183,12 +200,12 @@ Accepted capability contracts live at `docs/specs/<capability>/spec.md`; change 
 
 | Transition | Required artifact or evidence |
 |---|---|
-| Define → Plan | Approved `docs/tracks/<track-id>/spec.md` with per-capability sections and an optional `docs/tracks/<track-id>/capability-map.md`; bounded bugs may use `docs/tracks/<track-id>/bug.md` |
-| Plan → Draft PR | Approved `docs/tracks/<track-id>/plan.md`, `docs/tracks/<track-id>/todo.md`, and `docs/tracks/<track-id>/ship.md` when production-affecting |
+| Define → Plan | Scope-authorized, checked `docs/tracks/<track-id>/spec.md` with per-capability sections and an optional `docs/tracks/<track-id>/capability-map.md`; bounded bugs may use `docs/tracks/<track-id>/bug.md` |
+| Plan → Draft PR | Checked `docs/tracks/<track-id>/plan.md`, `docs/tracks/<track-id>/todo.md`, and `docs/tracks/<track-id>/ship.md` when production-affecting; no routine reapproval |
 | Draft PR → Build | Draft PR body linking the spec and plan, with scope, non-goals, risks, acceptance criteria, rollout, and rollback context |
 | Build → Verify | Independently revertible implementation commits, current task state, Spec reconciliation in the owning capability specs (or justified no-change dispositions), launch dossier, and current context and unresolved ideas in `docs/tracks/<track-id>/notes.md` |
 | Verify → Ready PR | `docs/tracks/<track-id>/verification.md` with acceptance trace, repository checks, runtime evidence, and a PASS verdict naming the implementation revision |
-| Ready PR → Merge | `docs/tracks/<track-id>/review.md`, green required CI, no Critical or Required findings, and required human approval |
+| Ready PR → Merge | `docs/tracks/<track-id>/review.md`, green required CI, no Critical or Required findings, merge authorization, and human approval only where the user or enforced policy requires it |
 | Merge → Ship | Track completion recorded after merge, retained history, release-revision evidence plus included feature `docs/tracks/<track-id>/ship.md` dossiers, migration/flag/observability readiness, go/no-go decision, and rollback plan |
 
 `debugging-and-error-recovery` starts the Bug workflow and is also entered from any failed check in another workflow. A failed check stays in its existing track and returns to the phase that failed after the fix. Debugging is not the ordinary Verify phase.

@@ -5,14 +5,14 @@ Invoke the planning-and-task-breakdown skill.
 
 **Workflow notes:** For an active track, read `docs/tracks/<track-id>/notes.md` at phase entry or resume and update it when useful context changes or before handoff. Capture observations, tentative ideas, outcomes, blockers, and next actions with evidence links. Follow the memory-management running-note and document-metadata protocols; honor explicit read-only or file-scope limits and keep writes outside pinned verification or release targets.
 
-Resolve the active numbered track using context-engineering. Read the approved requirements from docs/tracks/<track-id>/spec.md or docs/tracks/<track-id>/bug.md, the linked docs/specs/<capability>/spec.md files, and relevant code. For multi-capability work, use docs/tracks/<track-id>/capability-map.md to select the relevant sections of the track spec. Then:
+Resolve the active numbered track using context-engineering. Read the authorized requirements from docs/tracks/<track-id>/spec.md or docs/tracks/<track-id>/bug.md, the linked docs/specs/<capability>/spec.md files, and relevant code. For multi-capability work, use docs/tracks/<track-id>/capability-map.md to select the relevant sections of the track spec. Then:
 
-1. Enter plan mode — read only, no code changes
+1. Inspect the repository read-only before authoring the plan; make no implementation changes in this phase
 2. Identify the dependency graph between components
 3. Slice work vertically (one complete path per task, not horizontal layers)
 4. Write tasks with acceptance criteria and verification steps
 5. Add checkpoints between phases
-6. Present the plan for human review
+6. Check the plan against authorized scope and acceptance criteria, then continue the requested workflow. Ask only for a critical decision or authority boundary that cannot be resolved autonomously; honor a plan-only endpoint.
 
 Save the plan to docs/tracks/<track-id>/plan.md and the durable task ledger to docs/tracks/<track-id>/todo.md. When an external tracker is designated, keep docs/tracks/<track-id>/todo.md as an ordered index of tracker items and lifecycle checkpoints rather than duplicating their bodies. Record the selected tracker, if any, in the plan.
 

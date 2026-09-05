@@ -28,4 +28,4 @@ Validate the changed skills, command adapters, links, lifecycle contracts, and r
 
 ## Spec reconciliation
 
-Pending implementation and verification. Reconcile the automation and escalation rules into the affected capability specs before review. Complete this track after verification and merge.
+The autonomous default, critical escalation boundary, build modes, review authorization, and knowledge closeout rules are reconciled into the linked capability specs. Repository checks pass, and all four incremental-implementation behavioral scenarios pass (14 expectations), including autonomous local progress before an unresolved external handoff. Independent review found one routine deletion prompt; it was corrected and rereviewed without remaining findings. Record the exact implementation revision with the evidence; complete this track after merge.

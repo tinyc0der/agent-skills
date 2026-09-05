@@ -14,6 +14,8 @@ Review the current pull request when one exists; otherwise review the staged cha
 4. **Security** — Input validated? Secrets safe? Auth checked? (Use security-and-hardening skill)
 5. **Performance** — No N+1 queries? No unbounded ops? (Use performance-optimization skill)
 
+Perform review and in-scope remediation autonomously. Use a suitable cross-model reviewer when available within existing provider, data-handling, scope, and cost authorization, following doubt-driven-development. Disclose fallback or missing coverage; an optional tool outage does not require a permission prompt. Preserve any explicitly requested read-only review and required independent or human approval.
+
 Categorize every finding as Critical, Required, Optional, Nit, or FYI. Critical and Required findings block approval.
 Spec reconciliation: compare the track's spec or bug report with the affected `docs/specs/<capability>/spec.md` files. Require verified requirement changes in the implementation PR, or a justified no-change disposition for unchanged contracts. Deferred and canceled proposals remain in the track. Canonical spec changes invalidate affected evidence; report missing reconciliation as incomplete verification or a Required review finding.
 

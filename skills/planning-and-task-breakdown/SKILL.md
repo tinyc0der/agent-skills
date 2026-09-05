@@ -27,7 +27,7 @@ Decompose work into small, verifiable tasks with explicit acceptance criteria. G
 
 Before writing any code, operate in read-only mode:
 
-- Read the active track's approved spec or bug report, its linked canonical capability specs, and relevant codebase sections
+- Read the active track's authorized spec or bug report, its linked canonical capability specs, and relevant codebase sections
 - Identify existing patterns and conventions
 - Map dependencies between components
 - Note risks and unknowns
@@ -125,10 +125,10 @@ Add explicit checkpoints to the task list target:
 - [ ] All tests pass
 - [ ] Application builds without errors
 - [ ] Core user flow works end-to-end
-- [ ] Review with human before proceeding
+- [ ] Review checkpoint evidence and resolve blockers before proceeding
 ```
 
-In normal incremental mode, keep the human review item. In an explicitly approved `/build auto` run, routine checkpoints become automated verification gates; failures and high-risk or irreversible work still stop for the human.
+Run routine checkpoints autonomously. Diagnose, fix, and reverify failed checks before continuing; involve the human only when a material decision, missing authority/access, or uncontained risk cannot be resolved within the authorized scope. Preserve a human checkpoint only when the user or enforced policy explicitly requires it.
 
 ## Task Sizing Guidelines
 
@@ -156,7 +156,7 @@ If a task is L or larger, it should be broken into smaller tasks. An agent perfo
 
 Each document starts with the memory-management header (`type`, `title`, `description`): use `Implementation Plan`, `Task List`, or `Launch Dossier` respectively. New unreviewed documents use `status: draft`; task progress and launch readiness remain separate. Add frontmatter once per file, not to individual tasks, checklist sections, or external tracker items.
 
-Resolve the active numbered track using `context-engineering`: ids use a repository-wide three-digit prefix and kebab-case name, such as `001-user-auth`. Create `docs/tracks/<track-id>/` only for the selected or newly authorized change. The plan and task ledger live beside the approved change spec or bug report, while accepted capability requirements stay at `docs/specs/<capability>/spec.md`.
+Resolve the active numbered track using `context-engineering`: ids use a repository-wide three-digit prefix and kebab-case name, such as `001-user-auth`. Create `docs/tracks/<track-id>/` only for the selected or newly authorized change. The plan and task ledger live beside the authorized change spec or bug report, while accepted capability requirements stay at `docs/specs/<capability>/spec.md`.
 
 Include **Spec reconciliation** in completion criteria: verified requirement changes update the owning capability specs in the same implementation PR; unchanged contracts receive a justified no-change disposition in the track spec or bug report. Deferred and canceled proposals remain in the track. A task may finish before the track; the track completes only after review and merge.
 
@@ -262,7 +262,7 @@ Before starting implementation, confirm:
 - [ ] Production-affecting work has an initialized `docs/tracks/<track-id>/ship.md`
 - [ ] No task touches more than ~5 files
 - [ ] Checkpoints exist between major phases
-- [ ] The human has reviewed and approved the plan
+- [ ] The plan matches authorized requirements, is checked for dependencies and verification, and has no unresolved decision requiring the user
 
 ## See Also
 

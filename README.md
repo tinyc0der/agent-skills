@@ -40,7 +40,7 @@ RED-GREEN-REFACTOR while implementing behavior; use `/verify` after the assemble
 feature is complete. Antigravity and Gemini name `/plan` as `/planning`, but the
 lifecycle and artifacts are identical.
 
-Want fewer manual steps once the spec exists? **`/build auto`** generates the plan and implements every task in a single approved pass — you approve the plan once, then it runs autonomously. It removes the human stepping *between* tasks, not the verification: behavioral tasks apply the minimum-sufficient test gate and RED-GREEN-REFACTOR, non-behavioral tasks use proportionate executable checks, every task is committed individually, and the run pauses on failures or risky steps.
+**`/build` runs the authorized scope autonomously**, with `/build auto` and `/build all` as aliases. Use `/build step` for one task. Required plans and checkpoints are checked without repeated approval: behavioral slices use the minimum-sufficient test gate and RED-GREEN-REFACTOR, every slice is verified and committed, and failures enter debugging. Human gates are reserved for material decisions, access/authority, or consequential risks the agent cannot resolve itself. Existing scope and release/merge authorization limits still apply.
 
 Skills also activate automatically based on what you're doing — designing an API triggers `api-and-interface-design`, building UI triggers `frontend-ui-engineering`, and so on.
 
