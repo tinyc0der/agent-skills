@@ -51,7 +51,7 @@ Skills also activate automatically based on what you're doing — designing an A
 **Fastest path — any agent, one command.** The open [skills CLI](https://github.com/vercel-labs/skills) installs into 70+ agents (Claude Code, Cursor, Codex, Copilot, Cline, and more):
 
 ```bash
-npx skills add addyosmani/agent-skills            # install all 26 skills
+npx skills add addyosmani/agent-skills            # install all 28 skills
 npx skills add addyosmani/agent-skills --list     # browse before installing
 ```
 
@@ -222,15 +222,18 @@ Already installed? How you roll the pack out depends on your codebase. The **[Ad
 
 ---
 
-## All 26 Skills
+## All 28 Skills
 
-The commands above are entry points. The pack includes 26 skills total — 25 lifecycle skills plus the `using-agent-skills` meta-skill. Each skill is a structured workflow with steps, verification gates, and anti-rationalization tables. You can also reference any skill directly.
+The commands above are entry points. The pack includes 28 skills covering lifecycle work, discovery, and Orca phase delegation. Each skill is a structured workflow with steps, verification gates, and anti-rationalization tables. You can also reference any skill directly.
 
-### Meta - Discover which skill applies
+### Meta - Discover and coordinate workflows
 
 | Skill | What It Does | Use When |
 |-------|-------------|----------|
 | [using-agent-skills](skills/using-agent-skills/SKILL.md) | Maps incoming work to the right skill workflow and defines shared operating rules | Starting a session or deciding which skill applies |
+| [delegate](skills/delegate/SKILL.md) | Coordinates separate Orca sessions for planning, implementation, independent verification, and review | Codex should plan, verify, and review while OpenCode or Antigravity implements |
+
+`delegate` requires Orca and its separately installed `orca-cli` and `orchestration` skills. Those dependencies provide session control and tracked completion; they are not bundled in this pack.
 
 ### Define - Clarify what to build
 
@@ -360,7 +363,7 @@ Every skill follows a consistent anatomy:
 
 ```
 agent-skills/
-├── skills/                            # 26 skills (25 lifecycle + 1 meta)
+├── skills/                            # 28 skills
 │   ├── interview-me/                  #   Define
 │   ├── idea-refine/                   #   Define
 │   ├── spec-driven-development/       #   Define

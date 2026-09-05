@@ -1,0 +1,3 @@
+interface:
+  display_name: "Delegate"
+  short_description: "Delegate phases across Orca agent sessions"
