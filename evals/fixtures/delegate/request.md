@@ -19,12 +19,13 @@ The requirements and implementation plan below are approved. Prepare the remaini
 
 - Use Antigravity for implementation and fixes. Use the default verifier runner and Codex for review.
 - Keep every phase in the current worktree; separate sessions may share it sequentially.
+- Sessions can read this request, shared local artifacts, and installed project skills directly. Use file and section references for inputs and preserve each lifecycle skill's report format and location.
 - Implementation may edit the export package and its tests. The verifier and reviewer may write their reports and evidence only.
 - Use the project's own check commands once execution starts; no source tree or runnable application is included in this preparation fixture.
 - Do not publish, create a PR, merge, or deploy.
 
 ## Requested artifact
 
-Write `delegation-plan.md` alongside this request. Include phase owners, dependencies, bounded task packets, evidence needed before advancing, and the route for failed or missing verification evidence. Keep the coordinator accountable for the combined result.
+Write `delegation-plan.md` alongside this request. Include phase owners, dependencies, bounded task packets, a shared phase handoff template referencing local artifacts and skills, evidence needed before advancing, and the route for failed or missing verification evidence. Keep the coordinator accountable for the combined result.
 
 Only prepare the plan. Do not contact a live Orca runtime, launch sessions, or claim any worker has completed the work.

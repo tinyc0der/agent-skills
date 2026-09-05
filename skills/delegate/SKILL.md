@@ -53,13 +53,15 @@ Verify that the requested runner is installed and supported by the current Orca 
 
 Create one tracked task per delegated phase, or per independent implementation slice when the plan calls for it. Supply:
 
-- Objective, phase, acceptance criteria, and the exact lifecycle skill to apply.
-- Repository/worktree and branch, input artifact paths, and the revision or dirty working state the worker must inspect.
+- Objective, phase, acceptance criterion references, and the exact lifecycle skill name and resolved `SKILL.md` path to apply.
+- Absolute repository/worktree path and branch, input artifact paths, and the revision or dirty working state the worker must inspect.
 - Allowed write paths, exclusions, dependencies, expected output/report path, and checks whose evidence must be returned.
 - Decisions and relevant user instructions from earlier phases, so a fresh session can work without chat history.
 - A phase boundary: return the result to this coordinator; do not start the next phase, spawn descendants, or take ownership of the parent workflow.
 
-Use the project's existing artifact locations. Planning may write its specified documents; verification and review may write their designated reports and evidence but must not edit implementation or test source. Route fixes to the selected implementation runner, including fixes discovered during PR preparation when PR work is authorized.
+Local sessions read shared artifacts and skills directly. Reference the relevant files and sections instead of copying whole documents or earlier conversations into the task packet. Each session reads the applicable project instructions, its assigned lifecycle skill, and the referenced inputs at phase entry. Resolve project paths from the named worktree and use absolute paths for skills outside it; confirm the inputs are accessible from that session.
+
+Use the project's existing artifact locations and lifecycle report formats. In a track workflow, keep running context in `docs/tracks/<track-id>/notes.md` and link the existing spec or bug report, plan, task ledger, verification, and review as relevant. Otherwise use the task's designated brief and report paths. Delegation alone does not require a new track, handoff directory, or duplicate report. Planning may write its specified documents; verification and review may write their designated reports and evidence but must not edit implementation or test source. Route fixes to the selected implementation runner, including fixes discovered during PR preparation when PR work is authorized.
 
 A fresh session does not require a new worktree. Use fresh agent sessions in the required current worktree by default, especially when inputs are uncommitted. Allow only one implementation writer at a time in that checkout. Freeze implementation edits while verification or review examines it. Use another checkout only as permitted by `orchestration`, with an explicit base and a verified way to carry required artifacts and changes into it.
 
@@ -72,6 +74,28 @@ Start dependent phases only after their inputs have been accepted. Task completi
 Use bounded orchestration event waits within the host's responsiveness limits. Process and acknowledge deliveries according to the live guide, answer worker questions through tracked replies, and handle worker release or retention there. A timeout or idle terminal does not mean failure or completion. Inspect uncertain launch receipts before retrying so two workers do not edit the same task.
 
 Require an accepted completion report from the actual dispatched worker with the correct task/dispatch identity and explicit outcome. Failed or stale completion reports cannot release dependent phases. Never manufacture worker completion from the coordinator, and do not use a manual completed status to disguise an unsupported runner.
+
+#### Shared phase handoff
+
+Every planner, worker, reviewer, and verifier returns this concise summary through the live orchestration completion mechanism. Write phase artifacts using the assigned lifecycle skill, then reference them here. If the existing report already covers a field, link its relevant section rather than repeating the content. Keep useful new context in the existing workflow notes or brief within the assigned write scope.
+
+```markdown
+## Phase handoff
+
+- Phase / runner: <assigned role and actual runner>
+- Orca task / dispatch: <actual identifiers from this dispatch>
+- Worktree / branch: <absolute worktree path>; <branch>
+- Target: <commit plus reproducible working-tree snapshot if dirty>
+- Skills applied: <names and resolved SKILL.md paths>
+- Delivery: <complete | partial | blocked>
+- Summary: <what this phase produced or found>
+- Artifacts: <project paths and relevant sections for outputs>
+- Evidence / verdict: <phase report path and verdict; or applicable check results>
+- Context / blockers: <notes or brief section; essential context not yet recorded>
+- Next action: <recommendation for the coordinator>
+```
+
+Delivery describes whether the assigned phase returned its result; it does not approve the implementation. Preserve the lifecycle report's verdict, including FAIL or INCOMPLETE. The coordinator reads the linked artifacts, accepts or rejects the result, and supplies the accepted paths and relevant context in the next task packet. The receiving session reads those local sources itself. A handoff recommendation does not authorize a child to start another phase.
 
 ### 5. Verify independently
 
@@ -122,6 +146,7 @@ Apply these checks to the requested execution scope; a plan-only request needs a
 - [ ] Only required phases ran, using the resolved runner mapping and requested settings.
 - [ ] Every delegated phase has valid Orca task/dispatch provenance and an accepted result.
 - [ ] Each session received accessible inputs and stayed within its phase and write scope.
+- [ ] Each handoff identifies its target and links accessible local artifacts and skills using the existing workflow's report formats and locations.
 - [ ] When verification is required, a separate verifier returned PASS against the final implementation state with independent acceptance evidence.
 - [ ] When review is required, it covers the final implementation state; blocking findings and required checks are resolved.
 - [ ] Worker resources are accounted for through the live orchestration cleanup contract.
