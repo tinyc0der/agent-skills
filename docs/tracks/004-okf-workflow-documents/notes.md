@@ -10,8 +10,8 @@ status: draft
 ## Resume
 
 - Phase: local checks and artifact audit complete; live AI behavioral evidence is pending.
-- Next: commit the implementation, then record its exact revision in verification and review reports. Run affected behavioral scenarios when executor capacity returns; keep the track open until verification and merge.
-- Sources: [spec](spec.md), [plan](plan.md), [tasks](todo.md).
+- Next: run affected behavioral scenarios when executor capacity returns, record fresh evidence, and keep the track open until verification and merge.
+- Sources: [spec](spec.md), [plan](plan.md), [tasks](todo.md), [verification](verification.md), [artifact audit](review.md).
 
 ## Notes
 
@@ -29,3 +29,4 @@ status: draft
 - Applied — Updated saved brief producers, three specialist report personas, performance ledgers, runbook guidance, and the migration guide. The idea initializer creates only a directory and needs no document-template change. All 46 existing workflow hooks (16 phase skills and 30 command adapters) reference both shared protocols.
 - Observed — Behavioral dry-runs enumerate eight memory-management cases and two documentation-and-adrs cases. The new mixed-format case checks that an external ADR collection retains its native convention while a track plan receives metadata; the original ADR case keeps its original single-file fixture input.
 - Disposition — The requested skill/workflow improvements are applied to their owning files and reconciled into capability specs. No knowledge-bundle promotion is needed. Remaining uncertainty is live AI compliance with the instructions; local checks do not certify it.
+- Observed — Implementation committed at `7bca7466d46383680ca26f1d26934c3a87de9128`. Verification and artifact-audit reports pin that revision; subsequent evidence-only documentation does not expand its coverage.
