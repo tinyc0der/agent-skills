@@ -147,3 +147,90 @@ The skill files were not changed during this review.
 
 All five Required findings remain open. Reverify affected checks and rereview
 the updated skill before treating this import as ready to merge.
+
+---
+
+## Rereview: Memory-management fixes
+
+**Verdict: APPROVE.** All five Required findings and the optional source-pin
+finding from the import review above are resolved for implementation revision
+`7fc54cb17f6c3269f9559b89495954bb91189eb2`. This supersedes the import verdict,
+not the separate test-design review at the start of this file. The implementation
+is in `f0d3356` and `7fc54cb`; the original import remains available in `3474029`.
+
+### Finding dispositions
+
+| Finding | Disposition and evidence |
+| --- | --- |
+| Existing knowledge homes | Resolved. Discovery checks rules, existing documentation, and `.adr-dir`; established ADR/runbook locations and formats remain canonical. The new established-homes eval preserved the ADR unchanged and created only a bundle catalog pointing to it. |
+| Read-only consumption | Resolved. Separate consumption and authored-change checklists preserve imported versions and metadata. The v9.9 eval made only read-only tool calls and neither normalized files nor committed. |
+| Description and routing | Resolved. The description uses `Use when` and focuses on durable memory maintenance. Structural validation and all 144 routing checks pass, including the pre-existing PRD prompt. |
+| Eval registration | Resolved. Five cases now live in `evals/cases/memory-management.json`, with expectations, three positive triggers, three owner-backed negatives, and fixtures under `evals/fixtures/memory-management/`. Prompts name the materialized project scope. |
+| Markdown links | Resolved. Illustrative reference links use fenced examples. Repository link validation excludes fixture inputs, whose bundle-relative and deliberately broken links remain unchanged. A regression test protects that boundary while another checks that `evals/README.md` is still validated. |
+| Versioned source | Resolved. The skill, profile, and historical draft cite the pinned [OKF v0.1 draft](https://github.com/GoogleCloudPlatform/knowledge-catalog/blob/ee67a5ca27044ebe7c38385f5b6cffc2305a9c1a/okf/SPEC.md). |
+
+### Additional issues found during verification
+
+- The behavioral runner supplied only `SKILL.md`, leaving required local
+  references unavailable. It now copies the full skill into the disposable
+  workspace, names the reference base in the executor prompt, and excludes that
+  tooling directory from fixture git status. A CLI-boundary test exercises an
+  executor reading the actual supporting file and confirms a clean baseline.
+- The first link-not-copy execution added `AGENTS.md`; its grader incorrectly
+  accepted that as preserving fixture content. The revised expectation expressly
+  prohibits all new files and commits, and Sync now has an explicit no-op path.
+  The affected eval was rerun: only reads occurred, with no new rules file or commit.
+- The first bootstrap handoff failed review presentation, and the grader also
+  conflated committing a proposal with approval. The skill and expectation now
+  require an explicit proposal, source evidence, and unresolved inferences while
+  allowing a reviewable local commit. The rerun passed all five expectations.
+
+### Verification evidence
+
+- `node --test` across all eight `scripts/**/*-test.js` files: **65 tests passed**.
+  The two added runner/link-checker regressions first failed against the prior
+  implementations, then passed after their fixes.
+- All deterministic validators passed: skills, versions, commands, reference
+  links, Markdown links, artifact paths, and lifecycle contracts.
+- `node scripts/run-evals.js --min-rank1 80`: **144 checks passed**, zero errors
+  or warnings, rank-1 rate **88% (77/88)**. The structural and routing checks
+  were rerun after the final instruction changes.
+- `node scripts/run-evals.js --behavioral memory-management`: real executor and
+  grader runs exercised all five scenarios. The two affected scenarios were
+  rerun in isolated copies after their instruction/expectation fixes; unaffected
+  scenarios were retained. Final results are below. The original full run had a
+  failure and is not represented as a clean first pass.
+
+| Behavioral case | Final result | Observed behavior |
+| --- | --- | --- |
+| over-saving | 3/3 | Saved the verified missing-await lesson and index entry; omitted the pool experiment and cache speculation. |
+| link-not-copy | 2/2 | Read and cited the existing contract, ADR, and indexes; made no edits or commits. |
+| prune-not-size | 3/3 | Superseded stale Gulp guidance from package evidence; preserved valid preferences and the playbook. |
+| unknown-version | 3/3 | Read the v9.9 bundle permissively; preserved its metadata, version, and files. |
+| established-homes | 5/5 | Preserved `docs/adr/`, created the required bundle with external-home discovery, explained citation portability, and handed off a proposal for review. |
+
+Detailed grader evidence is local under ignored `evals/results/`; the table and
+dispositions above retain the material findings in version control. These
+behavioral runs demonstrate the selected scenarios, not a guarantee of every
+future model execution. No application build is applicable to this Markdown and
+Node-script change.
+
+### Review and test scope
+
+- Correctness: the ownership and consumption contradictions are resolved;
+  no-op and bootstrap handoffs have observed behavioral evidence.
+- Readability and architecture: existing owners take precedence over documented
+  defaults, the historical draft is labeled, and test inputs are separated from
+  repository documentation without adding a special OKF link parser.
+- Security: supporting skill files stay in the disposable workspace; no remote
+  writes, production changes, dependencies, or credentials were introduced.
+- Performance: the added deterministic tests use local fixture processes;
+  token-backed behavioral evals remain opt-in.
+- Test admission: retained four imported cases for distinct memory behaviors;
+  added one established-home scenario and two runner/validator regressions.
+  Extended the existing documentation-root test to protect `evals/README.md`.
+  Existing structural/routing checks cover the description changes, so no
+  implementation-mirroring prose tests were added.
+
+No Critical or Required findings remain in this scope. This report adds evidence
+only; any later implementation change requires affected checks and review again.
