@@ -1,25 +1,22 @@
 ---
 name: memory-management
-description: Maintains running track notes for ad hoc observations, reusable knowledge, and skill or workflow improvement ideas, plus durable Open Knowledge Format (OKF) bundles. Use when keeping or resuming notes during a tracked change, saving verified lessons or team preferences for future sessions, bootstrapping a knowledge bundle, or pruning and syncing stale memory.
+description: Maintains running track notes, shared Open Knowledge Format (OKF) document metadata, and durable knowledge bundles. Use when recording ad hoc observations or skill and workflow improvement ideas, resuming a tracked change, formatting capability specs and track documents, saving verified lessons or preferences, or bootstrapping, pruning, and syncing memory.
 ---
 
 # Memory Management
 
 ## Overview
 
-A project should get faster to work in over time. Every session, feature, fix, and failure leaves behind knowledge — but most of it dies when the session ends, so the next session re-derives it from scratch. Memory management fixes that: it captures the *durable* knowledge, routes it to a home where future sessions will actually find it, and keeps it from rotting.
+Preserve useful context across sessions, route reusable knowledge to its canonical owner, and keep evidence and freshness visible. During an active track, maintain `docs/tracks/<track-id>/notes.md` across every workflow phase; working observations can be recorded before they become permanent lessons.
 
-During an active track, it also maintains `docs/tracks/<track-id>/notes.md` as the AI's running notes across every workflow phase. Working notes preserve context before a lesson is ready for permanent memory.
-
-The core skill is **knowing what to keep and where to put it.** Memory is not a dumping ground for everything that happened — it's the small, curated set of facts a future session genuinely needs and could not quickly re-derive. Save too little and the agent hallucinates project conventions; save too much (or save wrong things) and the signal drowns in noise.
-
-This skill is **tool-agnostic**. It assumes a git-backed project but makes no assumptions about Claude Code, Cursor, or any specific tool's memory mechanism. Git is the common substrate: durable memory lives in tracked files, and changes to it go through reviewable commits. The one place it touches the tool layer is a thin *pointer* in the agent's rules file (`CLAUDE.md`/`AGENTS.md`/…) that signposts memory's location — never a copy of it (see Bootstrap).
+The skill defines shared document metadata for capability specs, track artifacts, and saved workflow briefs and reports, plus the durable OKF knowledge bundle. It uses reviewable Git changes and thin rules-file pointers, without depending on a particular agent tool. Save what future work needs and link to established sources instead of copying them.
 
 ## When to Use
 
 Trigger this skill — even when the user doesn't say "memory":
 
 - **An active track enters or resumes any workflow phase.** Read its running notes and update them as useful context changes, including before a pause, handoff, or context compaction.
+- **A capability spec, track document, or authorized saved workflow brief or report is authored or deliberately updated.** Apply the document-metadata profile while preserving its ownership, workflow state, and evidence.
 - **A feature ships.** Promote what was learned during the work into durable memory.
 - **The user states a durable preference or corrects you** in a way that should outlive this session ("we always run migrations in a transaction", "don't use default exports here").
 - **A failure is diagnosed and reproducible.** The failure mode and its cause are worth keeping.
@@ -98,7 +95,36 @@ Each capability has one stable kebab-case id and one canonical spec across chang
 
 **Spec reconciliation:** Before review, incorporate implemented, verified requirement changes into each owning `docs/specs/<capability>/spec.md` in the same PR as the implementation. Record links and dispositions in the track spec or bug report. If a fix restores an already-correct contract, record why no canonical edit is needed. Keep deferred, canceled, and unverified proposals in the track. Reconcile against the latest accepted spec when concurrent tracks affect the same capability. Mark a track complete after merge and retain it as history.
 
-Spec reconciliation and OKF knowledge promotion have separate destinations and gates: capability contracts accompany their implementation; reusable lessons follow the review/promotion workflow below. Do not copy requirements, plans, bug reports, or reviews into `steering/`, and do not treat a completed track as proof that every candidate lesson was verified. Link to canonical specs and track evidence when useful. Specs and tracks do not require OKF frontmatter.
+Spec reconciliation and OKF knowledge promotion have separate destinations and gates: capability contracts accompany their implementation; reusable lessons follow the review/promotion workflow below. Do not copy requirements, plans, bug reports, or reviews into `steering/`, and do not treat a completed track as proof that every candidate lesson was verified. Link to canonical specs and track evidence when useful. Specs and tracks share document metadata with OKF concepts while retaining these separate roles.
+
+## Document Metadata for Specs and Tracks
+
+The **document-metadata profile** requires parseable YAML frontmatter with non-empty string `type`, `title`, and one-sentence `description` for newly authored or deliberately updated capability specs, track documents, and authorized saved workflow briefs or standalone reports. Base OKF requires only `type`; the other two fields are this project's discovery convention. Add one header at the start of the file and retain its ordinary Markdown body and artifact-specific sections.
+
+| Artifact | `type` |
+| --- | --- |
+| `docs/specs/<capability>/spec.md` | `Capability Specification` |
+| Track `spec.md` | `Change Specification` |
+| `bug.md` | `Bug Report` |
+| `plan.md` | `Implementation Plan` |
+| `todo.md` | `Task List` |
+| `review.md` | `Review` |
+| `verification.md` | `Verification Report` |
+| `notes.md` | `Working Notes` |
+| `capability-map.md` | `Capability Map` |
+| `ship.md` | `Launch Dossier` |
+| Saved idea / intent brief | `Idea Brief` / `Intent Brief` |
+| Standalone security / performance audit | `Security Audit` / `Performance Audit` |
+| Standalone test coverage report | `Test Coverage Analysis` |
+| Standalone optimization ledger (`PERF.md`) | `Performance Record` |
+
+Use OKF `status` only for document maturity: `draft`, `stable`, or `deprecated`. New unreviewed documents start as `draft`; `stable` means ready for consumption, not approved requirements, implemented behavior, a PASS verdict, or a completed track. Record work progress separately in `workflow_status` when useful, using the project's vocabulary (for example `planned`, `in_progress`, or `completed`). Keep one authoritative representation of progress; task checkboxes and report verdicts keep their own meanings. An existing prose “Status” label may describe work or evidence; never automatically convert it to OKF `status`.
+
+Optional `sources`, `generated`, and `verified` follow the v0.2 rules below and record only actual evidence. Document-relative source paths resolve from the containing file. Keep evaluated revisions and report verdicts explicit; adding a header does not reverify content or extend earlier evidence. Whole-document maturity never turns a hypothesis in working notes into verified knowledge.
+
+Read older headerless documents permissively. Add or repair metadata only within an authorized edit, preserving unknown fields, useful contents, links, and historical revision claims. A bulk header migration preserves historical bodies and adds only known descriptive metadata; do not infer authorship, maturity, review events, or completion. Explicit file-scope and read-only limits still apply.
+
+These workflow documents remain in their owning homes outside the durable knowledge bundle; sharing frontmatter does not move them, bootstrap indexes, or declare all of `docs/` an OKF bundle. Save briefs and standalone reports only when authorized; inline summaries, general documentation, raw evidence, and skill/command configuration retain their own formats.
 
 ## OKF v0.2 Essentials
 
@@ -247,6 +273,13 @@ When resuming a track with the former `memory-delta.md` filename, read it first.
 Keep three small sections, omitting empty optional ones:
 
 ```markdown
+---
+type: Working Notes
+title: "[Track] working notes"
+description: "Current context, observations, and follow-ups for [track]."
+status: draft
+---
+
 # Notes: [Track]
 
 ## Resume
@@ -417,7 +450,8 @@ All of these are memory changes, so they go through the same commit/PR review as
 - Memorializing the agent's own scaffolding — `.claude/`, `.cursor/`, `.gemini/` and similar tooling dirs are not project knowledge.
 - A new domain file that overlaps an existing one instead of extending it.
 - A sync that overwrites a human-written entry instead of proposing an additive change.
-- Treating all of `docs/` as the OKF bundle and accidentally imposing concept frontmatter on specs, migration guides, or general documentation.
+- Treating all of `docs/` as the OKF bundle or imposing this document profile on unrelated guides and configuration.
+- Using OKF `status` for task progress or a test verdict, or inventing review metadata during a header migration.
 - A non-reserved bundle concept with missing or empty `type` frontmatter.
 - Frontmatter on a collection `index.md`, or any root-index frontmatter beyond its `okf_version` declaration.
 - Dropping unknown OKF types or extension keys during sync.
@@ -432,7 +466,12 @@ All of these are memory changes, so they go through the same commit/PR review as
 - [ ] Review and freshness signals are interpreted from evidence; missing signals never imply human review.
 - [ ] Files and the declared version are unchanged. No scaffolding, normalization, index update, commit, or conformance claim is required to finish reading.
 
-### Track-note changes
+### Spec and track document changes
+
+- [ ] Each authored or deliberately updated document has the required string fields and the appropriate artifact type; unknown metadata is preserved.
+- [ ] Document maturity, workflow progress, approval, and evidence verdicts remain distinct. Header migrations preserve historical bodies and evaluated revisions without fabricating provenance.
+
+For working notes, also confirm:
 
 - [ ] The checkpoint names the current phase, next action, and relevant source links; stale claims are rechecked against current evidence.
 - [ ] Observations, hypotheses, approval, and verification status remain distinct. Actionable knowledge and improvement ideas have proposed destinations and dispositions.

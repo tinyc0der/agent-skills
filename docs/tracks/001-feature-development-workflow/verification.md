@@ -1,3 +1,9 @@
+---
+type: Verification Report
+title: Feature development workflow verification
+description: Recorded checks, outcomes, and evaluated revisions for feature development workflow.
+---
+
 # Verification: PASS
 
 **Implementation target:** working tree based on `5c07d0fe41250a81b90cb6474242cc56ee95315f`, excluding this evidence update

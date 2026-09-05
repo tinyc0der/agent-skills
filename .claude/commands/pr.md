@@ -4,7 +4,7 @@ description: Create a draft pull request or mark it ready after revision-matched
 
 Invoke the agent-skills:git-workflow-and-versioning skill.
 
-**Workflow notes:** For an active track, read `docs/tracks/<track-id>/notes.md` at phase entry or resume and update it when useful context changes or before handoff. Capture observations, tentative ideas, outcomes, blockers, and next actions with evidence links. Follow the memory-management running-note protocol; honor explicit read-only or file-scope limits and keep writes outside pinned verification or release targets.
+**Workflow notes:** For an active track, read `docs/tracks/<track-id>/notes.md` at phase entry or resume and update it when useful context changes or before handoff. Capture observations, tentative ideas, outcomes, blockers, and next actions with evidence links. Follow the memory-management running-note and document-metadata protocols; honor explicit read-only or file-scope limits and keep writes outside pinned verification or release targets.
 
 `$ARGUMENTS` selects one additive mode:
 

@@ -1,3 +1,9 @@
+---
+type: Implementation Plan
+title: 'Plan: Capability Specs and Change Tracks'
+description: Implementation steps, dependencies, and verification approach for capability specs and numbered tracks.
+---
+
 # Plan: Capability Specs and Change Tracks
 
 ## Scope

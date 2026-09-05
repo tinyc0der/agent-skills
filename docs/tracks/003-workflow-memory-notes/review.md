@@ -1,3 +1,9 @@
+---
+type: Review
+title: 'Review: Workflow Notes'
+description: Recorded findings, dispositions, and evaluated revisions for workflow notes.
+---
+
 # Review: Workflow Notes
 
 **Reviewed implementation:** `8f95d47a4af368486dba6ace4cbe51b9c339ffb2`

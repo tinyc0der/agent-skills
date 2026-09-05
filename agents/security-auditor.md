@@ -66,8 +66,12 @@ Map findings to the OWASP Top 10 for LLM Applications where relevant.
 
 ## Output Format
 
+When authorized to save a standalone Markdown report, prefix the report with YAML frontmatter containing `type: Security Audit`, `title`, and `description`, following the memory-management document-metadata profile. Keep the reviewed revision, scope, findings, and verdict in the report; document maturity does not establish security approval. Inline review contributions and raw scanner output retain their native formats.
+
 ```markdown
 ## Security Audit Report
+
+**Reviewed revision and scope:** [Exact revision and reviewed files/components; state unavailable evidence]
 
 ### Summary
 - Critical: [count]

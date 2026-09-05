@@ -1,3 +1,9 @@
+---
+type: Capability Specification
+title: 'Capability: Feature Development Workflow'
+description: Accepted requirements, ownership, and acceptance criteria for Feature Development Workflow.
+---
+
 # Capability: Feature Development Workflow
 
 ## Objective
@@ -13,6 +19,8 @@ Provide a consistent, reviewable lifecycle from change requirements through impl
 - Multi-capability changes keep per-capability sections in one track spec. An optional capability map links those sections, canonical owners, dependency directions, and build order.
 - Explicit track selection takes precedence over branch-derived naming. A branch can supply a new track's suffix; capability ids and existing track ids remain stable across branch renames and deletion. Never infer an active change from the sole historical directory.
 - External task trackers remain authoritative when designated; the track retains an ordered index without duplicating task bodies.
+- Capability specs, authored track documents, and authorized saved workflow briefs or standalone reports use the memory-management document-metadata profile: required `type`, `title`, and `description`; evidence-backed optional fields; preserved Markdown body sections. Metadata applies to whole files; task subsections, external tracker items, inline review contributions, and raw evidence retain their native formats.
+- Document maturity uses OKF `status` (`draft`, `stable`, `deprecated`); new unreviewed documents start as `draft`. Workflow progress, approval, report verdicts, and evaluated revisions remain separate. Formatting a proposal or report does not change its authority or evidence coverage.
 
 ## Lifecycle
 
@@ -35,6 +43,7 @@ The canonical sequence is `/spec`, `/plan`, `/pr draft`, `/build`, `/verify`, `/
 - Zero-argument `/ship` discovers the production baseline and remote default-branch target, pins the exact release range, identifies included PRs and direct commits, and obtains required release confirmation.
 - Track launch dossiers describe rollout, migrations, flags, success thresholds, monitoring, rollback, and ownership. The authoritative deployment result stays in the configured release system; recording it must not mutate the pinned target.
 - Keep working-note updates outside pinned verification/release targets in an authorized workspace or follow-up documentation change. A note-only commit does not expand coverage to a new revision.
+- Read older headerless artifacts permissively and add metadata only within authorized edits. Header migrations preserve historical bodies, unknown fields, and revision claims; they do not reverify reports or mutate a pinned target.
 - Reusable knowledge follows `memory-management` promotion rules and remains separate from capability spec reconciliation.
 
 ## Verification Contract

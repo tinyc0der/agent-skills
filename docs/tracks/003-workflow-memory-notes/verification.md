@@ -1,3 +1,9 @@
+---
+type: Verification Report
+title: Workflow notes verification
+description: Recorded checks, outcomes, and evaluated revisions for workflow notes.
+---
+
 # Verification: Workflow Notes
 
 **Implementation revision:** `8f95d47a4af368486dba6ace4cbe51b9c339ffb2`

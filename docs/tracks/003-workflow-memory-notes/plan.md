@@ -1,3 +1,9 @@
+---
+type: Implementation Plan
+title: 'Plan: Workflow Memory Notes'
+description: Implementation steps, dependencies, and verification approach for workflow notes.
+---
+
 # Plan: Workflow Memory Notes
 
 1. Expand the memory skill's note lifecycle and update all phase consumers, including standalone skill use and command adapters.

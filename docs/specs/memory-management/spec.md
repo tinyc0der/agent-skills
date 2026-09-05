@@ -1,3 +1,9 @@
+---
+type: Capability Specification
+title: 'Capability: Memory Management'
+description: Accepted requirements, ownership, and acceptance criteria for Memory Management.
+---
+
 # Capability: Memory Management
 
 ## Objective
@@ -31,8 +37,12 @@ Preserve trustworthy project knowledge across sessions while keeping accepted ca
 
 ## Format, Trust, and Maintenance
 
+- Newly authored or deliberately updated capability specs, track documents, and authorized saved workflow briefs or standalone reports have parseable YAML frontmatter with non-empty string `type`, `title`, and `description`. Use the artifact types defined in the memory-management profile and keep their Markdown bodies and canonical ownership.
+- OKF `status` describes document maturity (`draft`, `stable`, `deprecated`). New unreviewed documents start as `draft`. Workflow progress may use `workflow_status`; approval, task checkboxes, report verdicts, and evaluated revisions retain their separate meanings. Do not duplicate authoritative progress fields or convert an existing prose status into OKF maturity automatically.
+- Optional provenance and verification metadata require actual evidence. Read legacy headerless documents permissively; preserve unknown metadata and respect read-only/file-scope limits. Authorized header migrations preserve historical bodies and revision claims without inventing authorship, maturity, or review.
 - New bundles use the relevant OKF v0.2 subset embedded in the skill: typed concepts, discovery indexes, provenance, actual verification metadata, and evidence-backed freshness.
 - Continue reading v0.1 and unfamiliar versions permissively. Preserve unknown fields and legacy evidence; do not migrate or change a version declaration as a side effect of reading.
 - Never invent authors, dates, review, or evidence. Bootstrap output remains a draft proposal until actually reviewed; a local commit does not establish human approval.
 - Prune based on accuracy, redundancy, ownership, and usefulness. File size alone does not justify losing distinct guidance.
-- Canonical specs and track artifacts remain outside OKF bundles and do not require OKF frontmatter.
+- Canonical specs and track artifacts remain outside the durable knowledge bundle while sharing its document metadata conventions. This does not bootstrap bundle indexes, declare all documentation an OKF bundle, or promote a track proposal into accepted requirements.
+- Documentation authoring discovers the artifact's owner and format before writing. Bundle ADRs and runbooks follow their concept types and indexes; established external ADR/runbook homes, reserved indexes/logs, general guides, configurations, inline contributions, and raw evidence retain their owning formats.

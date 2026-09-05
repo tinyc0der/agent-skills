@@ -1,3 +1,9 @@
+---
+type: Implementation Plan
+title: 'Implementation Plan: Durable Feature Workflow Artifacts'
+description: Implementation steps, dependencies, and verification approach for feature development workflow.
+---
+
 # Implementation Plan: Durable Feature Workflow Artifacts
 
 ## Overview

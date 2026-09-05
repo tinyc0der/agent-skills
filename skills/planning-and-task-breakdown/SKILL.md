@@ -9,7 +9,7 @@ description: Breaks work into ordered tasks. Use when you have a spec or clear r
 
 Decompose work into small, verifiable tasks with explicit acceptance criteria. Good task breakdown is the difference between an agent that completes work reliably and one that produces a tangled mess. Every task should be small enough to implement and verify in a single focused session, using new tests only when the admission gate warrants them.
 
-**Workflow notes:** For an active track, read `docs/tracks/<track-id>/notes.md` at phase entry or resume and update it when useful context changes or before handoff. Capture observations, tentative ideas, outcomes, blockers, and next actions with evidence links. Follow the memory-management running-note protocol; honor explicit read-only or file-scope limits and keep writes outside pinned verification or release targets.
+**Workflow notes:** For an active track, read `docs/tracks/<track-id>/notes.md` at phase entry or resume and update it when useful context changes or before handoff. Capture observations, tentative ideas, outcomes, blockers, and next actions with evidence links. Follow the memory-management running-note and document-metadata protocols; honor explicit read-only or file-scope limits and keep writes outside pinned verification or release targets.
 
 ## When to Use
 
@@ -154,6 +154,8 @@ If a task is L or larger, it should be broken into smaller tasks. An agent perfo
 - **Task list:** Record each task in the **task list target** (defined below).
 - **Launch dossier:** For production-affecting work, initialize `docs/tracks/<track-id>/ship.md` with rollout prerequisites, migrations, feature flags, success thresholds, monitoring, rollback triggers and steps, and owners. Build and verification keep it current.
 
+Each document starts with the memory-management header (`type`, `title`, `description`): use `Implementation Plan`, `Task List`, or `Launch Dossier` respectively. New unreviewed documents use `status: draft`; task progress and launch readiness remain separate. Add frontmatter once per file, not to individual tasks, checklist sections, or external tracker items.
+
 Resolve the active numbered track using `context-engineering`: ids use a repository-wide three-digit prefix and kebab-case name, such as `001-user-auth`. Create `docs/tracks/<track-id>/` only for the selected or newly authorized change. The plan and task ledger live beside the approved change spec or bug report, while accepted capability requirements stay at `docs/specs/<capability>/spec.md`.
 
 Include **Spec reconciliation** in completion criteria: verified requirement changes update the owning capability specs in the same implementation PR; unchanged contracts receive a justified no-change disposition in the track spec or bug report. Deferred and canceled proposals remain in the track. A task may finish before the track; the track completes only after review and merge.
@@ -170,6 +172,13 @@ When using an external tracker, note it in `docs/tracks/<track-id>/plan.md` (e.g
 ## Plan Document Template
 
 ```markdown
+---
+type: Implementation Plan
+title: "[Change] implementation plan"
+description: "Implementation steps, dependencies, risks, and verification for [change]."
+status: draft
+---
+
 # Implementation Plan: [Feature/Project Name]
 
 ## Overview

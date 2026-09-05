@@ -1,3 +1,9 @@
+---
+type: Launch Dossier
+title: 'Launch Dossier: Durable Feature Workflow Artifacts'
+description: Rollout prerequisites, monitoring, rollback, and ownership for feature development workflow.
+---
+
 # Launch Dossier: Durable Feature Workflow Artifacts
 
 **Release inclusion:** Pending

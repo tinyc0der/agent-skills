@@ -38,6 +38,12 @@ docs/tracks/<track-id>/      # NNN-name, e.g. 001-user-auth
 
 Create only the files needed for the change. One track can affect several capabilities; each capability keeps one canonical spec across tracks. Allocate the next repository-wide three-digit track number above the highest existing prefix, starting at `001`, followed by a kebab-case name. Preserve ids and gaps and resolve concurrent allocation collisions before merge.
 
+Start each authored capability spec and track document with YAML frontmatter containing `type`, `title`, and `description`, following the [document-metadata profile](../skills/memory-management/SKILL.md#document-metadata-for-specs-and-tracks). It defines types for each artifact while preserving their Markdown bodies and ownership. New unreviewed documents use `status: draft`; OKF maturity stays separate from workflow progress, approval, task checkboxes, and report verdicts. Add optional provenance only from actual evidence.
+
+Read older artifacts without forcing a migration. During an authorized header adoption, preserve historical bodies, unknown metadata, and evaluated revisions. Shared frontmatter does not turn all of `docs/` into a knowledge bundle or make proposed requirements canonical.
+
+Authorized saved idea/intent briefs, specialist reports, and performance ledgers use the same profile in their owning homes. Follow [documentation-and-adrs](../skills/documentation-and-adrs/SKILL.md#document-authoring-workflow) when selecting a format: established external ADRs and runbooks, reserved OKF indexes/logs, general guides, inline contributions, and raw evidence retain their own conventions.
+
 Create a non-default branch before writing track artifacts. Prefer explicit track selection from the user, task, or PR; a branch may identify an existing numbered track or supply a new track's suffix. Never infer active work from the sole historical folder. The complete allocation and resolution rules live in the [context artifact map](../skills/context-engineering/SKILL.md#durable-workflow-artifacts).
 
 **Spec reconciliation:** Before review, update each owning capability spec with implemented, verified requirements in the same PR. Record target links or a justified no-change disposition in the track spec or bug report. Deferred and canceled proposals remain in tracks. Resolve concurrent capability edits against the latest accepted contract; complete the track after merge and retain it as history.

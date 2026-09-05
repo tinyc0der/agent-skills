@@ -4,7 +4,7 @@ description: Break work into small verifiable tasks with acceptance criteria and
 
 Invoke the agent-skills:planning-and-task-breakdown skill.
 
-**Workflow notes:** For an active track, read `docs/tracks/<track-id>/notes.md` at phase entry or resume and update it when useful context changes or before handoff. Capture observations, tentative ideas, outcomes, blockers, and next actions with evidence links. Follow the memory-management running-note protocol; honor explicit read-only or file-scope limits and keep writes outside pinned verification or release targets.
+**Workflow notes:** For an active track, read `docs/tracks/<track-id>/notes.md` at phase entry or resume and update it when useful context changes or before handoff. Capture observations, tentative ideas, outcomes, blockers, and next actions with evidence links. Follow the memory-management running-note and document-metadata protocols; honor explicit read-only or file-scope limits and keep writes outside pinned verification or release targets.
 
 Resolve the active numbered track using context-engineering. Read the approved requirements from `docs/tracks/<track-id>/spec.md` or `docs/tracks/<track-id>/bug.md`, the linked `docs/specs/<capability>/spec.md` files, and relevant code. For multi-capability work, use `docs/tracks/<track-id>/capability-map.md` to select the relevant sections of the track spec. Then:
 

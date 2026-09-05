@@ -1,3 +1,9 @@
+---
+type: Task List
+title: Feature Development Workflow Implementation Checklist
+description: Task state and completion checkpoints for feature development workflow.
+---
+
 # Feature Development Workflow Implementation Checklist
 
 **Source specification:** [`docs/feature-development-workflow.md`](../../feature-development-workflow.md)

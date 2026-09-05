@@ -1,3 +1,9 @@
+---
+type: Working Notes
+title: 'Notes: Workflow Memory Notes'
+description: Working observations, decisions, and follow-ups from workflow notes.
+---
+
 # Notes: Workflow Memory Notes
 
 ## Resume

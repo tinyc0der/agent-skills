@@ -9,7 +9,7 @@ description: Instruments code so production behavior is visible and diagnosable.
 
 Code you can't observe is code you can't operate. Observability is the ability to answer "what is the system doing and why?" from the outside, using the telemetry the code emits. Instrumentation is not a post-launch add-on — it's written alongside the feature, the same way tests are. If a feature ships without telemetry, the first user-reported bug becomes archaeology instead of a query.
 
-**Workflow notes:** For an active track, read `docs/tracks/<track-id>/notes.md` at phase entry or resume and update it when useful context changes or before handoff. Capture observations, tentative ideas, outcomes, blockers, and next actions with evidence links. Follow the memory-management running-note protocol; honor explicit read-only or file-scope limits and keep writes outside pinned verification or release targets.
+**Workflow notes:** For an active track, read `docs/tracks/<track-id>/notes.md` at phase entry or resume and update it when useful context changes or before handoff. Capture observations, tentative ideas, outcomes, blockers, and next actions with evidence links. Follow the memory-management running-note and document-metadata protocols; honor explicit read-only or file-scope limits and keep writes outside pinned verification or release targets.
 
 ## When to Use
 
@@ -155,6 +155,8 @@ Rules for every alert you create:
 2. **It links to a runbook** — even three lines: what it means, first query to run, escalation path.
 3. **It has a threshold and duration** justified by the SLO or by historical data, not by a guess.
 4. Use two severities only: **page** (user-facing, act now) and **ticket** (degradation, act this week). A third tier becomes noise that trains people to ignore everything.
+
+When authoring the linked runbook, discover its established home and format through documentation-and-adrs. A runbook in an OKF bundle uses `type: Playbook`, `title`, and `description` plus its collection index; an external runbook retains its owning convention. Preserve real operational evidence and link the deployed procedure without creating a second canonical copy.
 
 ### 7. Verify the telemetry itself
 

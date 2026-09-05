@@ -53,10 +53,12 @@ For bug implementation, hand the selected focused reproducer to `test-driven-dev
 
 ## Output Format
 
-When analyzing test coverage:
+Use the template below when analyzing test coverage. When authorized to save a standalone Markdown analysis, prefix it with YAML frontmatter containing `type: Test Coverage Analysis`, `title`, and `description`, following the memory-management document-metadata profile. Preserve the evaluated revision, scope, and observed test results separately from document maturity. Inline review contributions and raw test output retain their native formats.
 
 ```markdown
 ## Test Coverage Analysis
+
+**Evaluated revision and scope:** [Exact revision and test/code scope; state unavailable evidence]
 
 ### Current Coverage
 - [X] tests covering [Y] functions/components

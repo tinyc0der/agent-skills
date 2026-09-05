@@ -9,7 +9,7 @@ description: Prepares production launches. Use when preparing to deploy to produ
 
 Ship with confidence. The goal is not just to deploy — it's to deploy safely, with monitoring in place, a rollback plan ready, and a clear understanding of what success looks like. Every launch should be reversible, observable, and incremental.
 
-**Workflow notes:** For an active track, read `docs/tracks/<track-id>/notes.md` at phase entry or resume and update it when useful context changes or before handoff. Capture observations, tentative ideas, outcomes, blockers, and next actions with evidence links. Follow the memory-management running-note protocol; honor explicit read-only or file-scope limits and keep writes outside pinned verification or release targets.
+**Workflow notes:** For an active track, read `docs/tracks/<track-id>/notes.md` at phase entry or resume and update it when useful context changes or before handoff. Capture observations, tentative ideas, outcomes, blockers, and next actions with evidence links. Follow the memory-management running-note and document-metadata protocols; honor explicit read-only or file-scope limits and keep writes outside pinned verification or release targets.
 
 ## When to Use
 
@@ -127,6 +127,8 @@ silently expand the release range.
 ### Feature launch dossiers
 
 For every included PR with a workflow bundle, read `docs/tracks/<track-id>/ship.md`. It is the durable feature-level launch dossier and should contain rollout prerequisites, feature flags, migrations, success thresholds, monitoring, acknowledged risks, rollback triggers and steps, and ownership. Missing required feature launch information is release evidence to collect, not a reason to guess.
+
+When authoring or deliberately updating a dossier in an authorized workspace, use YAML frontmatter with `type: Launch Dossier`, `title`, and `description`. OKF `status` describes document maturity; GO/NO-GO and deployment state remain explicit release evidence. Header adoption must not mutate the pinned target or rewrite historical release claims.
 
 Review actionable items in `docs/tracks/<track-id>/notes.md` before GO. Route verified reusable knowledge through memory-management promotion into its established ADR, documentation, or runbook home. Accepted skill/workflow improvements belong in their owning project files or a linked follow-up task; ad hoc context can remain in the track. Record dispositions and follow-up ownership without promoting tentative ideas as facts. An unresolved item blocks launch only when operators need it to deploy, observe, or roll back safely.
 

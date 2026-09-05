@@ -1,3 +1,9 @@
+---
+type: Change Specification
+title: 'Change Spec: Workflow Memory Notes'
+description: Proposed requirements and reconciliation history for workflow notes.
+---
+
 # Change Spec: Workflow Memory Notes
 
 **Status:** Implemented locally; behavioral evaluation and merge remain pending.

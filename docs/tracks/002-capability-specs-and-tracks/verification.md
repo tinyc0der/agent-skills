@@ -1,3 +1,9 @@
+---
+type: Verification Report
+title: Capability specs and numbered tracks verification
+description: Recorded checks, outcomes, and evaluated revisions for capability specs and numbered tracks.
+---
+
 # Verification: INCOMPLETE
 
 Implementation revision: `b821f67e6f00abcee5c72a4980015ab39d30f7f8`.

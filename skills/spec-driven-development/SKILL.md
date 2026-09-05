@@ -11,7 +11,7 @@ Write a structured specification before writing any code. The spec is the shared
 
 Canonical capability specs live at `docs/specs/<capability>/spec.md` and describe current accepted behavior. This skill writes proposed changes to `docs/tracks/<track-id>/spec.md`, linking the affected capability specs rather than copying them. Track ids use a repository-wide three-digit prefix and kebab-case suffix, such as `001-user-auth`; follow the artifact map in `context-engineering` for allocation and active-track resolution. A bug that restores an existing contract can use `docs/tracks/<track-id>/bug.md` through `debugging-and-error-recovery` without a separate change spec.
 
-**Workflow notes:** For an active track, read `docs/tracks/<track-id>/notes.md` at phase entry or resume and update it when useful context changes or before handoff. Capture observations, tentative ideas, outcomes, blockers, and next actions with evidence links. Follow the memory-management running-note protocol; honor explicit read-only or file-scope limits and keep writes outside pinned verification or release targets.
+**Workflow notes:** For an active track, read `docs/tracks/<track-id>/notes.md` at phase entry or resume and update it when useful context changes or before handoff. Capture observations, tentative ideas, outcomes, blockers, and next actions with evidence links. Follow the memory-management running-note and document-metadata protocols; honor explicit read-only or file-scope limits and keep writes outside pinned verification or release targets.
 
 ## When to Use
 
@@ -48,6 +48,13 @@ Most requests describe one capability. If this one does, skip this phase and go 
 **Propose a capability map before writing any spec.** Small and reviewable — a module table plus a build order, not a project plan:
 
 ```markdown
+---
+type: Capability Map
+title: "[Initiative] capability map"
+description: "Capability boundaries, dependencies, and build order for [initiative]."
+status: draft
+---
+
 # Capability Map: [Initiative Name]
 
 | Module id | Responsibility | Depends on |
@@ -117,9 +124,17 @@ Don't silently fill in ambiguous requirements. The spec's entire purpose is to s
 **Spec template:**
 
 ```markdown
+---
+type: Change Specification
+title: "[Change] specification"
+description: "Proposed requirements and acceptance criteria for [change]."
+status: draft
+workflow_status: planned
+---
+
 # Spec: [Project/Feature Name]
 
-**Status:** Draft | Approved | In progress | Complete | Canceled
+**Approval:** [Actual approval evidence or pending review]
 **Affected capabilities:** [Links to existing specs; intended paths for new capabilities]
 
 ## Objective
@@ -184,7 +199,7 @@ The track spec remains current while work proceeds:
 - **Commit the spec** — The approved spec belongs in version control before implementation begins.
 - **Reference the spec in PRs** — Link back to the spec section that each PR implements.
 
-**Spec reconciliation:** Before review, incorporate implemented, verified changes into each owning `docs/specs/<capability>/spec.md` in the same PR as the implementation. Record the affected paths and dispositions in the track spec. Keep deferred, canceled, and unverified requirements out of canonical specs; record a justified no-change disposition for an unchanged contract. Reconcile concurrent edits against the latest accepted capability spec. Mark the track complete after merge and retain its history.
+**Spec reconciliation:** Before review, incorporate implemented, verified changes into each owning `docs/specs/<capability>/spec.md` in the same PR as the implementation. Canonical specs use `type: Capability Specification`; track proposals use `type: Change Specification`, both with `title` and `description`. Record the affected paths and dispositions in the track spec. Keep deferred, canceled, and unverified requirements out of canonical specs; record a justified no-change disposition for an unchanged contract. Reconcile concurrent edits against the latest accepted capability spec. Mark the track complete after merge and retain its history.
 
 ## Common Rationalizations
 

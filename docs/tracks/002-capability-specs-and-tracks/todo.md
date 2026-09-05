@@ -1,3 +1,9 @@
+---
+type: Task List
+title: 'Tasks: Capability Specs and Change Tracks'
+description: Task state and completion checkpoints for capability specs and numbered tracks.
+---
+
 # Tasks: Capability Specs and Change Tracks
 
 - [x] Migrate the artifact contract, existing records, lifecycle skills, adapters, and validators.

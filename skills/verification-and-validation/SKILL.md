@@ -11,7 +11,7 @@ Prove that the assembled change satisfies its approved requirements and is ready
 
 Verification answers "did we build it correctly?" Validation answers "did we build the right thing?" A feature needs both.
 
-**Workflow notes:** For an active track, read `docs/tracks/<track-id>/notes.md` at phase entry or resume and update it when useful context changes or before handoff. Capture observations, tentative ideas, outcomes, blockers, and next actions with evidence links. Follow the memory-management running-note protocol; honor explicit read-only or file-scope limits and keep writes outside pinned verification or release targets.
+**Workflow notes:** For an active track, read `docs/tracks/<track-id>/notes.md` at phase entry or resume and update it when useful context changes or before handoff. Capture observations, tentative ideas, outcomes, blockers, and next actions with evidence links. Follow the memory-management running-note and document-metadata protocols; honor explicit read-only or file-scope limits and keep writes outside pinned verification or release targets.
 
 ## When to Use
 
@@ -121,6 +121,13 @@ Verify feature-flag ownership and expiry, migration safety, rollback readiness, 
 Use this report shape:
 
 ```markdown
+---
+type: Verification Report
+title: "[Change] verification"
+description: "Acceptance evidence and remaining limitations for [change] at the recorded revision."
+status: draft
+---
+
 ## Verification: PASS | FAIL | INCOMPLETE
 
 Revision: [commit or working-tree description]

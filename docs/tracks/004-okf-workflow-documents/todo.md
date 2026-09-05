@@ -7,8 +7,9 @@ status: draft
 
 # Tasks: OKF Workflow Documents
 
-- [ ] Update the memory profile, phase guidance, and artifact templates.
-- [ ] Migrate existing headers and extend affected execution expectations.
-- [ ] Reconcile capability specs, validate YAML and historical preservation, and review.
+- [x] Update the memory profile, phase guidance, and artifact templates.
+- [x] Migrate existing headers and extend affected execution expectations.
+- [x] Audit all artifact producers, including documentation-and-adrs, saved briefs, specialist reports, ADRs/runbooks, and performance ledgers.
+- [x] Reconcile capability specs, validate YAML and historical preservation, and review.
 - [ ] Run affected AI behavioral scenarios when executor capacity is available.
 - [ ] Complete the track after verification and merge.

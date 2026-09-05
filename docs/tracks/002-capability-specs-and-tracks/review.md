@@ -1,3 +1,9 @@
+---
+type: Review
+title: 'Review: Capability Specs and Numbered Tracks'
+description: Recorded findings, dispositions, and evaluated revisions for capability specs and numbered tracks.
+---
+
 # Review: Capability Specs and Numbered Tracks
 
 Reviewed implementation: `b821f67e6f00abcee5c72a4980015ab39d30f7f8`.

@@ -82,7 +82,7 @@
         "memory-management/numbered-change-track"
       ],
       "expectations": [
-        "Allocates docs/tracks/008-session-timeouts/spec.md above the highest existing repository-wide number 007, preserving both historical track ids and contents rather than filling a gap or reusing a completed track.",
+        "Allocates docs/tracks/008-session-timeouts/spec.md above the highest existing repository-wide number 007, preserving both historical track ids and contents rather than filling a gap or reusing a completed track. The new document has parseable YAML frontmatter with type: Change Specification and non-empty string title and description. Document maturity does not encode workflow progress or approval; no generated/verified identity or review event is invented.",
         "The new track links docs/specs/authentication/spec.md and records the approved 15-minute timeout proposal and deferred SAML. The canonical spec remains byte-for-byte unchanged because implementation and verification have not happened.",
         "Records spec reconciliation into the capability spec in the implementation PR after verification and before review, keeps deferred requirements out of canonical specs, and does not mark the track complete before merge. Creates no implementation code, extra plan/task/review placeholders, or OKF bundle."
       ]
@@ -99,7 +99,22 @@
       "expectations": [
         "Reads the existing notes and bug report, runs the reproduction, and inspects its source. Notes record that tests observe zero rows before seed:complete because setupTests does not wait for seedDatabase; they do not falsely claim that a fix has been implemented or verified.",
         "Preserves the reverted pool-size attempt as useful local history, marks the earlier pool-size hypothesis unsupported or superseded by the observed ordering, and refreshes the resume checkpoint with a concrete next action and evidence links.",
-        "Records the proposed debugging-skill and test-workflow improvements with their intended destinations and pending status, keeps the CI-cache idea unverified, and distinguishes working context or promotion candidates from accepted durable knowledge. Edits only docs/tracks/004-test-startup/notes.md; does not create a knowledge bundle, modify the reproduction or other files, or mark the track complete."
+        "Records the proposed debugging-skill and test-workflow improvements with their intended destinations and pending status, keeps the CI-cache idea unverified, and distinguishes working context or promotion candidates from accepted durable knowledge. Edits only docs/tracks/004-test-startup/notes.md; does not create a knowledge bundle, modify the reproduction or other files, or mark the track complete. The updated note file has parseable YAML frontmatter with type: Working Notes and non-empty string title and description; provisional observations remain provisional regardless of document metadata."
+      ]
+    },
+    {
+      "id": 7,
+      "name": "document-metadata-preserves-evidence",
+      "kind": "execution",
+      "prompt": "The fixture project is memory-management/document-metadata/; use that directory as the project scope. Adopt our minimal OKF document headers in docs/tracks/001-search-index/plan.md and verification.md. Add or repair type, title, and description. The plan has already been reviewed, but implementation is still in progress. The verification report describes an earlier evaluation; do not rerun it. Preserve both Markdown bodies and all existing metadata, including extensions. Do not invent authorship or review events, mark the track complete, create a knowledge bundle, or change any other files.",
+      "expected_output": "Both authorized files have valid descriptive headers. The plan retains stable document maturity, in-progress workflow state, and its nested extension. The historical verification report retains its INCOMPLETE verdict and exact revision without fabricated verification metadata. Bodies remain unchanged and no other files are created or edited.",
+      "files": [
+        "memory-management/document-metadata"
+      ],
+      "expectations": [
+        "Reads both files and repairs only their frontmatter. The plan has type: Implementation Plan and the verification report type: Verification Report; both have non-empty string title and description. Both Markdown bodies remain unchanged.",
+        "Preserves the plan status: stable, workflow_status: in_progress, and the nested vendor_extension mapping and list. Does not map INCOMPLETE or in_progress into OKF status, infer completion, or add fabricated generated/verified identities or timestamps.",
+        "Preserves the report verdict, historical revision, and missing-evidence statement without running or claiming a new evaluation. Creates or edits no files outside the two named documents, including notes, rules files, capability specs, or a knowledge bundle."
       ]
     }
   ],
@@ -119,6 +134,10 @@
       },
       {
         "prompt": "Keep running notes for this track, including ad hoc observations and ideas to improve our skills and workflows.",
+        "top_k": 1
+      },
+      {
+        "prompt": "Apply OKF headers to our specs and track documents while preserving workflow status.",
         "top_k": 1
       }
     ],

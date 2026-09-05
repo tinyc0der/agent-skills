@@ -1,3 +1,9 @@
+---
+type: Change Specification
+title: 'Change Spec: Capability Specs and Change Tracks'
+description: Proposed requirements and reconciliation history for capability specs and numbered tracks.
+---
+
 # Change Spec: Capability Specs and Change Tracks
 
 **Status:** Approved for implementation by the user's spec/track layout instruction.

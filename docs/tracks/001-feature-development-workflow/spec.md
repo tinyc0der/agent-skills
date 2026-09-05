@@ -1,3 +1,9 @@
+---
+type: Change Specification
+title: 'Spec: Durable Feature Workflow Artifacts'
+description: Proposed requirements and reconciliation history for feature development workflow.
+---
+
 # Spec: Durable Feature Workflow Artifacts
 
 > Historical change specification, retained from the workflow before the capability/track split. The current contract is [Feature Development Workflow](../../specs/feature-development-workflow/spec.md); the migration is recorded in [track 002](../002-capability-specs-and-tracks/spec.md). Historical approval and evidence below do not certify later revisions.

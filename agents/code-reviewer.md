@@ -62,7 +62,16 @@ Categorize every finding:
 
 ## Review Output Template
 
+When persisting this report to the track, use the memory-management document-metadata profile. Document maturity is separate from the review verdict and the exact revision evaluated.
+
 ```markdown
+---
+type: Review
+title: "[Change] review"
+description: "Review findings, dispositions, and verification limits for [change] at the recorded revision."
+status: draft
+---
+
 ## Review Summary
 
 **Verdict:** APPROVE | REQUEST CHANGES

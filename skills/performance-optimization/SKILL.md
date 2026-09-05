@@ -324,6 +324,8 @@ Reverted work leaves no trace in git history, which is exactly why the same dead
 
 A section in the PR description or a `PERF.md` in the repo both work. What matters is that the next person (or the next agent) reads it before proposing an experiment, and doesn't re-run one that already failed.
 
+When authorized to save a standalone ledger, add YAML frontmatter with `type: Performance Record`, a descriptive `title`, and a one-sentence `description`, following the memory-management document-metadata profile. Record actual revisions, measurement conditions, and outcomes in the body; document maturity does not establish a measured improvement. A ledger section in a PR or existing track document keeps its containing format. Keep attempt history in its owning workflow artifact; reusable lessons follow the memory promotion gate.
+
 ## Performance Budget
 
 Set budgets and enforce them:
