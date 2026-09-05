@@ -84,7 +84,7 @@ test('accepts every durable artifact in a track', () => {
       '`docs/tracks/<track-id>/todo.md`',
       '`docs/tracks/<track-id>/verification.md`',
       '`docs/tracks/<track-id>/review.md`',
-      '`docs/tracks/<track-id>/memory-delta.md`',
+      '`docs/tracks/<track-id>/notes.md`',
       '`docs/tracks/<track-id>/ship.md`',
     ].join('\n'),
   );
@@ -202,6 +202,16 @@ test('rejects execution artifacts stored under canonical capability specs', () =
   assert.match(result.stdout, /docs\/specs\/auth\/plan\.md/);
   assert.match(result.stdout, /docs\/specs\/auth\/bug\.md/);
   assert.match(result.stdout, /docs\/specs\/auth\/review\.md/);
+});
+
+test('rejects running notes stored under canonical capability specs', () => {
+  const root = makeSandbox();
+  writeFile(root, 'docs/specs/auth/notes.md', 'A hypothesis from the active change.');
+
+  const result = run(root);
+
+  assert.equal(result.status, 1, result.stdout + result.stderr);
+  assert.match(result.stdout, /docs\/specs\/auth\/notes\.md/);
 });
 
 test('rejects unnumbered tracks and duplicate numeric allocations on disk', () => {

@@ -7,9 +7,25 @@ const path = require('node:path');
 
 const ROOT = path.resolve(__dirname, '..');
 
+const WORKFLOW_NOTE_FILES = [
+  ...[
+    'memory-management', 'context-engineering', 'using-agent-skills',
+    'spec-driven-development', 'planning-and-task-breakdown', 'incremental-implementation',
+    'test-driven-development', 'debugging-and-error-recovery', 'verification-and-validation',
+    'code-review-and-quality', 'git-workflow-and-versioning', 'shipping-and-launch',
+    'interview-me', 'idea-refine', 'documentation-and-adrs',
+    'observability-and-instrumentation', 'deprecation-and-migration',
+  ].map(name => `skills/${name}/SKILL.md`),
+  ...['spec', 'plan', 'build', 'test', 'verify', 'review', 'pr', 'ship', 'code-simplify', 'webperf'].flatMap(name => {
+    const tomlName = name === 'plan' ? 'planning' : name;
+    return [`.claude/commands/${name}.md`, `.gemini/commands/${tomlName}.toml`, `commands/${tomlName}.toml`];
+  }),
+];
+
 const REQUIRED_TEXT = [
   { file: 'AGENTS.md', values: ['VERIFY → `verification-and-validation`'] },
   { file: 'docs/opencode-setup.md', values: ['VERIFY → `verification-and-validation`'] },
+  ...WORKFLOW_NOTE_FILES.map(file => ({ file, values: ['Workflow notes:', 'docs/tracks/<track-id>/notes.md'] })),
   ...[
     'skills/spec-driven-development/SKILL.md',
     'skills/verification-and-validation/SKILL.md',

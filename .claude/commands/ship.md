@@ -4,6 +4,8 @@ description: Automatically discover the next release, then run revision-aware ch
 
 Invoke the agent-skills:shipping-and-launch skill.
 
+**Workflow notes:** For an active track, read `docs/tracks/<track-id>/notes.md` at phase entry or resume and update it when useful context changes or before handoff. Capture observations, tentative ideas, outcomes, blockers, and next actions with evidence links. Follow the memory-management running-note protocol; honor explicit read-only or file-scope limits and keep writes outside pinned verification or release targets.
+
 `/ship` is the production-release gate. Its normal interface is zero-argument.
 
 ## Phase 0 — Discover and confirm the release
@@ -12,7 +14,7 @@ The shipping-and-launch skill owns the complete **Automatic Release Discovery** 
 
 ## Phase A — Reuse evidence and refresh stale checks
 
-For every included PR with a change track, load its `docs/tracks/<track-id>/ship.md` launch dossier, revision-scoped `docs/tracks/<track-id>/verification.md` and `docs/tracks/<track-id>/review.md` evidence, and `docs/tracks/<track-id>/memory-delta.md` when present. Determine which specialist reports are stale, missing, or invalidated by release changes. When more than one is needed, spawn them concurrently using the Agent tool.
+For every included PR with a change track, load its `docs/tracks/<track-id>/ship.md` launch dossier, revision-scoped `docs/tracks/<track-id>/verification.md` and `docs/tracks/<track-id>/review.md` evidence, and `docs/tracks/<track-id>/notes.md` when present. Determine which specialist reports are stale, missing, or invalidated by release changes. When more than one is needed, spawn them concurrently using the Agent tool.
 
 In Claude Code, each call passes `subagent_type` matching the persona's `name` field:
 

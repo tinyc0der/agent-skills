@@ -41,7 +41,7 @@ review workflow; `test-driven-development` retains RED-GREEN-REFACTOR execution.
 - Canonical capability contracts live at `docs/specs/<capability>/spec.md`.
   Individual changes use numbered `docs/tracks/<track-id>/` directories with
   `spec.md` or `bug.md`, and only the planning, task, verification, review,
-  candidate-memory, and launch evidence needed for that work. Multi-capability
+  running notes, and launch evidence needed for that work. Multi-capability
   proposals use sections of the track spec and an optional capability map.
 - Track ids use the next repository-wide three-digit number followed by a
   kebab-case name, starting at `001`. Preserve historical ids and resolve

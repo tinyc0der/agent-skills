@@ -32,7 +32,7 @@ docs/tracks/<track-id>/      # NNN-name, e.g. 001-user-auth
 ├── todo.md
 ├── verification.md
 ├── review.md
-├── memory-delta.md          # Only when candidate reusable knowledge exists
+├── notes.md                 # Running context, knowledge, and improvement ideas
 └── ship.md                  # Only when production launch facts are needed
 ```
 
@@ -43,6 +43,14 @@ Create a non-default branch before writing track artifacts. Prefer explicit trac
 **Spec reconciliation:** Before review, update each owning capability spec with implemented, verified requirements in the same PR. Record target links or a justified no-change disposition in the track spec or bug report. Deferred and canceled proposals remain in tracks. Resolve concurrent capability edits against the latest accepted contract; complete the track after merge and retain it as history.
 
 Evidence names the exact evaluated revision. Only evidence or administrative changes within the same track can preserve earlier evidence without a rerun; changes to requirements, scope, acceptance criteria, canonical specs, or production behavior invalidate affected evidence. Persist repository-relative links.
+
+## Notes Across Every Phase
+
+Read `docs/tracks/<track-id>/notes.md` at phase entry and when resuming. Create it with the track's initial checkpoint, then update useful discoveries, decisions, attempts and outcomes, blockers, and next actions as work proceeds, including before handoff or compaction. Before a track exists, keep discovery in the authorized brief and link it when the track is created. Standalone questions and explicit read-only or file-scope limits do not require extra artifacts.
+
+Notes can contain ad hoc observations, reusable knowledge, and skill or workflow improvement ideas. Keep hypotheses, observed facts, and accepted decisions distinct; link current specs, tasks, and evidence. At handoff and closeout, route useful items to their canonical knowledge owner, an accepted in-scope skill/workflow change, or a follow-up task. Retain useful temporary context in the track. Follow [memory-management](../skills/memory-management/SKILL.md#running-notes-throughout-the-workflow) for the note format and promotion gates.
+
+Notes preserve context throughout verification, review, release, and cleanup, but do not establish approval or expand evidence coverage. Record updates outside pinned verification or release targets in an authorized track workspace or a follow-up documentation change.
 
 ## Phase 1: Discover
 
@@ -195,7 +203,7 @@ Read acceptance criteria
 - Small, independently revertible commits
 - Updated task state and track requirements; reconciled capability specs for verified changes
 - Documentation, ADR, migration, feature-flag, and telemetry changes owned by the slice
-- Updated `docs/tracks/<track-id>/ship.md` launch facts and `docs/tracks/<track-id>/memory-delta.md` candidate knowledge when applicable
+- Updated `docs/tracks/<track-id>/notes.md` with useful outcomes, unresolved ideas, and the next action; updated `docs/tracks/<track-id>/ship.md` when launch facts change
 
 **Exit gate**
 

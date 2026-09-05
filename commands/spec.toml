@@ -3,6 +3,8 @@ description = "Start spec-driven development — write a structured specificatio
 prompt = """
 Invoke the spec-driven-development skill.
 
+**Workflow notes:** For an active track, read `docs/tracks/<track-id>/notes.md` at phase entry or resume and update it when useful context changes or before handoff. Capture observations, tentative ideas, outcomes, blockers, and next actions with evidence links. Follow the memory-management running-note protocol; honor explicit read-only or file-scope limits and keep writes outside pinned verification or release targets.
+
 Begin by understanding what the user wants to build. Ask clarifying questions about:
 1. The objective and target users
 2. Core features and acceptance criteria

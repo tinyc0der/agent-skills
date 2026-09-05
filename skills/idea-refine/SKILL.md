@@ -7,6 +7,8 @@ description: Refines raw ideas into sharp, actionable concepts through structure
 
 Refines raw ideas into sharp, actionable concepts worth building through structured divergent and convergent thinking.
 
+**Workflow notes:** For an active track, read `docs/tracks/<track-id>/notes.md` at phase entry or resume and update it when useful context changes or before handoff. Capture observations, tentative ideas, outcomes, blockers, and next actions with evidence links. Follow the memory-management running-note protocol; honor explicit read-only or file-scope limits and keep writes outside pinned verification or release targets.
+
 ## How It Works
 
 1.  **Understand & Expand (Divergent):** Restate the idea, ask sharpening questions, and generate variations.

@@ -9,6 +9,8 @@ description: Prepares production launches. Use when preparing to deploy to produ
 
 Ship with confidence. The goal is not just to deploy — it's to deploy safely, with monitoring in place, a rollback plan ready, and a clear understanding of what success looks like. Every launch should be reversible, observable, and incremental.
 
+**Workflow notes:** For an active track, read `docs/tracks/<track-id>/notes.md` at phase entry or resume and update it when useful context changes or before handoff. Capture observations, tentative ideas, outcomes, blockers, and next actions with evidence links. Follow the memory-management running-note protocol; honor explicit read-only or file-scope limits and keep writes outside pinned verification or release targets.
+
 ## When to Use
 
 - Deploying a feature to production for the first time
@@ -126,7 +128,7 @@ silently expand the release range.
 
 For every included PR with a workflow bundle, read `docs/tracks/<track-id>/ship.md`. It is the durable feature-level launch dossier and should contain rollout prerequisites, feature flags, migrations, success thresholds, monitoring, acknowledged risks, rollback triggers and steps, and ownership. Missing required feature launch information is release evidence to collect, not a reason to guess.
 
-When `docs/tracks/<track-id>/memory-delta.md` exists, review every candidate before GO. Promote verified decisions or operational knowledge into the project's established ADR, documentation, or runbook location; mark rejected or deferred candidates with their disposition and follow-up owner. An unresolved candidate blocks launch only when operators need that knowledge to deploy, observe, or roll back safely.
+Review actionable items in `docs/tracks/<track-id>/notes.md` before GO. Route verified reusable knowledge through memory-management promotion into its established ADR, documentation, or runbook home. Accepted skill/workflow improvements belong in their owning project files or a linked follow-up task; ad hoc context can remain in the track. Record dispositions and follow-up ownership without promoting tentative ideas as facts. An unresolved item blocks launch only when operators need it to deploy, observe, or roll back safely.
 
 The release-wide GO/NO-GO decision and authoritative deployment result belong to the configured release or deployment system because writing them into the repository would mutate the pinned target. After deployment, a follow-up documentation change may append the immutable release or deployment identifier to each included feature's `docs/tracks/<track-id>/ship.md`; that follow-up is not part of the already-shipped target.
 

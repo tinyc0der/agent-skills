@@ -9,6 +9,8 @@ description: Discovers and invokes agent skills. Use when starting a session or 
 
 Agent Skills is a collection of engineering workflow skills organized by development phase. Each skill encodes a specific process that senior engineers follow. This meta-skill helps you discover and apply the right skill for your current task.
 
+**Workflow notes:** For an active track, read `docs/tracks/<track-id>/notes.md` at phase entry or resume and update it when useful context changes or before handoff. Capture observations, tentative ideas, outcomes, blockers, and next actions with evidence links. Follow the memory-management running-note protocol; honor explicit read-only or file-scope limits and keep writes outside pinned verification or release targets.
+
 ## Skill Discovery
 
 When a task arrives, identify the development phase and apply the corresponding skill:
@@ -165,7 +167,7 @@ Accepted capability contracts live at `docs/specs/<capability>/spec.md`; change 
 | Define → Plan | Approved `docs/tracks/<track-id>/spec.md` with per-capability sections and an optional `docs/tracks/<track-id>/capability-map.md`; bounded bugs may use `docs/tracks/<track-id>/bug.md` |
 | Plan → Draft PR | Approved `docs/tracks/<track-id>/plan.md`, `docs/tracks/<track-id>/todo.md`, and `docs/tracks/<track-id>/ship.md` when production-affecting |
 | Draft PR → Build | Draft PR body linking the spec and plan, with scope, non-goals, risks, acceptance criteria, rollout, and rollback context |
-| Build → Verify | Independently revertible implementation commits, current task state, Spec reconciliation in the owning capability specs (or justified no-change dispositions), launch dossier, and any candidate knowledge in `docs/tracks/<track-id>/memory-delta.md` |
+| Build → Verify | Independently revertible implementation commits, current task state, Spec reconciliation in the owning capability specs (or justified no-change dispositions), launch dossier, and current context and unresolved ideas in `docs/tracks/<track-id>/notes.md` |
 | Verify → Ready PR | `docs/tracks/<track-id>/verification.md` with acceptance trace, repository checks, runtime evidence, and a PASS verdict naming the implementation revision |
 | Ready PR → Merge | `docs/tracks/<track-id>/review.md`, green required CI, no Critical or Required findings, and required human approval |
 | Merge → Ship | Track completion recorded after merge, retained history, release-revision evidence plus included feature `docs/tracks/<track-id>/ship.md` dossiers, migration/flag/observability readiness, go/no-go decision, and rollback plan |

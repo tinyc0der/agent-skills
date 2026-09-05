@@ -11,6 +11,8 @@ Write a structured specification before writing any code. The spec is the shared
 
 Canonical capability specs live at `docs/specs/<capability>/spec.md` and describe current accepted behavior. This skill writes proposed changes to `docs/tracks/<track-id>/spec.md`, linking the affected capability specs rather than copying them. Track ids use a repository-wide three-digit prefix and kebab-case suffix, such as `001-user-auth`; follow the artifact map in `context-engineering` for allocation and active-track resolution. A bug that restores an existing contract can use `docs/tracks/<track-id>/bug.md` through `debugging-and-error-recovery` without a separate change spec.
 
+**Workflow notes:** For an active track, read `docs/tracks/<track-id>/notes.md` at phase entry or resume and update it when useful context changes or before handoff. Capture observations, tentative ideas, outcomes, blockers, and next actions with evidence links. Follow the memory-management running-note protocol; honor explicit read-only or file-scope limits and keep writes outside pinned verification or release targets.
+
 ## When to Use
 
 - Starting a new project or feature

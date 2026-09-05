@@ -105,6 +105,26 @@ function writeCanonicalFiles(root) {
     writeFile(root, file, previous + '\nSpec reconciliation: docs/specs/<capability>/spec.md');
   }
 
+  const noteSkills = [
+    'memory-management', 'context-engineering', 'using-agent-skills',
+    'spec-driven-development', 'planning-and-task-breakdown', 'incremental-implementation',
+    'test-driven-development', 'debugging-and-error-recovery', 'verification-and-validation',
+    'code-review-and-quality', 'git-workflow-and-versioning', 'shipping-and-launch',
+    'interview-me', 'idea-refine', 'documentation-and-adrs',
+    'observability-and-instrumentation', 'deprecation-and-migration',
+  ];
+  const noteFiles = noteSkills.map(name => `skills/${name}/SKILL.md`);
+  for (const command of ['spec', 'plan', 'build', 'test', 'verify', 'review', 'pr', 'ship', 'code-simplify', 'webperf']) {
+    noteFiles.push(`.claude/commands/${command}.md`);
+    const tomlName = command === 'plan' ? 'planning' : command;
+    noteFiles.push(`.gemini/commands/${tomlName}.toml`, `commands/${tomlName}.toml`);
+  }
+  for (const file of noteFiles) {
+    const absolutePath = path.join(root, file);
+    const previous = fs.existsSync(absolutePath) ? fs.readFileSync(absolutePath, 'utf8') : '';
+    writeFile(root, file, previous + '\nWorkflow notes: Read docs/tracks/<track-id>/notes.md at entry and update it at meaningful changes.');
+  }
+
 }
 
 function run(root) {
@@ -310,4 +330,17 @@ test('fails when PR readiness omits capability spec reconciliation', () => {
   assert.equal(result.status, 1, result.stdout + result.stderr);
   assert.match(result.stdout, /\.claude\/commands\/pr\.md/);
   assert.match(result.stdout, /Spec reconciliation/);
+});
+
+
+test('fails when an early workflow phase only mentions promotion instead of running notes', () => {
+  const root = makeSandbox();
+  writeCanonicalFiles(root);
+  writeFile(root, '.claude/commands/spec.md', 'Write the approved spec. Promote lessons from docs/tracks/<track-id>/notes.md at ship.');
+
+  const result = run(root);
+
+  assert.equal(result.status, 1, result.stdout + result.stderr);
+  assert.match(result.stdout, /\.claude\/commands\/spec\.md/);
+  assert.match(result.stdout, /Workflow notes/);
 });

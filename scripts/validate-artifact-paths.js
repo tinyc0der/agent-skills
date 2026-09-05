@@ -31,7 +31,7 @@ const ROOT = path.resolve(__dirname, '..');
 
 const SLUG = '[a-z0-9](?:[a-z0-9-]*[a-z0-9])?';
 const TRACK_ID = `(?!000)[0-9]{3}-${SLUG}`;
-const FIXED_ARTIFACT = '(?:spec|bug|capability-map|plan|todo|verification|review|memory-delta|ship)';
+const FIXED_ARTIFACT = '(?:spec|bug|capability-map|plan|todo|verification|review|notes|ship)';
 const TRACK_ARTIFACT_RE = new RegExp(
   `^docs/tracks/(?:<track-id>|${TRACK_ID})/${FIXED_ARTIFACT}\\.md$`,
 );
@@ -89,7 +89,8 @@ const RELATIVE_PATH_FILES = new Set([
   'docs/getting-started.md',
   'docs/adoption-guide.md',
 ]);
-const RELATIVE_ARTIFACT_RE = new RegExp(`^${FIXED_ARTIFACT}\\.md$`);
+// Overview documents may explain how to migrate the former notes filename.
+const RELATIVE_ARTIFACT_RE = new RegExp(`^(?:${FIXED_ARTIFACT}|memory-delta)\\.md$`);
 const LEGACY_MIGRATION_FILES = new Set([
   'docs/feature-development-workflow-release-notes.md',
 ]);
@@ -98,7 +99,7 @@ const LEGACY_ARTIFACT_RE = /^(?:specs\/(?:SPEC(?:-[a-z0-9-]+)?|capability-map)|t
 // Match full path-like tokens, including documented angle- or square-bracket
 // placeholders. Case-insensitive matching catches legacy `SPEC.md` paths;
 // canonical validation below remains lowercase and exact.
-const ARTIFACT_RE = /(?:[A-Za-z0-9._[\]<>-]+\/)*(?:spec(?:-(?:[a-z0-9-]+|<module-id>))?|bug|capability-map|plan|todo|verification|review|memory-delta|ship)\.md/gi;
+const ARTIFACT_RE = /(?:[A-Za-z0-9._[\]<>-]+\/)*(?:spec(?:-(?:[a-z0-9-]+|<module-id>))?|bug|capability-map|plan|todo|verification|review|notes|memory-delta|ship)\.md/gi;
 
 function isAllowedArtifactPath(artifactPath, relPath) {
   return TRACK_ARTIFACT_RE.test(artifactPath)

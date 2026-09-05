@@ -3,6 +3,8 @@ description = "Implement tasks incrementally — build, test, verify, commit. Ad
 prompt = """
 Invoke incremental-implementation and test-driven-development. For non-trivial case selection, also invoke test-case-design-review.
 
+**Workflow notes:** For an active track, read `docs/tracks/<track-id>/notes.md` at phase entry or resume and update it when useful context changes or before handoff. Capture observations, tentative ideas, outcomes, blockers, and next actions with evidence links. Follow the memory-management running-note protocol; honor explicit read-only or file-scope limits and keep writes outside pinned verification or release targets.
+
 ## Modes
 
 - `/build` — implement the next pending task, then stop (careful, one slice at a time).
@@ -22,7 +24,7 @@ Pick the next pending task from the plan, or the bounded defect from the active 
 6. Run the repository's affected and full regression tests, build, lint, formatting, and type-check gates where available.
 7. Verify the slice at runtime when its acceptance criteria require observable behavior.
 8. Apply the task acceptance criteria and the project-wide Definition of Done.
-9. Update docs/tracks/<track-id>/ship.md when the slice changes rollout, migration, flag, monitoring, or rollback facts. When the slice reveals candidate project knowledge that should survive the feature, record the fact, evidence, proposed durable destination, and status in docs/tracks/<track-id>/memory-delta.md; do not create an empty ledger.
+9. Update `docs/tracks/<track-id>/ship.md` when the slice changes rollout, migration, flag, monitoring, or rollback facts. Refresh `docs/tracks/<track-id>/notes.md` with useful attempts, outcomes, discoveries, improvement ideas, blockers, and the next action; label uncertainty and link evidence. Mark reusable knowledge as a promotion candidate only when warranted.
 10. Spec reconciliation: incorporate verified requirement changes into docs/specs/<capability>/spec.md in the same PR, and record the affected paths or a justified no-change disposition in the track spec or bug report. Mark the task complete in its configured target; keep the track open until review and merge.
 11. Inspect and stage only the slice's files and artifact updates, then commit with a descriptive message.
 12. Stop after exactly one task.

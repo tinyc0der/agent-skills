@@ -1,6 +1,6 @@
 ---
 name: memory-management
-description: Maintains durable memory as Open Knowledge Format (OKF) bundles. Use when saving verified lessons or team preferences for future sessions, bootstrapping a knowledge bundle, or pruning and syncing stale memory. Covers canonical knowledge ownership and permissive reading of imported bundles.
+description: Maintains running track notes for ad hoc observations, reusable knowledge, and skill or workflow improvement ideas, plus durable Open Knowledge Format (OKF) bundles. Use when keeping or resuming notes during a tracked change, saving verified lessons or team preferences for future sessions, bootstrapping a knowledge bundle, or pruning and syncing stale memory.
 ---
 
 # Memory Management
@@ -8,6 +8,8 @@ description: Maintains durable memory as Open Knowledge Format (OKF) bundles. Us
 ## Overview
 
 A project should get faster to work in over time. Every session, feature, fix, and failure leaves behind knowledge — but most of it dies when the session ends, so the next session re-derives it from scratch. Memory management fixes that: it captures the *durable* knowledge, routes it to a home where future sessions will actually find it, and keeps it from rotting.
+
+During an active track, it also maintains `docs/tracks/<track-id>/notes.md` as the AI's running notes across every workflow phase. Working notes preserve context before a lesson is ready for permanent memory.
 
 The core skill is **knowing what to keep and where to put it.** Memory is not a dumping ground for everything that happened — it's the small, curated set of facts a future session genuinely needs and could not quickly re-derive. Save too little and the agent hallucinates project conventions; save too much (or save wrong things) and the signal drowns in noise.
 
@@ -17,6 +19,7 @@ This skill is **tool-agnostic**. It assumes a git-backed project but makes no as
 
 Trigger this skill — even when the user doesn't say "memory":
 
+- **An active track enters or resumes any workflow phase.** Read its running notes and update them as useful context changes, including before a pause, handoff, or context compaction.
 - **A feature ships.** Promote what was learned during the work into durable memory.
 - **The user states a durable preference or corrects you** in a way that should outlive this session ("we always run migrations in a transaction", "don't use default exports here").
 - **A failure is diagnosed and reproducible.** The failure mode and its cause are worth keeping.
@@ -24,7 +27,7 @@ Trigger this skill — even when the user doesn't say "memory":
 - **Memory looks stale, sprawling, or wrong** — it contradicts the current code, or files have grown unscannable. Pruning and reorganizing is part of this skill, not a separate one.
 - **Setting up a project's durable-memory core** for the first time (Bootstrap mode — derive it from the codebase), or deciding where a new piece of knowledge belongs.
 
-If a piece of knowledge only matters to the current conversation, it does **not** belong in memory. Memory is for what survives the session.
+Temporary context belongs in track notes when it helps continue the work. It does **not** automatically belong in the durable knowledge bundle. Standalone questions and explicit read-only or no-op requests do not require creating or updating notes.
 
 ## A Note on Terms: Memory vs. `steering/`
 
@@ -81,7 +84,7 @@ docs/tracks/<track-id>/  → numbered change, e.g. 001-adopt-okf-v0-2
   plan.md, todo.md      → implementation plan and task ledger
   verification.md       → evidence for an exact revision
   review.md             → findings, dispositions, and reviewed revision
-  memory-delta.md       → candidate reusable knowledge, only when discovered
+  notes.md              → running notes and resume context throughout the workflow
   ship.md               → launch dossier, only when needed
 ```
 
@@ -169,7 +172,7 @@ Continue reading v0.1 bundles: a legacy `timestamp` can supply content-change ti
 
 ## The Cardinal Rule: Explain the Why
 
-Every memory entry records **why it's true, not just what it says.** A rule without its rationale can't be re-evaluated — a future session can't tell when it has stopped applying, so it either follows a dead rule or distrusts a live one.
+Every durable knowledge entry records **why it's true, not just what it says.** A rule without its rationale can't be re-evaluated — a future session can't tell when it has stopped applying, so it either follows a dead rule or distrusts a live one. Working notes may record unresolved hypotheses when clearly labeled and tied to a next check.
 
 ```
 Weak:    Use cn() for conditional classNames.
@@ -177,7 +180,7 @@ Strong:  Use cn() for conditional classNames — hand-concatenation caused
          duplicate-class bugs in #142.
 ```
 
-The "why" does triple duty: it's the **rationale** (so the rule can be applied with judgment), the **evidence/provenance** (so it's trustworthy), and the **staleness check** (when the why no longer holds, prune the rule). This is also why silent learning is banned — a memory entry must trace to a completed feature, an accepted decision, a verified failure, or a user-approved preference. Never write memory from an unverified assumption or a one-off behavior.
+The "why" does triple duty: it's the **rationale** (so the rule can be applied with judgment), the **evidence/provenance** (so it's trustworthy), and the **staleness check** (when the why no longer holds, prune the rule). A durable entry must trace to a completed feature, an accepted decision, a verified failure, or a user-approved preference. Never promote an unverified assumption or a one-off behavior merely because it was written in the notes.
 
 ## The Golden Rule: Capture Patterns, Not Catalogs
 
@@ -195,7 +198,7 @@ A catalog rots on every commit and adds nothing a `ls` couldn't show; a pattern 
 
 ## Three Modes: Bootstrap, Migrate, and Sync
 
-Resolve the active scope and existing knowledge owners first. A request only to read or summarize memory uses permissive consumption and the read-only verification checklist; it does not select a write mode, scaffold missing indexes, normalize metadata, or create a commit. For authorized memory changes, choose a mode from the state of the active `<memory-root>/knowledge/` bundle:
+Resolve the active scope and existing knowledge owners first. A request only to read or summarize memory uses permissive consumption and the read-only verification checklist; it does not select a write mode, scaffold missing indexes, normalize metadata, or create a commit. Track-note updates use the running-notes workflow below and do not require an OKF bundle. Choose one of these modes only for authorized bundle changes, from the state of the active `<memory-root>/knowledge/` bundle:
 
 **Bootstrap** — no legacy layout exists and `<bundle-root>/index.md`, `<bundle-root>/project.md`, or a required collection index is missing. Generate or repair the active repository or package bundle by *analyzing its codebase scope*: README, config and dependency files, directory structure, naming and import patterns. Extract patterns (per the Golden Rule), don't interrogate the user for what the code already shows. The research areas — product/direction, tech/stack, structure/conventions, and domain patterns — are independent and can be gathered in parallel. Write OKF-conformant concepts and indexes, then present the result for review before treating it as source of truth.
 
@@ -233,25 +236,64 @@ If the requested facts already have canonical homes and discovery indexes, finis
 
 **Sync updates are additive, and human-written content is sacred.** A sync proposes *additions* and explicit *supersessions* through review — it never silently overwrites an entry a person wrote. Preserve unknown OKF types and frontmatter keys when round-tripping. Broken links and missing profile indexes are repair candidates, not reasons to reject the bundle. When in doubt, add rather than replace.
 
-## How Memory Gets Saved: Delta → Review → Promote
+## Running Notes Throughout the Workflow
+
+**Workflow notes:** Read `docs/tracks/<track-id>/notes.md` at entry to every phase and on resume. Update it as useful context changes throughout discovery, specification, planning, implementation, testing, debugging, verification, review, PR transitions, release, and cleanup. Use the current checkpoint and relevant unresolved notes rather than loading every historical track.
+
+Create the file when an authorized track begins, with its current phase, source links, and next action; honor explicit file-scope restrictions. Before a track exists, keep discovery in the authorized brief and link it when the track is created. A standalone question or read-only/no-op request does not create a track or a note file.
+
+When resuming a track with the former `memory-delta.md` filename, read it first. In an authorized edit, rename it to `notes.md` and update its active links, preserving useful contents and provenance. If both files exist, reconcile them into one notes file without dropping unresolved items. Keep historical reports and evaluated revisions intact; reading alone does not trigger migration.
+
+Keep three small sections, omitting empty optional ones:
+
+```markdown
+# Notes: [Track]
+
+## Resume
+- Phase and current step: ...
+- Next action and blocker, if any: ...
+- Sources: links to the spec or bug report, task, and current evidence.
+
+## Notes
+- Hypothesis — suspected cause; evidence still needed; next check.
+- Observed — attempted action and actual outcome, with evidence/revision.
+- Decision — chosen approach and concise rationale; approval state if relevant.
+- Rejected or superseded — what changed and why; link to the replacement.
+
+## Follow-ups and promotion candidates
+- Knowledge, skill improvement, workflow improvement, or ad hoc follow-up — evidence/status, proposed destination, next action or disposition.
+```
+
+Write after meaningful discoveries, decisions, attempts, failures, user corrections, and phase transitions, and before pause, handoff, or context compaction. Do not append a status line after every tool call or fill a phase with empty boilerplate. A next session must be able to identify what is known, what is uncertain, and what to do next.
+
+Notes can preserve failed approaches to avoid repeating them, but a failed experiment is not automatically a reusable lesson. Keep observations, hypotheses, approval status, and verification status distinct; recheck stale or conflicting observations against current code and evidence. A note is context, not permission, an accepted requirement, or a PASS report.
+
+The file can hold reusable knowledge, ideas for improving skills or workflows, and ad hoc reminders or questions. At phase handoff and closeout, triage actionable items: knowledge → propose its canonical owner for the promotion gate below; skill/workflow improvement → the relevant project file when accepted and within the authorized change, otherwise a linked follow-up track or task; temporary context → retain in this track or condense when obsolete. Record the rationale, evidence, destination, and disposition. A suggestion may be recorded before it is proven; verify an accepted improvement before treating it as an established practice.
+
+Link to authoritative specs, plans, task ledgers, bug reports, reviews, and verification results rather than duplicating their bodies or raw logs. Refresh the resume checkpoint and condense superseded detail into brief outcomes with evidence links; retain useful causal history. Record concise observations and decisions, not a transcript of every action.
+
+For an immutable verification or release target, keep note updates in an authorized track workspace or a follow-up documentation change. Never mutate the pinned target to record notes or treat note-only commits as expanded verification coverage.
+
+## How Knowledge Gets Saved: Notes → Review → Promote
 
 Discovered knowledge does not get written straight into durable memory. It flows through review:
 
-1. **During a feature**, candidate knowledge accumulates in `docs/tracks/<track-id>/memory-delta.md` — a scratchpad. It is *not* durable memory yet; the feature might get reverted and take its "lessons" with it.
-2. **At ship, resolve scope first.** For each candidate, choose the memory root before choosing the concept type. Use `docs/` for repo-wide or cross-package knowledge. For knowledge owned by one package, use `packages/<pkg>/docs/` only when that package already has (or now justifies) an independent bundle; otherwise keep it in the repository bundle with package scope encoded in the concept. The target OKF bundle is `<memory-root>/knowledge/`.
-3. **GO — review, record, and promote.** Give every candidate a disposition with rationale: accepted, rejected as unverified, or retained as feature-local. Route accepted items within the resolved bundle: project direction or constraints → `<bundle-root>/project.md`; deliberate architecture choices → `<bundle-root>/decisions/`; declarative conventions, risks, or lessons → `<bundle-root>/steering/`; repeatable procedures → `<bundle-root>/runbooks/`. At repository scope these resolve to `docs/knowledge/project.md`, `docs/knowledge/decisions/`, `docs/knowledge/steering/`, and `docs/knowledge/runbooks/`. Create or update an OKF concept with the required frontmatter, update the affected collection index, and keep the root index current. Promote the accepted set in **one batched PR** and record target links in `memory-delta.md`.
-4. **NO-GO — preserve workflow state.** Record why the launch was blocked, leave every candidate unpromoted in `memory-delta.md`, and make no durable-memory edit. A later GO decision performs the review and promotion.
-5. **Knowledge discovered outside a feature** (a standalone correction, a preference, or an incident with no feature branch) skips the delta scratchpad, resolves root-versus-package scope, and goes straight to its canonical home through a reviewable commit/PR.
+1. **Throughout a track**, capture working context in `docs/tracks/<track-id>/notes.md`. Mark verified, reusable findings as promotion candidates when they emerge; observations, hypotheses, and local execution notes remain working context. The file's existence or a phase completing does not establish durable knowledge.
+2. **At ship or closeout, resolve scope first.** For work with no production launch, use the approved closeout review as the promotion gate. For each reusable-knowledge candidate, choose the memory root before choosing the concept type. Use `docs/` for repo-wide or cross-package knowledge. For knowledge owned by one package, use `packages/<pkg>/docs/` only when that package already has (or now justifies) an independent bundle; otherwise keep it in the repository bundle with package scope encoded in the concept. The target OKF bundle is `<memory-root>/knowledge/`.
+3. **GO — review, record, and promote.** Review the reusable-knowledge candidates for bundle promotion; skill/workflow improvements and ad hoc follow-ups use their own destinations above. Give each knowledge candidate a disposition with rationale: accepted, rejected as unverified, or retained as track-local. Route accepted items within the resolved bundle: project direction or constraints → `<bundle-root>/project.md`; deliberate architecture choices → `<bundle-root>/decisions/`; declarative conventions, risks, or lessons → `<bundle-root>/steering/`; repeatable procedures → `<bundle-root>/runbooks/`. At repository scope these resolve to `docs/knowledge/project.md`, `docs/knowledge/decisions/`, `docs/knowledge/steering/`, and `docs/knowledge/runbooks/`. Create or update an OKF concept with the required frontmatter, update the affected collection index, and keep the root index current. Promote the accepted set in **one batched PR** and record target links in `notes.md`.
+4. **NO-GO — preserve workflow state.** Record why the launch was blocked, leave every candidate unpromoted in `notes.md`, and make no durable-memory edit. A later GO decision performs the review and promotion.
+5. **Knowledge discovered outside a track** (a standalone correction, a preference, or an incident with no active track) resolves root-versus-package scope and goes straight to its canonical home through a reviewable commit/PR; do not create a track just to store the note.
 
-The promotion chain for procedural knowledge extends one step further: **delta → lesson → runbook.** After an incident, a lesson ("DB failover needs X") that proves recurring and procedural graduates into a runbook *step*.
+The promotion chain for procedural knowledge extends one step further: **note → lesson → runbook.** After an incident, a lesson ("DB failover needs X") that proves recurring and procedural graduates into a runbook *step*.
 
 Memory concepts **cite** `docs/tracks/<track-id>/review.md` and other permanent evidence rather than copying it. For v0.2 concepts, record evidence in `sources` and use matching footnote IDs for claim-level attribution. Prefer durable repository/web URLs when the bundle may be distributed independently; use checkout-relative links only when that portability trade-off is explicit.
 
 ## How Memory Gets Loaded: Progressive Disclosure
 
-Never load all of memory at once. Split it into two tiers:
+Never load all of memory at once. Load the context appropriate to the current work:
 
-- **Always-loaded core** — `docs/knowledge/index.md` + `docs/knowledge/project.md`. Small, durable, and read at the start of every session: the bundle map plus project identity.
+- **Project core** — `docs/knowledge/index.md` + `docs/knowledge/project.md` when the bundle exists. Small, durable, and read at session start: the bundle map plus project identity.
+- **Active-track context** — read the resume checkpoint and relevant notes in `docs/tracks/<track-id>/notes.md` at each phase entry and resume, alongside the linked capability specs and current task. Missing track notes do not require bootstrapping an OKF bundle.
 - **Load-on-demand** — load the relevant steering, decisions, or runbooks index on demand from the root map, then load only the concepts that index says the current task needs.
 
 Each `index.md` does real work — it is **not** a bare table of contents. It carries a one-line summary per entry plus the path to the full file, so a session can often answer a question from the index alone and only open the full file when it needs detail. *Surface context at the level the moment requires.*
@@ -390,7 +432,13 @@ All of these are memory changes, so they go through the same commit/PR review as
 - [ ] Review and freshness signals are interpreted from evidence; missing signals never imply human review.
 - [ ] Files and the declared version are unchanged. No scaffolding, normalization, index update, commit, or conformance claim is required to finish reading.
 
-### Authored changes
+### Track-note changes
+
+- [ ] The checkpoint names the current phase, next action, and relevant source links; stale claims are rechecked against current evidence.
+- [ ] Observations, hypotheses, approval, and verification status remain distinct. Actionable knowledge and improvement ideas have proposed destinations and dispositions.
+- [ ] Explicit read-only and file-scope boundaries and pinned targets remain intact. Notes alone do not trigger bundle-authoring checks.
+
+### Bundle-authoring changes
 
 Apply these checks to the authorized changes and their affected indexes, not as a mandate to normalize every imported concept. Preserve untouched imported metadata and versions; propose unrelated repairs separately. Full profile checks apply when creating a bundle or explicitly migrating it to this profile.
 

@@ -86,6 +86,21 @@
         "The new track links docs/specs/authentication/spec.md and records the approved 15-minute timeout proposal and deferred SAML. The canonical spec remains byte-for-byte unchanged because implementation and verification have not happened.",
         "Records spec reconciliation into the capability spec in the implementation PR after verification and before review, keeps deferred requirements out of canonical specs, and does not mark the track complete before merge. Creates no implementation code, extra plan/task/review placeholders, or OKF bundle."
       ]
+    },
+    {
+      "id": 6,
+      "name": "resume-working-notes",
+      "kind": "execution",
+      "prompt": "The fixture project is memory-management/workflow-notes/; use that directory as the project scope. Resume diagnosis of track 004-test-startup from its notes.md checkpoint. Run the provided startup reproduction and inspect its source, then update the notes with what the evidence establishes and the next action. Keep useful earlier attempts so we do not repeat them. Also record my ideas to improve our debugging skill by checking startup ordering before tuning pool sizes, and our test workflow by checking that seeding has completed before test assertions. The CI cache hunch is still unchecked and should remain an ad hoc follow-up. Only edit this track's notes.md; do not fix implementation, update skills/workflows, or create other artifacts yet.",
+      "expected_output": "Updated notes.md preserves useful prior outcomes, replaces the unsupported pool-size explanation with the observed asynchronous startup ordering, refreshes the checkpoint, and labels knowledge and improvement proposals with evidence and destinations. The CI hunch remains unverified. No changes occur outside the authorized note file.",
+      "files": [
+        "memory-management/workflow-notes"
+      ],
+      "expectations": [
+        "Reads the existing notes and bug report, runs the reproduction, and inspects its source. Notes record that tests observe zero rows before seed:complete because setupTests does not wait for seedDatabase; they do not falsely claim that a fix has been implemented or verified.",
+        "Preserves the reverted pool-size attempt as useful local history, marks the earlier pool-size hypothesis unsupported or superseded by the observed ordering, and refreshes the resume checkpoint with a concrete next action and evidence links.",
+        "Records the proposed debugging-skill and test-workflow improvements with their intended destinations and pending status, keeps the CI-cache idea unverified, and distinguishes working context or promotion candidates from accepted durable knowledge. Edits only docs/tracks/004-test-startup/notes.md; does not create a knowledge bundle, modify the reproduction or other files, or mark the track complete."
+      ]
     }
   ],
   "trigger": {
@@ -100,6 +115,10 @@
       },
       {
         "prompt": "Bootstrap an OKF memory bundle from the conventions in this repository.",
+        "top_k": 1
+      },
+      {
+        "prompt": "Keep running notes for this track, including ad hoc observations and ideas to improve our skills and workflows.",
         "top_k": 1
       }
     ],
