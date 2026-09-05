@@ -46,6 +46,8 @@ Project memory   → durable knowledge reused across features   (docs/knowledge/
 
 The promotion test for project memory: **"Would a future feature that has nothing to do with this one still need this fact?"** If yes, it belongs in durable memory — and if it has no more specific home, in `steering/`. If no, it stays in the feature's workflow state. Shipped feature folders remain as provenance, but feature-local facts are not promoted into the always-discovered core.
 
+An abandoned or reverted experiment that established no reusable constraint stays in session or workflow history. Do not save an ineffective parameter change merely as context for a verified fix, or turn "it made no difference in this session" into a general rule.
+
 ## Where Knowledge Lives
 
 Durable memory is separated into homes. The skill's first move is always to ask *"does this belong somewhere more specific?"* and only land in `steering/` when the answer is no.
@@ -75,20 +77,58 @@ docs/specs/<slug>/      → feature workflow: spec → plan → memory delta →
 
 Each bundle has a root `index.md`; each durable collection under `<memory-root>/knowledge/` carries its own `index.md`. These maps provide one-line summaries and discovery paths so a session can find the right concept without reading the whole directory.
 
-## OKF v0.1 Interoperability Profile
+## OKF v0.2 Essentials
 
-Before bootstrapping, syncing, migrating, or promoting memory, read [references/okf-v0.1.md](references/okf-v0.1.md). It contains the canonical bundle, frontmatter, reserved-file, linking, and producer/consumer rules derived from the [Open Knowledge Format v0.1 draft](https://github.com/GoogleCloudPlatform/knowledge-catalog/blob/ee67a5ca27044ebe7c38385f5b6cffc2305a9c1a/okf/SPEC.md).
+These are the parts of [Open Knowledge Format v0.2](https://github.com/GoogleCloudPlatform/knowledge-catalog/blob/62432a095456147ee71e70ac6e4dc0d2dea3ac30/okf/SPEC.md) that this workflow uses. The pinned specification is supplemental; this skill contains the rules needed to work without fetching or embedding it.
 
-The non-negotiable profile rules are:
+### Bundle and concept structure
 
-- Treat `docs/knowledge/` and each `packages/<pkg>/docs/knowledge/` as independent OKF bundles. General docs and feature workflow artifacts are not bundle concepts.
-- Put `okf_version: "0.1"` in the bundle-root `index.md`. Other indexes contain no frontmatter.
-- Give every non-reserved Markdown concept parseable YAML frontmatter with a non-empty `type`; producers also add `title` and a one-sentence `description`. Lucas producers use a deterministic flat top-level mapping with scalar values or inline scalar lists, quoting values that contain YAML punctuation. This is a producer convention, not a consumer restriction. Default types are `Project`, `Project Guidance`, `Architecture Decision`, and `Playbook` for the four homes.
-- Reserve `index.md` and `log.md` at every depth. Index entries are grouped under headings and use relative links plus descriptions. Omit `log.md` by default because git already provides reviewable history.
-- Prefer absolute bundle-relative links for concepts inside one bundle. Use durable repository or web citations for workflow evidence or cross-bundle sources when the bundle must remain portable.
-- Consume permissively: tolerate unknown types, unknown frontmatter fields, missing optional fields, broken links, and missing optional indexes. If the root declares an unrecognized OKF version, warn and attempt best-effort consumption rather than refusing the bundle. Preserve unknown keys when round-tripping and propose repairs without overwriting human-authored content.
+- New bundles declare `okf_version: "0.2"` in their root `index.md`. Each repository or package bundle is independent; general docs, external knowledge homes, and feature workflow artifacts stay outside it.
+- Every non-reserved Markdown concept has parseable YAML frontmatter with a non-empty `type`. This skill also produces `title` and a one-sentence `description`. Use normal YAML mappings and lists, including nested values; quote punctuation and date/time strings. Defaults are `Project`, `Project Guidance`, `Architecture Decision`, and `Playbook` for the four homes; catalogs use `Bundle Catalog` or `Knowledge Sources`.
+- Reserve `index.md` and `log.md` at every depth. Indexes group directory-relative links and descriptions under headings. Only the root index has frontmatter, containing only the version. Optional `log.md` has no frontmatter and uses newest-first `## YYYY-MM-DD` headings with bullets; omit it when git history suffices.
+- A concept ID is its bundle-relative path without `.md`. Prefer bundle-relative absolute links between concepts and directory-relative links in indexes. External-home and cross-bundle links belong in typed catalog concepts, not reserved indexes.
 
-The Lucas profile requires discovery indexes even though base OKF makes them optional. A missing profile index is a repair candidate, not a reason to reject the remaining bundle as unreadable.
+The root, project concept, and three collection indexes in the layout above are this skill's discovery requirements; base OKF makes indexes optional. Missing indexes are repair candidates, never grounds to reject readable knowledge.
+
+### Provenance, review, and freshness
+
+Use these optional fields when they convey verified information; absence is valid and must not be filled with invented authors, dates, or approval:
+
+| Field | How this skill uses it |
+| --- | --- |
+| `sources` | Evidence behind the concept. Each entry needs `resource`; add a stable `id` when attributing a claim with a matching Markdown footnote. Prefer durable repository/web URLs for evidence outside the bundle; document the portability trade-off when only checkout-relative paths are available. |
+| `generated` | Authorship and content-change time, with required `by` and optional `at`. Actor forms are `<producer>/<version>`, `human:<id>`, or `process:<id>`. Record only an identity and time actually known. |
+| `verified` | Actual verification events as a list of `{ by, at }`; also accept a single mapping when reading. No field means unverified; non-human verifiers mean machine-confirmed; only an actual `human:<id>` review means human-reviewed. A commit or a human-authored source does not establish human review of the generated concept. |
+| `status` | `draft`, `stable`, or `deprecated`. Mark bootstrap proposals `draft` until reviewed. Absent status means stable content, not verified content; surface deprecated knowledge as historical. |
+| `stale_after` | An optional absolute revalidation deadline. Once reached, flag the knowledge for rechecking rather than silently trusting or deleting it. |
+
+Timestamp-valued fields use ISO 8601 datetimes with an explicit UTC offset. Preserve verification history when editing, but do not present earlier verification as confirmation of new claims. Omit freshness deadlines without an evidence-backed expiry policy.
+
+For example, a proposed guidance concept can cite an existing bundle decision:
+
+```markdown
+---
+type: Project Guidance
+title: Await asynchronous test setup
+description: Complete fixture seeding before running database assertions.
+status: draft
+sources:
+  - id: test-isolation
+    resource: /decisions/0003-test-isolation.md
+---
+
+Await fixture seeding so assertions cannot race database initialization.[^test-isolation]
+
+[^test-isolation]: Accepted test isolation policy.
+```
+
+Top-level `resource`, when used, identifies the canonical underlying asset; `sources` identifies evidence. Keep the rationale in the body instead of treating metadata alone as proof.
+
+### Reading and upgrading existing bundles
+
+Consume permissively: preserve unknown types, fields, and nested values; tolerate missing optional metadata, missing indexes, and broken links. Report unfamiliar versions and attempt best-effort reading. Missing trust/freshness fields do not make a concept unreadable.
+
+Continue reading v0.1 bundles: a legacy `timestamp` can supply content-change time only when `generated` is absent, and a legacy `# Citations` list remains usable evidence. Neither proves review. Do not rewrite an existing bundle or bump its declared version as a side effect of reading or syncing it. If a format upgrade is authorized, preserve every existing claim and extension, convert citations to `sources` with stable footnote IDs where needed, and map a legacy time into `generated.at` only when a real `generated.by` is known. Preserve legacy data rather than fabricate missing provenance. Validate before changing the version declaration.
 
 `steering/` and `runbooks/` are siblings that split durable knowledge by *shape*: `steering/` holds **declarative** facts (what's true — conventions, risks, lessons), and `runbooks/` holds **imperative** procedures (what to do — deploy, rollback, incident response). They share the same lifecycle (durable, synced, promoted, reviewed); the split is just declarative-vs-imperative.
 
@@ -141,15 +181,15 @@ Resolve the active scope and existing knowledge owners first. A request only to 
 
 In the bootstrap handoff, explicitly present the generated guidance as a proposal for review, cite the verified source facts, and identify any unresolved inferences. A local commit may package that proposal as a reviewable diff; it does not count as review or approval.
 
-**Migrate** — project rules, existing memory pointers, or the user's instructions identify an earlier memory layout, and the task authorizes its migration. Its homes may include `<memory-root>/project.md`, `steering/`, `decisions/`, or `runbooks/`, or custom paths discovered above. Follow [the legacy-layout migration procedure](references/okf-v0.1.md#legacy-layout-migration). If a confirmed legacy memory layout and `<memory-root>/knowledge/` both exist, reconcile unresolved ownership with the user; reuse any ownership decision already supplied. Otherwise inventory and move the identified legacy artifacts, repair missing required profile files from verified codebase evidence, add concept frontmatter, rewrite links, and update rules-file pointers in one reviewable change. Established external ADR/runbook homes are preserved unless their migration is authorized. Preflight reserved legacy `index.md` and `log.md` names: keep files that already have the reserved meaning, but rename ambiguous concept collisions with user approval and rewrite inbound links. Before trimming a human-authored rules file, route its unique durable facts into the bundle and preserve its tool-specific controls. Never bootstrap a second copy or discard partial legacy content. Without migration authorization, read the legacy layout best-effort and keep changes in its existing homes.
+**Migrate** — project rules, existing memory pointers, or the user's instructions identify an earlier memory layout, and the task authorizes its migration. Its homes may include `<memory-root>/project.md`, `steering/`, `decisions/`, or `runbooks/`, or custom paths discovered above. If a confirmed legacy memory layout and `<memory-root>/knowledge/` both exist, reconcile unresolved ownership with the user; reuse any ownership decision already supplied. Otherwise inventory and move the identified legacy artifacts, repair missing required profile files from verified codebase evidence, add concept frontmatter, rewrite links, and update rules-file pointers in one reviewable change. Established external ADR/runbook homes are preserved unless their migration is authorized. Preflight reserved legacy `index.md` and `log.md` names: keep files that already have the reserved meaning, but rename ambiguous concept collisions with user approval and rewrite inbound links. Before trimming a human-authored rules file, route its unique durable facts into the bundle and preserve its tool-specific controls. Never bootstrap a second copy, leave compatibility copies or symlinks claiming the same canonical home, or discard partial legacy content. Without migration authorization, read the legacy layout best-effort and keep changes in its existing homes.
 
 **Bridge the agent's rules file to memory (pointer only).** After bootstrap or migration writes a bundle, update the existing rules file at the same scope — repository `CLAUDE.md`, `AGENTS.md`, `.cursorrules`, `.github/copilot-instructions.md`, etc., or a package-local rules file for a package bundle. Create `AGENTS.md` only when no rules file exists and the user wants one. This block does **not** duplicate memory; it is a signpost.
 
-For the repository bundle:
+For a new repository bundle (use the actual declared version for an existing bundle):
 
 ```markdown
 ## Project memory
-Durable knowledge is an OKF v0.1 bundle under `docs/knowledge/`. Read these at session start:
+Durable knowledge is an OKF v0.2 bundle under `docs/knowledge/`. Read these at session start:
 - `docs/knowledge/index.md` — bundle map and OKF version
 - `docs/knowledge/project.md` — project contract, direction, constraints
 Use the root index to load collection indexes and individual concepts on demand; don't inline their contents here.
@@ -162,7 +202,7 @@ file, keep the repository rules pointer unchanged and add the package bundle to
 the typed root `docs/knowledge/bundles.md` catalog instead; do not put a
 cross-bundle pointer in a reserved index.
 
-Keep each block to those pointers. The rules file is a *bridge*, not a second copy of memory — canonical content stays in the OKF bundle, and this block is the one place the tool-specific layer touches it (**link, don't restate**). On Sync, refresh the applicable block only if its bundle location changes; indexes absorb everything else.
+Keep each block to those pointers. The rules file is a *bridge*, not a second copy of memory — canonical content stays in the OKF bundle, and this block is the one place the tool-specific layer touches it (**link, don't restate**). On Sync, refresh the applicable block only if its bundle location or explicitly upgraded version changes; indexes absorb everything else.
 
 **Sync** — the OKF bundle exists; keep it aligned with reality. This is the ongoing maintenance loop, and it works as **bidirectional drift detection**:
 
@@ -185,7 +225,7 @@ Discovered knowledge does not get written straight into durable memory. It flows
 
 The promotion chain for procedural knowledge extends one step further: **delta → lesson → runbook.** After an incident, a lesson ("DB failover needs X") that proves recurring and procedural graduates into a runbook *step*.
 
-Memory concepts **cite** `docs/specs/<slug>/review.md` and other permanent evidence rather than copying it. Prefer a durable repository/web URL in `# Citations` when the bundle may be distributed independently; use a checkout-relative link only when that portability trade-off is explicit.
+Memory concepts **cite** `docs/specs/<slug>/review.md` and other permanent evidence rather than copying it. For v0.2 concepts, record evidence in `sources` and use matching footnote IDs for claim-level attribution. Prefer durable repository/web URLs when the bundle may be distributed independently; use checkout-relative links only when that portability trade-off is explicit.
 
 ## How Memory Gets Loaded: Progressive Disclosure
 
@@ -245,7 +285,7 @@ docs/knowledge/decisions/     → architecture decision records
 
 ## Monorepos: Two-Level Memory
 
-A monorepo breaks the single-bundle assumption — one repository bundle covering many packages eventually makes unrelated package concepts noisy. The fix is a shared OKF bundle plus independent package bundles. Each bundle has its own concept-ID namespace and `okf_version: "0.1"` declaration.
+A monorepo breaks the single-bundle assumption — one repository bundle covering many packages eventually makes unrelated package concepts noisy. The fix is a shared OKF bundle plus independent package bundles. Each bundle has its own concept-ID namespace and `okf_version: "0.2"` declaration for new bundles.
 
 ```
 docs/knowledge/                         # repo-wide OKF bundle
@@ -317,7 +357,7 @@ All of these are memory changes, so they go through the same commit/PR review as
 - A sync that overwrites a human-written entry instead of proposing an additive change.
 - Treating all of `docs/` as the OKF bundle and accidentally imposing concept frontmatter on specs, migration guides, or general documentation.
 - A non-reserved bundle concept with missing or empty `type` frontmatter.
-- Frontmatter on a collection `index.md`, or any root-index frontmatter beyond `okf_version: "0.1"`.
+- Frontmatter on a collection `index.md`, or any root-index frontmatter beyond its `okf_version` declaration.
 - Dropping unknown OKF types or extension keys during sync.
 - Putting package-bundle links in a reserved collection index instead of a typed bundle-catalog concept.
 
@@ -327,6 +367,7 @@ All of these are memory changes, so they go through the same commit/PR review as
 
 - [ ] The answer reflects the available concepts and identifies unavailable evidence without inventing it.
 - [ ] An unrecognized version is reported; unknown types, extension fields, absent optional metadata, missing indexes, and broken links are tolerated.
+- [ ] Review and freshness signals are interpreted from evidence; missing signals never imply human review.
 - [ ] Files and the declared version are unchanged. No scaffolding, normalization, index update, commit, or conformance claim is required to finish reading.
 
 ### Authored changes
@@ -335,11 +376,12 @@ Apply these checks to the authorized changes and their affected indexes, not as 
 
 - [ ] Each new entry records **why**, not just what — with provenance (feature, decision, failure, or approved preference).
 - [ ] The active bundle root is `docs/knowledge/` or `packages/<pkg>/docs/knowledge/`; workflow and general docs remain outside it.
-- [ ] A newly created or explicitly migrated v0.1 bundle declares `okf_version: "0.1"`; new or explicitly repaired concepts have parseable frontmatter with non-empty `type`, `title`, and `description`. A sync preserves an imported bundle's declared version and does not imply whole-bundle conformance.
+- [ ] A newly created or explicitly upgraded v0.2 bundle declares `okf_version: "0.2"`; new or explicitly repaired concepts have parseable frontmatter with non-empty `type`, `title`, and `description`. A sync preserves an imported bundle's declared version and does not imply whole-bundle conformance.
 - [ ] Reserved `index.md` and any `log.md` follow the OKF structure; collection indexes have no frontmatter.
 - [ ] Each entry captures a **pattern, not a catalog** — nothing that's just an inventory of what the code already shows.
 - [ ] A new domain file doesn't duplicate an existing one; sync changes are additive, not silent overwrites of human-written content.
 - [ ] Unknown types and frontmatter keys were preserved; optional fields, broken links, or missing optional indexes did not cause destructive normalization.
+- [ ] New v0.2 provenance uses `sources`; optional authorship, verification, and expiry fields are evidence-backed. Bootstrap concepts remain `draft` until reviewed.
 - [ ] The knowledge was routed to its resolved owner, preserving established external locations and formats; nothing duplicates `project.md`, an ADR, or a spec folder.
 - [ ] Every fact has exactly one canonical location; everything else links to it.
 - [ ] The change went through a reviewable diff (commit/PR), not a silent in-place edit.

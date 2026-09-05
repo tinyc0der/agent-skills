@@ -109,7 +109,7 @@ The skill files were not changed during this review.
    [evals/README.md](../../../evals/README.md).
 
 5. **Integrate OKF examples and fixtures with Markdown-link validation.**
-   [okf-v0.1.md](../../../skills/memory-management/references/okf-v0.1.md),
+   `skills/memory-management/references/okf-v0.1.md` at checkpoint `3474029`,
    lines 85 and 94, includes example links inside inline code that the current
    link checker treats as actual links. Once the import is tracked, the checker
    reports four failures: `path.md`, `/decisions/0004-auth.md`, the fixture's
