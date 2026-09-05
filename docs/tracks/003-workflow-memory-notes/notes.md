@@ -2,9 +2,9 @@
 
 ## Resume
 
-- Phase: local verification and review complete; preparing the implementation commit and evidence record.
-- Next: record the implementation revision and outstanding behavioral evaluation for handoff.
-- Source of truth: [change spec](spec.md), [plan](plan.md), [tasks](todo.md).
+- Phase: handoff; implementation `8f95d47a4af368486dba6ace4cbe51b9c339ffb2` is committed and locally reviewed.
+- Next: run affected AI behavior scenarios after the quota reset, record their revision and outcomes, and complete the track only after verification and merge.
+- Source of truth: [change spec](spec.md), [plan](plan.md), [tasks](todo.md), [verification](verification.md), [review](review.md).
 - Blocker: Claude's session quota is unavailable until 18:10 local time; do not claim a behavioral pass from older runs.
 
 ## Working Notes
