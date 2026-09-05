@@ -231,7 +231,7 @@ The commands above are entry points. The pack includes 28 skills covering lifecy
 | Skill | What It Does | Use When |
 |-------|-------------|----------|
 | [using-agent-skills](skills/using-agent-skills/SKILL.md) | Maps incoming work to the right skill workflow and defines shared operating rules | Starting a session or deciding which skill applies |
-| [delegate](skills/delegate/SKILL.md) | Coordinates separate Orca sessions for planning, implementation, independent verification, and review | Codex should plan, verify, and review while OpenCode or Antigravity implements |
+| [delegate](skills/delegate/SKILL.md) | Coordinates separate Orca sessions for planning, implementation, independent verification, and review | Codex should plan and review while OpenCode or Antigravity implements and verifies in separate sessions |
 
 `delegate` requires Orca and its separately installed `orca-cli` and `orchestration` skills. Those dependencies provide session control and tracked completion; they are not bundled in this pack.
 

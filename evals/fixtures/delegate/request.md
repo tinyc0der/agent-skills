@@ -17,7 +17,7 @@ The requirements and implementation plan below are approved. Prepare the remaini
 
 ## Execution constraints
 
-- Use Antigravity for implementation and fixes. Use Codex for verification and review.
+- Use Antigravity for implementation and fixes. Use the default verifier runner and Codex for review.
 - Keep every phase in the current worktree; separate sessions may share it sequentially.
 - Implementation may edit the export package and its tests. The verifier and reviewer may write their reports and evidence only.
 - Use the project's own check commands once execution starts; no source tree or runnable application is included in this preparation fixture.

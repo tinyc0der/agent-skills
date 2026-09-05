@@ -7,14 +7,14 @@ description: Delegates engineering phases to separate Orca agent sessions with c
 
 ## Overview
 
-Keep the current session accountable while delegated phases run in separate Orca sessions. Default to Codex for specification, planning, independent verification, and review, and OpenCode for implementation; allow Antigravity or an explicit runner override.
+Keep the current session accountable while delegated phases run in separate Orca sessions. Default to Codex for specification, planning, and review, and OpenCode for implementation and independent verification; allow Antigravity for implementation or verification, or an explicit runner override.
 
 This skill owns the phase-to-runner policy. Orca's separately installed `orchestration` workflow owns dispatch and completion mechanics; the project's lifecycle skills own the engineering work. Runner choice is a preference, not evidence of quality.
 
 ## When to Use
 
 - The user invokes `delegate` for a task or asks to supervise phases across agent sessions.
-- Planning, verification, or review should run in Codex while OpenCode or Antigravity implements.
+- Planning or review should run in Codex while OpenCode or Antigravity implements and independently verifies.
 - A phase result must return to the coordinator before another phase begins.
 
 For a full ownership transfer without returned results, follow `orca-cli`. For ordinary work with no delegation request, use the relevant lifecycle skill directly. If the user asks only to discuss or draft a delegation plan, stop at that requested deliverable without launching workers.
@@ -37,13 +37,13 @@ Apply choices in this order: the user's current instruction, an existing project
 | --- | --- | --- |
 | Specification and planning | Codex | Requirements, acceptance criteria, and an actionable plan |
 | Implementation, tests, and fixes | OpenCode | Scoped changes and the implementer's check results |
-| Independent verification | Codex in a fresh session | Acceptance trace, applicable check results, runtime evidence, and a readiness verdict |
+| Independent verification | OpenCode in a fresh session | Acceptance trace, applicable check results, runtime evidence, and a readiness verdict |
 | Independent review | Codex in a fresh session | Findings against the actual revision and acceptance criteria |
 | Integration and final acceptance | Current coordinator | Reconciled evidence and the requested final outcome |
 
-Antigravity can replace OpenCode for implementation, fixes, and the implementer's own checks. Verification and review keep their separate owners unless explicitly overridden. Preserve explicitly chosen runners, models, reasoning effort, accounts, and budgets. Otherwise use the runner's configured model defaults. Do not infer a model from a CLI name or pass one provider's model flags to another.
+Antigravity can replace OpenCode for implementation, fixes, the implementer's own checks, or independent verification. Resolve the implementation and verifier runners separately: an override naming only one role changes only that role. Preserve explicitly chosen runners, models, reasoning effort, accounts, and budgets. Otherwise use the runner's configured model defaults. Do not infer a model from a CLI name or pass one provider's model flags to another.
 
-The default order, for phases required by the task, is planning → implementation → independent verification → independent review → coordinator acceptance. The verifier and reviewer use separate fresh sessions, even when both run Codex.
+The default order, for phases required by the task, is planning → implementation → independent verification → independent review → coordinator acceptance. The verifier uses a fresh session separate from the implementer, even when both use OpenCode or Antigravity. The reviewer also uses its own fresh session.
 
 State the selected mapping before launch and proceed within existing authorization. Do not add a planning phase to an already planned task or a review phase to a planning-only request. A phase transition does not itself require new user approval; preserve actual project gates and reuse approvals already given.
 
@@ -75,7 +75,7 @@ Require an accepted completion report from the actual dispatched worker with the
 
 ### 5. Verify independently
 
-When verification is required, dispatch it to a fresh verifier after accepting the implementation output. The implementer still runs checks while building; the verifier independently tests the assembled result against acceptance criteria. Load the project's `verification-and-validation` skill when available; otherwise use its documented verification workflow with the minimum report contract below.
+When verification is required, dispatch it to a fresh session using the selected verifier runner after accepting the implementation output. The default verifier is OpenCode; Antigravity is an alternative. The implementer still runs checks while building; the verifier independently tests the assembled result against acceptance criteria. Load the project's `verification-and-validation` skill when available; otherwise use its documented verification workflow with the minimum report contract below.
 
 Give the verifier the requirements, accepted plan, exact implementation revision or reproducible working-tree snapshot, environment and check instructions, and the implementer's report. Require the verifier to run applicable checks and observe relevant runtime behavior itself. The implementer's report supplies context, not a substitute for independent evidence. For changes with no runtime surface, record why runtime checks do not apply.
 
@@ -93,8 +93,8 @@ Keep the coordinator responsible for integration, any lifecycle checks still req
 
 ## Example Requests
 
-- `Use delegate to build this feature. Codex plans, verifies, and reviews in separate sessions; OpenCode implements.`
-- `Use delegate with Antigravity for implementation and fixes. Keep all phases in this worktree.`
+- `Use delegate to build this feature. Codex plans and reviews; OpenCode implements and verifies in separate sessions.`
+- `Use delegate with Antigravity for implementation, fixes, and verification in separate sessions. Keep all phases in this worktree.`
 - `Use delegate for implementation and review only; the existing plan is already approved.`
 
 ## Common Rationalizations

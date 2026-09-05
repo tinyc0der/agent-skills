@@ -7,7 +7,7 @@
         "top_k": 1
       },
       {
-        "prompt": "Keep coordinating the work in Orca while Antigravity implements and separate Codex sessions verify and review the result.",
+        "prompt": "Keep coordinating the work in Orca while Antigravity implements, another Antigravity session verifies, and Codex reviews the result.",
         "top_k": 1
       },
       {
@@ -31,13 +31,13 @@
       "id": 1,
       "kind": "execution",
       "prompt": "Use delegate to prepare the workflow requested in delegate/request.md. Write delegate/delegation-plan.md with the phase owners, dependencies, and task packets. This is preparation only: do not launch agents, create Orca runtime state, or implement the feature. Identify runtime prerequisites that would need checking at execution time without requiring them to write this plan.",
-      "expected_output": "A reviewable delegation plan that preserves Antigravity as implementer, assigns independent verification and review to separate Codex sessions, carries the accepted inputs into bounded task packets, and gates later phases on accepted evidence without claiming workers ran",
+      "expected_output": "A reviewable delegation plan that preserves Antigravity as implementer, assigns independent verification to a fresh OpenCode session and review to a separate Codex session, carries the accepted inputs into bounded task packets, and gates later phases on accepted evidence without claiming workers ran",
       "files": [
         "delegate"
       ],
       "expectations": [
         "delegate/delegation-plan.md is created using the approved requirements and plan in request.md; no new discovery or planning worker is scheduled",
-        "Antigravity owns implementation and fixes, while verification and review each use a distinct fresh Codex session; changing the implementation runner does not change the other phase owners",
+        "Antigravity owns implementation and fixes, the default verifier uses a fresh OpenCode session, and review uses a separate fresh Codex session; the implementation-only override does not change the verifier runner",
         "Task packets identify accessible inputs, allowed write scope, expected reports, and acceptance checks; verification and review cannot modify implementation or test source",
         "The plan requires an independent verifier report tied to the implementation revision and blocks review and final acceptance on FAIL or INCOMPLETE",
         "Blocking findings return to the implementation runner, followed by verification and review of the changed revision; the coordinator retains final acceptance",
