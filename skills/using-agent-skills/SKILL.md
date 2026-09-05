@@ -1,28 +1,31 @@
 ---
 name: using-agent-skills
-description: Discovers and invokes agent skills. Use when starting a session or when you need to discover which skill applies to the current task. This is the meta-skill that governs how all other skills are discovered and invoked.
+description: Discovers and invokes agent skills and selects workflows for engineering requests. Use when starting a session, choosing the skill for an activity, or routing a scoped change through its lifecycle. This is the meta-skill that governs how all other skills are discovered and invoked.
 ---
 
 # Using Agent Skills
 
 ## Overview
 
-Agent Skills is a collection of engineering workflow skills organized by development phase. Each skill encodes a specific process that senior engineers follow. This meta-skill helps you discover and apply the right skill for your current task.
+Agent Skills is a collection of engineering workflow skills organized by development phase. Each skill encodes a specific process that senior engineers follow. This meta-skill selects a lifecycle for a whole change or the right skill for a single activity.
 
 **Workflow notes:** For an active track, read `docs/tracks/<track-id>/notes.md` at phase entry or resume and update it when useful context changes or before handoff. Capture observations, tentative ideas, outcomes, blockers, and next actions with evidence links. Follow the memory-management running-note and document-metadata protocols; honor explicit read-only or file-scope limits and keep writes outside pinned verification or release targets.
 
 ## Skill Discovery
 
-When a task arrives, identify the development phase and apply the corresponding skill:
+For a whole change, start with Workflow Selection below. For a single activity, identify the development phase and apply the corresponding skill:
 
 ```
 Task arrives
     │
+    ├── A whole change to carry end-to-end? → Workflow Selection (below)
+    │
     ├── Don't know what you want yet? ──────→ interview-me
     ├── Have a rough concept, need variants? → idea-refine
-    ├── New project/feature/change? ──→ spec-driven-development
+    ├── New capability or unclear requirements? → spec-driven-development
     ├── Have a spec, need tasks? ──────→ planning-and-task-breakdown
     ├── Designing/reviewing/pruning tests? → test-case-design-review
+    ├── Simplifying existing code? ────→ code-simplification
     ├── Implementing code? ────────────→ incremental-implementation + test-driven-development
     │   ├── UI work? ─────────────────→ frontend-ui-engineering
     │   ├── API work? ────────────────→ api-and-interface-design
@@ -43,6 +46,22 @@ Task arrives
     ├── Adding logs/metrics/alerts? ───→ observability-and-instrumentation
     └── Deploying/launching? ─────────→ shipping-and-launch
 ```
+
+## Workflow Selection
+
+Classify a whole change by its intended outcome and entry conditions, then state the selected route. Use the existing context and approved requirements; the user can correct the classification. Questions and single activities do not start a full lifecycle. For other work types, use the corresponding specialized skill in Skill Discovery.
+
+| Workflow | Entry condition |
+|---|---|
+| [Bug fix / regression](#bug-fix-and-regression) | Existing behavior is incorrect or regressed; expected behavior can be established from an accepted contract or confirmed requirement. |
+| [Refactoring / simplification](#refactoring-and-simplification) | Internal structure should improve while observable behavior remains unchanged. |
+| [Epic / multi-feature initiative](#epic-or-multi-feature-initiative) | One outcome requires several separately deliverable features with distinct acceptance criteria and coordinated dependencies. |
+| [Bounded task](#bounded-task) | Scope, acceptance criteria, dependencies, and relevant contracts are explicit enough to implement without separate discovery or planning. |
+| [Feature](#lifecycle-sequence) | A capability change needs requirements or design development, or coordinated implementation planning beyond the bounded-task entry conditions. |
+
+Specialized routes take precedence over the general Feature or Bounded task route. Classify from the work, not its ticket label, file count, or expected diff size. If the request contains distinct kinds of work, separate or sequence them within the authorized scope. Risk determines additional checks and safeguards; it does not by itself make a bounded task a Feature.
+
+The selected route defines the required Define and Plan work. Downstream skills use that route's requirement record and task state; intentionally omitted feature-only artifacts are not missing prerequisites. Verification, review, applicable release safeguards, and existing authorization boundaries still apply. Reuse approval already provided for the current scope.
 
 ## Core Operating Behaviors
 
@@ -127,7 +146,7 @@ These are the subtle errors that look like productivity but create problems:
 6. Overcomplicating code and APIs
 7. Modifying code or comments orthogonal to the task
 8. Removing things you don't fully understand
-9. Building without a spec because "it's obvious"
+9. Building without the selected workflow's written requirements and acceptance criteria because "it's obvious"
 10. Skipping verification because "it looks right"
 
 ## Skill Rules
@@ -138,11 +157,11 @@ These are the subtle errors that look like productivity but create problems:
 
 3. **Multiple skills can apply.** A feature commonly uses `spec-driven-development` → `planning-and-task-breakdown` → `test-case-design-review` when test selection is non-trivial → `incremental-implementation` with `test-driven-development` → `verification-and-validation` → `code-review-and-quality` → `shipping-and-launch`. Cross-cutting skills activate when their concern appears.
 
-4. **When in doubt, start with a spec.** If the task is non-trivial and there's no spec, begin with `spec-driven-development`.
+4. **Select the workflow before requiring feature artifacts.** Use the route's written requirements and acceptance criteria. When those are unresolved, clarify them through `spec-driven-development`; do not force a bounded bug or ready-to-build task through the full Feature lifecycle.
 
 ## Lifecycle Sequence
 
-For a complete feature, the typical lifecycle is:
+For a complete feature, the typical lifecycle is below. Other workflows use their own entry requirements, then share the applicable Verify, Review, Merge, Ship, and Observe gates.
 
 ```
 Optional discovery: interview-me -> idea-refine
@@ -158,9 +177,9 @@ Ship:               shipping-and-launch
 Observe:            observability-and-instrumentation -> flag/legacy cleanup
 ```
 
-Use the canonical artifacts at each transition:
+Use the canonical artifacts at each Feature transition; the additional workflows below specify which Define and Plan artifacts they need:
 
-Accepted capability contracts live at `docs/specs/<capability>/spec.md`; change requirements and execution history live under `docs/tracks/<track-id>/`. Track ids use repository-wide `NNN-name` numbering starting at `001`. Resolve the active track through explicit task/PR context before branch-derived naming; never mix evidence from different tracks. Read the linked capability specs before acting on the track proposal.
+Accepted capability contracts live at `docs/specs/<capability>/spec.md`; change requirements and execution history live under `docs/tracks/<track-id>/`. Track ids use repository-wide `NNN-name` numbering starting at `001`. Use `context-engineering` to resolve the active track through explicit task/PR context before branch-derived naming and create a non-default branch before producing track artifacts. Never mix evidence from different tracks. Read the linked capability specs before acting on the track proposal, and create only the artifacts needed by the selected route.
 
 | Transition | Required artifact or evidence |
 |---|---|
@@ -172,7 +191,7 @@ Accepted capability contracts live at `docs/specs/<capability>/spec.md`; change 
 | Ready PR → Merge | `docs/tracks/<track-id>/review.md`, green required CI, no Critical or Required findings, and required human approval |
 | Merge → Ship | Track completion recorded after merge, retained history, release-revision evidence plus included feature `docs/tracks/<track-id>/ship.md` dossiers, migration/flag/observability readiness, go/no-go decision, and rollback plan |
 
-`debugging-and-error-recovery` is entered from any failed check and returns to the phase that failed. It is not the ordinary Verify phase.
+`debugging-and-error-recovery` starts the Bug workflow and is also entered from any failed check in another workflow. A failed check stays in its existing track and returns to the phase that failed after the fix. Debugging is not the ordinary Verify phase.
 
 Cross-cutting skills do not wait for a late lifecycle phase:
 
@@ -183,6 +202,94 @@ Cross-cutting skills do not wait for a late lifecycle phase:
 - `ci-cd-and-automation` enforces merge and deployment gates.
 - `test-case-design-review` applies wherever tests need to be selected, written without TDD sequencing, pruned, or reviewed in depth.
 - `context-engineering`, `source-driven-development`, and `doubt-driven-development` activate when their conditions apply.
+
+## Additional Workflows
+
+Each route dispatches the named skills for their detailed mechanics. Apply `git-workflow-and-versioning` from branch setup through draft PR, readiness, review, and merge. After a skipped planning phase, a draft PR links the route's requirement record and can open after the first coherent implementation commit. Corrections follow `review -> fix -> reverify -> rereview`; preserve revision-specific verification and review evidence in the active track.
+
+For production-affecting work, maintain `docs/tracks/<track-id>/ship.md` and invoke `shipping-and-launch` for release, followed by the applicable Observe work. Implementation readiness, track completion after review and merge, and deployment are separate states; continue only through the endpoint authorized by the user.
+
+### Bug Fix and Regression
+
+Use when existing behavior is incorrect or has regressed and the expected behavior can be established from an accepted contract or confirmed requirement.
+
+```text
+Reproduce -> Diagnose -> Prove failure -> Fix -> Verify -> Review -> Merge
+```
+
+1. Invoke `debugging-and-error-recovery` to preserve evidence, reproduce the failure, and identify its root cause.
+2. Use `test-driven-development` to demonstrate the defect with a failing regression test before fixing it. Reuse an existing test when it already captures the failure.
+3. Apply the smallest correction that addresses the root cause. Use `incremental-implementation` when the correction needs multiple increments.
+4. Invoke `verification-and-validation` to rerun the original scenario, check surrounding behavior, and record evidence for the implementation revision.
+5. Invoke `code-review-and-quality`; corrections return through verification before rereview.
+
+**Artifacts:** Record expected versus actual behavior, reproduction evidence, affected capabilities, root cause, and fix acceptance criteria in `docs/tracks/<track-id>/bug.md`. A bounded bug requires no separate feature spec or implementation plan. Add planning through `planning-and-task-breakdown` if the fix needs coordinated work. A failure discovered during existing work stays in that work's track.
+
+**Spec reconciliation:** When the fix restores an already-correct capability contract, record why no canonical spec change is needed. Approved requirement changes must be reconciled with the owning capability specs in the implementation PR before review.
+
+**Exit:** The original failure is resolved, regression protection is demonstrated, and verification and review pass. Complete the track after merge.
+
+**Reroute:** If expected behavior is unresolved, clarify it before implementing. Separate newly requested behavior into Feature or Bounded task work. An active production outage requires incident mitigation and recovery first. An unreproduced defect remains an investigation; do not report it as fixed.
+
+### Refactoring and Simplification
+
+Use when the intended outcome is easier-to-understand or more maintainable code while preserving observable behavior.
+
+```text
+Define scope and invariants -> Establish baseline -> Simplify incrementally
+-> Verify preservation -> Review -> Merge
+```
+
+1. Record the structural problem, authorized scope, and behavior that must remain unchanged: outputs, errors, side effects, ordering, and public contracts.
+2. Inspect existing coverage and establish a passing baseline. Invoke `test-case-design-review` when meaningful gaps require test selection; add characterization coverage only where needed to protect the refactor.
+3. Invoke `code-simplification`. Make one coherent simplification at a time and check it before proceeding. Keep refactoring separate from feature and bug-fix changes.
+4. Invoke `verification-and-validation` to establish that behavior remains intact, including affected runtime or integration boundaries. Do not rewrite expected behavior merely to make checks pass.
+5. Invoke `code-review-and-quality` to assess both behavior preservation and whether the result is clearer.
+
+**Artifacts:** Use a concise `docs/tracks/<track-id>/spec.md` for the objective, scope, preservation criteria, and capability links. Add `docs/tracks/<track-id>/plan.md` and `docs/tracks/<track-id>/todo.md` through `planning-and-task-breakdown` when dependencies or multiple increments need coordination. Record a justified no-change disposition for unchanged capability contracts.
+
+**Exit:** The structural objective is achieved, existing behavior is preserved, and verification and review pass. Complete the track after merge.
+
+**Reroute:** Separate discovered bugs and intended behavior changes into their appropriate workflows. Public contract removal requires `deprecation-and-migration`. Performance improvement requires `performance-optimization` with baseline and result measurements.
+
+### Epic or Multi-feature Initiative
+
+Use when one requested outcome requires several separately deliverable features with distinct acceptance criteria and coordinated dependencies. Touching several modules or capabilities alone does not make work an Epic; one coordinated deliverable can remain a Feature.
+
+```text
+Clarify outcome -> Define feature boundaries -> Map dependencies
+-> Run child workflows -> Verify integrated outcome -> Close initiative
+```
+
+1. Use `interview-me` or `idea-refine` only when the initiative's outcome is unclear. Reuse existing discovery and approved requirements.
+2. Use `spec-driven-development` to establish the overall outcome, scope, capability boundaries, and integration acceptance criteria.
+3. Use `planning-and-task-breakdown` to identify deliverable features, dependency order, milestones, and shared interface decisions. Establish the approved feature split before detailed child implementation, reusing approval already provided for that scope.
+4. Give each independently delivered feature its own numbered track and branch and run the Feature workflow for it. Link each child to the initiative; child tracks own their detailed change proposals and evidence.
+5. Resolve shared contract decisions before dependent implementation, using `api-and-interface-design` when needed. Sequence dependent work and reconcile concurrent changes against the latest accepted capability specs.
+6. Invoke `verification-and-validation` against the assembled revision to prove the initiative's cross-feature acceptance criteria. Child reports are supporting evidence; they do not substitute for integrated verification. Route integration failures through debugging in the parent track.
+
+**Artifacts:** In the parent track, `docs/tracks/<track-id>/spec.md` records initiative-level outcomes; `docs/tracks/<track-id>/plan.md` records dependencies and integration checkpoints; `docs/tracks/<track-id>/todo.md` indexes child tracks instead of duplicating their task lists. Use `docs/tracks/<track-id>/capability-map.md` when capability decomposition is needed. Canonical specs remain per-capability. Child tracks retain their own requirements, verification, review, and release evidence; the parent's `docs/tracks/<track-id>/verification.md` records the assembled revision and integration results.
+
+**Exit:** Required child work is reviewed and merged, the integrated outcome passes verification, any integration fixes pass review and merge, and deferred scope has an explicit disposition. Keep the parent open until these conditions hold; merging its initial planning documents or completing one child does not complete the initiative. Deployment follows the agreed release scope.
+
+### Bounded Task
+
+Use when scope, acceptance criteria, dependencies, and relevant contracts are already explicit enough to implement without a separate discovery or planning phase. A bounded task may stand alone or belong to an existing track.
+
+```text
+Validate task readiness -> Implement -> Verify -> Review -> Merge
+```
+
+1. Confirm the task states the intended result, affected scope, acceptance criteria, and dependencies. Read the owning capability contracts and any parent track requirements.
+2. Use `incremental-implementation` when multiple increments are needed. Apply `test-driven-development` to behavioral changes that warrant new or modified coverage, using `test-case-design-review` when test selection is non-trivial.
+3. Invoke `verification-and-validation` against the task's acceptance criteria and the changed runtime boundary where applicable.
+4. Invoke `code-review-and-quality` through the task's own PR or its parent change. A linked task's focused verification does not replace verification and review of the assembled parent change.
+
+**Artifacts:** A task within an existing track uses its existing requirements and `docs/tracks/<track-id>/todo.md` entry. A standalone task uses a concise `docs/tracks/<track-id>/spec.md` containing or linking its explicit requirements, acceptance criteria, and affected capabilities. Neither needs a separate planning document when the implementation sequence is already clear. Record Spec reconciliation in the owning track: update verified capability changes in the implementation PR or justify an unchanged contract.
+
+**Exit:** Acceptance criteria are met and verification passes. A parent task can be marked implementation-complete while its parent still awaits review or merge; standalone track completion follows review and merge.
+
+**Reroute:** Missing product decisions or unresolved scope require Feature definition. Several independently deliverable outcomes require Epic decomposition. Defects use the Bug workflow. Risk determines additional checks and safeguards; a small diff does not establish task readiness.
 
 ## Quick Reference
 
