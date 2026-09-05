@@ -4,7 +4,7 @@ description: Break work into small verifiable tasks with acceptance criteria and
 
 Invoke the agent-skills:planning-and-task-breakdown skill.
 
-Resolve the active numbered track using context-engineering. Read the approved requirements from docs/tracks/<track-id>/spec.md or docs/tracks/<track-id>/bug.md, the linked docs/specs/<capability>/spec.md files, and relevant code. For multi-capability work, use docs/tracks/<track-id>/capability-map.md to select the relevant sections of the track spec. Then:
+Resolve the active numbered track using context-engineering. Read the approved requirements from `docs/tracks/<track-id>/spec.md` or `docs/tracks/<track-id>/bug.md`, the linked `docs/specs/<capability>/spec.md` files, and relevant code. For multi-capability work, use `docs/tracks/<track-id>/capability-map.md` to select the relevant sections of the track spec. Then:
 
 1. Enter plan mode — read only, no code changes
 2. Identify the dependency graph between components

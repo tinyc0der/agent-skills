@@ -14,7 +14,7 @@ Invoking this command authorizes the scoped remote push and pull-request mutatio
 ## Common checks
 
 1. Resolve the current branch, default branch, remote, head SHA, working-tree state, and any existing PR. Never guess a branch or create a duplicate PR.
-2. Resolve the numbered track under docs/tracks/<track-id>/; read its approved spec or bug report, linked docs/specs/<capability>/spec.md files, plan and task ledger when present, relevant commits, and existing PR body.
+2. Resolve the numbered track under `docs/tracks/<track-id>/`; read its approved spec or bug report, linked `docs/specs/<capability>/spec.md` files, plan and task ledger when present, relevant commits, and existing PR body.
 3. Do not expose secrets or include unrelated working-tree changes.
 
 ## Draft mode
@@ -29,7 +29,7 @@ Invoking this command authorizes the scoped remote push and pull-request mutatio
 
 1. Require an existing draft PR and a clean working tree. If the only uncommitted change is the newly generated `docs/tracks/<track-id>/verification.md`, stage that exact file and commit it as verification evidence before continuing; otherwise stop on unrelated changes.
 2. Require `docs/tracks/<track-id>/verification.md` to contain a `/verify` PASS report for the current implementation revision. Reject stale, FAIL, or INCOMPLETE evidence. A later evidence-only commit is acceptable only when the intervening diff contains evidence or administrative updates in the same track, without changing requirements, scope, acceptance criteria, or canonical specs.
-3. Spec reconciliation: require the implemented, verified requirements in docs/specs/<capability>/spec.md, with links or a justified no-change disposition recorded in the track spec or bug report. Require the PR description and task state to be current, the pre-review Definition of Done profile to pass, and no known Critical or Required findings to remain.
+3. Spec reconciliation: require the implemented, verified requirements in `docs/specs/<capability>/spec.md`, with links or a justified no-change disposition recorded in the track spec or bug report. Require the PR description and task state to be current, the pre-review Definition of Done profile to pass, and no known Critical or Required findings to remain.
 4. Push the exact current branch if local commits are not on the remote, update the PR body with final evidence, then run `gh pr ready`.
 5. Report the PR URL and head revision. Do not merge.
 
