@@ -234,3 +234,66 @@ Node-script change.
 
 No Critical or Required findings remain in this scope. This report adds evidence
 only; any later implementation change requires affected checks and review again.
+
+---
+
+## Review: Self-contained OKF v0.2 skill
+
+**Implementation revision:** `8fab66cb9817f8dc2100b3a999931316c8cc2d00`.
+**Static review:** no new Critical or Required findings.
+**Deterministic verification:** PASS. **Behavioral verification:** PARTIAL,
+because the executor service exhausted its session quota. The prior v0.1
+behavioral approval above does not certify this newer revision.
+
+The user requested extracting the useful v0.2 rules into the skill instead of
+shipping a draft and a separate format profile. The skill now consists of one
+391-line `SKILL.md`, replacing the previous three files totaling 872 lines.
+Both `memory-draft.md` and `references/okf-v0.1.md` were removed; historical
+references to the deleted profile identify its local checkpoint instead of
+linking to a missing file or inventing a published repository URL.
+
+### Design and source review
+
+The extracted rules were checked against the pinned
+[OKF v0.2 specification](https://github.com/GoogleCloudPlatform/knowledge-catalog/blob/62432a095456147ee71e70ac6e4dc0d2dea3ac30/okf/SPEC.md).
+The main skill contains the applicable structure, provenance, review, and
+freshness rules; fetching the full specification is optional. Advanced
+computation and attestation workflows were not imported.
+
+- New bundles target v0.2. Existing bundles keep their version unless an upgrade
+  is authorized; the existing v0.1 fixture remains a compatibility test.
+- New provenance uses `sources`, with resource references and stable footnote IDs.
+  Nested YAML is supported instead of the former flat producer convention.
+- Optional authorship, verification, status, and expiry metadata carry only
+  known evidence. Bootstrap proposals are `draft`; a commit or source author is
+  not fabricated human approval.
+- Legacy timestamps and citation lists remain readable. The skill does not
+  manufacture authorship to convert a legacy timestamp.
+- Existing knowledge owners, no-op behavior, reserved-file rules, migration
+  safeguards, and permissive consumption remain in the self-contained workflow.
+
+### Verification and limits
+
+- **65 automated tests passed**, with no new executable code or prose-matching
+  tests added for this documentation change.
+- **144 routing checks passed**, zero errors or warnings, rank-1 rate 88%.
+- Skill structure, reference links, Markdown links, artifact paths, lifecycle
+  contracts, and whitespace checks passed.
+- Existing behavioral expectations were updated for v0.2 provenance and draft
+  status. The initial saving run retained an ineffective reverted experiment;
+  a focused instruction clarification restored the intended promotion boundary,
+  and its targeted rerun passed without weakening the expectation.
+
+| Behavioral case | Evidence for this revision |
+| --- | --- |
+| over-saving | PASS, 3/3 after the focused correction and rerun. |
+| link-not-copy | PASS, 2/2; read v0.1 as supported legacy content without edits, rules-file creation, or version changes. |
+| prune-not-size | PASS, 3/3 with the v0.2 fixture. |
+| unknown-version | INCOMPLETE; executor stopped on its session limit before grading. |
+| established-homes | NOT RUN in the v0.2 pass because the preceding quota failure stopped the runner. |
+
+The incomplete run reported a Claude session-limit error; this is an external
+verification limit, not a demonstrated skill failure. Older grading files for
+the last two cases were moved to `evals/results/memory-management-v0.1/` so they
+cannot be mistaken for current results. Re-run the two remaining cases when
+capacity is available before claiming all five v0.2 behavioral scenarios pass.
