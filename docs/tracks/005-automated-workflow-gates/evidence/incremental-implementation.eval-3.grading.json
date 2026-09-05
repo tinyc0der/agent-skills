@@ -1,0 +1,35 @@
+{
+  "expectations": [
+    {
+      "text": "Auto mode selects capability sections in the track spec through docs/tracks/001-account-platform/capability-map.md and resolves external tracker items through docs/tracks/001-account-platform/todo.md",
+      "passed": true,
+      "evidence": "Section 1 \"Preflight: resolve the three-level artifact chain\" names capability-map.md as the approved authority for which capabilities exist and their dependencies (read-only; changes are a re-approval event), the track spec's auth/billing sections as track-scope pointing to owning capability specs, and todo.md as \"an *index*, not a task list\" that resolves to external tracker IDs whose real body, status, and dependency links are fetched from the tracker. Section 3 reuses capability-map edges as the non-negotiable ordering source, and section 2 keeps todo.md from becoming a second status source of truth."
+    },
+    {
+      "text": "Generated or changed spec, plan, and task artifacts are committed together before implementation so they cannot leak into the first code commit",
+      "passed": true,
+      "evidence": "Section 2: \"Planning artifacts land **before** and **separately from** code\" — Commit 1 (`docs(track-001): ...`) bundles the resolved todo.md index (tracker IDs, derived execution order, spec anchors) plus the notes.md DAG/assumptions entry, with the explicit rule \"No implementation ever rides in that commit, and no planning artifact rides in an implementation commit that changes behavior.\""
+    },
+    {
+      "text": "Tasks run in dependency order using existing authorization without routine approval pauses. Failed checkpoints block dependent work while debugging and re-verification proceed autonomously. Human input is reserved for unresolved material intent, missing authority/access, or consequential risk that cannot be contained; explicit user checkpoints remain binding.",
+      "passed": true,
+      "evidence": "Section 3 derives a topologically sorted order (capability-map edges → contract-first seam slice → tracker task edges, ties risk-first) with the hard rule that \"a slice may only depend on work that is already committed and verified.\" Section 4: checkpoints are \"pass-through, not ask-through — the user's approval of the capability map and specs is the authorization\"; the capability-boundary DoD check \"halts the run rather than degrading billing quietly.\" Section 5 confines halts to contradictions between track section and owning spec, unanchored tasks, DAG conflicts/cycles, needing to edit the approved map (re-approval, not an edit), unreachable/read-only tracker access, and money-movement/PCI/irreversible-migration risk — and explicitly excludes failing tests, lint, and type errors: \"Those are the loop working, not a gate.\" The only soft spot is that binding explicit user checkpoints are implied by the approval-as-authorization framing rather than stated as their own rule."
+    },
+    {
+      "text": "Each behavioral slice applies the minimum-sufficient test admission gate before RED-GREEN-REFACTOR, while adequately covered or non-behavioral tasks record a rationale and use a proportionate executable check; all slices then run applicable regression, build, lint, type, and runtime checks",
+      "passed": true,
+      "evidence": "Section 6 applies the admission gate first (\"does this slice carry a distinct material regression that isn't already covered?\"), then the smallest missing behavioral case through RED → GREEN → REFACTOR; otherwise \"record the reason in notes.md and run the relevant existing or executable check instead — do not add a test purely so the slice has one,\" with stack-appropriate repo commands and concrete high-value cases (token lifecycle, money arithmetic, webhook idempotency) versus CRUD wrappers. Section 7 adds per-increment and per-task gates: existing tests, focused and regression suites, build, type check, lint, and runtime behavior \"demonstrated, not just asserted,\" while avoiding re-running commands that already passed on unchanged code."
+    },
+    {
+      "text": "Each completed task satisfies the canonical Definition of Done and leaves a clean independently revertible commit",
+      "passed": true,
+      "evidence": "Section 7 states the per-task gate (acceptance criteria in the owning capability spec, focused + regression suites, demonstrated runtime behavior, lint/build/type clean, docs and safeguards updated, work independently revertible) and defers to `references/definition-of-done.md` as the project-wide canonical gate, honestly flagging that the file is absent from this skill-pack copy. Section 8 enforces one logical change per commit (never contract + implementation + refactor, never auth + billing), tracker-ID trailers, feature flags for incomplete user-visible work, paired down-migrations, no adjacent-code cleanup (logged as NOTICED BUT NOT TOUCHING), and a clean tree at end of run."
+    }
+  ],
+  "summary": {
+    "passed": 5,
+    "failed": 0,
+    "total": 5,
+    "pass_rate": 1
+  }
+}

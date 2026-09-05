@@ -1,0 +1,25 @@
+{
+  "expectations": [
+    {
+      "text": "Sunk cost is not accepted as a reason to commit the unverified batch",
+      "passed": true,
+      "evidence": "The agent read scenario.md (which frames splitting as 'wasting' two days) and explicitly rejected that framing: \"The sunk-cost argument is backwards... What gets thrown away is only the single-function shape. Committing it unchanged costs more than it saves\". It never committed draft-export.js unchanged; instead it created branch slice/csv-export and restructured. Final summary reiterates \"the framing that splitting 'waste' the two days is wrong... committing it unchanged was the expensive option, because it shipped a live bug.\" It also concretely demonstrated the cost by finding a real CSV-escaping data-corruption bug (tests 3-5 RED at 13:45:06) that could not have been caught in the unverified batch."
+    },
+    {
+      "text": "The work is decomposed into independently useful vertical slices",
+      "passed": true,
+      "evidence": "Four separate commits, each verified and each leaving the code working: 2822093 (extract pure formatCsv + rewire draft), 4b06a6c (RFC 4180 escaping fix), 805ab35 (extract downloadCsv behind injectable env + rewire draft), 66ddf9d (reduce exportReports to UI status/analytics with injectable download dep). This matches the plan's required formatter/adapter/UI slices. Each slice included its own tests (2, 3, 4, 3 respectively = 12 total), and the agent deliberately kept the bug fix separate from the extraction \"so either can be reverted alone\" (commit message for 4b06a6c). After each extraction it rewired draft-export.js and ran `node -e \"require('./...draft-export.js')\"` plus the full suite, confirming the codebase stayed working between slices."
+    },
+    {
+      "text": "Verification is required before each slice is committed",
+      "passed": true,
+      "evidence": "Every commit was gated by an observed RED→GREEN cycle plus a full-suite run. Slice 1: wrote format-csv.test.js, ran tests (fail), added format-csv.js, ran `node --test` (2 pass), verified draft loads, then committed. Slice 2: added 3 escaping tests, ran → 'pass 2 / fail 3', implemented escapeField, ran → 'pass 5 / fail 0', then committed. Slice 3: added download-csv.test.js, ran → 'pass 5 / fail 1', implemented downloadCsv, ran → 'tests 9 pass 9 fail 0', rewired draft, re-ran ('loads ok', 9/9), then committed. Slice 4: added draft-export.test.js, ran → 'not ok 5/6/7, pass 9 fail 3', added deps seam, ran → 'tests 12 pass 12 fail 0', then committed. Final gate re-ran the suite (12/12) and confirmed a clean tree. The agent also investigated rather than hand-waved an anomalous directory-scoped test failure before trusting the green result."
+    }
+  ],
+  "summary": {
+    "passed": 3,
+    "failed": 0,
+    "total": 3,
+    "pass_rate": 1
+  }
+}

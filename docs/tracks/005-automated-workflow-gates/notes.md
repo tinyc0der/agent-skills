@@ -10,8 +10,8 @@ status: draft
 ## Resume
 
 - Phase: implementation, local checks, behavioral evaluation, and independent review complete.
-- Next: commit the implementation and preserve revision-scoped results; track completion remains after merge.
-- Sources: [spec](spec.md), [plan](plan.md), [tasks](todo.md).
+- Next: follow the authorized merge workflow when requested; track completion remains after merge.
+- Sources: [spec](spec.md), [plan](plan.md), [tasks](todo.md), [verification](verification.md), [review](review.md).
 
 ## Observations and decisions
 
@@ -27,3 +27,4 @@ status: draft
 - Review disposition — The independent reviewer confirmed the unused-code finding resolved, with no remaining defect in the corrected scope. Standalone review requests produce findings/reports; code remediation requires an implementation or fix assignment.
 - Behavioral evidence — All four incremental-implementation scenarios passed: 3/3, 3/3, 5/5, and 3/3 expectations (14/14 total). The new case completed two local functions with separate verified commits, prepared the handoff, and asked only for the unresolved recipient/channel; no external action occurred.
 - Validation — All 18 changed skills pass skill-creator validation. Changed YAML/TOML and metadata source links parse correctly; Gemini/Antigravity build adapters are identical. Historical tracks 001–004 are unchanged. Behavioral coverage is a representative sample, not a claim that every possible skill interaction was executed.
+- Commit — Implementation is `e62949b7518806b072f965f3b10bedf53df0c84c`. The reports and four preserved grader records refer to that implementation; subsequent evidence-only documentation does not expand its coverage.

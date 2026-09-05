@@ -10,5 +10,5 @@ status: draft
 - [x] Define the autonomous default and critical escalation boundary.
 - [x] Align skills, commands, docs, and affected behavioral expectations.
 - [x] Reconcile capability specs, validate, and resolve review findings.
-- [ ] Record implementation and verification evidence in commits.
+- [x] Record implementation and verification evidence in commits.
 - [ ] Complete the track after verification and merge.
