@@ -1,6 +1,6 @@
 ---
 name: git-workflow-and-versioning
-description: Structures git workflow practices. Use when making any code change. Use when committing, branching, resolving conflicts, or when you need to organize work across multiple parallel streams. Use when cutting a release, choosing a semantic version bump, tagging, or writing a changelog.
+description: Structures git and pull-request workflow practices. Use when making code changes, committing, branching, opening or updating a PR, resolving conflicts, organizing parallel work, or cutting, versioning, tagging, and documenting a release.
 ---
 
 # Git Workflow and Versioning
@@ -8,6 +8,8 @@ description: Structures git workflow practices. Use when making any code change.
 ## Overview
 
 Git is your safety net. Treat commits as save points, branches as sandboxes, and history as documentation. With AI agents generating code at high speed, disciplined version control is the mechanism that keeps changes manageable, reviewable, and reversible.
+
+**Workflow notes:** For an active track, read `docs/tracks/<track-id>/notes.md` at phase entry or resume and update it when useful context changes or before handoff. Capture observations, tentative ideas, outcomes, blockers, and next actions with evidence links. Follow the memory-management running-note and document-metadata protocols; honor explicit read-only or file-scope limits and keep writes outside pinned verification or release targets.
 
 ## When to Use
 
@@ -208,6 +210,73 @@ POTENTIAL CONCERNS:
 
 This pattern catches wrong assumptions early and gives reviewers a clear map of the change. The "DIDN'T TOUCH" section is especially important — it shows you exercised scope discipline and didn't go on an unsolicited renovation.
 
+## Pull Request Lifecycle
+
+A pull request is the durable handoff between implementation, verification, review, and merge. Open it as a draft after the approved plan or first coherent implementation commit; do not wait until the entire diff is difficult to review.
+
+### Draft
+
+Create or update one PR for the current feature branch. Before mutating the remote, resolve the exact branch, remote, default branch, head revision, working-tree state, and any existing PR. Never create a duplicate because lookup was skipped.
+
+Apply this state matrix after lookup:
+
+| Existing PR state | `/pr draft` behavior |
+|---|---|
+| No PR | Create a new draft PR |
+| Draft | Update the existing draft idempotently |
+| Ready/open | Update it and explicitly convert it back to draft; editing the body alone is not a state transition |
+| Closed or merged | Stop without reopening or creating a duplicate; report the state and ask whether to start a new branch/PR |
+
+The draft body should stand alone:
+
+```markdown
+## Objective
+[What and why]
+
+## Scope and non-goals
+- In: ...
+- Out: ...
+
+## Source of truth
+- Spec: ...
+- Plan/tasks: ...
+
+## Acceptance criteria
+- [Criterion + current evidence state]
+
+## Design and risks
+[Decisions, migrations, flags, compatibility, observability]
+
+## Verification
+- Current revision: ...
+- Planned or completed evidence: ...
+
+## Visual evidence
+[Screenshots or before/after evidence for user-facing changes, otherwise why not applicable]
+
+## Rollback
+[When applicable]
+```
+
+Use a temporary file for CLI body input instead of interpolating Markdown or untrusted text into a shell command. Invoking `/pr draft` authorizes the scoped push and PR creation/update, but not merge or deploy.
+
+### Ready for review
+
+Mark a draft ready only when:
+
+- The working tree is clean and the remote contains the exact local head
+- A `verification-and-validation` PASS report names that head revision
+- Acceptance criteria and the pre-review Definition of Done profile are satisfied
+- Spec reconciliation is recorded in the numbered track's spec or bug report: verified requirement changes update `docs/specs/<capability>/spec.md` in the same PR, or unchanged contracts have a justified no-change disposition
+- The PR body, task state, screenshots, migration notes, and risk notes are current
+- No known Critical or Required finding remains
+
+Stale evidence is not transferable to a newer revision. Canonical spec changes and changes to a track's requirements, scope, or acceptance criteria invalidate affected evidence; they are not evidence-only commits. Rerun every affected check, update the PR, then mark it ready. `/pr ready` does not authorize merge.
+
+### Review and merge
+
+Use the loop `review -> fix -> reverify -> rereview`. Required fixes that change behavior follow `test-driven-development`. Merge only after required human approval and green CI using the project's established merge strategy.
+
 ## Pre-Commit Hygiene
 
 Before every commit:
@@ -336,6 +405,9 @@ Write the entry in the same change that makes the change, while the impact is fr
 - A breaking change shipped under a minor or patch version bump
 - A release with no tag, or a version number hand-edited out of sync with the tag
 - A user-facing release with no changelog entry, or a changelog that's just dumped commit messages
+- A PR opened without resolving whether one already exists for the branch
+- A PR marked ready with stale, FAIL, or INCOMPLETE verification evidence
+- A merge performed without required review, green CI, or explicit authorization
 
 ## Verification
 
@@ -353,3 +425,11 @@ For every release (anything with consumers):
 - [ ] The version bump matches the change: breaking → major, additive → minor, fix → patch
 - [ ] The release is tagged, and the version is derived from the tag, not hand-edited out of sync
 - [ ] The changelog has a curated, human-readable entry grouped by impact for this version
+
+For every pull request:
+
+- [ ] The PR identifies its spec, plan, scope, non-goals, risks, and head revision
+- [ ] Draft creation or readiness was explicitly requested before remote mutation
+- [ ] Ready status is backed by a PASS report for the exact head revision
+- [ ] Critical and Required findings are resolved before merge
+- [ ] Required human approval and CI gates pass before merge

@@ -7,7 +7,9 @@ description: Breaks work into ordered tasks. Use when you have a spec or clear r
 
 ## Overview
 
-Decompose work into small, verifiable tasks with explicit acceptance criteria. Good task breakdown is the difference between an agent that completes work reliably and one that produces a tangled mess. Every task should be small enough to implement, test, and verify in a single focused session.
+Decompose work into small, verifiable tasks with explicit acceptance criteria. Good task breakdown is the difference between an agent that completes work reliably and one that produces a tangled mess. Every task should be small enough to implement and verify in a single focused session, using new tests only when the admission gate warrants them.
+
+**Workflow notes:** For an active track, read `docs/tracks/<track-id>/notes.md` at phase entry or resume and update it when useful context changes or before handoff. Capture observations, tentative ideas, outcomes, blockers, and next actions with evidence links. Follow the memory-management running-note and document-metadata protocols; honor explicit read-only or file-scope limits and keep writes outside pinned verification or release targets.
 
 ## When to Use
 
@@ -25,12 +27,12 @@ Decompose work into small, verifiable tasks with explicit acceptance criteria. G
 
 Before writing any code, operate in read-only mode:
 
-- Read the spec and relevant codebase sections
+- Read the active track's approved spec or bug report, its linked canonical capability specs, and relevant codebase sections
 - Identify existing patterns and conventions
 - Map dependencies between components
 - Note risks and unknowns
 
-**Do NOT write code during planning.** The output is a plan document saved to `tasks/plan.md` and a task list recorded in the task list target (see Output Files; default `tasks/todo.md`), not implementation.
+**Do NOT write code during planning.** The output is a plan document saved to `docs/tracks/<track-id>/plan.md` and a task ledger at `docs/tracks/<track-id>/todo.md`, not implementation.
 
 ### Step 2: Identify the Dependency Graph
 
@@ -89,6 +91,8 @@ Each task follows this structure, whether it lands in the markdown task list or 
 - [ ] [Specific, testable condition]
 - [ ] [Specific, testable condition]
 
+**Test design:** [Changed contract or material risk → exact existing coverage or proposed case, cheapest layer, and distinct-defect rationale; or why no new test is warranted]
+
 **Verification:**
 - [ ] Tests pass: [the repository's focused-test command]
 - [ ] Build succeeds: [the repository's build command]
@@ -98,10 +102,12 @@ Each task follows this structure, whether it lands in the markdown task list or 
 
 **Files likely touched:**
 - `src/path/to/file.ts`
-- `tests/path/to/test.ts`
+- `tests/path/to/test.ts` — only when the admission gate warrants a new or modified case
 
 **Estimated scope:** [Small: 1-2 files | Medium: 3-5 files | Large: 5+ files]
 ```
+
+For a non-trivial behavioral task, use the compact test ledger from `test-case-design-review`. Skip it for an obviously sufficient one-test change. Do not populate happy/empty/boundary/error/concurrency matrices unless each retained row protects a distinct material risk.
 
 ### Step 5: Order and Checkpoint
 
@@ -121,6 +127,8 @@ Add explicit checkpoints to the task list target:
 - [ ] Core user flow works end-to-end
 - [ ] Review with human before proceeding
 ```
+
+In normal incremental mode, keep the human review item. In an explicitly approved `/build auto` run, routine checkpoints become automated verification gates; failures and high-risk or irreversible work still stop for the human.
 
 ## Task Sizing Guidelines
 
@@ -142,23 +150,35 @@ If a task is L or larger, it should be broken into smaller tasks. An agent perfo
 
 ## Output Files
 
-- **Plan document:** Save the implementation plan to `tasks/plan.md`. This is always a markdown file — design decisions, risks, and open questions don't map cleanly onto individual tracker issues.
+- **Plan document:** Save the implementation plan to `docs/tracks/<track-id>/plan.md`. This is always a markdown file — design decisions, risks, and open questions don't map cleanly onto individual tracker issues.
 - **Task list:** Record each task in the **task list target** (defined below).
+- **Launch dossier:** For production-affecting work, initialize `docs/tracks/<track-id>/ship.md` with rollout prerequisites, migrations, feature flags, success thresholds, monitoring, rollback triggers and steps, and owners. Build and verification keep it current.
 
-Create the `tasks/` directory if it does not exist.
+Each document starts with the memory-management header (`type`, `title`, `description`): use `Implementation Plan`, `Task List`, or `Launch Dossier` respectively. New unreviewed documents use `status: draft`; task progress and launch readiness remain separate. Add frontmatter once per file, not to individual tasks, checklist sections, or external tracker items.
+
+Resolve the active numbered track using `context-engineering`: ids use a repository-wide three-digit prefix and kebab-case name, such as `001-user-auth`. Create `docs/tracks/<track-id>/` only for the selected or newly authorized change. The plan and task ledger live beside the approved change spec or bug report, while accepted capability requirements stay at `docs/specs/<capability>/spec.md`.
+
+Include **Spec reconciliation** in completion criteria: verified requirement changes update the owning capability specs in the same implementation PR; unchanged contracts receive a justified no-change disposition in the track spec or bug report. Deferred and canceled proposals remain in the track. A task may finish before the track; the track completes only after review and merge.
 
 ### Task List Target
 
 The task list target is where tasks and checkpoints are recorded. It is defined once, here; every other reference in this skill defers to it.
 
-- **Default: a checklist-style markdown file at `tasks/todo.md`.** This is the convention the `/build` command and other downstream tooling expect. Use it unless the project says otherwise.
-- **External tracker:** if the project's agent rules (`CLAUDE.md`, `AGENTS.md`, etc.) or the user designate an issue tracker (e.g. GitHub Issues, Jira, Linear, `bd`/beads), create one tracker item per task instead of writing `tasks/todo.md`. Map the Step 4 structure onto the tracker's fields: acceptance criteria and verification steps in the item body, dependencies via the tracker's linking mechanism (`bd dep add`, "blocked by", etc.). Record Step 5 checkpoints as tracker items too, or as a checklist in the plan document if the tracker has no natural equivalent.
+- **Default:** write the complete checklist to `docs/tracks/<track-id>/todo.md`. This is the convention `/build` and downstream tooling expect.
+- **External tracker:** if the project's agent rules (`CLAUDE.md`, `AGENTS.md`, etc.) or the user designate an issue tracker (e.g. GitHub Issues, Jira, Linear, `bd`/beads), create one tracker item per task. Map the Step 4 structure onto the tracker's fields: acceptance criteria and verification steps in the item body, dependencies via the tracker's linking mechanism (`bd dep add`, "blocked by", etc.). Keep `docs/tracks/<track-id>/todo.md` as an ordered index of tracker item IDs or repository-relative links plus local lifecycle checkpoints; do not duplicate the full tracker bodies.
 
-When using an external tracker, note it in `tasks/plan.md` (e.g. "Tasks tracked in Linear project FOO") so downstream steps and future sessions know where to look, and keep the plan document's Task List section as an ordered index of tracker item IDs or links rather than a duplicate checklist.
+When using an external tracker, note it in `docs/tracks/<track-id>/plan.md` (e.g. "Tasks tracked in Linear project FOO") so downstream steps and future sessions know where to look. Keep both the plan's Task List section and `docs/tracks/<track-id>/todo.md` as compact ordered indexes rather than duplicate checklists.
 
 ## Plan Document Template
 
 ```markdown
+---
+type: Implementation Plan
+title: "[Change] implementation plan"
+description: "Implementation steps, dependencies, risks, and verification for [change]."
+status: draft
+---
+
 # Implementation Plan: [Feature/Project Name]
 
 ## Overview
@@ -223,7 +243,7 @@ When multiple agents or sessions are available:
 ## Red Flags
 
 - Starting implementation without a written task list
-- Writing `tasks/todo.md` when the project has designated an external tracker (or scattering tasks across both)
+- Duplicating full external-tracker task bodies in `docs/tracks/<track-id>/todo.md` instead of keeping a durable index
 - Tasks that say "implement the feature" without acceptance criteria
 - No verification steps in the plan
 - All tasks are XL-sized
@@ -236,12 +256,14 @@ Before starting implementation, confirm:
 
 - [ ] Every task has acceptance criteria
 - [ ] Every task has a verification step
+- [ ] Every proposed test names the uncovered contract or distinct regression it protects, or the task records why existing coverage is sufficient
 - [ ] Task dependencies are identified and ordered correctly
-- [ ] Tasks are recorded in the task list target (default `tasks/todo.md`)
+- [ ] Tasks are recorded or indexed in `docs/tracks/<track-id>/todo.md`
+- [ ] Production-affecting work has an initialized `docs/tracks/<track-id>/ship.md`
 - [ ] No task touches more than ~5 files
 - [ ] Checkpoints exist between major phases
 - [ ] The human has reviewed and approved the plan
 
 ## See Also
 
-Acceptance criteria are per-task and answer "did we build the right thing?". They sit on top of the project-wide Definition of Done, the standing bar every task clears before it counts as done. See `../../references/definition-of-done.md`.
+Acceptance criteria are per-task and answer "did we build the right thing?". They sit on top of the project-wide Definition of Done: tests and required checks pass, runtime behavior is verified, the change remains maintainable and revertible, and relevant docs and operational safeguards are included. Optional whole-pack reference: `../../references/definition-of-done.md`.

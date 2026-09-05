@@ -60,10 +60,11 @@ function makeSandbox() {
   return root;
 }
 
-function run(root, args = []) {
+function run(root, args = [], env = process.env) {
   return spawnSync(process.execPath, [path.join(root, 'scripts', 'run-evals.js'), ...args], {
     cwd: root,
     encoding: 'utf8',
+    env,
   });
 }
 
@@ -77,6 +78,54 @@ test('accepts a complete and consistent grader result', () => {
   });
 
   assert.deepEqual(parseGrading(raw, 2), JSON.parse(raw));
+});
+
+test('provides supporting skill files to the behavioral executor inside its workspace', () => {
+  const root = makeSandbox();
+  try {
+    writeSkill(root, 'alpha-skill', 'Handles alpha widgets. Use when changing alpha widgets.');
+    const refs = path.join(root, 'skills', 'alpha-skill', 'references');
+    fs.mkdirSync(refs);
+    fs.writeFileSync(path.join(refs, 'profile.md'), 'required profile\n');
+    writeJson(path.join(root, 'evals', 'cases', 'alpha-skill.json'),
+      completeCase('alpha-skill', 'change alpha widget'));
+
+    const bin = path.join(root, 'bin');
+    fs.mkdirSync(bin);
+    const stub = `#!/usr/bin/env node
+const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const path = require('node:path');
+const { execFileSync } = require('node:child_process');
+fs.readFileSync(0, 'utf8');
+const args = process.argv.slice(2);
+if (args.includes('--append-system-prompt')) {
+  const prompt = args[args.indexOf('--append-system-prompt') + 1];
+  const directory = prompt.match(/^Skill directory: (.+)$/m)?.[1];
+  assert.ok(directory, 'executor needs a base directory for relative skill references');
+  assert.equal(fs.realpathSync(path.dirname(directory)), fs.realpathSync(process.cwd()));
+  assert.equal(fs.readFileSync(path.join(directory, 'references/profile.md'), 'utf8'), 'required profile\\n');
+  assert.match(fs.readFileSync(path.join(directory, 'SKILL.md'), 'utf8'), /alpha-skill/);
+  assert.equal(execFileSync('git', ['status', '--porcelain'], { encoding: 'utf8' }).trim(), '');
+  process.stdout.write('supporting profile read successfully');
+} else {
+  process.stdout.write(JSON.stringify({
+    expectations: [{ text: 'profile accessible', passed: true, evidence: 'executor assertions passed' }],
+    summary: { passed: 1, failed: 0, total: 1, pass_rate: 1 }
+  }));
+}
+`;
+    fs.writeFileSync(path.join(bin, 'claude'), stub, { mode: 0o755 });
+
+    const result = run(root, ['--behavioral', 'alpha-skill'], {
+      ...process.env, PATH: `${bin}${path.delimiter}${process.env.PATH}`,
+    });
+
+    assert.equal(result.status, 0, result.stdout + result.stderr);
+    assert.match(result.stdout, /1\/1 expectations passed/);
+  } finally {
+    fs.rmSync(root, { recursive: true, force: true });
+  }
 });
 
 test('rejects grader results that omit expectations', () => {

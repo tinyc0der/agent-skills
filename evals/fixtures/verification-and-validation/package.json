@@ -1,0 +1,10 @@
+{
+  "name": "verification-fixture",
+  "private": true,
+  "scripts": {
+    "test": "node --test",
+    "build": "node --check src/slug.js",
+    "lint": "node scripts/lint.js",
+    "typecheck": "node --check src/slug.js"
+  }
+}

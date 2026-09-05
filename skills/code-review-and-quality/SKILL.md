@@ -11,6 +11,8 @@ Multi-dimensional code review with quality gates. Every change gets reviewed bef
 
 **The approval standard:** Approve a change when it definitely improves overall code health, even if it isn't perfect. Perfect code doesn't exist — the goal is continuous improvement. Don't block a change because it isn't exactly how you would have written it. If it improves the codebase and follows the project's conventions, approve it.
 
+**Workflow notes:** For an active track, read `docs/tracks/<track-id>/notes.md` at phase entry or resume and update it when useful context changes or before handoff. Capture observations, tentative ideas, outcomes, blockers, and next actions with evidence links. Follow the memory-management running-note and document-metadata protocols; honor explicit read-only or file-scope limits and keep writes outside pinned verification or release targets.
+
 ## When to Use
 
 - Before merging any PR or change
@@ -28,6 +30,7 @@ Every review evaluates code across these dimensions:
 Does the code do what it claims to do?
 
 - Does it match the spec or task requirements?
+- **Spec reconciliation:** Do implemented, verified requirements match the owning `docs/specs/<capability>/spec.md` in the same implementation PR, with links or a justified no-change disposition in the track spec or bug report? Missing reconciliation is a Required finding; deferred and canceled proposals remain track-local.
 - Are edge cases handled (null, empty, boundary values)?
 - Are error paths handled (not just the happy path)?
 - Does it pass all tests? Are the tests actually testing the right things?
@@ -112,7 +115,7 @@ Small, focused changes are easier to review, faster to merge, and safer to deplo
 
 **Watch file size, not just diff size.** A small diff can still push a file past a healthy boundary — around 1000 *total* lines in a single file (distinct from the ~1000 *changed*-lines threshold above) is a common inspection signal, not a hard cap. When a change materially grows an already-large file, ask whether to extract helpers, subcomponents, or modules *first*, before piling more on. Decompose, then add.
 
-**What counts as "one change":** A single self-contained modification that addresses one thing, includes related tests, and keeps the system functional after submission. One part of a feature — not the whole feature.
+**What counts as "one change":** A single self-contained modification that addresses one thing, includes any test changes justified by the admission gate or an explicit existing-coverage rationale, and keeps the system functional after submission. One part of a feature — not the whole feature.
 
 **Splitting strategies when a change is too large:**
 
@@ -149,14 +152,20 @@ Before looking at code, understand the intent:
 - What is the expected behavior change?
 ```
 
+Record the exact revision under review. Findings and approvals are evidence for that revision; after fixes, reverify affected behavior and rereview the updated revision.
+
 ### Step 2: Review the Tests First
 
 Tests reveal intent and coverage:
 
+For substantial test-specific design, pruning, or overlap analysis, apply `test-case-design-review`. It owns the distinct-defect ledger and Keep/Merge/Rewrite/Remove/Add/Omit decisions; this skill retains the broader five-axis review and final merge assessment.
+
 ```
 - Do tests exist for the change?
 - Do they test behavior (not implementation details)?
-- Are edge cases covered?
+- Are material edge cases and error paths covered?
+- Does each added case protect a distinct plausible regression that existing tests would miss?
+- Is the behavior tested at the cheapest reliable layer without unjustified duplication across unit, integration, and end-to-end suites?
 - Do tests have descriptive names?
 - Would the tests catch a regression if the code changed?
 ```
@@ -180,11 +189,11 @@ Label every comment with its severity so the author knows what's required vs opt
 
 | Prefix | Meaning | Author Action |
 |--------|---------|---------------|
-| *(no prefix)* | Required change | Must address before merge |
 | **Critical:** | Blocks merge | Security vulnerability, data loss, broken functionality |
-| **Nit:** | Minor, optional | Author may ignore — formatting, style preferences |
-| **Optional:** / **Consider:** | Suggestion | Worth considering but not required |
-| **FYI** | Informational only | No action needed — context for future reference |
+| **Required:** | Blocks merge | Correctness, test, architecture, or maintainability issue introduced or exposed by the change |
+| **Optional:** | Suggestion | Worth considering but not required |
+| **Nit:** | Minor, optional | Formatting or style preference |
+| **FYI:** | Informational only | No action needed — context for future reference |
 
 This prevents authors from treating all feedback as mandatory and wasting time on optional suggestions.
 
@@ -201,6 +210,18 @@ Check the author's verification story:
 - Are there screenshots for UI changes?
 - Is there a before/after comparison?
 ```
+
+### Step 6: Remediate and Rereview
+
+Critical and Required findings enter a loop:
+
+```text
+Review -> Fix -> Reverify affected behavior -> Rereview final revision
+```
+
+Behavior-changing fixes follow `test-driven-development`. Do not approve based on a superseded diff or stale verification report.
+
+Persist the structured findings and final disposition to `docs/tracks/<track-id>/review.md`, resolving the active numbered track from explicit task/PR context before branch-derived naming. Include the implementation revision, evidence sources, each finding's severity and disposition, and the final verdict. Copy or link the report from the pull request. A later commit containing only evidence or administrative updates in that track does not expand the reviewed scope; changes to requirements, scope, acceptance criteria, canonical specs, or production behavior require affected reverify and rereview.
 
 ## Multi-Model Review Pattern
 
@@ -225,7 +246,7 @@ This catches issues that a single model might miss — different models have dif
 ```
 Review this code change for correctness, security, and adherence to
 our project conventions. The spec says [X]. The change should [Y].
-Flag any issues as Critical, Required, Optional, or Nit.
+Flag every issue as Critical, Required, Optional, Nit, or FYI.
 ```
 
 ## Dead Code Hygiene
@@ -302,6 +323,13 @@ For triaging `npm audit` findings and supply-chain risk (typosquatting, compromi
 ## The Review Checklist
 
 ```markdown
+---
+type: Review
+title: "[Change] review"
+description: "Findings and dispositions for [change] at the recorded implementation revision."
+status: draft
+---
+
 ## Review: [PR/Change title]
 
 ### Context
@@ -346,10 +374,12 @@ For triaging `npm audit` findings and supply-chain risk (typosquatting, compromi
 - [ ] **Approve** — Ready to merge
 - [ ] **Request changes** — Issues must be addressed
 ```
-## See Also
+## Optional Whole-Pack References
 
-- For detailed security review guidance, see `../../references/security-checklist.md`
-- For performance review checks, see `../../references/performance-checklist.md`
+The required review axes and exit gates are embedded above. Whole-pack installs can load these supplemental checklists:
+
+- Security review guidance: `../../references/security-checklist.md`
+- Performance review guidance: `../../references/performance-checklist.md`
 
 ## Common Rationalizations
 
@@ -387,10 +417,11 @@ For triaging `npm audit` findings and supply-chain risk (typosquatting, compromi
 After review is complete:
 
 - [ ] All Critical issues are resolved
-- [ ] All Required (no-prefix) changes are resolved or explicitly deferred with justification
+- [ ] All Required changes are resolved
 - [ ] Tests pass
 - [ ] Build succeeds
 - [ ] The verification story is documented (what changed, how it was verified)
+- [ ] The review is saved to `docs/tracks/<track-id>/review.md` and names the reviewed implementation revision
 - [ ] Dependency upgrades were reviewed against their changelog, isolated per package, and verified by a green suite with the lockfile diff reviewed
 
 **Presumptive blockers:** surface and propose the simpler design for each of these; escalate to Required only when the change actively makes structure worse: a refactor that relocates complexity instead of reducing it; a change that pushes a file past the size boundary with no decomposition; feature logic added to a shared module; a near-duplicate of an existing canonical helper; a silent fallback that hides an unclear invariant.

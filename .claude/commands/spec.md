@@ -4,14 +4,16 @@ description: Start spec-driven development — write a structured specification 
 
 Invoke the agent-skills:spec-driven-development skill.
 
+**Workflow notes:** For an active track, read `docs/tracks/<track-id>/notes.md` at phase entry or resume and update it when useful context changes or before handoff. Capture observations, tentative ideas, outcomes, blockers, and next actions with evidence links. Follow the memory-management running-note and document-metadata protocols; honor explicit read-only or file-scope limits and keep writes outside pinned verification or release targets.
+
 Begin by understanding what the user wants to build. Ask clarifying questions about:
 1. The objective and target users
 2. Core features and acceptance criteria
 3. Tech stack preferences and constraints
 4. Known boundaries (what to always do, ask first about, and never do)
 
-Then generate a structured spec covering all six core areas: objective, commands, project structure, code style, testing strategy, and boundaries.
+Then generate a structured spec covering objective, non-goals, project context, affected structure, testing and verification, boundaries, success criteria, and open questions. Reference existing project-wide commands and conventions instead of copying them unless the feature changes them.
 
-If the request bundles several independently testable capabilities, first propose a capability map (module ids, dependency direction, build order) per the skill's Phase 0 and get it approved, then spec each module in dependency order.
+If the request bundles several independently testable capabilities, first propose a capability map (stable ids, dependency direction, build order), get it approved, then describe each capability's changes in a section of the track spec.
 
-Save the spec as SPEC.md in the project root and confirm with the user before proceeding.
+Require a non-default branch and resolve the active numbered track using the skill's artifact contract. A new track id uses the next repository-wide three-digit prefix and a kebab-case name, such as 001-user-auth. Read the affected `docs/specs/<capability>/spec.md` files, then save proposed changes as `docs/tracks/<track-id>/spec.md`. An optional `docs/tracks/<track-id>/capability-map.md` links capability sections and their canonical owners. Spec reconciliation belongs before review, after implementation and verification; do not publish the proposal as canonical behavior. Confirm approval, then stop and hand off to /plan; do not create tasks or implementation code.

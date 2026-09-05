@@ -23,13 +23,15 @@ OpenCode uses a **skill-driven execution model** powered by the `skill` tool and
 
 The agent should automatically map user intent to skills:
 
-- Feature / new functionality → `spec-driven-development`, then `incremental-implementation`, `test-driven-development`
+- Feature / new functionality → `spec-driven-development`, `planning-and-task-breakdown`, `incremental-implementation` + `test-driven-development`, then `verification-and-validation`
 - Planning / breakdown → `planning-and-task-breakdown`
+- Test design, test-suite review, or pruning → `test-case-design-review`
 - Bug / failure / unexpected behavior → `debugging-and-error-recovery`
 - Code review → `code-review-and-quality`
 - Refactoring / simplification → `code-simplification`
 - API or interface design → `api-and-interface-design`
 - UI work → `frontend-ui-engineering`
+- Pull request / branch / commit → `git-workflow-and-versioning`
 
 ### Lifecycle Mapping (Implicit Commands)
 
@@ -40,9 +42,11 @@ Instead, the agent must internally follow this lifecycle:
 - DEFINE → `spec-driven-development`
 - PLAN → `planning-and-task-breakdown`
 - BUILD → `incremental-implementation` + `test-driven-development`
-- VERIFY → `debugging-and-error-recovery`
+- VERIFY → `verification-and-validation` (+ `browser-testing-with-devtools` when applicable)
 - REVIEW → `code-review-and-quality`
 - SHIP → `shipping-and-launch`
+
+`debugging-and-error-recovery` is the exception path for a failed check. After the fix, return to the phase that failed and rerun its evidence.
 
 ### Execution Model
 
@@ -77,7 +81,7 @@ This repo has three composable layers. They have different jobs and should not b
 
 Composition rule: **the user (or a slash command) is the orchestrator. Personas do not invoke other personas.** A persona may invoke skills.
 
-The only multi-persona orchestration pattern this repo endorses is **parallel fan-out with a merge step** — used by `/ship` to run `code-reviewer`, `security-auditor`, and `test-engineer` concurrently and synthesize their reports. Do not build a "router" persona that decides which other persona to call; that's the job of slash commands and intent mapping.
+The only multi-persona orchestration pattern this repo endorses is **parallel fan-out with a merge step**. `/ship` uses it when two or more revision-specific `code-reviewer`, `security-auditor`, or `test-engineer` reports are stale or missing; current reports are reused. Do not build a "router" persona that decides which other persona to call; that's the job of slash commands and intent mapping.
 
 See [docs/agents.md](docs/agents.md) for the decision matrix and [references/orchestration-patterns.md](references/orchestration-patterns.md) for the full pattern catalog.
 

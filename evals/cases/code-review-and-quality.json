@@ -40,6 +40,19 @@
         "Security of user input is explicitly considered for the new endpoint",
         "The review leads with high-leverage findings rather than nits"
       ]
+    },
+    {
+      "id": 2,
+      "kind": "dialogue",
+      "prompt": "A PR review at commit A reports one Critical auth bypass, one Required missing regression test, and two Optional cleanup ideas. Describe the remediation loop and the evidence needed to approve the final commit C after fixes land.",
+      "expected_output": "A severity-correct review remediation workflow that blocks on Critical and Required findings, fixes behavior test-first, reverifies and rereviews the final revision, and preserves non-blocking advice",
+      "expectations": [
+        "Critical and Required findings block approval while Optional findings do not",
+        "Behavior-changing fixes use RED-GREEN-REFACTOR",
+        "The affected checks and assembled feature are reverified after fixes",
+        "The final review examines commit C and does not reuse commit A approval as current evidence",
+        "The final report accounts for every original finding using the shared Critical, Required, Optional, Nit, and FYI taxonomy"
+      ]
     }
   ]
 }

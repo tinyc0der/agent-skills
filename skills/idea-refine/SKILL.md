@@ -7,6 +7,8 @@ description: Refines raw ideas into sharp, actionable concepts through structure
 
 Refines raw ideas into sharp, actionable concepts worth building through structured divergent and convergent thinking.
 
+**Workflow notes:** For an active track, read `docs/tracks/<track-id>/notes.md` at phase entry or resume and update it when useful context changes or before handoff. Capture observations, tentative ideas, outcomes, blockers, and next actions with evidence links. Follow the memory-management running-note and document-metadata protocols; honor explicit read-only or file-scope limits and keep writes outside pinned verification or release targets.
+
 ## How It Works
 
 1.  **Understand & Expand (Divergent):** Restate the idea, ask sharpening questions, and generate variations.
@@ -35,6 +37,8 @@ The final output is a markdown one-pager saved to `docs/ideas/[idea-name].md` (a
 - Key Assumptions
 - MVP Scope
 - Not Doing list
+
+For an authorized saved one-pager, prefix the body with YAML containing `type: Idea Brief`, a descriptive `title`, and a one-sentence `description`, following the memory-management document-metadata profile. Keep assumptions and approval state explicit; metadata does not turn an idea into an accepted capability spec. The dialogue and unsaved one-pager need no header.
 
 ## Detailed Instructions
 

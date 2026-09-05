@@ -292,9 +292,9 @@ function useToggleTask() {
 }
 ```
 
-## See Also
+## Optional Whole-Pack Reference
 
-For detailed accessibility requirements and testing tools, see `../../references/accessibility-checklist.md`.
+The required accessibility baseline is embedded in this skill's process and verification. Whole-pack installs can load the supplemental checklist at `../../references/accessibility-checklist.md`.
 
 ## Common Rationalizations
 

@@ -2,7 +2,7 @@
 
 How to roll out agent-skills depends heavily on where your codebase is in its life. A greenfield project can adopt the full lifecycle from commit one. A codebase with years of history needs an incremental path that respects what already exists, its conventions, its undocumented decisions, and its lack of test coverage in places you'd rather not touch blind.
 
-This guide covers both paths. For installation mechanics, see [getting-started.md](getting-started.md) and the per-tool setup guides. For what each skill does, see the [skill catalog in the README](../README.md#all-24-skills).
+This guide covers both paths. For installation mechanics, see [getting-started.md](getting-started.md) and the per-tool setup guides. For what each skill does, see the [skill catalog in the README](../README.md#all-26-skills).
 
 ---
 
@@ -36,18 +36,22 @@ A new project is the best-case scenario: there's no legacy behavior to preserve,
 Run the lifecycle in order for the project's first real feature:
 
 ```
-/spec   →  SPEC.md            (spec-driven-development)
-/plan   →  tasks/plan.md      (planning-and-task-breakdown)
-/build  →  one slice at a time (incremental-implementation + test-driven-development)
+/spec   →  docs/tracks/<track-id>/spec.md  (spec-driven-development)
+/plan   →  docs/tracks/<track-id>/plan.md  (planning-and-task-breakdown)
+/pr draft → early collaboration artifact (git-workflow-and-versioning)
+/build  →  one slice at a time (incremental-implementation + test-case-design-review when needed + test-driven-development)
+/verify →  assembled feature evidence (verification-and-validation)
+/pr ready → verification-matched review handoff
 /review →  before every merge  (code-review-and-quality)
 /ship   →  when going live     (shipping-and-launch)
 ```
 
-`/build auto` is a good fit for greenfield: you approve the plan once and every task still runs test-driven and commits individually. The spec and plan artifacts (`SPEC.md`, `tasks/`) are living documents, keep them in version control while the work is in flight.
+`/build auto` is a good fit for greenfield: you approve the plan once, behavioral tasks apply the minimum-sufficient test gate and RED-GREEN-REFACTOR, non-behavioral tasks use proportionate executable checks, and every task commits individually. Numbered `docs/tracks/<track-id>/` directories use repository-wide `NNN-name` ids and retain change requirements and evidence. Before review, reconcile verified requirements into `docs/specs/<capability>/spec.md` in the same PR, or record a justified no-change disposition. Keep completed tracks as history after merge.
 
 ### From the start, treat these as always-on
 
-- **test-driven-development**, coverage debt is cheapest to avoid at zero.
+- **test-case-design-review**, select only distinct, material regression cases before a suite accumulates redundant coverage.
+- **test-driven-development**, execute selected behavior cases through RED-GREEN-REFACTOR so coverage debt is cheapest to avoid at zero.
 - **git-workflow-and-versioning**, atomic commits and ~100-line changes are habits, not retrofits.
 - **security-and-hardening**, auth, input validation, and secrets handling are structural; bolting them on later is a migration project.
 - **documentation-and-adrs**, the first architectural decisions are exactly the ones nobody will remember the _why_ of in two years. An ADR now prevents the brownfield archaeology described in Path B.
@@ -65,7 +69,7 @@ Run the lifecycle in order for the project's first real feature:
 ### Greenfield anti-patterns
 
 - **Skipping `/spec` because "it's just a prototype."** Prototypes become products. The spec is the cheapest artifact you'll ever write for this codebase.
-- **Loading all 24 skills into every session.** It wastes context and dilutes the ones that matter. Load by phase; let `using-agent-skills` route.
+- **Loading all 26 skills into every session.** It wastes context and dilutes the ones that matter. Load by phase; let `using-agent-skills` route.
 - **Deferring observability until "there's something to observe."** Instrument as you build, retrofitting structured logging is a Path B problem you're choosing to create.
 
 ---
@@ -87,7 +91,8 @@ Goal: the agent understands the codebase before it modifies anything.
 
 Goal: every area the agent will touch gets a safety net first.
 
-- **`test-driven-development`, applied selectively.** Don't aim for global coverage; aim for coverage _where change is planned_. For untested legacy behavior, write characterization tests, tests that pin down what the code currently does, right or wrong, before any modification. The Beyonce Rule applies: if the agent liked a behavior enough to depend on it, it should have put a test on it.
+- **`test-case-design-review` before changing a legacy suite.** Map planned changes to existing tests, add only material gaps, and identify merge, rewrite, or removal candidates. For untested legacy behavior, add a characterization test only when the touched behavior lacks a cheaper regression guard.
+- **`test-driven-development` for behavior changes.** Execute the admitted regression cases through RED-GREEN-REFACTOR; do not use TDD sequencing as a reason to invent another case.
 - **`code-simplification` on the worst hotspots.** Chesterton's Fence is the operative principle: the skill forces the agent to understand _why_ code exists before removing it. Behavior-preserving simplification plus characterization tests is the lowest-risk way to make legacy code changeable.
 - **`git-workflow-and-versioning` everywhere.** Small atomic commits matter _more_ in brownfield: when a change to old code breaks something subtle, a ~100-line commit is bisectable; a 2,000-line "modernization" commit is not.
 
@@ -95,7 +100,7 @@ Goal: every area the agent will touch gets a safety net first.
 
 Goal: two-speed adoption, legacy code stays under the Phase 1–2 regime; **new features get the greenfield treatment**.
 
-- New feature in the old codebase? `/spec → /plan → /build → /review`. The spec's boundaries section is where you declare what legacy surface the feature may and may not touch.
+- New feature in the old codebase? `/spec → /plan → /pr draft → /build → /verify → /pr ready → /review`. The spec's boundaries section is where you declare what legacy surface the feature may and may not touch.
 - **`api-and-interface-design` at the seams.** When new code must talk to old code, design the boundary contract-first. Hyrum's Law is not theoretical in a years-old codebase, someone depends on every observable behavior, including the bugs.
 - **`security-and-hardening` as an audit, then a gate.** Run it once across the existing attack surface (auth, input handling, dependencies, the dependency audit alone usually pays for the exercise), file what you find, then enforce it on new changes.
 
@@ -108,7 +113,7 @@ Goal: two-speed adoption, legacy code stays under the Phase 1–2 regime; **new 
 ### Brownfield anti-patterns
 
 - **"Big bang" adoption.** Loading the full lifecycle onto a legacy codebase on day one produces specs for code that already exists and refactors without safety nets. Sequence it.
-- **Letting the agent refactor untested code.** No characterization tests, no refactor. This is the single most expensive shortcut in brownfield adoption.
+- **Letting the agent refactor behavior with no regression guard.** Reuse adequate public-behavior tests when they exist; otherwise add the smallest characterization coverage for the material behavior being touched.
 - **Skipping `context-engineering` because "the code is the documentation."** The agent will infer conventions from the worst file it happens to read. Tell it the real ones.
 - **Treating the legacy system's behavior as wrong by default.** Chesterton's Fence: the weird retry loop may be load-bearing. Understand, then change.
 - **Ratcheting nothing.** Adoption should make quality monotonically better: each phase adds a gate that doesn't come back off. If a month in you can't name what's now enforced that wasn't before, the rollout has stalled.
@@ -117,13 +122,13 @@ Goal: two-speed adoption, legacy code stays under the Phase 1–2 regime; **new 
 
 ## The two paths converge
 
-Both end in the same steady state: `/spec → /plan → /build → /review → /ship` for new work, always-on TDD and git discipline, review gates before merge, and skills loaded by phase rather than in bulk. Greenfield gets there in days; brownfield gets there in a quarter, and the difference is exactly the safety nets (context, characterization tests, boundaries) that the old codebase never had.
+Both end in the same steady state: `/spec → /plan → /pr draft → /build → /verify → /pr ready → /review → merge → /ship` for new work, risk-based TDD and always-on git discipline, review gates before merge, and skills loaded by phase rather than in bulk. Greenfield gets there in days; brownfield gets there in a quarter, and the difference is exactly the safety nets (context, characterization tests, boundaries) that the old codebase never had.
 
 |                        | Greenfield                     | Brownfield                               |
 | ---------------------- | ------------------------------ | ---------------------------------------- |
 | First skill loaded     | `using-agent-skills` + `/spec` | `context-engineering`                    |
 | First value delivered  | Spec'd, tested first feature   | Zero-risk reviews and safer bug fixes    |
 | TDD posture            | Universal from commit one      | Selective: tests where change is planned |
-| Refactoring rule       | Rare (little to refactor)      | Characterization tests first, always     |
+| Refactoring rule       | Rare (little to refactor)      | Reuse coverage; characterize material gaps |
 | Riskiest anti-pattern  | Skipping the spec              | Refactoring untested code                |
 | Time to full lifecycle | Day one                        | ~One quarter, two-speed in between       |

@@ -4,7 +4,9 @@ description: Break work into small verifiable tasks with acceptance criteria and
 
 Invoke the agent-skills:planning-and-task-breakdown skill.
 
-Read the existing spec (SPEC.md or equivalent) and the relevant codebase sections. Then:
+**Workflow notes:** For an active track, read `docs/tracks/<track-id>/notes.md` at phase entry or resume and update it when useful context changes or before handoff. Capture observations, tentative ideas, outcomes, blockers, and next actions with evidence links. Follow the memory-management running-note and document-metadata protocols; honor explicit read-only or file-scope limits and keep writes outside pinned verification or release targets.
+
+Resolve the active numbered track using context-engineering. Read the approved requirements from `docs/tracks/<track-id>/spec.md` or `docs/tracks/<track-id>/bug.md`, the linked `docs/specs/<capability>/spec.md` files, and relevant code. For multi-capability work, use `docs/tracks/<track-id>/capability-map.md` to select the relevant sections of the track spec. Then:
 
 1. Enter plan mode — read only, no code changes
 2. Identify the dependency graph between components
@@ -13,4 +15,6 @@ Read the existing spec (SPEC.md or equivalent) and the relevant codebase section
 5. Add checkpoints between phases
 6. Present the plan for human review
 
-Save the plan to tasks/plan.md and task list to tasks/todo.md.
+Save the plan to `docs/tracks/<track-id>/plan.md` and the durable task ledger to `docs/tracks/<track-id>/todo.md`. When an external tracker is designated, keep `docs/tracks/<track-id>/todo.md` as an ordered index of tracker items and lifecycle checkpoints rather than duplicating their bodies. Record the selected tracker, if any, in the plan.
+
+For production-affecting work, initialize `docs/tracks/<track-id>/ship.md` with rollout prerequisites, migrations, feature flags, success thresholds, monitoring, rollback triggers and steps, and owners.

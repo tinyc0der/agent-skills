@@ -9,6 +9,8 @@ description: Optimizes agent context setup. Use when starting a new session, whe
 
 Feed agents the right information at the right time. Context is the single biggest lever for agent output quality — too little and the agent hallucinates, too much and it loses focus. Context engineering is the practice of deliberately curating what the agent sees, when it sees it, and how it's structured.
 
+**Workflow notes:** For an active track, read `docs/tracks/<track-id>/notes.md` at phase entry or resume and update it when useful context changes or before handoff. Capture observations, tentative ideas, outcomes, blockers, and next actions with evidence links. Follow the memory-management running-note and document-metadata protocols; honor explicit read-only or file-scope limits and keep writes outside pinned verification or release targets.
+
 ## When to Use
 
 - Starting a new coding session
@@ -84,6 +86,40 @@ Load the relevant spec section when starting a feature. Don't load the entire sp
 **Effective:** "Here's the authentication section of our spec: [auth spec content]"
 
 **Wasteful:** "Here's our entire 5000-word spec: [full spec]" (when only working on auth)
+
+#### Durable workflow artifacts
+
+Keep accepted capability contracts separate from individual changes:
+
+```text
+docs/specs/<capability>/
+└── spec.md                  # Current accepted capability contract
+
+docs/tracks/<track-id>/
+├── spec.md                  # Proposed requirements and affected capability links
+├── bug.md                   # Defect, reproduction, expected behavior, fix criteria
+├── capability-map.md        # Capability links, spec sections, dependencies, when needed
+├── plan.md                  # Approved implementation plan
+├── todo.md                  # Task ledger or external-tracker index
+├── verification.md          # Revision-scoped verification evidence
+├── review.md                # Revision-scoped review findings and disposition
+├── notes.md                 # Running context and ideas throughout the workflow
+└── ship.md                  # Feature launch dossier and release inclusion record
+```
+
+Capability ids are stable kebab-case names, independent of branches. One track may change several capabilities; each capability keeps one canonical spec across all tracks. Read the linked capability specs before the active track's proposed changes. New capabilities identify their intended canonical paths without claiming those files already exist.
+
+Create only the track files needed for the work. Features use a track spec; bugs can use a bug report without a separate spec or plan. Both record affected capabilities, status, acceptance criteria, and a Spec reconciliation section. Multi-capability proposals use sections in the same track spec, selected through the optional map; do not create a second canonical spec for an existing capability.
+
+Create a non-default branch before producing track artifacts. Track ids use `NNN-<name>`, such as `001-user-auth`. Allocate the next unused three-digit number above the highest existing prefix in repository `docs/tracks/`, starting at `001`. Numbers are repository-wide, not per capability; preserve ids and gaps, never overwrite or renumber historical tracks, and resolve concurrent allocation collisions before merge.
+
+Prefer an explicit existing track path provided by the user, task, or PR. Otherwise, a branch name can identify an existing numbered track or supply the descriptive suffix for a new track. For a new suffix, drop a leading workflow or owner namespace such as `feature/`, `fix/`, `hotfix/`, `chore/`, `task/`, `migrate/`, `perf/`, `improve/`, `spike/`, `claude/`, `codex/`, or `origin/`; lowercase the remainder; replace each run of non-alphanumeric characters, including `/`, with `-`; then trim leading and trailing `-`. For example, the first track for `feature/user-auth` is `docs/tracks/001-user-auth/`. Keep an existing track id stable after branch renames or deletion. If the active track is unresolved, do not guess from the only historical folder: confirm the active track or create the new track authorized by the current request.
+
+**Spec reconciliation:** Before review, fold implemented, verified requirement changes into `docs/specs/<capability>/spec.md` in the same PR as the implementation. Record each affected capability and its disposition in the track spec or bug report; a bug that restores an already-correct contract records why no canonical edit is needed. Deferred and canceled requirements remain in the track. Reconcile against the latest accepted specs when concurrent tracks touch the same capability. Mark the track complete after merge, retaining its history; task checkboxes alone do not complete the track.
+
+Track artifacts remain in version control after merge. Evidence files name the exact revision they evaluated. A later commit that only persists workflow evidence does not silently widen that evidence scope: downstream consumers must verify that any intervening diff contains only evidence or administrative updates within the same track and does not change requirements, scope, acceptance criteria, or canonical specs. Production-affecting and contract changes always invalidate the affected evidence.
+
+`ship.md` is the feature-level launch dossier consumed by release-wide `/ship` discovery; the authoritative final deployment record remains in the configured release or deployment system so recording it cannot mutate the pinned release target. Persist repository-relative links only—never local absolute paths or `file://` URLs.
 
 ### Level 3: Relevant Source Files
 

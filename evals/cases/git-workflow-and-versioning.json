@@ -13,6 +13,10 @@
       {
         "prompt": "How should we tag and version this release?",
         "top_k": 3
+      },
+      {
+        "prompt": "Push this feature branch and open a draft pull request, then mark it ready once verification matches the head commit",
+        "top_k": 1
       }
     ],
     "negative": [
@@ -37,6 +41,20 @@
         "Refactor, fix, and feature land as separate commits",
         "Commit messages are imperative and standalone",
         "Each commit leaves the tree in a working state"
+      ]
+    },
+    {
+      "id": 2,
+      "kind": "dialogue",
+      "prompt": "The spec and plan are approved and the user explicitly authorizes remote PR changes. Explain `/pr draft` now, then evaluate `/pr ready` after two more commits when the only verification report names the older commit. Include the PR body, state transitions, and readiness verdict.",
+      "expected_output": "An authorized draft-PR transition with a cold-readable body, followed by refusal to mark the newer head ready until revision-matched verification exists",
+      "expectations": [
+        "The draft PR is created only because the user explicitly authorized the remote mutation",
+        "The draft body includes the spec and plan, scope and non-goals, risks, acceptance criteria, verification status, migrations, flags, screenshots when applicable, and rollback notes",
+        "The PR may be updated as commits and evidence arrive without implying readiness",
+        "/pr ready is refused because the verification report does not name the current head revision",
+        "Readiness uses the pre-review Definition of Done profile and preserves required CI, final review, and human approval for the later merge gate",
+        "Existing PR state is handled explicitly: create when absent, update a draft, convert a ready PR back to draft, and stop on closed or merged PRs without creating a duplicate"
       ]
     }
   ]

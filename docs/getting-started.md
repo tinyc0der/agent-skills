@@ -59,8 +59,9 @@ For comprehensive coverage, load skills by phase:
 
 ```
 Starting a project:  spec-driven-development → planning-and-task-breakdown
-During development:  incremental-implementation + test-driven-development
-Before merge:        code-review-and-quality + security-and-hardening
+During development:  incremental-implementation + test-case-design-review when needed + test-driven-development
+After implementation: verification-and-validation
+Before merge:        code-review-and-quality; security-and-hardening when triggered
 Before deploy:       shipping-and-launch
 ```
 
@@ -69,6 +70,7 @@ Before deploy:       shipping-and-launch
 Don't load all skills at once — it wastes context. Load skills relevant to the current task:
 
 - Working on UI? Load `frontend-ui-engineering`
+- Designing, pruning, or reviewing tests? Load `test-case-design-review`
 - Debugging? Load `debugging-and-error-recovery`
 - Setting up CI? Load `ci-cd-and-automation`
 
@@ -110,9 +112,11 @@ The `.claude/commands/` directory contains slash commands for Claude Code:
 |---------|---------------|
 | `/spec` | spec-driven-development |
 | `/plan` | planning-and-task-breakdown |
+| `/pr draft`, `/pr ready` | git-workflow-and-versioning |
 | `/build` | incremental-implementation + test-driven-development |
 | `/build auto` | planning-and-task-breakdown → incremental-implementation + test-driven-development (whole plan, one approval) |
-| `/test` | test-driven-development |
+| `/verify` | verification-and-validation |
+| `/test` | test-case-design-review + test-driven-development |
 | `/review` | code-review-and-quality |
 | `/code-simplify` | code-simplification |
 | `/ship` | shipping-and-launch |
@@ -141,25 +145,24 @@ The `references/` directory contains supplementary checklists:
 Load a reference when you need detailed patterns beyond what the skill covers.
 
 If you install one skill with `npx skills add ... --skill <name>`, only the
-selected `skills/<name>/` directory is copied. The skill still works, but paths
-to supplementary checklists in the repo-level `references/` directory are
-unavailable. Use a whole-repo integration, clone the repository, or copy the
-needed checklist into a `references/` directory inside the installed skill.
-This portability gap is tracked in
-[addyosmani/agent-skills#361](https://github.com/addyosmani/agent-skills/issues/361).
+selected `skills/<name>/` directory is copied. Every skill embeds the required
+workflow and exit criteria in `SKILL.md`, so these installs remain operational
+without repo-level files. Links to shared `references/` are explicitly optional
+expanded guidance for whole-pack installs. Copy one into the installed skill
+only when you want that additional detail.
 
-## Spec and task artifacts
+## Capability specs and change tracks
 
-The `/spec` and `/plan` commands create working artifacts (`SPEC.md`, `tasks/plan.md`, `tasks/todo.md`). Treat them as **living documents** while the work is in progress:
+Canonical requirements live at `docs/specs/<capability>/spec.md`. Each change uses a numbered `docs/tracks/<track-id>/` directory (such as `001-user-auth`) with `spec.md` or `bug.md` and only the needed plan, task, verification, review, memory, and launch files. Before review, reconcile verified requirements into the owning capability specs in the same PR, or record why no canonical edit is needed. Complete the track after merge and retain its history. Treat active track artifacts as **living documents**:
 
 - Keep them in version control during development so the human and the agent have a shared source of truth.
 - Update them when scope or decisions change.
-- If your repo doesn’t want these files long‑term, delete them before merge or add the folder to `.gitignore` — the workflow doesn’t require them to be permanent.
+- Retain shipped change tracks after merge so later sessions can trace intent, evidence, review, and release inclusion without reconstructing them from conversation history.
 
 ## Tips
 
 1. **Start with spec-driven-development** for any non-trivial work
-2. **Always load test-driven-development** when writing code
-3. **Don't skip verification steps** — they're the whole point
+2. **Load test-case-design-review** when selecting, pruning, or reviewing cases; then load **test-driven-development** when implementing changed behavior through RED-GREEN-REFACTOR
+3. **Run verification-and-validation** on the assembled feature before review
 4. **Load skills selectively** — more context isn't always better
 5. **Use the agents for review** — different perspectives catch different issues

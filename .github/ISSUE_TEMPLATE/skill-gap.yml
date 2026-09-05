@@ -37,6 +37,7 @@ body:
         - shipping-and-launch
         - source-driven-development
         - spec-driven-development
+        - test-case-design-review
         - test-driven-development
         - using-agent-skills
         - other / not sure

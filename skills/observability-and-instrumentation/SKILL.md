@@ -9,6 +9,8 @@ description: Instruments code so production behavior is visible and diagnosable.
 
 Code you can't observe is code you can't operate. Observability is the ability to answer "what is the system doing and why?" from the outside, using the telemetry the code emits. Instrumentation is not a post-launch add-on — it's written alongside the feature, the same way tests are. If a feature ships without telemetry, the first user-reported bug becomes archaeology instead of a query.
 
+**Workflow notes:** For an active track, read `docs/tracks/<track-id>/notes.md` at phase entry or resume and update it when useful context changes or before handoff. Capture observations, tentative ideas, outcomes, blockers, and next actions with evidence links. Follow the memory-management running-note and document-metadata protocols; honor explicit read-only or file-scope limits and keep writes outside pinned verification or release targets.
+
 ## When to Use
 
 - Building any feature that will run in production
@@ -154,6 +156,8 @@ Rules for every alert you create:
 3. **It has a threshold and duration** justified by the SLO or by historical data, not by a guess.
 4. Use two severities only: **page** (user-facing, act now) and **ticket** (degradation, act this week). A third tier becomes noise that trains people to ignore everything.
 
+When authoring the linked runbook, discover its established home and format through documentation-and-adrs. A runbook in an OKF bundle uses `type: Playbook`, `title`, and `description` plus its collection index; an external runbook retains its owning convention. Preserve real operational evidence and link the deployed procedure without creating a second canonical copy.
+
 ### 7. Verify the telemetry itself
 
 Instrumentation is code; it can be wrong. Before calling the work done, trigger the paths and look at the actual output:
@@ -200,4 +204,4 @@ After instrumenting a feature, confirm:
 - [ ] Every new alert is symptom-based, has a runbook link, and was test-fired once
 - [ ] An induced failure in staging was located via telemetry alone, without reading the source
 
-For the at-a-glance version of this list, including the pre-launch instrumentation gate, see `../../references/observability-checklist.md`.
+The required instrumentation gates are embedded above. Optional whole-pack at-a-glance checklist: `../../references/observability-checklist.md`.

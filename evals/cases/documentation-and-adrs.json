@@ -32,12 +32,27 @@
       "prompt": "Record the decision to adopt event sourcing for the orders service as an ADR.",
       "expected_output": "An ADR capturing context, decision, alternatives considered, and consequences",
       "files": [
-        "documentation-and-adrs"
+        "documentation-and-adrs/decision-context.md"
       ],
       "expectations": [
         "The ADR states context, decision, alternatives, and consequences distinctly",
         "Trade-offs and rejected options are recorded, not just the winning choice",
         "The document is written in timeless language describing current state"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "mixed-document-formats",
+      "kind": "execution",
+      "prompt": "Use documentation-and-adrs/mixed-documents/ as the project scope. We approved adopting event sourcing for orders so support can replay order state; accept projection lag and rebuild operations as trade-offs. Record that decision as the next ADR using our existing convention and .adr-dir configuration. Also add our shared workflow header (type, title, description) to docs/tracks/002-projection-rebuild/plan.md, preserving its body and in-progress state. Only create the new ADR and update that plan. Preserve the existing ADR unchanged, do not migrate the ADR collection or create a knowledge bundle, and do not invent decision dates, authorship, or verification events.",
+      "expected_output": "The next native-format ADR is docs/adr/0002-event-sourcing.md (or an equivalent descriptive suffix), following the existing numbered filename and body headings without introducing frontmatter or another ADR home. The plan has an Implementation Plan header with descriptive title and description. Existing ADR content and the plan body remain unchanged, with no extra files or fabricated evidence.",
+      "files": [
+        "documentation-and-adrs/mixed-documents"
+      ],
+      "expectations": [
+        "Inspects .adr-dir and the existing ADR, then creates the next 0002-*.md record in docs/adr with the existing native Markdown section convention, including a body Status for the approved decision. Does not impose OKF frontmatter, create docs/decisions or a bundle copy, or alter the existing ADR.",
+        "Adds parseable YAML frontmatter to the authorized plan with type: Implementation Plan and non-empty string title and description, preserving its Markdown body and in-progress state. Does not treat document maturity as implementation completion or infer generated/verified events.",
+        "The new ADR records the supplied replay rationale, decision, and projection-lag/rebuild trade-offs without inventing decision dates, authors, review, or historical evidence. Creates or edits only the new ADR and named plan; no notes, rules files, capability specs, or other artifacts."
       ]
     }
   ]

@@ -9,6 +9,8 @@ description: Records decisions and documentation. Use when making architectural 
 
 Document decisions, not just code. The most valuable documentation captures the *why* — the context, constraints, and trade-offs that led to a decision. Code shows *what* was built; documentation explains *why it was built this way* and *what alternatives were considered*. This context is essential for future humans and agents working in the codebase.
 
+**Workflow notes:** For an active track, read `docs/tracks/<track-id>/notes.md` at phase entry or resume and update it when useful context changes or before handoff. Capture observations, tentative ideas, outcomes, blockers, and next actions with evidence links. Follow the memory-management running-note and document-metadata protocols; honor explicit read-only or file-scope limits and keep writes outside pinned verification or release targets.
+
 ## When to Use
 
 - Making a significant architectural decision
@@ -17,8 +19,19 @@ Document decisions, not just code. The most valuable documentation captures the 
 - Shipping a feature that changes user-facing behavior
 - Onboarding new team members (or agents) to the project
 - When you find yourself explaining the same thing repeatedly
+- Authoring or updating capability specs, track documents, saved briefs, or review reports
 
 **When NOT to use:** Don't document obvious code. Don't add comments that restate what the code already says. Don't write docs for throwaway prototypes.
+
+## Document Authoring Workflow
+
+1. **Resolve ownership before writing.** Accepted requirements belong in `docs/specs/<capability>/spec.md`; proposals, bugs, plans, tasks, notes, and revision-scoped evidence belong in the active `docs/tracks/<track-id>/`. Saved discovery briefs retain their established home. Use the artifact's owning skill for requirements and acceptance criteria; link existing sources instead of duplicating them.
+2. **Choose the format for that owner.** Capability specs, track documents, and saved workflow briefs or standalone reports use the memory-management document-metadata profile: one YAML header with non-empty string `type`, `title`, and `description`, followed by the existing Markdown sections. Use its descriptive artifact types, such as `Capability Specification`, `Change Specification`, `Bug Report`, `Implementation Plan`, `Task List`, `Working Notes`, `Review`, or `Verification Report`.
+3. **Keep lifecycle meanings distinct.** OKF `status` is document maturity (`draft`, `stable`, `deprecated`); new unreviewed documents start as `draft`. Workflow progress may use `workflow_status`. ADR decision status, approval evidence, task checkboxes, review verdicts, and evaluated revisions retain their separate meanings. A stable document does not prove that its proposed work is complete or approved.
+4. **Preserve evidence while editing.** Add optional `sources`, `generated`, or `verified` only from actual evidence, following memory-management's OKF rules. Preserve unknown fields and historical revision claims; a header migration preserves the body and does not reverify it. Read older headerless documents permissively and honor explicit file-scope, read-only, and pinned-target limits.
+5. **Verify the authored result.** Parse the header, check required string fields and local source links, and review the diff against the requested scope. Reconcile verified requirement changes through the capability-spec workflow; do not promote a track proposal merely because it now has metadata.
+
+Knowledge concepts inside an OKF bundle follow its concept and index rules: ADRs use `Architecture Decision`, runbooks use `Playbook`, and reserved indexes/logs keep their special formats. Established ADR and runbook homes retain their existing format unless a migration is authorized. READMEs, changelogs, general guides, API schemas, rules files, skill/command configuration, and raw evidence retain their native formats. Inline report sections and task entries inherit the containing document's metadata; do not insert extra frontmatter blocks into them.
 
 ## Architecture Decision Records (ADRs)
 
@@ -41,6 +54,8 @@ Before creating an ADR, inspect the available repository context for an establis
 - **Numbering and naming** — continue the existing sequence and filename pattern (`ADR-004-Title.rst`, `0004-title.md`, …); don't restart at 001 or introduce a second scheme.
 - **Section headings** — reuse the project's heading set rather than imposing this template's.
 
+An established OKF decision collection is also a convention: use its existing bundle location, numbering, `type: Architecture Decision`, and discovery index. When an ADR home is outside the bundle, preserve that home and link to it rather than creating a competing copy in the bundle.
+
 If the available evidence conflicts, surface the conflict rather than silently introducing another scheme. Only when no convention can be established do you apply the default below.
 
 ### ADR Template
@@ -50,11 +65,11 @@ Store ADRs in `docs/decisions/` with sequential numbering (unless the project al
 ```markdown
 # ADR-001: Use PostgreSQL for primary database
 
-## Status
-Accepted | Superseded by ADR-XXX | Deprecated
+## Decision Status
+Proposed | Accepted | Superseded by ADR-XXX | Deprecated
 
 ## Date
-2025-01-15
+[Actual decision date, if known]
 
 ## Context
 We need a primary database for the task management application. Key requirements:
@@ -89,6 +104,19 @@ Use PostgreSQL with Prisma ORM.
 - Team needs PostgreSQL knowledge (standard skill, low risk)
 - Hosting on managed service (Supabase, Neon, or RDS)
 ```
+
+For an ADR authored inside an OKF bundle, prefix the body with the bundle's document header and update its collection index:
+
+```yaml
+---
+type: Architecture Decision
+title: Use PostgreSQL for the primary database
+description: Record the constraints and trade-offs behind the datastore choice.
+status: draft
+---
+```
+
+The body records whether the decision was proposed or accepted and the evidence for that state. Add provenance only when known; the example date and decision content must be replaced with the actual facts. An established external ADR format remains authoritative for documents in that home.
 
 ### ADR Lifecycle
 
@@ -252,7 +280,8 @@ For shipped features:
 Special consideration for AI agent context:
 
 - **CLAUDE.md / rules files** — Document project conventions so agents follow them
-- **Spec files** — Keep specs updated so agents build the right thing
+- **Capability specs** — Keep accepted requirements in their canonical specs, with track proposals and reconciliation recorded separately
+- **Workflow documents** — Keep descriptive metadata current and distinguish document maturity from task progress, approval, and evidence
 - **ADRs** — Help agents understand why past decisions were made (prevents re-deciding)
 - **Inline gotchas** — Prevent agents from falling into known traps
 
@@ -275,11 +304,18 @@ Special consideration for AI agent context:
 - TODO comments that have been there for weeks
 - No ADRs in a project with significant architectural choices
 - Documentation that restates the code instead of explaining intent
+- A document header that converts a workflow or decision status into OKF maturity
+- A header migration that rewrites historical evidence or invents authorship or verification
+- An existing ADR/runbook home displaced by an unnecessary second convention
 
 ## Verification
 
 After documenting:
 
+- [ ] Authored workflow documents have valid YAML with the appropriate type and non-empty title and description
+- [ ] Document maturity, workflow progress, decision status, and report verdicts remain distinct
+- [ ] Metadata and source links reflect actual evidence; unknown fields and historical bodies/revisions are preserved during header adoption
+- [ ] Existing ADR/runbook conventions and reserved OKF index/log formats remain intact
 - [ ] ADRs exist for all significant architectural decisions
 - [ ] README covers quick start, commands, and architecture overview
 - [ ] API functions have parameter and return type documentation

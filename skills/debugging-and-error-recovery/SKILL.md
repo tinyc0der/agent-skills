@@ -9,6 +9,8 @@ description: Guides systematic root-cause debugging. Use when tests fail, builds
 
 Systematic debugging with structured triage. When something breaks, stop adding features, preserve evidence, and follow a structured process to find and fix the root cause. Guessing wastes time. The triage checklist works for test failures, build errors, runtime bugs, and production incidents.
 
+**Workflow notes:** For an active track, read `docs/tracks/<track-id>/notes.md` at phase entry or resume and update it when useful context changes or before handoff. Capture observations, tentative ideas, outcomes, blockers, and next actions with evidence links. Follow the memory-management running-note and document-metadata protocols; honor explicit read-only or file-scope limits and keep writes outside pinned verification or release targets.
+
 ## When to Use
 
 - Tests fail after a code change
@@ -36,6 +38,10 @@ When anything unexpected happens:
 ## The Triage Checklist
 
 Work through these steps in order. Do not skip steps.
+
+For a tracked defect, resolve the active numbered change track through `context-engineering` and keep the report at `docs/tracks/<track-id>/bug.md`. Start with YAML frontmatter containing `type: Bug Report`, `title`, and `description`; keep bug progress separate from document maturity. New track ids use a repository-wide three-digit prefix and kebab-case name, such as `001-import-crash`. Record workflow status, affected capability links, expected and actual behavior, reproduction evidence, and fix acceptance criteria. A bounded bug does not require a separate feature spec or plan; a failed check inside an existing track stays in that track.
+
+**Spec reconciliation:** Read the owning `docs/specs/<capability>/spec.md`. When the fix restores an already-correct contract, record a justified no-change disposition in the bug report. If approved requirements change, update the capability spec with the verified implementation in the same PR before review. Keep unverified hypotheses and deferred fixes in the track, and mark it complete only after review and merge.
 
 ### Step 1: Reproduce
 

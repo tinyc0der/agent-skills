@@ -38,6 +38,32 @@
         "The rationale references the routing logic rather than guessing",
         "Core operating behaviors (assumptions surfaced) are respected"
       ]
+    },
+    {
+      "id": 2,
+      "kind": "dialogue",
+      "prompt": "Route a new production feature from a vague request through specification, planning, implementation, pull-request review, merge, and release. State the ordered lifecycle, the skill owner at each phase, when the PR is created and marked ready, and the artifact or evidence that permits each transition.",
+      "expected_output": "One coherent feature lifecycle from discovery through release with explicit owners, artifacts, revision-scoped gates, and cross-cutting disciplines",
+      "expectations": [
+        "The happy path is ordered as discovery/definition, specification, planning, draft PR, incremental TDD build, feature verification, ready PR, merge review, merge, and production shipping",
+        "The route distinguishes /test as the focused TDD entry point from /verify as assembled-feature validation",
+        "The draft PR is created after approved spec and plan artifacts, while ready-for-review requires verification evidence for the current revision",
+        "The response names the branch-scoped docs/tracks/<track-id>/ bundle, using NNN-name ids and including spec.md or bug.md, plan.md, todo.md, PR context, verification.md, review.md, and ship.md release/rollback evidence; canonical specs remain capability-based and are reconciled before review",
+        "Git, CI, security, documentation, and observability are treated as cross-cutting disciplines rather than late cleanup"
+      ]
+    },
+    {
+      "id": 3,
+      "kind": "dialogue",
+      "prompt": "The assembled feature fails an acceptance-criterion check during /verify. Explain the exact workflow from that failure until the PR can become ready, without treating debugging as the normal verification phase or quietly changing scope.",
+      "expected_output": "A failure-path route that records evidence, enters systematic debugging, applies a test-first fix, and returns to full verification on the new revision before PR readiness",
+      "expectations": [
+        "The failed verification result is preserved as evidence and the readiness verdict remains FAIL or INCOMPLETE",
+        "The route enters debugging-and-error-recovery only because a check failed",
+        "A behavioral fix uses RED-GREEN-REFACTOR and updates the plan/spec only if scope or acceptance criteria genuinely changed",
+        "Focused checks are followed by /verify again on the new revision",
+        "/pr ready remains blocked until current-revision verification evidence is complete"
+      ]
     }
   ]
 }

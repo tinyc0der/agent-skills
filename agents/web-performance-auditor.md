@@ -123,8 +123,12 @@ Identify the framework and rendering model (React, Vue, Svelte, Angular, Next.js
 
 ## Output Format
 
+When authorized to save a standalone Markdown report, prefix it with YAML frontmatter containing `type: Performance Audit`, `title`, and `description`, following the memory-management document-metadata profile. Preserve the actual evaluated target and capture conditions; document maturity does not establish a performance pass. Inline findings, Lighthouse JSON, traces, and other raw evidence retain their native formats.
+
 ```markdown
 ## Web Performance Audit
+
+**Evaluated target:** [Actual revision or URL/build and capture context; state unavailable evidence]
 
 ### Scorecard
 

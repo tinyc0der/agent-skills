@@ -21,9 +21,10 @@ Apply this to every change before declaring it done.
 ### Correctness
 - [ ] All acceptance criteria for the task are met
 - [ ] Code runs and behaves as intended, verified at runtime, not just compiled or typechecked
-- [ ] New behavior is covered by tests that fail without the change and pass with it
+- [ ] Materially changed behavior and failure risks are covered by the minimum sufficient test set; behavior-changing cases are demonstrated RED, while characterization cases pass against the pre-refactor baseline
 - [ ] Existing tests still pass; no regressions introduced
-- [ ] Edge cases and error paths are handled, not just the happy path
+- [ ] Material edge cases and error paths are handled where they change behavior or represent a credible risk
+- [ ] No new test duplicates an existing case or another layer without a distinct defect signal
 
 ### Quality
 - [ ] Code reveals intent through naming and structure; no comments needed to explain *what* it does
@@ -43,18 +44,25 @@ The depth behind these items lives in `code-review-and-quality` (the five-axis r
 - [ ] Public interfaces, APIs, and user-facing behavior are documented
 - [ ] Architectural decisions worth preserving are recorded (see `documentation-and-adrs`)
 - [ ] Documentation describes the current state in timeless language, not the change history
+- [ ] Spec reconciliation is recorded in the numbered track's spec or bug report: verified requirement changes update owning capability specs in the same implementation PR, or the unchanged contract has a justified no-change disposition
 
-### Ship-readiness
+### Operational readiness
 - [ ] Security implications reviewed for any untrusted input, auth, or data handling (see `security-and-hardening`)
 - [ ] Observability in place for new critical paths (logs, metrics, traces) (see `observability-and-instrumentation`)
 - [ ] Rollback path exists for anything risky (see `shipping-and-launch`)
+
+### Merge readiness
+- [ ] Required CI checks pass for the exact revision being approved
 - [ ] The human has reviewed and approved before merge or deploy
+- [ ] Pull-request verification and review evidence name the exact revision being approved
 
 ## How to Apply
 
 - **Per task**: confirm the Correctness and Quality sections before checking the task off.
-- **Per feature**: confirm Integration and Documentation before considering the feature complete.
+- **Before review**: confirm Correctness, Quality, Integration, Documentation, and Operational readiness, plus a `verification-and-validation` PASS report for the exact PR head. Review evidence, green merge CI, and human approval are intentionally not part of this pre-review profile.
+- **Before merge**: confirm the pre-review profile plus every Merge readiness item.
 - **Per release**: the full checklist is the floor; `shipping-and-launch` adds the deploy-specific gates on top.
+- **Per pull request**: mark ready only after feature verification passes for the current head; merge only after Critical and Required findings are resolved, CI is green, and required approval is present.
 
 Tailor the list to the project once, then reuse it unchanged. A Definition of Done that is renegotiated every sprint is not a Definition of Done.
 

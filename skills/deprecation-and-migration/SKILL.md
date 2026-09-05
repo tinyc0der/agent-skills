@@ -11,6 +11,8 @@ Code is a liability, not an asset. Every line of code has ongoing maintenance co
 
 Most engineering organizations are good at building things. Few are good at removing them. This skill addresses that gap.
 
+**Workflow notes:** For an active track, read `docs/tracks/<track-id>/notes.md` at phase entry or resume and update it when useful context changes or before handoff. Capture observations, tentative ideas, outcomes, blockers, and next actions with evidence links. Follow the memory-management running-note and document-metadata protocols; honor explicit read-only or file-scope limits and keep writes outside pinned verification or release targets.
+
 ## When to Use
 
 - Replacing an old system, API, or library with a new one

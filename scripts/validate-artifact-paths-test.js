@@ -40,13 +40,13 @@ afterEach(() => {
   }
 });
 
-test('passes when producers and consumers use the canonical artifact paths', () => {
+test('passes canonical artifact paths and skips absent guarded files', () => {
   const root = makeSandbox();
-  writeFile(root, '.claude/commands/spec.md', 'Save the spec as `SPEC.md` in the project root.\n');
-  writeFile(root, '.claude/commands/plan.md', 'Save the plan to `tasks/plan.md` and task list to `tasks/todo.md`.\n');
-  writeFile(root, '.claude/commands/build.md', 'Look for a spec at `SPEC.md`, `docs/SPEC.md`, or under `spec/`. Require `tasks/plan.md`.\n');
-  writeFile(root, 'skills/spec-driven-development/SKILL.md', 'Save the plan to `tasks/plan.md` and the task list to `tasks/todo.md`.\n');
-  writeFile(root, 'skills/planning-and-task-breakdown/SKILL.md', 'Save to `tasks/plan.md` and `tasks/todo.md`.\n');
+  writeFile(root, '.claude/commands/spec.md', 'Save the spec as `docs/tracks/<track-id>/spec.md`.\n');
+  writeFile(root, '.claude/commands/plan.md', 'Save the plan to `docs/tracks/<track-id>/plan.md` and task list to `docs/tracks/<track-id>/todo.md`.\n');
+  writeFile(root, '.claude/commands/build.md', 'Look for `docs/tracks/<track-id>/spec.md` or `docs/tracks/<track-id>/capability-map.md`. Require `docs/tracks/<track-id>/plan.md`.\n');
+  writeFile(root, 'skills/spec-driven-development/SKILL.md', 'Save the spec to `docs/tracks/<track-id>/spec.md`.\n');
+  writeFile(root, 'skills/planning-and-task-breakdown/SKILL.md', 'Save to `docs/tracks/<track-id>/plan.md` and `docs/tracks/<track-id>/todo.md`.\n');
 
   const result = run(root);
 
@@ -54,19 +54,98 @@ test('passes when producers and consumers use the canonical artifact paths', () 
   assert.match(result.stdout, /5 files checked — 0 error\(s\) — PASSED/);
 });
 
-test('fails when a producer drifts to an unapproved artifact path (the #93 regression)', () => {
+test('fails when a producer drifts outside the track', () => {
   const root = makeSandbox();
-  // Only the producers are changed to the per-feature layout; consumers stay on the old paths.
   writeFile(root, '.claude/commands/spec.md', 'Save the spec to `docs/features/[feature-name]/spec.md`.\n');
   writeFile(root, '.claude/commands/plan.md', 'Save the plan to `docs/features/[feature-name]/plan.md`.\n');
-  writeFile(root, '.claude/commands/build.md', 'Require a spec at `SPEC.md` and a plan at `tasks/plan.md`.\n');
+  writeFile(root, '.claude/commands/build.md', 'Require a spec at `specs/SPEC.md` and a plan at `tasks/plan.md`.\n');
 
   const result = run(root);
 
   assert.equal(result.status, 1, result.stdout + result.stderr);
   assert.match(result.stdout, /docs\/features\/\[feature-name\]\/spec\.md/);
   assert.match(result.stdout, /docs\/features\/\[feature-name\]\/plan\.md/);
+  assert.match(result.stdout, /specs\/SPEC\.md/);
+  assert.match(result.stdout, /tasks\/plan\.md/);
   assert.match(result.stdout, /error\(s\) — FAILED/);
+});
+
+test('accepts every durable artifact in a track', () => {
+  const root = makeSandbox();
+  writeFile(
+    root,
+    '.claude/commands/build.md',
+    [
+      '`docs/tracks/<track-id>/spec.md`',
+      '`docs/tracks/<track-id>/capability-map.md`',
+      '`docs/tracks/<track-id>/bug.md`',
+      '`docs/specs/<capability>/spec.md`',
+      '`docs/tracks/<track-id>/plan.md`',
+      '`docs/tracks/<track-id>/todo.md`',
+      '`docs/tracks/<track-id>/verification.md`',
+      '`docs/tracks/<track-id>/review.md`',
+      '`docs/tracks/<track-id>/notes.md`',
+      '`docs/tracks/<track-id>/ship.md`',
+    ].join('\n'),
+  );
+
+  const result = run(root);
+
+  assert.equal(result.status, 0, result.stdout + result.stderr);
+});
+
+test('accepts relative filenames only in artifact maps and overview documents', () => {
+  const root = makeSandbox();
+  writeFile(
+    root,
+    'skills/context-engineering/SKILL.md',
+    'docs/tracks/<track-id>/\n- spec.md\n- verification.md\n- review.md\n- ship.md\n',
+  );
+
+  const result = run(root);
+
+  assert.equal(result.status, 0, result.stdout + result.stderr);
+});
+
+test('allows legacy paths only in the migration release notes', () => {
+  const root = makeSandbox();
+  writeFile(
+    root,
+    'docs/feature-development-workflow-release-notes.md',
+    'Move `specs/SPEC.md` and `tasks/plan.md` into the feature bundle.\n',
+  );
+
+  const result = run(root);
+
+  assert.equal(result.status, 0, result.stdout + result.stderr);
+});
+
+test('fails when Gemini command artifacts drift', () => {
+  const root = makeSandbox();
+  writeFile(root, '.gemini/commands/spec.toml', 'prompt = "Save to docs/SPEC.md"\n');
+  writeFile(root, '.gemini/commands/planning.toml', 'prompt = "Save to docs/plan.md"\n');
+  writeFile(root, '.gemini/commands/build.toml', 'prompt = "Read docs/SPEC-module.md"\n');
+
+  const result = run(root);
+
+  assert.equal(result.status, 1, result.stdout + result.stderr);
+  assert.match(result.stdout, /\.gemini\/commands\/spec\.toml/);
+  assert.match(result.stdout, /\.gemini\/commands\/planning\.toml/);
+  assert.match(result.stdout, /\.gemini\/commands\/build\.toml/);
+});
+
+test('fails when Antigravity command artifacts drift', () => {
+  const root = makeSandbox();
+  writeFile(root, 'commands/spec.toml', 'prompt = "Save to docs/SPEC.md"\n');
+  writeFile(root, 'commands/planning.toml', 'prompt = "Save to docs/plan.md"\n');
+  writeFile(root, 'commands/build.toml', 'prompt = "Read docs/SPEC-module.md"\n');
+
+  const result = run(root);
+
+  assert.equal(result.status, 1, result.stdout + result.stderr);
+  assert.match(result.stdout, /commands\/spec\.toml/);
+  assert.match(result.stdout, /commands\/planning\.toml/);
+  assert.match(result.stdout, /commands\/build\.toml/);
 });
 
 test('reports the offending file and line number', () => {
@@ -80,14 +159,21 @@ test('reports the offending file and line number', () => {
   assert.match(result.stdout, /L2:/);
 });
 
-test('accepts the docs/SPEC.md alternate spec location', () => {
-  const root = makeSandbox();
-  writeFile(root, '.claude/commands/build.md', 'Look for the spec at `docs/SPEC.md`.\n');
+test('accepts capability specs and rejects legacy module spec filenames', () => {
+  const validRoot = makeSandbox();
+  writeFile(validRoot, '.claude/commands/build.md', 'Select `docs/specs/identity/spec.md`.\n');
 
-  const result = run(root);
+  const validResult = run(validRoot);
 
-  assert.equal(result.status, 0, result.stdout + result.stderr);
-  assert.match(result.stdout, /1 files checked — 0 error\(s\) — PASSED/);
+  assert.equal(validResult.status, 0, validResult.stdout + validResult.stderr);
+
+  const invalidRoot = makeSandbox();
+  writeFile(invalidRoot, '.claude/commands/build.md', 'Select `docs/tracks/001-user-auth/spec-identity.md`.\n');
+
+  const invalidResult = run(invalidRoot);
+
+  assert.equal(invalidResult.status, 1, invalidResult.stdout + invalidResult.stderr);
+  assert.match(invalidResult.stdout, /docs\/tracks\/001-user-auth\/spec-identity\.md/);
 });
 
 test('ignores non-artifact markdown references (no false positives)', () => {
@@ -95,7 +181,7 @@ test('ignores non-artifact markdown references (no false positives)', () => {
   writeFile(
     root,
     'skills/spec-driven-development/SKILL.md',
-    'See `SKILL.md` and `references/testing-patterns.md`. Save the plan to `tasks/plan.md`.\n',
+    'See `SKILL.md`, `references/testing-patterns.md`, and https://example.com/okf/SPEC.md. Save the plan to `docs/tracks/<track-id>/plan.md`.\n',
   );
 
   const result = run(root);
@@ -104,13 +190,39 @@ test('ignores non-artifact markdown references (no false positives)', () => {
   assert.match(result.stdout, /1 files checked — 0 error\(s\) — PASSED/);
 });
 
-test('skips guarded files that do not exist', () => {
+test('rejects execution artifacts stored under canonical capability specs', () => {
   const root = makeSandbox();
-  writeFile(root, '.claude/commands/spec.md', 'Save the spec as `SPEC.md`.\n');
-  // No other guarded files present.
+  writeFile(root, '.claude/commands/plan.md', 'See https://example.com/okf/SPEC.md. Save to `docs/specs/auth/plan.md`.');
+  writeFile(root, 'skills/debugging-and-error-recovery/SKILL.md', 'Save to `docs/specs/auth/bug.md`.');
+  writeFile(root, 'docs/specs/auth/review.md', 'Historical review left in the wrong home.');
 
   const result = run(root);
 
-  assert.equal(result.status, 0, result.stdout + result.stderr);
-  assert.match(result.stdout, /1 files checked — 0 error\(s\) — PASSED/);
+  assert.equal(result.status, 1, result.stdout + result.stderr);
+  assert.match(result.stdout, /docs\/specs\/auth\/plan\.md/);
+  assert.match(result.stdout, /docs\/specs\/auth\/bug\.md/);
+  assert.match(result.stdout, /docs\/specs\/auth\/review\.md/);
+});
+
+test('rejects running notes stored under canonical capability specs', () => {
+  const root = makeSandbox();
+  writeFile(root, 'docs/specs/auth/notes.md', 'A hypothesis from the active change.');
+
+  const result = run(root);
+
+  assert.equal(result.status, 1, result.stdout + result.stderr);
+  assert.match(result.stdout, /docs\/specs\/auth\/notes\.md/);
+});
+
+test('rejects unnumbered tracks and duplicate numeric allocations on disk', () => {
+  const root = makeSandbox();
+  writeFile(root, '.claude/commands/spec.md', 'Save to `docs/tracks/auth/spec.md`.');
+  writeFile(root, 'docs/tracks/001-auth/spec.md', 'First track.');
+  writeFile(root, 'docs/tracks/001-billing/spec.md', 'Concurrent collision.');
+
+  const result = run(root);
+
+  assert.equal(result.status, 1, result.stdout + result.stderr);
+  assert.match(result.stdout, /docs\/tracks\/auth\/spec\.md/);
+  assert.match(result.stdout, /duplicate track number 001/);
 });
