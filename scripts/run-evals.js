@@ -512,12 +512,19 @@ function runBehavioral(skillName, dryRun) {
     // headless denials would force the exact narrate-instead-of-perform
     // failure mode that trace grading exists to catch.
     try {
+    // Relative references in SKILL.md must resolve inside the disposable
+    // workspace, without sending the executor back into the source repository.
+    const skillDirectory = path.join(workspace, '.eval-skill');
+    fs.cpSync(path.dirname(skillFile), skillDirectory, { recursive: true, errorOnExist: true, force: false });
+    if (kind === 'execution') {
+      fs.appendFileSync(path.join(workspace, '.git', 'info', 'exclude'), '\n/.eval-skill/\n');
+    }
     const trace = execFileSync(
       'claude',
       ['-p', '--verbose', '--output-format', 'stream-json',
         '--permission-mode', 'acceptEdits',
         '--allowedTools', EXECUTOR_TOOLS,
-        '--append-system-prompt', `Follow this skill exactly:\n\n${fs.readFileSync(skillFile, 'utf8')}`],
+        '--append-system-prompt', `Skill directory: ${skillDirectory}\nResolve relative skill references from that directory. Treat it as read-only tooling, not project content.\n\nFollow this skill exactly:\n\n${fs.readFileSync(skillFile, 'utf8')}`],
       { input: ev.prompt, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024, cwd: workspace, timeout: EXECUTOR_TIMEOUT_MS },
     );
     const gradingInstructions = kind === 'dialogue'

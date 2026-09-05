@@ -1,6 +1,6 @@
 ---
 name: memory-management
-description: Organizes portable project memory as Open Knowledge Format (OKF) bundles so future sessions start from real knowledge instead of re-deriving it. Routes each fact to the right concept (project, decisions, steering, or runbooks), promotes lessons through review, and keeps memory pruned and trustworthy. Use whenever a feature ships, the user states a durable preference or correction, a failure is diagnosed, memory drifts from code, or a project needs an OKF-compatible durable-memory core.
+description: Maintains durable memory as Open Knowledge Format (OKF) bundles. Use when saving verified lessons or team preferences for future sessions, bootstrapping a knowledge bundle, or pruning and syncing stale memory. Covers canonical knowledge ownership and permissive reading of imported bundles.
 ---
 
 # Memory Management
@@ -50,6 +50,10 @@ The promotion test for project memory: **"Would a future feature that has nothin
 
 Durable memory is separated into homes. The skill's first move is always to ask *"does this belong somewhere more specific?"* and only land in `steering/` when the answer is no.
 
+**Discover existing owners before applying the defaults below.** Inspect project rules, documentation indexes, existing ADRs and runbooks, and configuration such as `.adr-dir`. Established homes such as `docs/adr/` or `Documentation/Decisions/` remain canonical, including their numbering, format, and links. Follow `documentation-and-adrs` for decisions in those homes. Directory names alone do not identify a legacy memory layout or authorize moving it.
+
+When an established home is outside the bundle, route its new knowledge there. If bundle discovery is needed, add a typed `external-knowledge.md` concept (`type: Knowledge Sources`) linking to those canonical homes with descriptions, and list that concept in the root index. Use the cross-boundary citation rules below; do not copy their contents into bundle concepts or put external links in reserved collection indexes. Required bundle indexes may stay empty for externally owned collections. External documents keep their existing format and are not subject to OKF concept frontmatter. All routing below uses these resolved owners; the illustrated homes are defaults for knowledge with no established owner.
+
 **Every durable artifact has a resolved memory root.** Resolve scope first: the repository memory root is `docs/`; a package-owned memory root is `packages/<pkg>/docs/`. The OKF bundle root is always `<memory-root>/knowledge/`. Per-feature workflow state remains in repository `docs/specs/<slug>/`, outside the bundle, regardless of memory scope. The repository layout is:
 
 ```
@@ -73,7 +77,7 @@ Each bundle has a root `index.md`; each durable collection under `<memory-root>/
 
 ## OKF v0.1 Interoperability Profile
 
-Before bootstrapping, syncing, migrating, or promoting memory, read [references/okf-v0.1.md](references/okf-v0.1.md). It contains the canonical bundle, frontmatter, reserved-file, linking, and producer/consumer rules derived from the [Open Knowledge Format v0.1 draft](https://github.com/GoogleCloudPlatform/knowledge-catalog/blob/main/okf/SPEC.md).
+Before bootstrapping, syncing, migrating, or promoting memory, read [references/okf-v0.1.md](references/okf-v0.1.md). It contains the canonical bundle, frontmatter, reserved-file, linking, and producer/consumer rules derived from the [Open Knowledge Format v0.1 draft](https://github.com/GoogleCloudPlatform/knowledge-catalog/blob/ee67a5ca27044ebe7c38385f5b6cffc2305a9c1a/okf/SPEC.md).
 
 The non-negotiable profile rules are:
 
@@ -131,11 +135,11 @@ A catalog rots on every commit and adds nothing a `ls` couldn't show; a pattern 
 
 ## Three Modes: Bootstrap, Migrate, and Sync
 
-Resolve the active scope, then choose a mode from the state of its `<memory-root>/knowledge/` bundle:
+Resolve the active scope and existing knowledge owners first. A request only to read or summarize memory uses permissive consumption and the read-only verification checklist; it does not select a write mode, scaffold missing indexes, normalize metadata, or create a commit. For authorized memory changes, choose a mode from the state of the active `<memory-root>/knowledge/` bundle:
 
 **Bootstrap** — no legacy layout exists and `<bundle-root>/index.md`, `<bundle-root>/project.md`, or a required collection index is missing. Generate or repair the active repository or package bundle by *analyzing its codebase scope*: README, config and dependency files, directory structure, naming and import patterns. Extract patterns (per the Golden Rule), don't interrogate the user for what the code already shows. The research areas — product/direction, tech/stack, structure/conventions, and domain patterns — are independent and can be gathered in parallel. Write OKF-conformant concepts and indexes, then present the result for review before treating it as source of truth.
 
-**Migrate** — any subset of the legacy homes (`<memory-root>/project.md`, `steering/`, `decisions/`, or `runbooks/`) exists. Follow [the legacy-layout migration procedure](references/okf-v0.1.md#legacy-layout-migration). If `<memory-root>/knowledge/` also exists, **stop and reconcile ownership with the user**, even when one tree appears empty; do not guess which scaffold is canonical. Otherwise inventory and move every existing legacy artifact, repair missing required profile files from verified codebase evidence, add concept frontmatter, rewrite links, and update rules-file pointers in one reviewable change. Preflight reserved legacy `index.md` and `log.md` names: keep files that already have the reserved meaning, but rename ambiguous concept collisions with user approval and rewrite inbound links. Before trimming a human-authored rules file, route its unique durable facts into the bundle and preserve its tool-specific controls. Never bootstrap a second copy or discard partial legacy content.
+**Migrate** — project rules, existing memory pointers, or the user's instructions identify an earlier memory layout, and the task authorizes its migration. Its homes may include `<memory-root>/project.md`, `steering/`, `decisions/`, or `runbooks/`, or custom paths discovered above. Follow [the legacy-layout migration procedure](references/okf-v0.1.md#legacy-layout-migration). If a confirmed legacy memory layout and `<memory-root>/knowledge/` both exist, reconcile unresolved ownership with the user; reuse any ownership decision already supplied. Otherwise inventory and move the identified legacy artifacts, repair missing required profile files from verified codebase evidence, add concept frontmatter, rewrite links, and update rules-file pointers in one reviewable change. Established external ADR/runbook homes are preserved unless their migration is authorized. Preflight reserved legacy `index.md` and `log.md` names: keep files that already have the reserved meaning, but rename ambiguous concept collisions with user approval and rewrite inbound links. Before trimming a human-authored rules file, route its unique durable facts into the bundle and preserve its tool-specific controls. Never bootstrap a second copy or discard partial legacy content. Without migration authorization, read the legacy layout best-effort and keep changes in its existing homes.
 
 **Bridge the agent's rules file to memory (pointer only).** After bootstrap or migration writes a bundle, update the existing rules file at the same scope — repository `CLAUDE.md`, `AGENTS.md`, `.cursorrules`, `.github/copilot-instructions.md`, etc., or a package-local rules file for a package bundle. Create `AGENTS.md` only when no rules file exists and the user wants one. This block does **not** duplicate memory; it is a signpost.
 
@@ -315,16 +319,24 @@ All of these are memory changes, so they go through the same commit/PR review as
 
 ## Verification
 
-Before considering memory work complete:
+### Read-only consumption
+
+- [ ] The answer reflects the available concepts and identifies unavailable evidence without inventing it.
+- [ ] An unrecognized version is reported; unknown types, extension fields, absent optional metadata, missing indexes, and broken links are tolerated.
+- [ ] Files and the declared version are unchanged. No scaffolding, normalization, index update, commit, or conformance claim is required to finish reading.
+
+### Authored changes
+
+Apply these checks to the authorized changes and their affected indexes, not as a mandate to normalize every imported concept. Preserve untouched imported metadata and versions; propose unrelated repairs separately. Full profile checks apply when creating a bundle or explicitly migrating it to this profile.
 
 - [ ] Each new entry records **why**, not just what — with provenance (feature, decision, failure, or approved preference).
 - [ ] The active bundle root is `docs/knowledge/` or `packages/<pkg>/docs/knowledge/`; workflow and general docs remain outside it.
-- [ ] The bundle-root index declares `okf_version: "0.1"`; every non-reserved concept has parseable frontmatter with non-empty `type`, `title`, and `description`.
+- [ ] A newly created or explicitly migrated v0.1 bundle declares `okf_version: "0.1"`; new or explicitly repaired concepts have parseable frontmatter with non-empty `type`, `title`, and `description`. A sync preserves an imported bundle's declared version and does not imply whole-bundle conformance.
 - [ ] Reserved `index.md` and any `log.md` follow the OKF structure; collection indexes have no frontmatter.
 - [ ] Each entry captures a **pattern, not a catalog** — nothing that's just an inventory of what the code already shows.
 - [ ] A new domain file doesn't duplicate an existing one; sync changes are additive, not silent overwrites of human-written content.
 - [ ] Unknown types and frontmatter keys were preserved; optional fields, broken links, or missing optional indexes did not cause destructive normalization.
-- [ ] The knowledge was routed to the right home; nothing duplicates `project.md`, an ADR, or a spec folder.
+- [ ] The knowledge was routed to its resolved owner, preserving established external locations and formats; nothing duplicates `project.md`, an ADR, or a spec folder.
 - [ ] Every fact has exactly one canonical location; everything else links to it.
 - [ ] The change went through a reviewable diff (commit/PR), not a silent in-place edit.
 - [ ] The corresponding root or package-local bundle and collection index is updated so a future session can find the new content without reading everything.

@@ -99,7 +99,7 @@ The skill files were not changed during this review.
    knowledge maintenance. Re-run both validators after editing it.
 
 4. **Register and adapt the imported evals to this repository's schema.**
-   [evals.json](../../../skills/memory-management/evals/evals.json), lines 1–15,
+   [evals.json](../../../evals/cases/memory-management.json), lines 1–15,
    is outside the runner's `evals/cases/` discovery directory. All four cases
    also lack `expectations[]`; there are no positive/negative trigger cases,
    and fixture paths are relative to the imported skill rather than the

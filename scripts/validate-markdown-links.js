@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * Validate local Markdown links and heading anchors in tracked repository docs.
- * External URLs and fenced examples are intentionally out of scope.
+ * External URLs, fenced examples, and eval fixture inputs are out of scope.
  */
 
 'use strict';
@@ -25,6 +25,9 @@ function trackedMarkdownFiles() {
   return result.stdout
     .split('\0')
     .filter(Boolean)
+    // Fixtures are sample projects and may deliberately contain invalid links
+    // or use another link convention (for example OKF bundle-relative paths).
+    .filter(relativePath => !relativePath.startsWith('evals/fixtures/'))
     .sort()
     .map(relativePath => path.join(ROOT, relativePath));
 }

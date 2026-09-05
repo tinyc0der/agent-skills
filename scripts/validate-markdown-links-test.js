@@ -86,12 +86,26 @@ test('checks tracked Markdown outside the original documentation roots', () => {
   const root = makeSandbox();
   writeFile(root, 'CONTRIBUTING.md', '# Contributing\n');
   writeFile(root, '.claude/commands/example.md', 'See [missing](../../docs/missing.md).\n');
+  writeFile(root, 'evals/README.md', 'See [missing](missing-guide.md).\n');
 
   const result = run(root);
 
   assert.equal(result.status, 1, result.stdout + result.stderr);
   assert.match(result.stdout, /\.claude\/commands\/example\.md/);
+  assert.match(result.stdout, /evals\/README\.md/);
   assert.match(result.stdout, /does not exist/);
+});
+
+test('treats eval fixture Markdown as test input rather than repository documentation', () => {
+  const root = makeSandbox();
+  writeFile(root, 'evals/README.md', 'See [fixture](fixtures/memory/docs/knowledge/project.md).\n');
+  writeFile(root, 'evals/fixtures/memory/docs/knowledge/project.md',
+    'A bundle-relative [decision](/decisions/store.md) and an intentionally [missing concept](missing.md).\n');
+
+  const result = run(root);
+
+  assert.equal(result.status, 0, result.stdout + result.stderr);
+  assert.match(result.stdout, /1 Markdown files checked/);
 });
 
 test('ignores external links and links inside fenced examples', () => {

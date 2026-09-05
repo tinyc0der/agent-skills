@@ -1,9 +1,12 @@
 # Memory Management Skill — Draft
 
+> Historical design notes. The current workflow and compatibility rules live in
+> [SKILL.md](SKILL.md); use that entrypoint when applying the skill.
+
 > Sources:
 > - Open Knowledge Format v0.1 draft — portable Markdown bundles, typed YAML
 >   frontmatter, reserved indexes/logs, links, and permissive consumption
->   (https://github.com/GoogleCloudPlatform/knowledge-catalog/blob/main/okf/SPEC.md)
+>   (https://github.com/GoogleCloudPlatform/knowledge-catalog/blob/ee67a5ca27044ebe7c38385f5b6cffc2305a9c1a/okf/SPEC.md)
 > - principles.md (Core Model, "Give each project its own memory", Memory freshness)
 > - Letta `initializing-memory` skill + memory subagent — progressive disclosure,
 >   always-loaded core vs. load-on-demand, retention over compression, File

@@ -1,0 +1,106 @@
+{
+  "skill_name": "memory-management",
+  "evals": [
+    {
+      "id": 0,
+      "name": "over-saving",
+      "prompt": "The fixture project is in memory-management/over-saving/; use that directory as the project scope. I just spent two hours debugging a flaky test and want to capture what's worth remembering in the OKF durable-memory bundle under docs/knowledge/. Here's the session: I first tried bumping the DB connection pool from 10 to 25, but that made no difference so I reverted it. Then I found the real cause: setupTests.ts was missing an `await` before `seedDatabase()`, so tests sometimes ran against an empty DB \u2014 adding the await fixed the flake. Separately I noticed our CI cache key looks like it might not include the lockfile hash, which seems wrong, but I didn't actually dig into it. Also for reference our staging environment is at https://staging.acme.internal. Route each verified fact to its canonical concept; use docs/knowledge/steering/ only when nothing more specific owns it. The provided files establish an otherwise empty bundle.",
+      "expected_output": "Saves ONLY verified, durable knowledge: the flaky-test failure mode (missing await -> tests run against empty DB) with its why, routed to a typed Project Guidance concept in the relevant docs/knowledge/steering/ domain. Updates the steering index with the concept description. Does NOT save the abandoned connection-pool experiment (reverted, no lasting value) or the un-investigated CI cache hunch (unverified -> silent learning). The staging URL is optional if it is durable and verified. The point is selective, canonical routing rather than dumping the whole session.",
+      "files": [
+        "memory-management/over-saving"
+      ],
+      "expectations": [
+        "Records the verified missing-await failure mode with its causal explanation in a typed testing guidance concept and updates the steering index.",
+        "Does not promote the reverted pool-size experiment or unverified CI-cache speculation into durable knowledge.",
+        "Keeps the change reviewable in git and preserves existing bundle concepts."
+      ]
+    },
+    {
+      "id": 1,
+      "name": "link-not-copy",
+      "prompt": "The fixture project is in memory-management/link-not-copy/; use that directory as the project scope. Please make sure future sessions discover that we use trunk-based development and chose PostgreSQL as our datastore. The provided OKF bundle already has docs/knowledge/project.md and docs/knowledge/decisions/0002-datastore-postgres.md.",
+      "expected_output": "Recognizes that trunk-based development already lives in docs/knowledge/project.md and the PostgreSQL choice already lives in the typed, indexed docs/knowledge/decisions/0002-datastore-postgres.md concept. Does NOT duplicate either into docs/knowledge/steering/ and makes no content change. The one-canonical-location rule wins over creating a second copy.",
+      "files": [
+        "memory-management/link-not-copy"
+      ],
+      "expectations": [
+        "Reads the existing project contract and datastore ADR before answering.",
+        "Identifies the two canonical sources without creating duplicate guidance or changing any fixture content."
+      ]
+    },
+    {
+      "id": 2,
+      "name": "prune-not-size",
+      "prompt": "The fixture project is in memory-management/prune-not-size/; use that directory as the project scope. My docs/knowledge/steering/ collection is getting big and I'm worried it's eating into my context window every session. Cut it down by about half. The current OKF bundle and package.json are provided.",
+      "expected_output": "Explains why cutting by size alone would discard valid knowledge. Proposes or applies an explicit supersession of the genuinely stale Gulp command because package.json proves the project migrated to Vite. PRESERVES the rarely used but valid no-Friday-deploy preference (incident #318) and the detailed docs/knowledge/runbooks/deploy.md Playbook. Addresses context cost by always loading only the bundle root index and project concept, then loading collection indexes and concepts on demand. Pruning is justified by wrongness, not size, and affected indexes are updated without stripping unknown frontmatter.",
+      "files": [
+        "memory-management/prune-not-size"
+      ],
+      "expectations": [
+        "Explains why size alone is not a valid reason to delete durable knowledge and proposes progressive loading.",
+        "Uses package.json as evidence to propose or apply an explicit supersession of the stale Gulp commands with the existing build and test scripts; does not silently erase history.",
+        "Preserves the valid Friday-deploy preference, its incident rationale, and the deploy playbook; preserves unknown frontmatter and updates affected index descriptions if content changes."
+      ]
+    },
+    {
+      "id": 3,
+      "name": "unknown-version",
+      "prompt": "The fixture project is in memory-management/unknown-version/; use that directory as the project scope. Read this imported knowledge bundle. Its root declares OKF 9.9, which you do not recognize. The project concept uses an unknown type and vendor extension, omits optional title and description fields, has a broken concept link, and has no collection indexes. Tell me what the project says without normalizing or rewriting the bundle.",
+      "expected_output": "Warns that OKF 9.9 is unrecognized, then attempts best-effort consumption instead of refusing the bundle. Reads the project concept as generic knowledge, tolerates the missing optional metadata, missing indexes, and broken link, and preserves the unknown type and vendor_extension field. Does not claim v0.1 conformance and does not rewrite the imported files.",
+      "files": [
+        "memory-management/unknown-version"
+      ],
+      "expectations": [
+        "Warns that OKF 9.9 is unrecognized and reports the backward-compatible minor-release API policy from the project concept.",
+        "Tolerates the unknown type, vendor extension, missing optional metadata, absent collection indexes, and broken link.",
+        "Makes no file edits, scaffolding, normalization, version rewrite, or new commit, and does not claim v0.1 conformance."
+      ]
+    },
+    {
+      "id": 4,
+      "name": "established-homes",
+      "prompt": "The fixture project is in memory-management/established-homes/; use that directory as the project scope. Bootstrap durable memory from this repository and make the existing PostgreSQL decision discoverable to future sessions. Preserve the established ADR location and format. Do not migrate the ADR collection or invent new architectural decisions. Use the README, .adr-dir, and existing decision as evidence.",
+      "expected_output": "An OKF memory bundle with a typed external-knowledge catalog pointing to the existing ADR home, preserving docs/adr/0001-postgres.md unchanged and creating no competing datastore ADR.",
+      "files": [
+        "memory-management/established-homes"
+      ],
+      "expectations": [
+        "Inspects the established ADR convention and .adr-dir before selecting memory homes.",
+        "Preserves docs/adr/0001-postgres.md byte-for-byte, including its location and existing format without YAML frontmatter; does not move it or duplicate its decision in a bundle concept.",
+        "Creates docs/knowledge/ with a v0.1 root index, typed project concept, and required collection indexes; a typed external-knowledge.md catalog links to the existing canonical ADR home and is discoverable from the root index.",
+        "Uses a durable repository URL for the external ADR citation, or explicitly explains the checkout-relative portability trade-off because this fixture supplies no remote; does not invent a remote URL.",
+        "Presents the bootstrap diff and evidence for review before claiming its inferred guidance is approved."
+      ]
+    }
+  ],
+  "trigger": {
+    "positive": [
+      {
+        "prompt": "Save this verified lesson in durable memory so future sessions remember it.",
+        "top_k": 1
+      },
+      {
+        "prompt": "Prune stale entries from our knowledge bundle without losing useful preferences.",
+        "top_k": 1
+      },
+      {
+        "prompt": "Bootstrap an OKF memory bundle from the conventions in this repository.",
+        "top_k": 1
+      }
+    ],
+    "negative": [
+      {
+        "prompt": "Draft a PRD with objectives and boundaries for this project",
+        "owner": "spec-driven-development"
+      },
+      {
+        "prompt": "Find the root cause of the memory leak in the worker",
+        "owner": "debugging-and-error-recovery"
+      },
+      {
+        "prompt": "Write an ADR comparing Postgres and MongoDB for the new service",
+        "owner": "documentation-and-adrs"
+      }
+    ]
+  }
+}

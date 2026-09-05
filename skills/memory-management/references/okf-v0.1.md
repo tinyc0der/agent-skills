@@ -1,6 +1,6 @@
 # Lucas Memory Profile for OKF v0.1
 
-This profile applies the [Open Knowledge Format v0.1 draft](https://github.com/GoogleCloudPlatform/knowledge-catalog/blob/main/okf/SPEC.md) to Lucas Harness durable project memory. OKF remains the interoperability baseline; the requirements for a root index, project concept, and collection indexes are stricter Lucas profile rules for reliable progressive disclosure.
+This profile applies the [Open Knowledge Format v0.1 draft](https://github.com/GoogleCloudPlatform/knowledge-catalog/blob/ee67a5ca27044ebe7c38385f5b6cffc2305a9c1a/okf/SPEC.md) to Lucas Harness durable project memory. The source is pinned to the v0.1 revision because upstream `main` now describes a newer format. OKF remains the interoperability baseline; the requirements for a root index, project concept, and collection indexes are stricter Lucas profile rules for reliable progressive disclosure.
 
 ## Contents
 
@@ -75,6 +75,7 @@ Use these descriptive producer defaults while tolerating any unknown type:
 | `decisions/NNNN-*.md` | `Architecture Decision` |
 | `runbooks/**/*.md` | `Playbook` |
 | a cross-bundle catalog such as `bundles.md` | `Bundle Catalog` |
+| an external-home catalog such as `external-knowledge.md` | `Knowledge Sources` |
 
 `resource`, `tags`, and `timestamp` are optional. Use `resource` only for a canonical underlying asset URI. Use an ISO 8601 timestamp only when it communicates a meaningful content change; git remains the authoritative history.
 
@@ -82,7 +83,7 @@ Use these descriptive producer defaults while tolerating any unknown type:
 
 `index.md` and `log.md` are reserved at every hierarchy level and are never concept documents.
 
-- A non-root `index.md` has no frontmatter. Organize it under headings and use relative Markdown links with the linked concept's description: `* [Title](path.md) - description`.
+- A non-root `index.md` has no frontmatter. Organize it under headings and use relative Markdown links with the linked concept's description, as in the required-profile example above.
 - The root `index.md` follows the same body format plus the `okf_version: "0.1"` exception above.
 - `log.md` is optional, has no frontmatter, and groups flat bullet entries under newest-first `## YYYY-MM-DD` headings. Do not create it by default because reviewed git history already supplies chronology and attribution.
 - An index inventories its own directory. Put links to independent package bundles in a typed `bundles.md` concept, not in a reserved collection index.
@@ -91,17 +92,25 @@ Use these descriptive producer defaults while tolerating any unknown type:
 
 Use standard Markdown links and describe the relationship in surrounding prose.
 
-- Between concepts in the same bundle, prefer absolute bundle-relative links such as `[auth decision](/decisions/0004-auth.md)`.
+- Between concepts in the same bundle, prefer absolute bundle-relative links:
+
+  ```markdown
+  [auth decision](/decisions/0004-auth.md)
+  ```
 - Inside an `index.md`, use directory-relative links as shown above.
 - For workflow evidence under `docs/specs/`, another package bundle, or any source outside the bundle, use a durable repository or web URL under `# Citations` when portability matters. A checkout-relative `../../specs/...` link is acceptable only when the project deliberately accepts that it will break if the bundle is distributed alone.
 - Never rewrite or reject a bundle merely because a cross-link is broken; flag it as drift and continue best-effort consumption.
 
 ## Legacy layout migration
 
-Before bootstrap, inspect the active repository or package memory root for any legacy `project.md`, `steering/`, `decisions/`, or `runbooks/` home.
+Before bootstrap, inspect project rules, documentation indexes, ADR/runbook conventions, and configuration such as `.adr-dir` throughout the active scope. Existing paths and formats take precedence over the profile defaults. A path named `decisions/` or `runbooks/` alone is not evidence of a legacy memory layout.
 
-- If any legacy home and `knowledge/` both exist, stop and ask the user to reconcile ownership, even if one looks empty. Never infer that a scaffold is disposable.
-- If only a partial or complete legacy layout exists, inventory every file and move the existing artifacts under `knowledge/` in one reviewable change. Derive any missing required project concept or collection index from verified codebase evidence; do not invent or discard content.
+Keep established external homes canonical unless their migration is authorized. Route new decisions or procedures there and, when discovery is needed, link to them from a typed `external-knowledge.md` concept listed in the bundle's root index. Do not duplicate their contents or impose OKF frontmatter on them. Follow the cross-boundary citation rules above. This permits an existing `docs/adr/` collection and a knowledge bundle to coexist without competing owners.
+
+For an earlier memory layout identified by rules, memory pointers, or user instructions, resolve migration authorization before moving files. Without it, consume best-effort and update the existing homes; do not bootstrap a replacement.
+
+- If a confirmed legacy memory layout and `knowledge/` both exist, reconcile unresolved ownership with the user, even if one looks empty; reuse any ownership decision already supplied. Never infer that a scaffold is disposable.
+- If migration is authorized and only a partial or complete legacy layout exists, inventory every identified legacy artifact, including custom paths, and move them under `knowledge/` in one reviewable change. Derive any missing required project concept or collection index from verified codebase evidence; do not invent or discard content.
 - If only `knowledge/` exists, do not migrate. If neither exists, bootstrap directly.
 
 Preflight reserved-name collisions before moving. A legacy `index.md` that is already a directory map can keep that role; a legacy concept named `index.md` or `log.md` must be renamed with user approval and every inbound link rewritten. Treat ambiguous files as a stop condition.
@@ -122,3 +131,5 @@ When reading, syncing, or migrating a bundle:
 - never overwrite human-authored content to normalize formatting.
 
 The permissive consumer contract is part of OKF interoperability. Lucas's required discovery indexes govern what its producers create, not what its consumers are allowed to read.
+
+A read-only request ends after best-effort consumption and reporting limitations; it requires no edits, commit, or v0.1 conformance claim. For a sync, validate authored changes while preserving untouched imports and their declared version. Apply full profile verification only when creating a bundle or explicitly migrating it to this profile.
