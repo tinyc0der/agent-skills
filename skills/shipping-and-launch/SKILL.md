@@ -124,11 +124,11 @@ silently expand the release range.
 
 ### Feature launch dossiers
 
-For every included PR with a workflow bundle, read `docs/specs/<feature-slug>/ship.md`. It is the durable feature-level launch dossier and should contain rollout prerequisites, feature flags, migrations, success thresholds, monitoring, acknowledged risks, rollback triggers and steps, and ownership. Missing required feature launch information is release evidence to collect, not a reason to guess.
+For every included PR with a workflow bundle, read `docs/tracks/<track-id>/ship.md`. It is the durable feature-level launch dossier and should contain rollout prerequisites, feature flags, migrations, success thresholds, monitoring, acknowledged risks, rollback triggers and steps, and ownership. Missing required feature launch information is release evidence to collect, not a reason to guess.
 
-When `docs/specs/<feature-slug>/memory-delta.md` exists, review every candidate before GO. Promote verified decisions or operational knowledge into the project's established ADR, documentation, or runbook location; mark rejected or deferred candidates with their disposition and follow-up owner. An unresolved candidate blocks launch only when operators need that knowledge to deploy, observe, or roll back safely.
+When `docs/tracks/<track-id>/memory-delta.md` exists, review every candidate before GO. Promote verified decisions or operational knowledge into the project's established ADR, documentation, or runbook location; mark rejected or deferred candidates with their disposition and follow-up owner. An unresolved candidate blocks launch only when operators need that knowledge to deploy, observe, or roll back safely.
 
-The release-wide GO/NO-GO decision and authoritative deployment result belong to the configured release or deployment system because writing them into the repository would mutate the pinned target. After deployment, a follow-up documentation change may append the immutable release or deployment identifier to each included feature's `docs/specs/<feature-slug>/ship.md`; that follow-up is not part of the already-shipped target.
+The release-wide GO/NO-GO decision and authoritative deployment result belong to the configured release or deployment system because writing them into the repository would mutate the pinned target. After deployment, a follow-up documentation change may append the immutable release or deployment identifier to each included feature's `docs/tracks/<track-id>/ship.md`; that follow-up is not part of the already-shipped target.
 
 ## The Pre-Launch Checklist
 

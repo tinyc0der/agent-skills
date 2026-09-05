@@ -48,7 +48,7 @@
         "The happy path is ordered as discovery/definition, specification, planning, draft PR, incremental TDD build, feature verification, ready PR, merge review, merge, and production shipping",
         "The route distinguishes /test as the focused TDD entry point from /verify as assembled-feature validation",
         "The draft PR is created after approved spec and plan artifacts, while ready-for-review requires verification evidence for the current revision",
-        "The response names the branch-scoped docs/specs/<feature-slug>/ bundle, including spec or module specs, plan.md, todo.md, PR context, verification.md, review.md, and ship.md release/rollback evidence",
+        "The response names the branch-scoped docs/tracks/<track-id>/ bundle, using NNN-name ids and including spec.md or bug.md, plan.md, todo.md, PR context, verification.md, review.md, and ship.md release/rollback evidence; canonical specs remain capability-based and are reconciled before review",
         "Git, CI, security, documentation, and observability are treated as cross-cutting disciplines rather than late cleanup"
       ]
     },

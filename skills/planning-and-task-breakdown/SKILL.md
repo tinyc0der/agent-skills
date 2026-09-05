@@ -25,12 +25,12 @@ Decompose work into small, verifiable tasks with explicit acceptance criteria. G
 
 Before writing any code, operate in read-only mode:
 
-- Read the spec and relevant codebase sections
+- Read the active track's approved spec or bug report, its linked canonical capability specs, and relevant codebase sections
 - Identify existing patterns and conventions
 - Map dependencies between components
 - Note risks and unknowns
 
-**Do NOT write code during planning.** The output is a plan document saved to `docs/specs/<feature-slug>/plan.md` and a task ledger at `docs/specs/<feature-slug>/todo.md`, not implementation.
+**Do NOT write code during planning.** The output is a plan document saved to `docs/tracks/<track-id>/plan.md` and a task ledger at `docs/tracks/<track-id>/todo.md`, not implementation.
 
 ### Step 2: Identify the Dependency Graph
 
@@ -148,20 +148,22 @@ If a task is L or larger, it should be broken into smaller tasks. An agent perfo
 
 ## Output Files
 
-- **Plan document:** Save the implementation plan to `docs/specs/<feature-slug>/plan.md`. This is always a markdown file — design decisions, risks, and open questions don't map cleanly onto individual tracker issues.
+- **Plan document:** Save the implementation plan to `docs/tracks/<track-id>/plan.md`. This is always a markdown file — design decisions, risks, and open questions don't map cleanly onto individual tracker issues.
 - **Task list:** Record each task in the **task list target** (defined below).
-- **Launch dossier:** For production-affecting work, initialize `docs/specs/<feature-slug>/ship.md` with rollout prerequisites, migrations, feature flags, success thresholds, monitoring, rollback triggers and steps, and owners. Build and verification keep it current.
+- **Launch dossier:** For production-affecting work, initialize `docs/tracks/<track-id>/ship.md` with rollout prerequisites, migrations, feature flags, success thresholds, monitoring, rollback triggers and steps, and owners. Build and verification keep it current.
 
-Resolve the active bundle from the current branch using the feature-slug convention established by `spec-driven-development`. Create `docs/specs/<feature-slug>/` if it does not exist. The plan and task ledger must live beside the approved spec they implement.
+Resolve the active numbered track using `context-engineering`: ids use a repository-wide three-digit prefix and kebab-case name, such as `001-user-auth`. Create `docs/tracks/<track-id>/` only for the selected or newly authorized change. The plan and task ledger live beside the approved change spec or bug report, while accepted capability requirements stay at `docs/specs/<capability>/spec.md`.
+
+Include **Spec reconciliation** in completion criteria: verified requirement changes update the owning capability specs in the same implementation PR; unchanged contracts receive a justified no-change disposition in the track spec or bug report. Deferred and canceled proposals remain in the track. A task may finish before the track; the track completes only after review and merge.
 
 ### Task List Target
 
 The task list target is where tasks and checkpoints are recorded. It is defined once, here; every other reference in this skill defers to it.
 
-- **Default:** write the complete checklist to `docs/specs/<feature-slug>/todo.md`. This is the convention `/build` and downstream tooling expect.
-- **External tracker:** if the project's agent rules (`CLAUDE.md`, `AGENTS.md`, etc.) or the user designate an issue tracker (e.g. GitHub Issues, Jira, Linear, `bd`/beads), create one tracker item per task. Map the Step 4 structure onto the tracker's fields: acceptance criteria and verification steps in the item body, dependencies via the tracker's linking mechanism (`bd dep add`, "blocked by", etc.). Keep `docs/specs/<feature-slug>/todo.md` as an ordered index of tracker item IDs or repository-relative links plus local lifecycle checkpoints; do not duplicate the full tracker bodies.
+- **Default:** write the complete checklist to `docs/tracks/<track-id>/todo.md`. This is the convention `/build` and downstream tooling expect.
+- **External tracker:** if the project's agent rules (`CLAUDE.md`, `AGENTS.md`, etc.) or the user designate an issue tracker (e.g. GitHub Issues, Jira, Linear, `bd`/beads), create one tracker item per task. Map the Step 4 structure onto the tracker's fields: acceptance criteria and verification steps in the item body, dependencies via the tracker's linking mechanism (`bd dep add`, "blocked by", etc.). Keep `docs/tracks/<track-id>/todo.md` as an ordered index of tracker item IDs or repository-relative links plus local lifecycle checkpoints; do not duplicate the full tracker bodies.
 
-When using an external tracker, note it in `docs/specs/<feature-slug>/plan.md` (e.g. "Tasks tracked in Linear project FOO") so downstream steps and future sessions know where to look. Keep both the plan's Task List section and `docs/specs/<feature-slug>/todo.md` as compact ordered indexes rather than duplicate checklists.
+When using an external tracker, note it in `docs/tracks/<track-id>/plan.md` (e.g. "Tasks tracked in Linear project FOO") so downstream steps and future sessions know where to look. Keep both the plan's Task List section and `docs/tracks/<track-id>/todo.md` as compact ordered indexes rather than duplicate checklists.
 
 ## Plan Document Template
 
@@ -230,7 +232,7 @@ When multiple agents or sessions are available:
 ## Red Flags
 
 - Starting implementation without a written task list
-- Duplicating full external-tracker task bodies in `docs/specs/<feature-slug>/todo.md` instead of keeping a durable index
+- Duplicating full external-tracker task bodies in `docs/tracks/<track-id>/todo.md` instead of keeping a durable index
 - Tasks that say "implement the feature" without acceptance criteria
 - No verification steps in the plan
 - All tasks are XL-sized
@@ -245,8 +247,8 @@ Before starting implementation, confirm:
 - [ ] Every task has a verification step
 - [ ] Every proposed test names the uncovered contract or distinct regression it protects, or the task records why existing coverage is sufficient
 - [ ] Task dependencies are identified and ordered correctly
-- [ ] Tasks are recorded or indexed in `docs/specs/<feature-slug>/todo.md`
-- [ ] Production-affecting work has an initialized `docs/specs/<feature-slug>/ship.md`
+- [ ] Tasks are recorded or indexed in `docs/tracks/<track-id>/todo.md`
+- [ ] Production-affecting work has an initialized `docs/tracks/<track-id>/ship.md`
 - [ ] No task touches more than ~5 files
 - [ ] Checkpoints exist between major phases
 - [ ] The human has reviewed and approved the plan

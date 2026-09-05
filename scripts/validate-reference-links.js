@@ -23,7 +23,7 @@
  *
  * Scope is deliberately narrow: only `references/*.md` links, only SKILL.md
  * files. It is not a general markdown path linter — skills legitimately
- * mention paths that do not exist yet (`docs/specs/<feature-slug>/todo.md`, `PERF.md`,
+ * mention paths that do not exist yet (`docs/tracks/<track-id>/todo.md`, `PERF.md`,
  * `docs/ideas/[idea-name].md`), and those must not fail the build.
  *
  * Exit codes: 0 = all clear, 1 = one or more unresolvable links.

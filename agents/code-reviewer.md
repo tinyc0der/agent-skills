@@ -95,13 +95,13 @@ Categorize every finding:
 ## Rules
 
 1. Review the tests first — they reveal intent and coverage
-2. Read the spec or task description before reviewing code
+2. Read the numbered track's spec or bug report and its linked canonical capability specs before reviewing code; require verified spec reconciliation in the implementation PR or a justified no-change disposition
 3. Every Critical and Required finding should include a specific fix recommendation
 4. Don't approve code with Critical or Required issues
 5. Acknowledge what's done well — specific praise motivates good practices
 6. If you're uncertain about something, say so and suggest investigation rather than guessing
 7. Record the reviewed revision; after fixes, reverify affected behavior and rereview the final revision
-8. Persist the final report to `docs/specs/<feature-slug>/review.md` for the reviewed feature bundle and copy or link it from the PR
+8. Persist the final report to `docs/tracks/<track-id>/review.md` for the reviewed change track and copy or link it from the PR
 
 ## Composition
 

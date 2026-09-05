@@ -18,24 +18,31 @@ The workflow is sequential at its major decision gates. Inside a phase, conditio
 
 ## Durable Artifact Structure
 
-Every feature branch owns one durable lifecycle bundle:
+Accepted contracts live by capability; execution history lives by numbered change:
 
 ```text
-docs/specs/<feature-slug>/
-├── spec.md
-├── capability-map.md       # Multi-capability initiatives only
-├── spec-<module-id>.md      # Multi-capability initiatives only
+docs/specs/<capability>/
+└── spec.md                  # Current accepted capability contract
+
+docs/tracks/<track-id>/      # NNN-name, e.g. 001-user-auth
+├── spec.md                  # Proposed changes linked to capabilities
+├── bug.md                   # Defect report when needed
+├── capability-map.md        # Optional index of capability sections
 ├── plan.md
 ├── todo.md
 ├── verification.md
 ├── review.md
-├── memory-delta.md          # Only when candidate durable knowledge exists
-└── ship.md                  # Production-affecting features
+├── memory-delta.md          # Only when candidate reusable knowledge exists
+└── ship.md                  # Only when production launch facts are needed
 ```
 
-Derive `<feature-slug>` from the feature branch by dropping a leading workflow or owner namespace, lowercasing, replacing runs of non-alphanumeric characters (including `/`) with `-`, and trimming leading or trailing `-`. For example, `feature/user-auth` becomes `user-auth`, while `fix/audio/import-crash` becomes `audio-import-crash`. Create the feature branch before `/spec`; never create a feature bundle on `main` or `master`.
+Create only the files needed for the change. One track can affect several capabilities; each capability keeps one canonical spec across tracks. Allocate the next repository-wide three-digit track number above the highest existing prefix, starting at `001`, followed by a kebab-case name. Preserve ids and gaps and resolve concurrent allocation collisions before merge.
 
-When resolving an existing bundle, prefer the directory matching the current branch. If it is absent and exactly one directory exists, use that directory; otherwise ask which feature is active. Keep persisted links repository-relative. Evidence artifacts record the exact implementation revision they evaluate; a later evidence-only commit does not expand that scope, and any production-affecting change invalidates affected evidence.
+Create a non-default branch before writing track artifacts. Prefer explicit track selection from the user, task, or PR; a branch may identify an existing numbered track or supply a new track's suffix. Never infer active work from the sole historical folder. The complete allocation and resolution rules live in the [context artifact map](../skills/context-engineering/SKILL.md#durable-workflow-artifacts).
+
+**Spec reconciliation:** Before review, update each owning capability spec with implemented, verified requirements in the same PR. Record target links or a justified no-change disposition in the track spec or bug report. Deferred and canceled proposals remain in tracks. Resolve concurrent capability edits against the latest accepted contract; complete the track after merge and retain it as history.
+
+Evidence names the exact evaluated revision. Only evidence or administrative changes within the same track can preserve earlier evidence without a rerun; changes to requirements, scope, acceptance criteria, canonical specs, or production behavior invalidate affected evidence. Persist repository-relative links.
 
 ## Phase 1: Discover
 
@@ -91,8 +98,9 @@ Specify what will be built without duplicating the planning or implementation ph
 
 **Artifacts**
 
-- `docs/specs/<feature-slug>/spec.md` for a single-capability feature
-- `docs/specs/<feature-slug>/capability-map.md` plus `docs/specs/<feature-slug>/spec-<module-id>.md` for a multi-capability initiative
+- `docs/tracks/<track-id>/spec.md` describing proposed changes and linking `docs/specs/<capability>/spec.md` owners
+- Optional `docs/tracks/<track-id>/capability-map.md` selecting per-capability sections of the track spec
+- `docs/tracks/<track-id>/bug.md` may stand alone for a bounded defect
 - Acceptance criteria, non-goals, boundaries, success measures, and open questions
 
 Feature specs should reference project-wide commands, structure, and style rules rather than copying them unless the feature changes those conventions.
@@ -116,9 +124,9 @@ Convert the approved specification into small, dependency-ordered, vertically sl
 
 **Artifacts**
 
-- `docs/specs/<feature-slug>/plan.md`
-- `docs/specs/<feature-slug>/todo.md`, containing the task checklist or a durable index to the designated external tracker
-- `docs/specs/<feature-slug>/ship.md` initialized for production-affecting work
+- `docs/tracks/<track-id>/plan.md`
+- `docs/tracks/<track-id>/todo.md`, containing the task checklist or a durable index to the designated external tracker
+- `docs/tracks/<track-id>/ship.md` initialized for production-affecting work
 - ADRs following the repository's existing convention
 - Risk-based test decisions, migration, rollout, observability, and rollback requirements embedded in the relevant tasks; proposed cases name the existing coverage gap and distinct regression they protect
 
@@ -178,16 +186,16 @@ Read acceptance criteria
 -> Verify runtime behavior when applicable
 -> Apply the per-task Definition of Done
 -> Commit atomically
--> Update the task, specification, ADR, and draft PR when needed
+-> Update the task, track requirements, capability spec reconciliation, ADR, and draft PR when needed
 ```
 
 **Artifacts**
 
 - Production code, the minimum sufficient behavior-focused tests, and an explicit no-new-test rationale when existing coverage or a non-behavioral check is sufficient
 - Small, independently revertible commits
-- Updated task state and living specification
+- Updated task state and track requirements; reconciled capability specs for verified changes
 - Documentation, ADR, migration, feature-flag, and telemetry changes owned by the slice
-- Updated `docs/specs/<feature-slug>/ship.md` launch facts and `docs/specs/<feature-slug>/memory-delta.md` candidate knowledge when applicable
+- Updated `docs/tracks/<track-id>/ship.md` launch facts and `docs/tracks/<track-id>/memory-delta.md` candidate knowledge when applicable
 
 **Exit gate**
 
@@ -219,10 +227,10 @@ Feature verification proves that the integrated result satisfies the approved sp
 
 **Artifacts**
 
-- `docs/specs/<feature-slug>/verification.md`, copied or linked from the PR
+- `docs/tracks/<track-id>/verification.md`, copied or linked from the PR
 - CI run links, command results, screenshots, measurements, and known limitations
 
-`/pr ready` may commit a newly generated `docs/specs/<feature-slug>/verification.md` when it is the only outstanding change. The report continues to name the implementation revision; the evidence-only commit does not claim to have been part of the tested implementation.
+`/pr ready` may commit a newly generated `docs/tracks/<track-id>/verification.md` when it is the only outstanding change. The report continues to name the implementation revision; the evidence-only commit does not claim to have been part of the tested implementation.
 
 **Exit gate**
 
@@ -254,7 +262,7 @@ Review -> Resolve Critical/Required findings with TDD
 **Artifacts**
 
 - Review findings using one severity taxonomy: `Critical`, `Required`, `Optional`, `Nit`, and `FYI`
-- `docs/specs/<feature-slug>/review.md` naming the reviewed implementation revision
+- `docs/tracks/<track-id>/review.md` naming the reviewed implementation revision
 - Responses or commits resolving every blocking finding
 - Final verification evidence, approval, and green CI run
 - Merge record
@@ -324,7 +332,7 @@ execute or URLs for it to follow.
 
 - Release discovery preview with baseline source, pinned target, included PRs,
   direct commits, reverts, and ambiguity warnings
-- Included feature launch dossiers from `docs/specs/<feature-slug>/ship.md`
+- Included feature launch dossiers from `docs/tracks/<track-id>/ship.md`
 - Go/no-go decision
 - Launch checklist and acknowledged risks
 - Rollback triggers, exact rollback steps, owner, and recovery-time target
@@ -332,7 +340,7 @@ execute or URLs for it to follow.
 - Dashboards and alert links
 - Release notes, changelog, version, and deployment record where applicable
 
-The authoritative release-wide decision and deployment record stay in the configured release or deployment system so `/ship` does not mutate its pinned target. A follow-up documentation change may append the immutable deployment identifier to each included feature's `docs/specs/<feature-slug>/ship.md`.
+The authoritative release-wide decision and deployment record stay in the configured release or deployment system so `/ship` does not mutate its pinned target. A follow-up documentation change may append the immutable deployment identifier to each included feature's `docs/tracks/<track-id>/ship.md`.
 
 **Exit gate**
 

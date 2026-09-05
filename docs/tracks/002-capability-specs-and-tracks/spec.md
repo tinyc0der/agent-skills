@@ -2,6 +2,7 @@
 
 **Status:** Approved for implementation by the user's spec/track layout instruction.
 **Capability:** [Feature development workflow](../../specs/feature-development-workflow/spec.md)
+**Also affected:** [Memory management](../../specs/memory-management/spec.md)
 
 ## Objective
 
@@ -10,6 +11,7 @@ Keep the accepted contract for each capability at `docs/specs/<capability>/spec.
 ## Requirements
 
 - Capability identifiers are stable across changes and independent of branch names. A track may affect several capabilities.
+- Track ids use a repository-wide `NNN-<name>` prefix, starting at `001` and allocating above the highest existing number. Preserve ids and gaps and resolve concurrent collisions before merge. This incorporates the user's follow-up naming instruction.
 - Each track uses `spec.md` for proposed requirements or `bug.md` for expected behavior, reproduction, actual behavior, and fix acceptance criteria. Create both only when the work needs both.
 - Plans, task ledgers, verification, review, candidate memory, and launch dossiers belong to the track and are created only when needed.
 - Track specifications describe changes to linked capability specs. Multi-capability changes keep one track specification with a section per capability; an optional capability map links those sections and their canonical targets.
@@ -33,4 +35,6 @@ Keep the accepted contract for each capability at `docs/specs/<capability>/spec.
 
 ## Reconciliation
 
-Pending implementation and verification.
+- [Feature development workflow](../../specs/feature-development-workflow/spec.md): reconciled artifact ownership, numbered track allocation, capability sections, bug reports, completion, and evidence boundaries with the implemented skills, adapters, and validators.
+- [Memory management](../../specs/memory-management/spec.md): records the existing OKF behavior and the implemented spec/track ownership, numbering, and reconciliation rules.
+- Deterministic verification passes. Targeted behavioral verification and final review are recorded separately in this track; earlier reports from track 001 do not certify this revision. Merge has not occurred, so this track remains open.

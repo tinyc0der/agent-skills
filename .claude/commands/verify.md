@@ -13,6 +13,8 @@ Verify the current completed change against its approved specification:
 5. Account for applicable security, accessibility, performance, migration, compatibility, documentation, feature-flag, and observability requirements.
 6. Return `PASS`, `FAIL`, or `INCOMPLETE` using the skill's verdict rules.
 
-Persist the complete report to `docs/specs/<feature-slug>/verification.md` and copy or link the same evidence from the PR. The report must name the exact implementation revision it evaluates; do not claim that a later evidence-only commit was part of that verification.
+Spec reconciliation: compare the track's spec or bug report with the affected docs/specs/<capability>/spec.md files. Require verified requirement changes in the implementation PR, or a justified no-change disposition for unchanged contracts. Deferred and canceled proposals remain in the track. Canonical spec changes invalidate affected evidence; report missing reconciliation as incomplete verification or a Required review finding.
+
+Persist the complete report to `docs/tracks/<track-id>/verification.md` and copy or link the same evidence from the PR. The report must name the exact implementation revision it evaluates; do not claim that a later evidence-only commit was part of that verification.
 
 Do not add production behavior during verification. If a check fails, preserve the evidence, invoke agent-skills:debugging-and-error-recovery, and return to `/verify` after the fix.

@@ -11,7 +11,7 @@ The shipping-and-launch skill owns the complete **Automatic Release Discovery** 
 
 ## Phase A — Reuse evidence and refresh stale checks
 
-For every included PR with a feature bundle, load its docs/specs/<feature-slug>/ship.md launch dossier, revision-scoped docs/specs/<feature-slug>/verification.md and docs/specs/<feature-slug>/review.md evidence, and docs/specs/<feature-slug>/memory-delta.md when present. Determine which specialist reports are stale, missing, or invalidated by release changes. When more than one is needed, spawn them concurrently. Gemini CLI exposes each custom subagent in `agents/` as a tool with the same name.
+For every included PR with a change track, load its docs/tracks/<track-id>/ship.md launch dossier, revision-scoped docs/tracks/<track-id>/verification.md and docs/tracks/<track-id>/review.md evidence, and docs/tracks/<track-id>/memory-delta.md when present. Determine which specialist reports are stale, missing, or invalidated by release changes. When more than one is needed, spawn them concurrently. Gemini CLI exposes each custom subagent in `agents/` as a tool with the same name.
 
 Dispatch each persona by tool name:
 
@@ -76,5 +76,5 @@ Produce a single output:
 3. Personas do not call each other. The main agent merges in Phase B.
 4. The rollback plan is mandatory before any GO decision.
 5. Any unresolved Critical or Required finding makes the verdict NO-GO.
-6. Persist the authoritative release-wide decision in the configured release or deployment system; do not commit it before deployment because that would mutate the pinned target. A later documentation-only change may append the immutable deployment identifier to each included docs/specs/<feature-slug>/ship.md.
+6. Persist the authoritative release-wide decision in the configured release or deployment system; do not commit it before deployment because that would mutate the pinned target. A later documentation-only change may append the immutable deployment identifier to each included docs/tracks/<track-id>/ship.md.
 """

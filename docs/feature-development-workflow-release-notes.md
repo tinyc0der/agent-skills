@@ -38,17 +38,22 @@ review workflow; `test-driven-development` retains RED-GREEN-REFACTOR execution.
   rather than creating a duplicate.
 - Reviews now use `Critical`, `Required`, `Optional`, `Nit`, and `FYI`.
   Former `Important` blockers map to `Required`.
-- Feature lifecycle artifacts now live together under
-  `docs/specs/<feature-slug>/`. Single-capability specs use `spec.md`;
-  multi-capability work uses `capability-map.md` and
-  `spec-<module-id>.md`; planning, task, verification, review, candidate-memory,
-  and launch evidence remain beside them.
-- Existing in-flight artifacts migrate by deriving the feature slug from their
-  branch, moving `specs/SPEC.md` to the bundle's `spec.md`, moving capability
-  files into the same directory with lowercase names, and moving
-  `tasks/plan.md` and `tasks/todo.md` beside them. Do not auto-migrate when the
-  old directories contain artifacts for more than one feature; resolve the
-  ownership first.
+- Canonical capability contracts live at `docs/specs/<capability>/spec.md`.
+  Individual changes use numbered `docs/tracks/<track-id>/` directories with
+  `spec.md` or `bug.md`, and only the planning, task, verification, review,
+  candidate-memory, and launch evidence needed for that work. Multi-capability
+  proposals use sections of the track spec and an optional capability map.
+- Track ids use the next repository-wide three-digit number followed by a
+  kebab-case name, starting at `001`. Preserve historical ids and resolve
+  concurrent allocations before merge. Explicit track selection takes precedence
+  over branch-derived naming.
+- Before review, reconcile verified requirement changes into the owning
+  capability specs in the same implementation PR; record target links or a
+  justified no-change disposition in the track. Complete tracks after merge and
+  retain them as history. Canonical spec edits invalidate affected evidence.
+- Migrate existing execution records into numbered tracks and consolidate
+  accepted, implemented requirements by capability. Resolve ambiguous ownership
+  before moving files. Follow the [migration guide](migrations/capability-specs-and-tracks.md).
 - Per-skill installs remain usable without repo-root references; those links are
   supplemental whole-pack guidance.
 - `/ship` no longer requires users to transfer a candidate digest, main SHA,
@@ -99,5 +104,5 @@ If command discovery, routing, or lifecycle behavior regresses after publication
    clean install before resuming rollout.
 
 Rollback is complete when the previous command set is discoverable, existing
-feature bundles still load, and no published guide points users at an
+change tracks still load, and no published guide points users at an
 unavailable command.

@@ -28,6 +28,7 @@ Every review evaluates code across these dimensions:
 Does the code do what it claims to do?
 
 - Does it match the spec or task requirements?
+- **Spec reconciliation:** Do implemented, verified requirements match the owning `docs/specs/<capability>/spec.md` in the same implementation PR, with links or a justified no-change disposition in the track spec or bug report? Missing reconciliation is a Required finding; deferred and canceled proposals remain track-local.
 - Are edge cases handled (null, empty, boundary values)?
 - Are error paths handled (not just the happy path)?
 - Does it pass all tests? Are the tests actually testing the right things?
@@ -218,7 +219,7 @@ Review -> Fix -> Reverify affected behavior -> Rereview final revision
 
 Behavior-changing fixes follow `test-driven-development`. Do not approve based on a superseded diff or stale verification report.
 
-Persist the structured findings and final disposition to `docs/specs/<feature-slug>/review.md`, resolving `<feature-slug>` from the reviewed feature branch. Include the implementation revision, evidence sources, each finding's severity and disposition, and the final verdict. Copy or link the report from the pull request. A later commit containing only workflow evidence does not expand the reviewed scope; any production-affecting change requires reverify and rereview.
+Persist the structured findings and final disposition to `docs/tracks/<track-id>/review.md`, resolving the active numbered track from explicit task/PR context before branch-derived naming. Include the implementation revision, evidence sources, each finding's severity and disposition, and the final verdict. Copy or link the report from the pull request. A later commit containing only evidence or administrative updates in that track does not expand the reviewed scope; changes to requirements, scope, acceptance criteria, canonical specs, or production behavior require affected reverify and rereview.
 
 ## Multi-Model Review Pattern
 
@@ -411,7 +412,7 @@ After review is complete:
 - [ ] Tests pass
 - [ ] Build succeeds
 - [ ] The verification story is documented (what changed, how it was verified)
-- [ ] The review is saved to `docs/specs/<feature-slug>/review.md` and names the reviewed implementation revision
+- [ ] The review is saved to `docs/tracks/<track-id>/review.md` and names the reviewed implementation revision
 - [ ] Dependency upgrades were reviewed against their changelog, isolated per package, and verified by a green suite with the lockfile diff reviewed
 
 **Presumptive blockers:** surface and propose the simpler design for each of these; escalate to Required only when the change actively makes structure worse: a refactor that relocates complexity instead of reducing it; a change that pushes a file past the size boundary with no decomposition; feature logic added to a shared module; a near-duplicate of an existing canonical helper; a silent fallback that hides an unclear invariant.

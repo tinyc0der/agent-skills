@@ -10,6 +10,14 @@ const ROOT = path.resolve(__dirname, '..');
 const REQUIRED_TEXT = [
   { file: 'AGENTS.md', values: ['VERIFY → `verification-and-validation`'] },
   { file: 'docs/opencode-setup.md', values: ['VERIFY → `verification-and-validation`'] },
+  ...[
+    'skills/spec-driven-development/SKILL.md',
+    'skills/verification-and-validation/SKILL.md',
+    'skills/code-review-and-quality/SKILL.md',
+    '.claude/commands/pr.md', '.claude/commands/verify.md', '.claude/commands/review.md',
+    '.gemini/commands/pr.toml', '.gemini/commands/verify.toml', '.gemini/commands/review.toml',
+    'commands/pr.toml', 'commands/verify.toml', 'commands/review.toml',
+  ].map(file => ({ file, values: ['Spec reconciliation', 'docs/specs/<capability>/spec.md'] })),
 ];
 
 const LIFECYCLE_TOKENS = [
@@ -51,14 +59,14 @@ const DURABLE_ARTIFACT_CONTRACTS = [
     '.claude/commands/verify.md',
     '.gemini/commands/verify.toml',
     'commands/verify.toml',
-  ].map(file => ({ file, artifact: 'docs/specs/<feature-slug>/verification.md' })),
-  ...REVIEW_PRODUCERS.map(file => ({ file, artifact: 'docs/specs/<feature-slug>/review.md' })),
+  ].map(file => ({ file, artifact: 'docs/tracks/<track-id>/verification.md' })),
+  ...REVIEW_PRODUCERS.map(file => ({ file, artifact: 'docs/tracks/<track-id>/review.md' })),
   ...[
     'skills/shipping-and-launch/SKILL.md',
     '.claude/commands/ship.md',
     '.gemini/commands/ship.toml',
     'commands/ship.toml',
-  ].map(file => ({ file, artifact: 'docs/specs/<feature-slug>/ship.md' })),
+  ].map(file => ({ file, artifact: 'docs/tracks/<track-id>/ship.md' })),
 ];
 
 const SHIP_SKILL = 'skills/shipping-and-launch/SKILL.md';

@@ -30,13 +30,13 @@
     {
       "id": 1,
       "kind": "execution",
-      "prompt": "The slug feature is implemented. Verify it against docs/specs/slug/spec.md, persist docs/specs/slug/verification.md, and report whether it is ready for review. Do not add new production behavior.",
+      "prompt": "The fixture project is verification-and-validation/. Its slug feature is implemented. Verify the active docs/tracks/001-slug/spec.md and linked docs/specs/slug/spec.md, persist docs/tracks/001-slug/verification.md, and report whether it is ready for review. Do not add new production behavior.",
       "expected_output": "A revision-scoped verification report tracing both acceptance criteria to evidence, running the repository-owned test/build/lint/typecheck commands, and making an honest PASS/FAIL/INCOMPLETE decision without editing production code",
       "files": [
         "verification-and-validation"
       ],
       "expectations": [
-        "Both acceptance criteria in docs/specs/slug/spec.md are mapped to concrete evidence and explicit evidence states in docs/specs/slug/verification.md",
+        "Both acceptance criteria in docs/tracks/001-slug/spec.md are mapped to concrete evidence and explicit evidence states in docs/tracks/001-slug/verification.md; capability spec reconciliation is checked against docs/specs/slug/spec.md",
         "The repository-owned test, build, lint, and typecheck commands are discovered from package.json and run",
         "The final verdict follows the skill's PASS, FAIL, or INCOMPLETE rules",
         "No production file under src/ is modified during verification"

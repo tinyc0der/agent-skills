@@ -151,13 +151,13 @@ without repo-level files. Links to shared `references/` are explicitly optional
 expanded guidance for whole-pack installs. Copy one into the installed skill
 only when you want that additional detail.
 
-## Durable feature artifacts
+## Capability specs and change tracks
 
-The lifecycle commands build one bundle under `docs/specs/<feature-slug>/`: `spec.md` or `capability-map.md` plus module specs, `plan.md`, `todo.md`, `verification.md`, `review.md`, optional `memory-delta.md`, and a production feature's `ship.md`. Treat them as **living documents**:
+Canonical requirements live at `docs/specs/<capability>/spec.md`. Each change uses a numbered `docs/tracks/<track-id>/` directory (such as `001-user-auth`) with `spec.md` or `bug.md` and only the needed plan, task, verification, review, memory, and launch files. Before review, reconcile verified requirements into the owning capability specs in the same PR, or record why no canonical edit is needed. Complete the track after merge and retain its history. Treat active track artifacts as **living documents**:
 
 - Keep them in version control during development so the human and the agent have a shared source of truth.
 - Update them when scope or decisions change.
-- Retain shipped feature bundles after merge so later sessions can trace intent, evidence, review, and release inclusion without reconstructing them from conversation history.
+- Retain shipped change tracks after merge so later sessions can trace intent, evidence, review, and release inclusion without reconstructing them from conversation history.
 
 ## Tips
 

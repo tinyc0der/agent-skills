@@ -28,7 +28,7 @@ If a piece of knowledge only matters to the current conversation, it does **not*
 
 ## A Note on Terms: Memory vs. `steering/`
 
-**Memory** is the whole durable-knowledge system: the portable OKF knowledge bundle plus the shipped `specs/` history that supplies workflow evidence. The bundle contains `project.md`, `decisions/`, `steering/`, and `runbooks/`; feature workflow state stays outside it.
+**Memory** is the whole durable-knowledge system: the portable OKF knowledge bundle, canonical capability specs, and change tracks that supply historical evidence. The bundle contains `project.md`, `decisions/`, `steering/`, and `runbooks/`; specs and tracks stay outside it.
 
 **`steering/`** is one part of that system: the directory holding durable knowledge that has no more specific home. It used to be called `memory/`; it's renamed to `steering/` precisely so "memory" can keep its broader meaning without the directory name colliding with it.
 
@@ -40,11 +40,11 @@ Knowledge lives at one of three levels, and only earns promotion upward when it'
 
 ```
 Session memory   → what this agent has in context right now (most of it is disposable)
-Workflow state   → task-specific state for one feature        (lives in docs/specs/<slug>/)
-Project memory   → durable knowledge reused across features   (docs/knowledge/ OKF bundle)
+Workflow state   → one change's proposals, tasks, and evidence (docs/tracks/<track-id>/)
+Project memory   → accepted capability specs + reusable knowledge (docs/specs/ + docs/knowledge/)
 ```
 
-The promotion test for project memory: **"Would a future feature that has nothing to do with this one still need this fact?"** If yes, it belongs in durable memory — and if it has no more specific home, in `steering/`. If no, it stays in the feature's workflow state. Shipped feature folders remain as provenance, but feature-local facts are not promoted into the always-discovered core.
+The promotion test for reusable knowledge: **"Would a future feature that has nothing to do with this one still need this fact?"** If yes, it belongs in durable memory — and if it has no more specific home, in `steering/`. Capability requirements go to their owning specs. Other change-local facts stay in the track. Completed tracks remain as provenance without promoting their task histories into the always-discovered core.
 
 An abandoned or reverted experiment that established no reusable constraint stays in session or workflow history. Do not save an ineffective parameter change merely as context for a verified fix, or turn "it made no difference in this session" into a general rule.
 
@@ -56,7 +56,7 @@ Durable memory is separated into homes. The skill's first move is always to ask 
 
 When an established home is outside the bundle, route its new knowledge there. If bundle discovery is needed, add a typed `external-knowledge.md` concept (`type: Knowledge Sources`) linking to those canonical homes with descriptions, and list that concept in the root index. Use the cross-boundary citation rules below; do not copy their contents into bundle concepts or put external links in reserved collection indexes. Required bundle indexes may stay empty for externally owned collections. External documents keep their existing format and are not subject to OKF concept frontmatter. All routing below uses these resolved owners; the illustrated homes are defaults for knowledge with no established owner.
 
-**Every durable artifact has a resolved memory root.** Resolve scope first: the repository memory root is `docs/`; a package-owned memory root is `packages/<pkg>/docs/`. The OKF bundle root is always `<memory-root>/knowledge/`. Per-feature workflow state remains in repository `docs/specs/<slug>/`, outside the bundle, regardless of memory scope. The repository layout is:
+**Every durable artifact has a resolved home.** Resolve scope first: the repository memory root is `docs/`; a package-owned memory root is `packages/<pkg>/docs/`. The OKF bundle root is always `<memory-root>/knowledge/`. Canonical capability specs stay in repository `docs/specs/<capability>/spec.md`; change history stays in `docs/tracks/<track-id>/`, outside the bundle, regardless of memory scope. The repository layout is:
 
 ```
 docs/knowledge/
@@ -72,10 +72,30 @@ docs/knowledge/
     index.md
     <procedure>.md
 
-docs/specs/<slug>/      → feature workflow: spec → plan → memory delta → review → ship
+docs/specs/<capability>/
+  spec.md               → current accepted requirements for one capability
+
+docs/tracks/<track-id>/  → numbered change, e.g. 001-adopt-okf-v0-2
+  spec.md               → proposed requirement changes and capability links
+  bug.md                → defect, reproduction, expected behavior, fix criteria
+  plan.md, todo.md      → implementation plan and task ledger
+  verification.md       → evidence for an exact revision
+  review.md             → findings, dispositions, and reviewed revision
+  memory-delta.md       → candidate reusable knowledge, only when discovered
+  ship.md               → launch dossier, only when needed
 ```
 
 Each bundle has a root `index.md`; each durable collection under `<memory-root>/knowledge/` carries its own `index.md`. These maps provide one-line summaries and discovery paths so a session can find the right concept without reading the whole directory.
+
+### Capability specs and numbered tracks
+
+Each capability has one stable kebab-case id and one canonical spec across changes. A track may affect several capabilities. Read the existing capability specs first; the track's spec describes proposed changes rather than copying the whole accepted contract. A bug report can replace a track spec when the work restores existing behavior. Create only the artifacts the change needs.
+
+**Track ids use `NNN-<name>`**, for example `001-adopt-okf-v0-2`. Allocate the next unused three-digit number above the highest existing prefix in repository `docs/tracks/`, starting at `001`; use a concise kebab-case name. Numbers are repository-wide, not per capability. Preserve existing ids and gaps, never overwrite or renumber historical tracks, and resolve a concurrent allocation collision before merge. An explicit existing track path takes precedence over branch-derived naming; a branch slug supplies only the descriptive suffix for a new track.
+
+**Spec reconciliation:** Before review, incorporate implemented, verified requirement changes into each owning `docs/specs/<capability>/spec.md` in the same PR as the implementation. Record links and dispositions in the track spec or bug report. If a fix restores an already-correct contract, record why no canonical edit is needed. Keep deferred, canceled, and unverified proposals in the track. Reconcile against the latest accepted spec when concurrent tracks affect the same capability. Mark a track complete after merge and retain it as history.
+
+Spec reconciliation and OKF knowledge promotion have separate destinations and gates: capability contracts accompany their implementation; reusable lessons follow the review/promotion workflow below. Do not copy requirements, plans, bug reports, or reviews into `steering/`, and do not treat a completed track as proof that every candidate lesson was verified. Link to canonical specs and track evidence when useful. Specs and tracks do not require OKF frontmatter.
 
 ## OKF v0.2 Essentials
 
@@ -138,9 +158,9 @@ Continue reading v0.1 bundles: a legacy `timestamp` can supply content-change ti
 |---|---|
 | Product direction → `<bundle-root>/project.md` | Conventions the code follows but no doc states |
 | A deliberate architecture decision → `<bundle-root>/decisions/` | Build / test / verify / deploy commands and env quirks |
-| One feature's requirements → `docs/specs/<slug>/` | Known risks and fragile areas found while working |
+| Accepted capability requirements → `docs/specs/<capability>/spec.md` | Known risks and fragile areas found while working |
+| Proposed changes, bugs, plans, and evidence → `docs/tracks/<track-id>/` | Lessons from completed changes |
 | A step-by-step operational procedure → `<bundle-root>/runbooks/` | Recurring failure modes |
-| | Lessons from completed features ("tried X, failed because Y") |
 | | User/team working preferences too informal for a spec |
 
 **ADR vs. memory lesson:** a *deliberate* architecture choice gets an ADR; an *observed* gotcha or failure with no formal decision attached is a memory lesson. Memory links to the ADR rather than restating it.
@@ -217,7 +237,7 @@ If the requested facts already have canonical homes and discovery indexes, finis
 
 Discovered knowledge does not get written straight into durable memory. It flows through review:
 
-1. **During a feature**, candidate knowledge accumulates in `docs/specs/<slug>/memory-delta.md` — a scratchpad. It is *not* durable memory yet; the feature might get reverted and take its "lessons" with it.
+1. **During a feature**, candidate knowledge accumulates in `docs/tracks/<track-id>/memory-delta.md` — a scratchpad. It is *not* durable memory yet; the feature might get reverted and take its "lessons" with it.
 2. **At ship, resolve scope first.** For each candidate, choose the memory root before choosing the concept type. Use `docs/` for repo-wide or cross-package knowledge. For knowledge owned by one package, use `packages/<pkg>/docs/` only when that package already has (or now justifies) an independent bundle; otherwise keep it in the repository bundle with package scope encoded in the concept. The target OKF bundle is `<memory-root>/knowledge/`.
 3. **GO — review, record, and promote.** Give every candidate a disposition with rationale: accepted, rejected as unverified, or retained as feature-local. Route accepted items within the resolved bundle: project direction or constraints → `<bundle-root>/project.md`; deliberate architecture choices → `<bundle-root>/decisions/`; declarative conventions, risks, or lessons → `<bundle-root>/steering/`; repeatable procedures → `<bundle-root>/runbooks/`. At repository scope these resolve to `docs/knowledge/project.md`, `docs/knowledge/decisions/`, `docs/knowledge/steering/`, and `docs/knowledge/runbooks/`. Create or update an OKF concept with the required frontmatter, update the affected collection index, and keep the root index current. Promote the accepted set in **one batched PR** and record target links in `memory-delta.md`.
 4. **NO-GO — preserve workflow state.** Record why the launch was blocked, leave every candidate unpromoted in `memory-delta.md`, and make no durable-memory edit. A later GO decision performs the review and promotion.
@@ -225,7 +245,7 @@ Discovered knowledge does not get written straight into durable memory. It flows
 
 The promotion chain for procedural knowledge extends one step further: **delta → lesson → runbook.** After an incident, a lesson ("DB failover needs X") that proves recurring and procedural graduates into a runbook *step*.
 
-Memory concepts **cite** `docs/specs/<slug>/review.md` and other permanent evidence rather than copying it. For v0.2 concepts, record evidence in `sources` and use matching footnote IDs for claim-level attribution. Prefer durable repository/web URLs when the bundle may be distributed independently; use checkout-relative links only when that portability trade-off is explicit.
+Memory concepts **cite** `docs/tracks/<track-id>/review.md` and other permanent evidence rather than copying it. For v0.2 concepts, record evidence in `sources` and use matching footnote IDs for claim-level attribution. Prefer durable repository/web URLs when the bundle may be distributed independently; use checkout-relative links only when that portability trade-off is explicit.
 
 ## How Memory Gets Loaded: Progressive Disclosure
 
@@ -384,6 +404,7 @@ Apply these checks to the authorized changes and their affected indexes, not as 
 - [ ] New v0.2 provenance uses `sources`; optional authorship, verification, and expiry fields are evidence-backed. Bootstrap concepts remain `draft` until reviewed.
 - [ ] The knowledge was routed to its resolved owner, preserving established external locations and formats; nothing duplicates `project.md`, an ADR, or a spec folder.
 - [ ] Every fact has exactly one canonical location; everything else links to it.
+- [ ] Any new track has a unique repository-wide `NNN-<name>` id; accepted capability requirements stay in their owning specs, with reconciliation or a justified no-change disposition recorded before review.
 - [ ] The change went through a reviewable diff (commit/PR), not a silent in-place edit.
 - [ ] The corresponding root or package-local bundle and collection index is updated so a future session can find the new content without reading everything.
 - [ ] Each file covers one concern; tiny/overlapping files were merged, multi-topic files split.

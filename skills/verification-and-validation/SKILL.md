@@ -40,7 +40,7 @@ Never convert NOT RUN into PASS. A compile result is not runtime evidence, and a
 
 Record the revision or working-tree state being verified. Read:
 
-- The approved specification and acceptance criteria
+- The active numbered track's approved spec or bug report, its acceptance criteria, and linked canonical capability specs
 - The implementation plan and completed tasks
 - The diff or commits included in the change
 - The repository's documented test, build, lint, format, type-check, and runtime commands
@@ -61,6 +61,8 @@ Map every acceptance criterion to the lowest-cost evidence that proves it:
 ```
 
 If a criterion has no credible evidence, mark it NOT RUN or FAIL. Do not weaken the criterion to fit available tests.
+
+**Spec reconciliation:** Compare implemented, verified requirements with `docs/specs/<capability>/spec.md`. The implementation PR must include each changed capability contract, with links and dispositions recorded in the track spec or bug report. A fix restoring the existing contract may record a justified no-change disposition. Deferred and canceled proposals stay in the track. Missing reconciliation makes readiness INCOMPLETE; return it to implementation rather than rewriting contracts during verification.
 
 ### 3. Discover the repository gates
 
@@ -149,7 +151,7 @@ Verdict rules:
 - **FAIL:** at least one criterion or required gate is FAIL
 - **INCOMPLETE:** nothing is known to fail, but required evidence is NOT RUN
 
-Persist the report to `docs/specs/<feature-slug>/verification.md` and copy or link it from the pull request. Resolve `<feature-slug>` from the current branch using the same mapping as the specification. The report names the exact implementation revision it evaluated. If committing the report creates a later evidence-only revision, record that separately; reuse remains valid only when the complete intervening diff is confined to workflow artifacts in this feature bundle.
+Persist the report to `docs/tracks/<track-id>/verification.md` and copy or link it from the pull request. Resolve the active numbered track using `context-engineering`; explicit selection takes precedence over branch-derived naming. The report names the exact implementation revision it evaluated. If committing the report creates a later evidence-only revision, record that separately; reuse remains valid only for evidence or administrative updates in the same track that do not change requirements, scope, acceptance criteria, or canonical specs. Contract changes invalidate affected evidence.
 
 After FAIL, preserve the evidence and invoke `debugging-and-error-recovery`. If the fix changes behavior, follow `test-driven-development` and prove the failure with a RED test before the fix. Return here afterward and verify the affected checks plus the full regression gate.
 
@@ -186,4 +188,4 @@ Before declaring the feature ready for review:
 - [ ] Failed checks entered debugging and were reverified after the fix
 - [ ] No required check is FAIL or NOT RUN for a PASS verdict
 - [ ] The report contains enough evidence for a reviewer to reproduce the decision
-- [ ] The report is saved to `docs/specs/<feature-slug>/verification.md` and names its implementation revision
+- [ ] The report is saved to `docs/tracks/<track-id>/verification.md` and names its implementation revision

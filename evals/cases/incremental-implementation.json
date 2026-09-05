@@ -56,10 +56,10 @@
     {
       "id": 3,
       "kind": "dialogue",
-      "prompt": "Explain how `/build auto` should execute an approved docs/specs/account-platform/capability-map.md with docs/specs/account-platform/spec-auth.md and docs/specs/account-platform/spec-billing.md when tasks live in an external tracker indexed by docs/specs/account-platform/todo.md. Include planning-artifact commits, dependency order, checkpoint semantics, stop-the-line cases, TDD, Definition of Done checks, and commit hygiene.",
+      "prompt": "Explain how `/build auto` should execute an approved docs/tracks/001-account-platform/capability-map.md with auth and billing sections in docs/tracks/001-account-platform/spec.md linked to their docs/specs/<capability>/spec.md owners when tasks live in an external tracker indexed by docs/tracks/001-account-platform/todo.md. Include planning-artifact commits, dependency order, checkpoint semantics, stop-the-line cases, TDD, Definition of Done checks, and commit hygiene.",
       "expected_output": "A precise auto-build contract for multi-capability specs and external tasks that preserves approval boundaries, safety checkpoints, per-slice verification, and independently revertible commits",
       "expectations": [
-        "Auto mode selects module specs through docs/specs/account-platform/capability-map.md and resolves external tracker items through docs/specs/account-platform/todo.md",
+        "Auto mode selects capability sections in the track spec through docs/tracks/001-account-platform/capability-map.md and resolves external tracker items through docs/tracks/001-account-platform/todo.md",
         "Generated or changed spec, plan, and task artifacts are committed together before implementation so they cannot leak into the first code commit",
         "Safe tasks run in dependency order without pausing after every task, but planned high-risk checkpoints and ambiguous, destructive, irreversible, or failing work stop the line",
         "Each behavioral slice applies the minimum-sufficient test admission gate before RED-GREEN-REFACTOR, while adequately covered or non-behavioral tasks record a rationale and use a proportionate executable check; all slices then run applicable regression, build, lint, type, and runtime checks",

@@ -158,17 +158,17 @@ Observe:            observability-and-instrumentation -> flag/legacy cleanup
 
 Use the canonical artifacts at each transition:
 
-All repository artifacts for a feature live together under `docs/specs/<feature-slug>/`. Resolve the slug from the feature branch; do not mix lifecycle files from different bundle directories.
+Accepted capability contracts live at `docs/specs/<capability>/spec.md`; change requirements and execution history live under `docs/tracks/<track-id>/`. Track ids use repository-wide `NNN-name` numbering starting at `001`. Resolve the active track through explicit task/PR context before branch-derived naming; never mix evidence from different tracks. Read the linked capability specs before acting on the track proposal.
 
 | Transition | Required artifact or evidence |
 |---|---|
-| Define → Plan | Approved `docs/specs/<feature-slug>/spec.md`, or `docs/specs/<feature-slug>/capability-map.md` plus addressable `docs/specs/<feature-slug>/spec-<module-id>.md` files |
-| Plan → Draft PR | Approved `docs/specs/<feature-slug>/plan.md`, `docs/specs/<feature-slug>/todo.md`, and `docs/specs/<feature-slug>/ship.md` when production-affecting |
+| Define → Plan | Approved `docs/tracks/<track-id>/spec.md` with per-capability sections and an optional `docs/tracks/<track-id>/capability-map.md`; bounded bugs may use `docs/tracks/<track-id>/bug.md` |
+| Plan → Draft PR | Approved `docs/tracks/<track-id>/plan.md`, `docs/tracks/<track-id>/todo.md`, and `docs/tracks/<track-id>/ship.md` when production-affecting |
 | Draft PR → Build | Draft PR body linking the spec and plan, with scope, non-goals, risks, acceptance criteria, rollout, and rollback context |
-| Build → Verify | Independently revertible implementation commits, current task state, launch dossier, and any candidate knowledge in `docs/specs/<feature-slug>/memory-delta.md` |
-| Verify → Ready PR | `docs/specs/<feature-slug>/verification.md` with acceptance trace, repository checks, runtime evidence, and a PASS verdict naming the implementation revision |
-| Ready PR → Merge | `docs/specs/<feature-slug>/review.md`, green required CI, no Critical or Required findings, and required human approval |
-| Merge → Ship | Release-revision evidence plus included feature `docs/specs/<feature-slug>/ship.md` dossiers, migration/flag/observability readiness, go/no-go decision, and rollback plan |
+| Build → Verify | Independently revertible implementation commits, current task state, Spec reconciliation in the owning capability specs (or justified no-change dispositions), launch dossier, and any candidate knowledge in `docs/tracks/<track-id>/memory-delta.md` |
+| Verify → Ready PR | `docs/tracks/<track-id>/verification.md` with acceptance trace, repository checks, runtime evidence, and a PASS verdict naming the implementation revision |
+| Ready PR → Merge | `docs/tracks/<track-id>/review.md`, green required CI, no Critical or Required findings, and required human approval |
+| Merge → Ship | Track completion recorded after merge, retained history, release-revision evidence plus included feature `docs/tracks/<track-id>/ship.md` dossiers, migration/flag/observability readiness, go/no-go decision, and rollback plan |
 
 `debugging-and-error-recovery` is entered from any failed check and returns to the phase that failed. It is not the ordinary Verify phase.
 

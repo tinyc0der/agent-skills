@@ -71,6 +71,21 @@
         "Uses a durable repository URL in sources for external ADR evidence, or explicitly explains the checkout-relative portability trade-off because this fixture supplies no remote; does not invent a remote URL.",
         "The final handoff explicitly presents the generated guidance as a proposal for review, cites its verified sources, and identifies unresolved inferences if any. A local commit is allowed as a reviewable proposal and is not by itself a claim of approval; do not require the agent to pause before committing."
       ]
+    },
+    {
+      "id": 5,
+      "name": "numbered-change-track",
+      "kind": "execution",
+      "prompt": "The fixture project is memory-management/numbered-change-track/; use that directory as the project scope. We approved a proposed change to authentication: reduce the idle session timeout from 30 minutes to 15 minutes. SAML support is deferred. Record this change in a new track named session-timeouts, using our NNN-name convention and existing capability spec. The existing tracks are historical. Requirements are approved, but no implementation, verification, or merge has happened. Create only the change spec we need now and record how it will be reconciled on completion. Do not implement the behavior or bootstrap a knowledge bundle.",
+      "expected_output": "A new docs/tracks/008-session-timeouts/spec.md links the unchanged docs/specs/authentication/spec.md, records the timeout proposal and deferred SAML, and requires verified reconciliation before review in the implementation PR. Historical tracks and canonical requirements remain unchanged; no premature completion or knowledge bootstrap.",
+      "files": [
+        "memory-management/numbered-change-track"
+      ],
+      "expectations": [
+        "Allocates docs/tracks/008-session-timeouts/spec.md above the highest existing repository-wide number 007, preserving both historical track ids and contents rather than filling a gap or reusing a completed track.",
+        "The new track links docs/specs/authentication/spec.md and records the approved 15-minute timeout proposal and deferred SAML. The canonical spec remains byte-for-byte unchanged because implementation and verification have not happened.",
+        "Records spec reconciliation into the capability spec in the implementation PR after verification and before review, keeps deferred requirements out of canonical specs, and does not mark the track complete before merge. Creates no implementation code, extra plan/task/review placeholders, or OKF bundle."
+      ]
     }
   ],
   "trigger": {

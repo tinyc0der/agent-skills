@@ -9,6 +9,8 @@ description: Creates specs before coding. Use when starting a new project, featu
 
 Write a structured specification before writing any code. The spec is the shared source of truth between you and the human engineer — it defines what we're building, why, and how we'll know it's done. Code without a spec is guessing.
 
+Canonical capability specs live at `docs/specs/<capability>/spec.md` and describe current accepted behavior. This skill writes proposed changes to `docs/tracks/<track-id>/spec.md`, linking the affected capability specs rather than copying them. Track ids use a repository-wide three-digit prefix and kebab-case suffix, such as `001-user-auth`; follow the artifact map in `context-engineering` for allocation and active-track resolution. A bug that restores an existing contract can use `docs/tracks/<track-id>/bug.md` through `debugging-and-error-recovery` without a separate change spec.
+
 ## When to Use
 
 - Starting a new project or feature
@@ -58,11 +60,11 @@ Build order: identity → billing, notifications → reporting
 
 - **Stable module ids.** Kebab-case, chosen once, never renamed mid-initiative. Specs, plans, and downstream commands select work by these ids instead of guessing which spec is active.
 - **Dependency direction, no cycles.** Arrows point one way. If two modules each need the other, they are one module.
-- **Interfaces live at the boundary.** The map records that `billing` depends on `identity`; the contract between them belongs in the provider module's spec (see `api-and-interface-design` for designing it).
+- **Interfaces live at the boundary.** The map records that `billing` depends on `identity`; proposed contract changes belong in the provider's track-spec section and accepted contracts in its capability spec (see `api-and-interface-design` for designing them).
 
-**The map is gated like every phase.** The human reviews module boundaries, dependency direction, and build order before any module spec is written. Getting the map wrong is expensive; reviewing ten lines is not.
+**The map is gated like every phase.** The human reviews capability boundaries, dependency direction, and build order before the detailed capability sections are written. Getting the map wrong is expensive; reviewing ten lines is not.
 
-**Then specify per module.** Each module gets its own spec, scoped to that module's objective, boundaries, contracts, and success criteria. Save the approved map as `docs/specs/<feature-slug>/capability-map.md` and module specs as `docs/specs/<feature-slug>/spec-<module-id>.md` — the map, not filename guessing, is the index of what exists. If a capability map already exists, update the owning module spec rather than creating a duplicate feature spec.
+**Then specify each capability's changes.** Save the approved map as `docs/tracks/<track-id>/capability-map.md`. Each row links a section in `docs/tracks/<track-id>/spec.md` and the owning `docs/specs/<capability>/spec.md` (or names its intended path for a new capability). Scope each section to that capability's objective, boundaries, contracts, and success criteria. Reuse existing capability ids across tracks; the map selects spec sections rather than separate module-spec files.
 
 ### Phase 1: Specify
 
@@ -115,6 +117,9 @@ Don't silently fill in ambiguous requirements. The spec's entire purpose is to s
 ```markdown
 # Spec: [Project/Feature Name]
 
+**Status:** Draft | Approved | In progress | Complete | Canceled
+**Affected capabilities:** [Links to existing specs; intended paths for new capabilities]
+
 ## Objective
 [What we're building and why. User stories or acceptance criteria.]
 
@@ -143,6 +148,9 @@ Don't silently fill in ambiguous requirements. The spec's entire purpose is to s
 
 ## Open Questions
 [Anything unresolved that needs human input]
+
+## Spec reconciliation
+[Before review: implemented requirements → canonical spec paths, or a justified no-change disposition. Deferred and canceled items remain here.]
 ```
 
 **Reframe instructions as success criteria.** When receiving vague requirements, translate them into concrete conditions:
@@ -161,18 +169,20 @@ This lets you loop, retry, and problem-solve toward a clear goal rather than gue
 
 ### Hand Off to Planning
 
-Before writing an artifact, require a non-default feature branch and derive `<feature-slug>` from it: drop the leading workflow or owner namespace, lowercase the remainder, replace every run of non-alphanumeric characters (including `/`) with `-`, and trim leading or trailing `-`. Create `docs/specs/<feature-slug>/` if needed.
+Before writing an artifact, require a non-default branch and resolve the active track. For a new track, allocate the next unused three-digit prefix above the repository's highest existing track number, starting at `001`, and append a kebab-case name. The branch can supply the suffix; it never supplies the capability id. Create `docs/tracks/<track-id>/` only for the selected or newly authorized change and preserve its id across branch renames.
 
-After human approval, save a single-capability spec as `docs/specs/<feature-slug>/spec.md`, or use the approved capability-map layout for a multi-capability initiative. Then invoke `planning-and-task-breakdown`; do not create tasks or implementation code in this skill.
+After human approval, save the change spec as `docs/tracks/<track-id>/spec.md`, with a section per affected capability when needed. Then invoke `planning-and-task-breakdown`; do not create tasks or implementation code in this skill. An approved proposal remains track-local until implemented and verified.
 
 ## Keeping the Spec Alive
 
-The spec is a living document, not a one-time artifact:
+The track spec remains current while work proceeds:
 
 - **Update when decisions change** — If you discover the data model needs to change, update the spec first, then implement.
 - **Update when scope changes** — Features added or cut should be reflected in the spec.
 - **Commit the spec** — The approved spec belongs in version control before implementation begins.
 - **Reference the spec in PRs** — Link back to the spec section that each PR implements.
+
+**Spec reconciliation:** Before review, incorporate implemented, verified changes into each owning `docs/specs/<capability>/spec.md` in the same PR as the implementation. Record the affected paths and dispositions in the track spec. Keep deferred, canceled, and unverified requirements out of canonical specs; record a justified no-change disposition for an unchanged contract. Reconcile concurrent edits against the latest accepted capability spec. Mark the track complete after merge and retain its history.
 
 ## Common Rationalizations
 
@@ -193,10 +203,11 @@ The spec is a living document, not a one-time artifact:
 - Implementing features not mentioned in any spec or task list
 - Making architectural decisions without documenting them
 - Skipping the spec because "it's obvious what to build"
-- One spec whose requirements span several independently testable capabilities
+- A multi-capability track spec without separately scoped capability sections and canonical owners
 - Module boundaries or build order decided implicitly during implementation because no capability map was approved up front
 - Planning tasks or implementation code produced before the specification is approved
-- A new feature spec created for behavior already owned by an existing module spec
+- A new canonical capability spec created for behavior already owned by an existing capability
+- An approved but unimplemented proposal written into the canonical capability spec
 
 ## Verification
 
@@ -208,7 +219,7 @@ Before proceeding to implementation, confirm:
 - [ ] The testing strategy targets material coverage gaps without generic case matrices or duplicated test layers
 - [ ] Boundaries (Always/Ask First/Never) are defined
 - [ ] The spec is saved to a file in the repository
-- [ ] If the request bundles several independently testable capabilities, a capability map (module ids, dependency direction, build order) was approved before any module spec was written
-- [ ] Every module spec traces to a module id in the approved map
-- [ ] The approved spec is saved under `docs/specs/<feature-slug>/` and committed before implementation
+- [ ] If the request bundles several independently testable capabilities, a capability map (stable ids, dependency direction, build order) was approved before detailed capability sections were written
+- [ ] Each proposed capability section links its canonical owner or names the intended path for a new capability
+- [ ] The approved spec is saved under `docs/tracks/<track-id>/` and committed before implementation
 - [ ] The next step is explicitly handed to `planning-and-task-breakdown`

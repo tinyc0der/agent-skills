@@ -4,7 +4,7 @@ description: Break work into small verifiable tasks with acceptance criteria and
 
 Invoke the agent-skills:planning-and-task-breakdown skill.
 
-Resolve the active feature bundle from the current branch. Read the approved spec from `docs/specs/<feature-slug>/spec.md` or select a module through `docs/specs/<feature-slug>/capability-map.md`, then read the relevant codebase sections. Then:
+Resolve the active numbered track using context-engineering. Read the approved requirements from docs/tracks/<track-id>/spec.md or docs/tracks/<track-id>/bug.md, the linked docs/specs/<capability>/spec.md files, and relevant code. For multi-capability work, use docs/tracks/<track-id>/capability-map.md to select the relevant sections of the track spec. Then:
 
 1. Enter plan mode — read only, no code changes
 2. Identify the dependency graph between components
@@ -13,6 +13,6 @@ Resolve the active feature bundle from the current branch. Read the approved spe
 5. Add checkpoints between phases
 6. Present the plan for human review
 
-Save the plan to `docs/specs/<feature-slug>/plan.md` and the durable task ledger to `docs/specs/<feature-slug>/todo.md`. When an external tracker is designated, keep `docs/specs/<feature-slug>/todo.md` as an ordered index of tracker items and lifecycle checkpoints rather than duplicating their bodies. Record the selected tracker, if any, in the plan.
+Save the plan to `docs/tracks/<track-id>/plan.md` and the durable task ledger to `docs/tracks/<track-id>/todo.md`. When an external tracker is designated, keep `docs/tracks/<track-id>/todo.md` as an ordered index of tracker items and lifecycle checkpoints rather than duplicating their bodies. Record the selected tracker, if any, in the plan.
 
-For production-affecting work, initialize `docs/specs/<feature-slug>/ship.md` with rollout prerequisites, migrations, feature flags, success thresholds, monitoring, rollback triggers and steps, and owners.
+For production-affecting work, initialize `docs/tracks/<track-id>/ship.md` with rollout prerequisites, migrations, feature flags, success thresholds, monitoring, rollback triggers and steps, and owners.

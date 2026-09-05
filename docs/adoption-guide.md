@@ -36,8 +36,8 @@ A new project is the best-case scenario: there's no legacy behavior to preserve,
 Run the lifecycle in order for the project's first real feature:
 
 ```
-/spec   →  docs/specs/<feature-slug>/spec.md  (spec-driven-development)
-/plan   →  docs/specs/<feature-slug>/plan.md  (planning-and-task-breakdown)
+/spec   →  docs/tracks/<track-id>/spec.md  (spec-driven-development)
+/plan   →  docs/tracks/<track-id>/plan.md  (planning-and-task-breakdown)
 /pr draft → early collaboration artifact (git-workflow-and-versioning)
 /build  →  one slice at a time (incremental-implementation + test-case-design-review when needed + test-driven-development)
 /verify →  assembled feature evidence (verification-and-validation)
@@ -46,7 +46,7 @@ Run the lifecycle in order for the project's first real feature:
 /ship   →  when going live     (shipping-and-launch)
 ```
 
-`/build auto` is a good fit for greenfield: you approve the plan once, behavioral tasks apply the minimum-sufficient test gate and RED-GREEN-REFACTOR, non-behavioral tasks use proportionate executable checks, and every task commits individually. The complete lifecycle bundle under `docs/specs/<feature-slug>/` is living, revision-aware documentation; keep it in version control through and after the feature.
+`/build auto` is a good fit for greenfield: you approve the plan once, behavioral tasks apply the minimum-sufficient test gate and RED-GREEN-REFACTOR, non-behavioral tasks use proportionate executable checks, and every task commits individually. Numbered `docs/tracks/<track-id>/` directories use repository-wide `NNN-name` ids and retain change requirements and evidence. Before review, reconcile verified requirements into `docs/specs/<capability>/spec.md` in the same PR, or record a justified no-change disposition. Keep completed tracks as history after merge.
 
 ### From the start, treat these as always-on
 

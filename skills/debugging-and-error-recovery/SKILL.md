@@ -37,6 +37,10 @@ When anything unexpected happens:
 
 Work through these steps in order. Do not skip steps.
 
+For a tracked defect, resolve the active numbered change track through `context-engineering` and keep the report at `docs/tracks/<track-id>/bug.md`. New track ids use a repository-wide three-digit prefix and kebab-case name, such as `001-import-crash`. Record status, affected capability links, expected and actual behavior, reproduction evidence, and fix acceptance criteria. A bounded bug does not require a separate feature spec or plan; a failed check inside an existing track stays in that track.
+
+**Spec reconciliation:** Read the owning `docs/specs/<capability>/spec.md`. When the fix restores an already-correct contract, record a justified no-change disposition in the bug report. If approved requirements change, update the capability spec with the verified implementation in the same PR before review. Keep unverified hypotheses and deferred fixes in the track, and mark it complete only after review and merge.
+
 ### Step 1: Reproduce
 
 Make the failure happen reliably. If you can't reproduce it, you can't fix it with confidence.

@@ -265,10 +265,11 @@ Mark a draft ready only when:
 - The working tree is clean and the remote contains the exact local head
 - A `verification-and-validation` PASS report names that head revision
 - Acceptance criteria and the pre-review Definition of Done profile are satisfied
+- Spec reconciliation is recorded in the numbered track's spec or bug report: verified requirement changes update `docs/specs/<capability>/spec.md` in the same PR, or unchanged contracts have a justified no-change disposition
 - The PR body, task state, screenshots, migration notes, and risk notes are current
 - No known Critical or Required finding remains
 
-Stale evidence is not transferable to a newer revision. Rerun every affected check, update the PR, then mark it ready. `/pr ready` does not authorize merge.
+Stale evidence is not transferable to a newer revision. Canonical spec changes and changes to a track's requirements, scope, or acceptance criteria invalidate affected evidence; they are not evidence-only commits. Rerun every affected check, update the PR, then mark it ready. `/pr ready` does not authorize merge.
 
 ### Review and merge
 

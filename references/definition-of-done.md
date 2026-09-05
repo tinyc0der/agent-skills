@@ -44,6 +44,7 @@ The depth behind these items lives in `code-review-and-quality` (the five-axis r
 - [ ] Public interfaces, APIs, and user-facing behavior are documented
 - [ ] Architectural decisions worth preserving are recorded (see `documentation-and-adrs`)
 - [ ] Documentation describes the current state in timeless language, not the change history
+- [ ] Spec reconciliation is recorded in the numbered track's spec or bug report: verified requirement changes update owning capability specs in the same implementation PR, or the unchanged contract has a justified no-change disposition
 
 ### Operational readiness
 - [ ] Security implications reviewed for any untrusted input, auth, or data handling (see `security-and-hardening`)
