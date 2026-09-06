@@ -112,16 +112,11 @@ Yes / no / refine?
 
 Including "Out of scope" is non-negotiable. Half of misalignment is silent disagreement about what is *not* being built.
 
-### Step 5: Confirm — explicit yes, not "whatever you think"
+### Step 5: Resolve Remaining Intent
 
-The gate is an explicit "yes." The following are **not** yes:
+Use the user's answers, corrections, and delegated judgment to establish actionable intent. A clear instruction to proceed or choose within stated constraints is authorization; do not demand a particular word or reject delegation as uncertainty. Resolve routine reversible choices and record them in the restatement.
 
-- "Whatever you think is best." → The user is delegating, which means they don't have 95% confidence either. Re-ask with two concrete options framed as a choice.
-- "Sounds good." → Ambiguous. Ask: "Anything you'd refine?" Silence isn't confirmation.
-- "Sure, let's go." → Often a polite exit, not an endorsement. Same follow-up.
-- Silence followed by "okay let's start." → The user has given up on the interview, not converged. Stop and ask whether you've missed something.
-
-If they correct you, fold the correction in and restate. Loop until you get an explicit yes.
+Ask another question only when a material outcome, audience, constraint, or trade-off remains unresolved and cannot be inferred responsibly. Silence does not answer a required question. When the user corrects the goal, update the restatement; do not repeatedly reconfirm an unchanged decision. A requested interview ends with its intent summary; an end-to-end assignment continues into the selected workflow within scope.
 
 ### The 95% Confidence Stop
 
@@ -135,9 +130,9 @@ This is a checkable test, not a vibe. It also has a floor: if you've gone severa
 
 ## Output
 
-The output of this skill is a **confirmed statement of intent**: the restate from Step 4, with an explicit yes from Step 5. That's the deliverable. Specs, plans, and task lists are downstream; they consume the intent this skill produces.
+The output of this skill is a **confirmed statement of intent**: the restate from Step 4, with material intent resolved in Step 5 and delegated choices identified. That's the deliverable. Specs, plans, and task lists are downstream; they consume the intent this skill produces.
 
-If the user wants the intent to persist (a multi-session project, a handoff to another collaborator), offer to save it to `docs/intent/[topic].md`. Only save if they confirm.
+If the user wants the intent to persist (a multi-session project, a handoff to another collaborator), save it to `docs/intent/[topic].md` when persistence is already authorized by the request. A conversational interview alone does not require saving a file or another permission prompt.
 
 For an authorized saved brief, add one YAML header with `type: Intent Brief`, a descriptive `title`, and a one-sentence `description`, using the memory-management document-metadata profile. Record confirmation of intent separately from document maturity; do not infer implementation approval or create a track just to save the brief. The conversational restatement needs no header.
 
@@ -196,23 +191,23 @@ Two questions in, the agent has discovered the actual ask isn't "a dashboard." I
 | "The ask is clear enough" | If you can't write the user's desired outcome in one sentence right now, the ask isn't clear. Run Step 1 before deciding. |
 | "Asking too many questions wastes their time" | Time wasted by 4–6 targeted questions is small. Time wasted by building the wrong thing is enormous, and the user is the one bearing that cost. |
 | "I'll figure it out as I build" | Switching costs after code exists are 10x what they are now. Discovery during implementation is rework. |
-| "They said 'whatever you think,' so I should just decide" | "Whatever you think" is delegation, not decision. Re-ask with two concrete options as a choice. |
+| "Delegation means I must ask again" | Delegation permits judgment within the stated constraints. Ask only when an unresolved material outcome or trade-off requires the user. |
 | "I should give them several options to pick from" | Options work when the user knows what they want and is choosing between trade-offs. They don't know what they want yet. Listing options widens the search; asking narrows it. |
 | "If I attach my guess, I'm leading them" | Leading is the point. Reacting is faster than generating from scratch. The risk is sycophancy, not leading; mitigate by being visibly willing to be wrong. |
 | "We've talked enough, I get it" | Test it: can you predict their reaction to the next three questions? If not, you don't get it yet. |
-| "The user said yes, we're done" | If the yes followed a vague restate or an open-ended "sounds good," the yes is hollow. Restate concretely and re-confirm. |
+| "Any yes resolves every unknown" | Check whether the response resolves the material uncertainty. Reuse clear authorization; do not invent an answer to an unrelated critical question. |
 
 ## Red Flags
 
 - Three or more questions in a single message: that's batching, not interviewing
 - A question without your hypothesis attached: that's surveying, not committing
-- Accepting "whatever you think is best" as a terminal answer
-- Producing a spec, plan, or task list before the user has explicitly confirmed your restate
+- Rejecting delegated judgment and asking the same resolved question again
+- Proceeding while a material intent question remains unresolved, or exceeding an interview-only request
 - Questions framed as "what would be best practice?" instead of "what do you actually want?"
 - The user gives a sophistication-signaling answer ("scalable", "clean", "modern") and you accept it without probing whether it's what they actually want
 - Three or more rounds without your confidence visibly rising: you're asking the wrong questions, step back and reframe
 - A confidence number below ~70% with no reason attached: the user can't help close the gap if they don't know what's missing
-- Saving the intent doc before the user has confirmed (the doc itself implies a yes the user didn't give)
+- Saving outside authorized scope or presenting an agent assumption as human approval
 - Skipping the "Out of scope" line in the restate (silent disagreement about non-goals is half of misalignment)
 
 ## Verification
@@ -224,6 +219,6 @@ After applying interview-me:
 - [ ] Questions were asked one at a time, each with the agent's guess attached
 - [ ] At least one "what would you actually want if you didn't have to justify it?" probe ran when the user gave a sophistication-signaling or convention-signaling answer
 - [ ] A concrete restate (Outcome / User / Why now / Success / Constraint / Out of scope) was written back to the user
-- [ ] The user confirmed the restate with an explicit yes (not "whatever you think," not "sounds good," not silence)
+- [ ] Material intent is resolved from actual answers or authorized delegation; no new confirmation was required for an unchanged decision
 - [ ] At the stop point, the agent could predict reactions to the next three questions it would ask
 - [ ] Any handoff to a downstream skill (`idea-refine`, `spec-driven-development`) was framed in terms of the confirmed intent, not the original underspecified ask

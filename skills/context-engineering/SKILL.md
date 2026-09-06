@@ -256,7 +256,7 @@ C) Ask — this seems like an intentional decision I shouldn't override
 If the spec doesn't cover a case you need to implement:
 
 1. Check existing code for precedent
-2. If no precedent exists, **stop and ask**
+2. If no precedent exists, choose a supported reversible approach within delegated scope; ask only for a material unresolved intent, authority, or risk decision
 3. Don't invent requirements — that's the human's job
 
 ```

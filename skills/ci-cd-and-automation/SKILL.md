@@ -301,7 +301,7 @@ Designate someone responsible for keeping CI green. When the build breaks, the B
 
 ### PR Checks
 
-- **Required reviews:** At least 1 approval before merge
+- **Required reviews:** Enforce the project's review policy before merge. Use automated review where permitted; require a human reviewer only when policy or an explicit user checkpoint calls for one.
 - **Required status checks:** CI must pass before merge
 - **Branch protection:** No force-pushes to main
 - **Auto-merge:** If all checks pass and approved, merge automatically

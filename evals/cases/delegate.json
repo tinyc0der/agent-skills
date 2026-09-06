@@ -1,0 +1,49 @@
+{
+  "skill_name": "delegate",
+  "trigger": {
+    "positive": [
+      {
+        "prompt": "Use delegate for this feature: have Codex plan and review, and let OpenCode build it.",
+        "top_k": 1
+      },
+      {
+        "prompt": "Keep coordinating the work in Orca while Antigravity implements, another Antigravity session verifies, and Codex reviews the result.",
+        "top_k": 1
+      },
+      {
+        "prompt": "Supervise the remaining phases across agent sessions and wait for each result before starting the next one.",
+        "top_k": 3
+      }
+    ],
+    "negative": [
+      {
+        "prompt": "Break this spec into small verifiable tasks with acceptance criteria.",
+        "owner": "planning-and-task-breakdown"
+      },
+      {
+        "prompt": "Verify this completed feature against every acceptance criterion and give me a readiness verdict.",
+        "owner": "verification-and-validation"
+      }
+    ]
+  },
+  "evals": [
+    {
+      "id": 1,
+      "kind": "execution",
+      "prompt": "Use delegate to prepare the workflow requested in delegate/request.md. Write delegate/delegation-plan.md with the phase owners, dependencies, and task packets. This is preparation only: do not launch agents, create Orca runtime state, or implement the feature. Identify runtime prerequisites that would need checking at execution time without requiring them to write this plan.",
+      "expected_output": "A reviewable delegation plan that preserves Antigravity as implementer, assigns independent verification to a fresh OpenCode session and review to a separate Codex session, references shared local inputs and lifecycle skills in bounded task packets and a common handoff template, and gates later phases on accepted evidence without claiming workers ran",
+      "files": [
+        "delegate"
+      ],
+      "expectations": [
+        "delegate/delegation-plan.md is created using the approved requirements and plan in request.md; no new discovery or planning worker is scheduled",
+        "Antigravity owns implementation and fixes, the default verifier uses a fresh OpenCode session, and review uses a separate fresh Codex session; the implementation-only override does not change the verifier runner",
+        "Task packets identify accessible inputs, allowed write scope, expected reports, and acceptance checks; verification and review cannot modify implementation or test source",
+        "The plan gives local sessions file and section references to the accepted requirements and plan, directs them to read the assigned lifecycle skills, and includes a shared handoff template tied to the worktree, target state, and existing phase reports; it does not create a parallel handoff store or require copying complete source documents into each prompt",
+        "The plan requires an independent verifier report tied to the implementation revision and blocks review and final acceptance on FAIL or INCOMPLETE",
+        "Blocking findings return to the implementation runner, followed by verification and review of the changed revision; the coordinator retains final acceptance",
+        "The only created project artifact is delegate/delegation-plan.md; no agent is launched, no Orca runtime state is created, and no task or dispatch completion is fabricated"
+      ]
+    }
+  ]
+}

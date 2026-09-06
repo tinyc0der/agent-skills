@@ -275,7 +275,7 @@ Stale evidence is not transferable to a newer revision. Canonical spec changes a
 
 ### Review and merge
 
-Use the loop `review -> fix -> reverify -> rereview`. Required fixes that change behavior follow `test-driven-development`. Merge only after required human approval and green CI using the project's established merge strategy.
+Use the loop `review -> fix -> reverify -> rereview` autonomously within scope. Required fixes that change behavior follow `test-driven-development`. Merge only when the user has authorized that endpoint, required reviews and CI pass, and the project's merge strategy permits it. Obtain human approval when enforced policy or an explicit user checkpoint requires it; do not add a separate human gate to an already authorized, policy-compliant merge or impersonate a required reviewer.
 
 ## Pre-Commit Hygiene
 
@@ -429,7 +429,7 @@ For every release (anything with consumers):
 For every pull request:
 
 - [ ] The PR identifies its spec, plan, scope, non-goals, risks, and head revision
-- [ ] Draft creation or readiness was explicitly requested before remote mutation
+- [ ] Draft creation or readiness is within the user's authorized endpoint; existing authorization was reused before remote mutation
 - [ ] Ready status is backed by a PASS report for the exact head revision
 - [ ] Critical and Required findings are resolved before merge
 - [ ] Required human approval and CI gates pass before merge

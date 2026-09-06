@@ -14,7 +14,7 @@ Discover -> Define -> Plan -> Draft PR -> Build slices -> Verify
        -> Ship -> Observe -> Clean up
 ```
 
-The workflow is sequential at its major decision gates. Inside a phase, conditional skills may run together when their concerns are independent.
+The workflow proceeds autonomously through the authorized endpoint. Major transitions retain their evidence gates; routine approval prompts are unnecessary. Use the [critical-human-gate policy](../skills/using-agent-skills/SKILL.md#autonomous-execution-and-critical-human-gates) for unresolved material intent, access/authority, or risk that cannot be handled autonomously. Inside a phase, independent checks may run together. Explicit read-only, stepwise, and endpoint limits still apply.
 
 ## Durable Artifact Structure
 
@@ -75,7 +75,7 @@ Use this phase when the request does not yet express a sufficiently clear proble
 **Exit gate**
 
 - The problem and intended outcome are understood well enough to specify
-- Material assumptions have been confirmed by the human
+- Material intent is established from the request, evidence, or delegated judgment; any remaining critical question is resolved
 
 ## Phase 2: Establish Context and a Safe Baseline
 
@@ -123,11 +123,11 @@ Feature specs should reference project-wide commands, structure, and style rules
 
 - Scope, non-goals, acceptance criteria, boundaries, and success measures are testable
 - Public contracts and trust boundaries are identified where applicable
-- The human approves the specification before planning begins
+- The specification matches authorized scope and passes readiness checks before planning begins
 
 ## Phase 4: Plan
 
-Convert the approved specification into small, dependency-ordered, vertically sliced tasks.
+Convert the scope-authorized specification into small, dependency-ordered, vertically sliced tasks.
 
 **Skills**
 
@@ -149,7 +149,7 @@ Convert the approved specification into small, dependency-ordered, vertically sl
 - Tasks have acceptance criteria, dependencies, likely files, and verification steps
 - High-risk work occurs early enough to fail fast
 - Every task leaves the repository in a working state
-- The human approves the plan
+- The plan passes dependency, scope, and verification checks; no critical decision remains unresolved
 
 ## Phase 5: Open a Draft Pull Request
 
@@ -164,7 +164,7 @@ Create the collaboration artifact early. A draft pull request is a living handof
 - A draft PR linking the specification and plan
 - A PR description covering objective, scope, non-goals, design, risks, and the planned verification story
 
-Open the draft after the approved plan has been committed or after the first coherent implementation commit. Update it as implementation and verification evidence accumulate.
+When PR creation is authorized, open the draft after the checked plan has been committed or after the first coherent implementation commit. Update it as implementation and verification evidence accumulate.
 
 **Exit gate**
 
@@ -269,7 +269,7 @@ Review is a loop, not a one-way handoff.
 Review -> Resolve Critical/Required findings with TDD
        -> Reverify affected behavior
        -> Rereview
-       -> Human approval and green CI
+       -> Required reviews, merge authorization, and green CI
        -> Merge
 ```
 
@@ -285,7 +285,7 @@ Review -> Resolve Critical/Required findings with TDD
 
 - No unresolved Critical or Required findings remain
 - Changes made during review have been reverified
-- Required human approvals and CI checks are green
+- Required reviews and CI checks pass; any human approval enforced by policy or requested by the user is recorded
 - The PR is merged using the project's merge strategy
 
 ## Phase 9: Ship
@@ -318,8 +318,9 @@ copy commit SHAs, artifact digests, or PR numbers from the feature worktree.
    unmatched or ambiguous commits. Merge dates may find candidate PRs but do
    not prove membership in the release.
 5. Present the detected baseline, target, included PRs, direct commits, and
-   material release risks for human confirmation before specialist checks or
-   any deployment action.
+   material release risks. Run checks autonomously and reuse existing release
+   authorization. Request confirmation only when a critical scope, authority,
+   access, or uncontained-risk decision requires the human before deployment.
 
 The discovery must work from any worktree because its identities are the
 remote release boundary and pinned target revision, not the current branch or a
@@ -361,7 +362,7 @@ The authoritative release-wide decision and deployment record stay in the config
 - Rollback is ready before deployment
 - Monitoring and success thresholds are active
 - Production configuration and migrations are ready
-- The authorized human gives the GO decision
+- The GO decision is evidence-backed and within release authorization; obtain a human decision only when required by policy or an unresolved critical boundary
 
 ## Phase 10: Observe and Clean Up
 
@@ -408,7 +409,7 @@ The user-facing sequence is:
       -> /pr ready -> /review -> merge -> /ship
 ```
 
-`/test` remains available as a focused TDD entry point but is not presented as the post-build lifecycle phase. `/build auto` may remove routine human pauses between tasks only after its checkpoint, artifact, and risk semantics are explicitly aligned with this workflow.
+`/test` remains available as a focused TDD entry point but is not presented as the post-build lifecycle phase. `/build` executes the authorized scope with automated checkpoints and failure recovery. `/build auto` and `/build all` are aliases; `/build step` executes one task. Continue between phases within an end-to-end assignment; a phase-only request ends at its handoff.
 
 Compatibility guidance, publication checks, and rollback steps are recorded in
 [Feature Development Workflow Release Notes](feature-development-workflow-release-notes.md).

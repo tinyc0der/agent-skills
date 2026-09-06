@@ -52,7 +52,9 @@ If you can't name the trust boundaries for a feature, you're not ready to secure
 - **Use httpOnly, secure, sameSite cookies** for sessions
 - **Run the detected package manager's native audit** against the committed lockfile before every release
 
-### Ask First (Requires Human Approval)
+### Assess Authority and Risk Before Acting
+
+The following changes require focused security analysis, tests, and recovery planning. Implement them autonomously when their intent and impact are within the existing authorization. Ask only when a material product/security decision, access grant, external effect, or risk cannot be resolved or contained with the available evidence and authority; their category alone is not a human gate.
 
 - Adding new authentication flows or changing auth logic
 - Storing new categories of sensitive data (PII, payment info)

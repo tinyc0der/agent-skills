@@ -114,7 +114,7 @@ The `.claude/commands/` directory contains slash commands for Claude Code:
 | `/plan` | planning-and-task-breakdown |
 | `/pr draft`, `/pr ready` | git-workflow-and-versioning |
 | `/build` | incremental-implementation + test-driven-development |
-| `/build auto` | planning-and-task-breakdown → incremental-implementation + test-driven-development (whole plan, one approval) |
+| `/build auto` | planning-and-task-breakdown when needed → incremental-implementation + test-driven-development (authorized scope; same as default `/build`, use `/build step` for one task) |
 | `/verify` | verification-and-validation |
 | `/test` | test-case-design-review + test-driven-development |
 | `/review` | code-review-and-quality |

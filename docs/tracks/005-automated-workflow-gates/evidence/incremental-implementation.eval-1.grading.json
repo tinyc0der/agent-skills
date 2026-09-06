@@ -1,0 +1,25 @@
+{
+  "expectations": [
+    {
+      "text": "Work proceeds in thin vertical slices rather than one large change",
+      "passed": true,
+      "evidence": "The agent read the plan (3 tasks), wrote track notes at docs/tracks/001-csv-export/notes.md listing three slices, then implemented them one at a time and strictly in order: slice 1 csv.test.js + csv.js (pure formatter), slice 2 download.test.js + download.js (adapter consuming the formatter), slice 3 reportsPage.test.js + reportsPage.js (button wiring visibleReports + downloadReportsCsv). Each slice was one small module plus its test file; no batch write of all three modules before verification, and reports.js was never touched."
+    },
+    {
+      "text": "Each slice is verified (tests or build) before the next begins",
+      "passed": true,
+      "evidence": "Baseline `node --test` run first (1/1 pass). Slice 1: RED run (2 tests, 1 fail) after writing the test, then GREEN run (4/4 pass) after csv.js — verified before committing and before slice 2. Slice 2: RED run (5 tests, 1 fail), then GREEN (5/5) before committing and before slice 3. Slice 3: RED run (6 tests, 1 fail), then a failing full-suite run (7 tests, 6 pass), which the agent diagnosed via `node --test | grep -A 20 \"not ok\"` (fake DOM `element.onclick is not a function`), fixed in the test harness, and re-ran to 7/7 green before committing. The agent also verified the pre-existing 'hides archived reports' test kept passing in every run and explicitly stated no build/lint/type-check gate exists rather than inventing one."
+    },
+    {
+      "text": "Each slice is committed separately",
+      "passed": true,
+      "evidence": "Three distinct commits, each made immediately after that slice's green run and confirmed via `git log --oneline`: 2892dec 'Add pure report-to-CSV formatter', 0e7ddc0 'Add CSV download adapter', f8594fa 'Wire an Export CSV button to the reports page' — on top of 8819ae7 fixture baseline. Each commit message describes only its own slice; the final commit command also ran `git status --short` and the tree was clean."
+    }
+  ],
+  "summary": {
+    "passed": 3,
+    "failed": 0,
+    "total": 3,
+    "pass_rate": 1
+  }
+}

@@ -58,7 +58,7 @@ STACK DETECTED:
 → Fetching official docs for the relevant patterns.
 ```
 
-If versions are missing or ambiguous, **ask the user**. Don't guess — the version determines which patterns are correct.
+If versions are missing or ambiguous, inspect lockfiles, installed packages, tooling, and CI to resolve them. For a new project with delegated stack choices, select a supported version from current official documentation and record it. Ask only when conflicting compatibility requirements or a material version decision cannot be resolved from available evidence and authorization.
 
 ### Step 2: Fetch Official Documentation
 

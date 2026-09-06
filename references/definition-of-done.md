@@ -53,7 +53,7 @@ The depth behind these items lives in `code-review-and-quality` (the five-axis r
 
 ### Merge readiness
 - [ ] Required CI checks pass for the exact revision being approved
-- [ ] The human has reviewed and approved before merge or deploy
+- [ ] Merge or deployment is within existing authorization; human approval is recorded only where explicitly required by the user or enforced policy
 - [ ] Pull-request verification and review evidence name the exact revision being approved
 
 ## How to Apply

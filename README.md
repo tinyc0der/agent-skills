@@ -40,7 +40,7 @@ RED-GREEN-REFACTOR while implementing behavior; use `/verify` after the assemble
 feature is complete. Antigravity and Gemini name `/plan` as `/planning`, but the
 lifecycle and artifacts are identical.
 
-Want fewer manual steps once the spec exists? **`/build auto`** generates the plan and implements every task in a single approved pass — you approve the plan once, then it runs autonomously. It removes the human stepping *between* tasks, not the verification: behavioral tasks apply the minimum-sufficient test gate and RED-GREEN-REFACTOR, non-behavioral tasks use proportionate executable checks, every task is committed individually, and the run pauses on failures or risky steps.
+**`/build` runs the authorized scope autonomously**, with `/build auto` and `/build all` as aliases. Use `/build step` for one task. Required plans and checkpoints are checked without repeated approval: behavioral slices use the minimum-sufficient test gate and RED-GREEN-REFACTOR, every slice is verified and committed, and failures enter debugging. Human gates are reserved for material decisions, access/authority, or consequential risks the agent cannot resolve itself. Existing scope and release/merge authorization limits still apply.
 
 Skills also activate automatically based on what you're doing — designing an API triggers `api-and-interface-design`, building UI triggers `frontend-ui-engineering`, and so on.
 
@@ -51,7 +51,7 @@ Skills also activate automatically based on what you're doing — designing an A
 **Fastest path — any agent, one command.** The open [skills CLI](https://github.com/vercel-labs/skills) installs into 70+ agents (Claude Code, Cursor, Codex, Copilot, Cline, and more):
 
 ```bash
-npx skills add addyosmani/agent-skills            # install all 26 skills
+npx skills add addyosmani/agent-skills            # install all 28 skills
 npx skills add addyosmani/agent-skills --list     # browse before installing
 ```
 
@@ -222,15 +222,18 @@ Already installed? How you roll the pack out depends on your codebase. The **[Ad
 
 ---
 
-## All 26 Skills
+## All 28 Skills
 
-The commands above are entry points. The pack includes 26 skills total — 25 lifecycle skills plus the `using-agent-skills` meta-skill. Each skill is a structured workflow with steps, verification gates, and anti-rationalization tables. You can also reference any skill directly.
+The commands above are entry points. The pack includes 28 skills covering lifecycle work, discovery, and Orca phase delegation. Each skill is a structured workflow with steps, verification gates, and anti-rationalization tables. You can also reference any skill directly.
 
-### Meta - Discover which skill applies
+### Meta - Discover and coordinate workflows
 
 | Skill | What It Does | Use When |
 |-------|-------------|----------|
 | [using-agent-skills](skills/using-agent-skills/SKILL.md) | Maps incoming work to the right skill workflow and defines shared operating rules | Starting a session or deciding which skill applies |
+| [delegate](skills/delegate/SKILL.md) | Coordinates separate Orca sessions for planning, implementation, independent verification, and review | Codex should plan and review while OpenCode or Antigravity implements and verifies in separate sessions |
+
+`delegate` requires Orca and its separately installed `orca-cli` and `orchestration` skills. Those dependencies provide session control and tracked completion; they are not bundled in this pack.
 
 ### Define - Clarify what to build
 
@@ -360,7 +363,7 @@ Every skill follows a consistent anatomy:
 
 ```
 agent-skills/
-├── skills/                            # 26 skills (25 lifecycle + 1 meta)
+├── skills/                            # 28 skills
 │   ├── interview-me/                  #   Define
 │   ├── idea-refine/                   #   Define
 │   ├── spec-driven-development/       #   Define

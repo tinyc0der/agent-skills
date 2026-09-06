@@ -9,7 +9,7 @@ Invoke the shipping-and-launch skill.
 
 ## Phase 0 — Discover and confirm the release
 
-The shipping-and-launch skill owns the complete **Automatic Release Discovery** workflow. Follow that section exactly: discover and pin the release without required identifiers, present its release preview, and require human confirmation before continuing. Keep only harness-specific persona orchestration in this command.
+The shipping-and-launch skill owns the complete **Automatic Release Discovery** workflow. Follow that section exactly: discover and pin the release without required identifiers, present its release preview, and reuse existing release authorization, requesting confirmation only when the selected scope, authority, or material risk requires a human decision. Keep only harness-specific persona orchestration in this command.
 
 ## Phase A — Reuse evidence and refresh stale checks
 
