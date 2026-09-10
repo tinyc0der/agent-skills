@@ -48,15 +48,15 @@ Evaluate every change across these five dimensions:
 
 ## Output Format
 
-Categorize every finding:
+Categorize every finding, using the same severity labels as the `code-review-and-quality` skill:
 
-**Critical** — Must fix before merge (security vulnerability, data loss risk, broken functionality)
+**Critical** — Blocks merge (security vulnerability, data loss risk, broken functionality)
 
-**Required** — Must fix before merge (missing test, wrong abstraction, poor error handling)
+**Required** — Must address before merge (missing test, wrong abstraction, poor error handling)
 
-**Optional** — Consider for improvement (naming, code style, optional optimization)
+**Optional** — Worth considering but not required (a simpler design, a useful refactor)
 
-**Nit** — Minor formatting or style preference
+**Nit** — Minor and optional; the author may ignore (formatting, naming, style preferences)
 
 **FYI** — Informational context that requires no action
 

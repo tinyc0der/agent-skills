@@ -159,6 +159,23 @@ Canonical requirements live at `docs/specs/<capability>/spec.md`. Each change us
 - Update them when scope or decisions change.
 - Retain shipped change tracks after merge so later sessions can trace intent, evidence, review, and release inclusion without reconstructing them from conversation history.
 
+### Working across sessions
+
+The same artifacts are the handoff between sessions. For a small task, run the whole lifecycle in one session. For anything non-trivial, a fresh session per phase (spec → plan → build → review) keeps context focused — what carries the work forward is the approved files, not the conversation:
+
+- the spec — `docs/tracks/<track-id>/spec.md` and its linked canonical capability specs
+- `docs/tracks/<track-id>/plan.md` and `docs/tracks/<track-id>/todo.md` — or the external tracker the plan identifies, if you use one
+
+**Before switching**, make sure those files reflect the decisions that still apply, the scope you approved, the questions still open, the next task, and the current verification state (which tests ran, against what).
+
+**In the new session**, read the actual files and look at `git status` before doing anything. Don't assume approvals you can't see in the artifacts. Treat a recorded "tests pass" as a claim about a specific baseline: re-run the checks it covers if the code has moved since, if it doesn't say what was run against what, or if you're about to touch the area it covered. If the baseline still holds, take it and get on with the next task — the point is a check proportional to what changed, not a full suite at every handoff.
+
+This doesn't need the `/spec` and `/plan` wrappers — plain requests work in any agent, including a `npx skills add` install that only has the skills:
+
+> Read docs/tracks/<track-id>/spec.md, then break it into small verifiable tasks with acceptance criteria and dependency order. Save them to docs/tracks/<track-id>/plan.md and docs/tracks/<track-id>/todo.md. No product code yet — show me the plan first.
+
+> Read docs/tracks/<track-id>/spec.md, docs/tracks/<track-id>/plan.md and docs/tracks/<track-id>/todo.md, then check where things actually stand — `git status`, plus re-running whatever checks the recorded verification state no longer covers. Tell me the next unchecked task and anything still open, then stop: I'll confirm the scope before you start it. If the plan looks incomplete, say what's missing rather than rewriting it.
+
 ## Tips
 
 1. **Start with spec-driven-development** for any non-trivial work

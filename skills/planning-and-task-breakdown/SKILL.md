@@ -160,6 +160,13 @@ Resolve the active numbered track using `context-engineering`: ids use a reposit
 
 Include **Spec reconciliation** in completion criteria: verified requirement changes update the owning capability specs in the same implementation PR; unchanged contracts receive a justified no-change disposition in the track spec or bug report. Deferred and canceled proposals remain in the track. A task may finish before the track; the track completes only after review and merge.
 
+**Never overwrite an incomplete plan.** Before writing `docs/tracks/<track-id>/plan.md` or `docs/tracks/<track-id>/todo.md`, check whether they already exist and still contain unchecked tasks:
+
+- Same work being replanned (the user asked to revise or extend this plan) → update the existing files in place.
+- Different work → **stop and ask.** The unchecked tasks may be mid-build in another session. Do not delete, overwrite, or rename the existing files on your own; present the conflict and let the user decide (finish the old plan first, explicitly discard it, or tell you where the new plan should go).
+
+The same rule applies to an external task list target: never bulk-close or delete another plan's open tracker items to make room for new ones.
+
 ### Task List Target
 
 The task list target is where tasks and checkpoints are recorded. It is defined once, here; every other reference in this skill defers to it.
@@ -239,11 +246,13 @@ When multiple agents or sessions are available:
 | "The tasks are obvious" | Write them down anyway. Explicit tasks surface hidden dependencies and forgotten edge cases. |
 | "Planning is overhead" | Planning is the task. Implementation without a plan is just typing. |
 | "I can hold it all in my head" | Context windows are finite. Written plans survive session boundaries and compaction. |
+| "The old `docs/tracks/<track-id>/plan.md` is stale, I'll just replace it" | Unchecked tasks may be mid-build in another session. Overwriting them destroys work state that exists nowhere else. Stop and ask. |
 
 ## Red Flags
 
 - Starting implementation without a written task list
 - Duplicating full external-tracker task bodies in `docs/tracks/<track-id>/todo.md` instead of keeping a durable index
+- Overwriting a track plan or task ledger that still has unchecked tasks for different work, without asking
 - Tasks that say "implement the feature" without acceptance criteria
 - No verification steps in the plan
 - All tasks are XL-sized
@@ -260,6 +269,7 @@ Before starting implementation, confirm:
 - [ ] Task dependencies are identified and ordered correctly
 - [ ] Tasks are recorded or indexed in `docs/tracks/<track-id>/todo.md`
 - [ ] Production-affecting work has an initialized `docs/tracks/<track-id>/ship.md`
+- [ ] No pre-existing incomplete plan was overwritten without explicit user confirmation
 - [ ] No task touches more than ~5 files
 - [ ] Checkpoints exist between major phases
 - [ ] The plan matches authorized requirements, is checked for dependencies and verification, and has no unresolved decision requiring the user

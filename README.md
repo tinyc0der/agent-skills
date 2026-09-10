@@ -20,7 +20,7 @@ DEFINE -> PLAN -> DRAFT PR -> BUILD -> VERIFY -> READY PR -> REVIEW -> MERGE -> 
 
 ## Commands
 
-10 slash commands map to lifecycle phases or focused specialist workflows. Each activates the right skills automatically.
+11 slash commands map to lifecycle phases or focused specialist workflows. Each activates the right skills automatically.
 
 | What you're doing | Command | Key principle |
 |-------------------|---------|---------------|
@@ -30,6 +30,7 @@ DEFINE -> PLAN -> DRAFT PR -> BUILD -> VERIFY -> READY PR -> REVIEW -> MERGE -> 
 | Build incrementally | `/build` | One slice at a time |
 | Verify the assembled feature | `/verify` | Acceptance criteria require evidence |
 | Develop behavior test-first | `/test` | Red-Green-Refactor |
+| Set the quality bar | `/constraints` | Decide it once, enforce it everywhere |
 | Review before merge | `/review` | Improve code health |
 | Audit web performance | `/webperf` | Measure before you optimize |
 | Simplify the code | `/code-simplify` | Clarity over cleverness |
@@ -51,7 +52,7 @@ Skills also activate automatically based on what you're doing — designing an A
 **Fastest path — any agent, one command.** The open [skills CLI](https://github.com/vercel-labs/skills) installs into 70+ agents (Claude Code, Cursor, Codex, Copilot, Cline, and more):
 
 ```bash
-npx skills add addyosmani/agent-skills            # install all 28 skills
+npx skills add addyosmani/agent-skills            # install all 29 skills
 npx skills add addyosmani/agent-skills --list     # browse before installing
 ```
 
@@ -112,7 +113,7 @@ Put workflow skills under `.cursor/skills/` (sync from `agent-skills/skills/`) a
 <details>
 <summary><b>Antigravity CLI</b></summary>
 
-Install as a native plugin for skills, subagents, and slash commands. See [docs/antigravity-setup.md](docs/antigravity-setup.md).
+Install as a native plugin for skills and subagents. In affected Antigravity CLI releases, legacy command TOMLs are reported as converted but their wrapper commands are not discoverable; invoke the underlying namespaced skills directly. See [docs/antigravity-setup.md](docs/antigravity-setup.md#lifecycle-workflows-and-command-compatibility).
 
 **Install from the repo:**
 
@@ -158,7 +159,7 @@ Add skill contents to your Windsurf rules configuration. See [docs/windsurf-setu
 <details>
 <summary><b>OpenCode</b></summary>
 
-Uses agent-driven skill execution via AGENTS.md and the `skill` tool.
+Copy skills to `.opencode/skills/` (or `~/.config/opencode/skills/`), add a project-local `AGENTS.md`, and use the built-in `skill` tool for agent-driven execution. Optional slash commands can be added under `.opencode/commands/`.
 
 See [docs/opencode-setup.md](docs/opencode-setup.md).
 
@@ -168,6 +169,8 @@ See [docs/opencode-setup.md](docs/opencode-setup.md).
 <summary><b>GitHub Copilot</b></summary>
 
 Use agent definitions from `agents/` as Copilot personas and skill content in `.github/copilot-instructions.md`. See [docs/copilot-setup.md](docs/copilot-setup.md).
+
+Using the standalone `copilot` CLI? Install it as a plugin — see [docs/copilot-cli-setup.md](docs/copilot-cli-setup.md).
 
 </details>
 
@@ -222,9 +225,9 @@ Already installed? How you roll the pack out depends on your codebase. The **[Ad
 
 ---
 
-## All 28 Skills
+## All 29 Skills
 
-The commands above are entry points. The pack includes 28 skills covering lifecycle work, discovery, and Orca phase delegation. Each skill is a structured workflow with steps, verification gates, and anti-rationalization tables. You can also reference any skill directly.
+The commands above are entry points. The pack includes 29 skills covering lifecycle work, discovery, and Orca phase delegation. Each skill is a structured workflow with steps, verification gates, and anti-rationalization tables. You can also reference any skill directly.
 
 ### Meta - Discover and coordinate workflows
 
@@ -242,6 +245,7 @@ The commands above are entry points. The pack includes 28 skills covering lifecy
 | [interview-me](skills/interview-me/SKILL.md) | One-question-at-a-time interview that extracts what the user actually wants instead of what they think they should want, until ~95% confidence | The ask is underspecified, or the user invokes "interview me" / "grill me" |
 | [idea-refine](skills/idea-refine/SKILL.md) | Structured divergent/convergent thinking to turn vague ideas into concrete proposals | You have a rough concept that needs exploration |
 | [spec-driven-development](skills/spec-driven-development/SKILL.md) | Write a PRD covering objectives, commands, structure, code style, testing, and boundaries before any code | Starting a new project, feature, or significant change |
+| [constraint-driven-development](skills/constraint-driven-development/SKILL.md) | Interviews you for a quality bar with sane default thresholds, writes CONSTRAINTS.md, places each check by cost, and catches agents silencing checks or skipping tests to get green | No standards are written down, or an agent is producing more than anyone reads |
 
 ### Plan - Break it down
 
@@ -363,10 +367,11 @@ Every skill follows a consistent anatomy:
 
 ```
 agent-skills/
-├── skills/                            # 28 skills
+├── skills/                            # 29 skills
 │   ├── interview-me/                  #   Define
 │   ├── idea-refine/                   #   Define
 │   ├── spec-driven-development/       #   Define
+│   ├── constraint-driven-development/ #   Define
 │   ├── planning-and-task-breakdown/   #   Plan
 │   ├── incremental-implementation/    #   Build
 │   ├── context-engineering/           #   Build
@@ -393,9 +398,9 @@ agent-skills/
 ├── agents/                            # 4 specialist personas
 ├── references/                        # 7 supplementary checklists
 ├── hooks/                             # Session lifecycle hooks
-├── .claude/commands/                  # 10 slash commands (Claude Code)
-├── .gemini/commands/                  # 10 slash commands (Gemini CLI)
-├── commands/                          # 10 slash commands (Antigravity CLI)
+├── .claude/commands/                  # 11 slash commands (Claude Code)
+├── .gemini/commands/                  # 11 slash commands (Gemini CLI)
+├── commands/                          # 11 slash commands (Antigravity CLI)
 ├── plugin.json                        # Antigravity plugin manifest
 └── docs/                              # Setup guides per tool
 ```

@@ -17,4 +17,6 @@ Resolve the active numbered track using context-engineering. Read the authorized
 Save the plan to docs/tracks/<track-id>/plan.md and the durable task ledger to docs/tracks/<track-id>/todo.md. When an external tracker is designated, keep docs/tracks/<track-id>/todo.md as an ordered index of tracker items and lifecycle checkpoints rather than duplicating their bodies. Record the selected tracker, if any, in the plan.
 
 For production-affecting work, initialize docs/tracks/<track-id>/ship.md with rollout prerequisites, migrations, feature flags, success thresholds, monitoring, rollback triggers and steps, and owners.
+
+If the selected track’s plan or task ledger already exists with unchecked tasks for different work, stop and ask before writing — never silently overwrite an incomplete plan.
 """

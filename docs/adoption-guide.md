@@ -2,7 +2,7 @@
 
 How to roll out agent-skills depends heavily on where your codebase is in its life. A greenfield project can adopt the full lifecycle from commit one. A codebase with years of history needs an incremental path that respects what already exists, its conventions, its undocumented decisions, and its lack of test coverage in places you'd rather not touch blind.
 
-This guide covers both paths. For installation mechanics, see [getting-started.md](getting-started.md) and the per-tool setup guides. For what each skill does, see the [skill catalog in the README](../README.md#all-28-skills).
+This guide covers both paths. For installation mechanics, see [getting-started.md](getting-started.md) and the per-tool setup guides. For what each skill does, see the [skill catalog in the README](../README.md#all-29-skills).
 
 ---
 
@@ -46,7 +46,7 @@ Run the lifecycle in order for the project's first real feature:
 /ship   →  when going live     (shipping-and-launch)
 ```
 
-`/build auto` is a good fit for greenfield: you approve the plan once, behavioral tasks apply the minimum-sufficient test gate and RED-GREEN-REFACTOR, non-behavioral tasks use proportionate executable checks, and every task commits individually. Numbered `docs/tracks/<track-id>/` directories use repository-wide `NNN-name` ids and retain change requirements and evidence. Before review, reconcile verified requirements into `docs/specs/<capability>/spec.md` in the same PR, or record a justified no-change disposition. Keep completed tracks as history after merge.
+`/build auto` is a good fit for greenfield: you approve the plan once, behavioral tasks apply the minimum-sufficient test gate and RED-GREEN-REFACTOR, non-behavioral tasks use proportionate executable checks, and every task commits individually. Numbered `docs/tracks/<track-id>/` directories use repository-wide `NNN-name` ids and retain change requirements and evidence. Before review, reconcile verified requirements into `docs/specs/<capability>/spec.md` in the same PR, or record a justified no-change disposition. Keep completed tracks as history after merge. If the feature spans more than one session, those files are also the handoff; see [working across sessions](getting-started.md#working-across-sessions).
 
 ### From the start, treat these as always-on
 

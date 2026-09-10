@@ -1,6 +1,6 @@
 ---
 name: git-workflow-and-versioning
-description: Structures git and pull-request workflow practices. Use when making code changes, committing, branching, opening or updating a PR, resolving conflicts, organizing parallel work, or cutting, versioning, tagging, and documenting a release.
+description: Structures git workflow practices. Use when making any code change. Use when committing, branching, resolving conflicts, splitting uncommitted work in a messy working tree into clean atomic commits, opening, updating, or reviewing a pull request (PR), pushing to a remote, or when you need to organize work across multiple parallel streams. Use when cutting a release, choosing a semantic version bump, tagging, or writing a changelog.
 ---
 
 # Git Workflow and Versioning
