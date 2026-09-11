@@ -46,7 +46,8 @@
       "expected_output": "A short interview with defaults offered, followed by a CONSTRAINTS.md the user can explain",
       "expectations": [
         "The agent inspects the repo for stack, test runner, and existing linters before asking anything",
-        "No more than four questions are asked, and each one carries a usable default",
+        "Questions address only material unresolved constraint decisions, reuse evidence and prior answers, and stop once the constraints are actionable rather than at a fixed count",
+        "Decision questions offer concise choices with a supported recommendation and allow the user to delegate or provide a custom answer",
         "When the user has no target number, the agent proposes recording today's value and holding it rather than inventing a threshold",
         "The resulting constraints say where each check runs, keeping fast checks in the edit loop and slow checks later",
         "Every number written down is accompanied by a reason"
