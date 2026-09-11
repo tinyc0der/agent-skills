@@ -7,6 +7,24 @@ status: draft
 
 # Review: Approve Local Documentation Change
 
+Implementation revision: `5dea3642ed8363464a6526905938a8bd74e7d78a`.
+
+## Decision-records Rename Review
+
+Agent self-review of the updated [scope](spec.md), staged diff, and fresh [verification](verification.md) found no Critical or Required issues.
+
+- Correctness: default directory paths, source-reference examples, package indexes, standalone ADR guidance, fixture files, and eval prompts agree on `decision-records/`.
+- Readability and architecture: the folder name describes individual records; current steering explanations and external ADR ownership retain their distinct purposes. Migration instructions preserve old bundles until their rename is authorized.
+- Preservation: the moved decision record, external ADR contents, and bundle versions are unchanged; collection indexes point to the new home. Older historical reports retain their original paths and revision claims.
+- Security and performance: no new dependencies, runtime behavior, or extra context-loading behavior. The test edit only updates an example path and retains its assertions.
+- Verification: 71 existing tests and all applicable validators pass, with separate direct checks for fixture links and content preservation.
+
+This is approval of the requested local change by the implementing agent, not independent or human approval. Merge and publishing remain outside the requested endpoint.
+
+## Prior Review Before the Rename
+
+The following findings and dispositions remain limited to the earlier revision.
+
 Implementation revision: `dea534f2c25a5600c25ae851a6ace50b83c529de`.
 
 Scope: [change spec](spec.md), [skill](../../../skills/memory-management/SKILL.md), [capability contract](../../specs/memory-management/spec.md), and [verification evidence](verification.md). This is an agent self-review, not independent or human approval.

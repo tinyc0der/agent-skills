@@ -7,6 +7,25 @@ status: draft
 
 # Verification: PASS
 
+Implementation revision: `5dea3642ed8363464a6526905938a8bd74e7d78a`.
+
+## Decision-records Rename
+
+The expanded [acceptance criteria](spec.md) pass. Manual diff review confirms the earlier steering goals remain intact; the default folder name is now `decision-records/` in repository/package bundles, standalone ADR guidance, examples, and evaluation references. The [capability contract](../../specs/memory-management/spec.md) includes permissive legacy reading and authorized migration without a format/version change.
+
+- PASS — both modified skills pass the skill-creator validator with the existing Homebrew Python interpreter.
+- PASS — `node scripts/validate-skills.js`, `node scripts/validate-markdown-links.js`, `node scripts/validate-reference-links.js`, `node scripts/validate-artifact-paths.js`, and `node scripts/validate-lifecycle-contracts.js` report no errors; 118 tracked Markdown files checked.
+- PASS — `node scripts/run-evals.js --min-rank1 95`: 163 checks, routing rank-1 100/102 (98%).
+- PASS — `node --test scripts/*test.js scripts/lib/*test.js`: 71 tests, no failures or skips. The only subsequent implementation edit adjusted spaces before an example comment; skill validation and whitespace checks were rerun.
+- PASS — a one-off Node assertion check verified all three fixture collections use the new directory, their collection links resolve, and their root version headers are unchanged. The moved PostgreSQL record and both external ADR fixtures match their pre-rename Git contents byte-for-byte.
+- PASS — repository search confirms remaining old-name paths are migration guidance or historical evidence. `git diff --cached --check` passed before committing.
+
+The four fixture files were moved, with collection titles updated and record content preserved; the three empty old directories were removed. The Git commit retains the previous layout for recovery. Existing external ADR homes and old review evidence are unchanged. Runtime/plugin installation and full agent evaluations are not applicable to this path/documentation rename; the routing check does not claim agent-execution coverage.
+
+## Prior Verification Before the Rename
+
+The following evidence remains limited to its earlier revision and scope.
+
 Implementation revision: `dea534f2c25a5600c25ae851a6ace50b83c529de`.
 
 ## Acceptance Trace

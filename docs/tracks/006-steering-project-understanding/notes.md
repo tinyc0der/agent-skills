@@ -9,9 +9,9 @@ status: draft
 
 ## Resume
 
-- Phase: implementing the user-authorized rename to `decision-records/`; next action is validation and review of the updated revision. The track remains unmerged.
+- Phase: the user-authorized rename to `decision-records/` is implemented, verified, and reviewed at `5dea3642ed8363464a6526905938a8bd74e7d78a`; ready for local handoff. The track remains unmerged.
 - Scope and acceptance: [change spec](spec.md); owner: [memory-management capability](../../specs/memory-management/spec.md).
-- Earlier evidence: [verification](verification.md) and [review](review.md) cover `dea534f2c25a5600c25ae851a6ace50b83c529de`; the rename requires fresh evidence before handoff.
+- Current evidence: [verification](verification.md) and [review](review.md) cover the renamed revision and retain the earlier revision's evidence separately. No unresolved issue remains within the requested local endpoint.
 - Local changes and a local commit are within the requested endpoint. No merge or publishing is requested.
 
 ## Notes
