@@ -225,8 +225,15 @@ status: draft
 | [Risk] | [High/Med/Low] | [Strategy] |
 
 ## Open Questions
-- [Question needing human input]
+- [Decision question] — [blocks which work, or needed by when]
+  - A. [Recommended option, when supported] — [reason and consequence]
+  - B. [Alternative] — [consequence; custom answers welcome]
+
+## Research Follow-ups
+- [Factual unknown for the agent to investigate] — [next action]
 ```
+
+Resolve questions from evidence and prior decisions before asking. Present remaining user decisions through an available interactive question tool, or short labeled options: 2–3 distinct choices, a supported recommendation first with a reason, and a custom-answer path. Ask dependent questions one at a time. Use focused free text for missing facts that choices would distort. Continue independent work while required answers are pending; a recommendation or silence is not approval. Record resolved decisions in the plan and remove them from Open Questions.
 
 When tasks live in an external tracker, keep the Task List section above as an ordered index of tracker item IDs or links instead of a duplicate checklist.
 

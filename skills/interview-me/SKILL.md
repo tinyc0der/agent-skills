@@ -52,16 +52,18 @@ The number forces honesty. If you wrote down a high number but can't actually pr
 
 When confidence is below ~70%, append a brief reason on the same line — what's still unresolved or missing. This tells the user exactly what the interview needs to surface, and prevents the number from being a vague signal.
 
-### Step 2: Ask one question at a time, each with a guess attached
+### Step 2: Ask one question at a time with clear choices
 
 Format:
 
 ```
-Q: <one focused question>
-GUESS: <your hypothesis for the answer, with the reasoning that produced it>
+Q: <one focused question, and what its answer changes>
+A. <choice> — <practical consequence>
+B. <choice> — <practical consequence>
+READ: <your best hypothesis and brief reason, if supported>
 ```
 
-Wait for the user to react before asking the next question.
+Default to 2–3 choices and use an available interactive question tool; otherwise use a short labeled list. Allow a custom answer. For a decision where you have a supported lean, put that option first and mark it **Recommended**, with a short reason tied to the user's priorities. A hypothesis about their audience or experience is not a recommendation about what that fact should be. Use a focused free-text prompt when choices would distort the answer. Say whether the answer blocks work or can wait, and wait for the user to react before asking the next dependent question.
 
 **Why one at a time, not a batch:**
 
@@ -76,7 +78,7 @@ Wait for the user to react before asking the next question.
 - It commits you to a hypothesis you can be visibly wrong about, which keeps you honest
 - It surfaces *your* assumptions, which is what the interview is meant to expose
 
-The risk here is a polite user agreeing with your guess to be agreeable. Mitigate by being visibly willing to be wrong, and occasionally guess in a direction you expect the user to push back on.
+The risk here is a polite user agreeing with your guess to be agreeable. Mitigate by offering credible alternatives, welcoming corrections, and stating uncertainty honestly. Never deliberately offer a misleading guess to provoke disagreement.
 
 ### Step 3: Listen for "want vs. should want"
 
@@ -158,16 +160,21 @@ Agent:
 HYPOTHESIS: You want a way to answer "how are we doing?" in standup, and "dashboard" came to mind because that's the conventional answer.
 CONFIDENCE: ~30% — missing: who it's for, what "metrics" are, and what success looks like
 
-Q:     When you say "how are we doing?", who's asking — you alone, the engineering team in standup, or up the chain (e.g., your manager, an exec, a board)?
-GUESS: engineering team in standup, because "we" usually scopes that way and standups are where this question gets asked. If it's for execs the metrics and the framing change a lot.
+Q: Who needs this view? This determines which information to show and needs answering before design.
+A. Just me — organize information for personal decisions.
+B. Engineering team — support shared discussion in standup.
+C. Leadership — summarize outcomes for reporting.
+READ: Possibly the engineering team because you said "our metrics," but that is uncertain. A different audience is welcome.
 
 User: It's actually for me. I keep losing track of which experiments are running and what their early signal looks like.
 
 Agent:
 Updated read: not a team dashboard at all. It's a personal experiment tracker. Confidence: ~60% — still missing: what "early signal" means and what done looks like.
 
-Q:     Is the gap that you don't know which experiments exist, or that you can't see their results in one place?
-GUESS: the second one. You have a list of experiments somewhere, but their results live in five different tools, and reconciling them by hand is what you're tired of.
+Q: Which gap matters most? This determines the first useful feature.
+A. Finding which experiments exist — collect an inventory.
+B. Seeing results together — combine their early signals.
+READ: Possibly B because you mentioned signals; correct me if neither fits.
 
 User: First one actually. I literally don't have a list. They're spread across different docs.
 
@@ -192,15 +199,16 @@ Two questions in, the agent has discovered the actual ask isn't "a dashboard." I
 | "Asking too many questions wastes their time" | Time wasted by 4–6 targeted questions is small. Time wasted by building the wrong thing is enormous, and the user is the one bearing that cost. |
 | "I'll figure it out as I build" | Switching costs after code exists are 10x what they are now. Discovery during implementation is rework. |
 | "Delegation means I must ask again" | Delegation permits judgment within the stated constraints. Ask only when an unresolved material outcome or trade-off requires the user. |
-| "I should give them several options to pick from" | Options work when the user knows what they want and is choosing between trade-offs. They don't know what they want yet. Listing options widens the search; asking narrows it. |
-| "If I attach my guess, I'm leading them" | Leading is the point. Reacting is faster than generating from scratch. The risk is sycophancy, not leading; mitigate by being visibly willing to be wrong. |
+| "Discovery requires prose-only questions" | Clear choices make a focused question easier to answer. Allow a custom answer and use free text when choices would distort their experience. |
+| "Every question needs a recommendation" | Recommend a decision when you have an honest lean. Facts and unknown preferences need a hypothesis or a neutral question, not invented advice. |
 | "We've talked enough, I get it" | Test it: can you predict their reaction to the next three questions? If not, you don't get it yet. |
 | "Any yes resolves every unknown" | Check whether the response resolves the material uncertainty. Reuse clear authorization; do not invent an answer to an unrelated critical question. |
 
 ## Red Flags
 
 - Three or more questions in a single message: that's batching, not interviewing
-- A question without your hypothesis attached: that's surveying, not committing
+- A decision question with no clear choices or no reason for a supported recommendation
+- Presenting an uncertain hypothesis as a fact, or inventing a lean to fill the format
 - Rejecting delegated judgment and asking the same resolved question again
 - Proceeding while a material intent question remains unresolved, or exceeding an interview-only request
 - Questions framed as "what would be best practice?" instead of "what do you actually want?"
@@ -216,7 +224,8 @@ After applying interview-me:
 
 - [ ] An explicit hypothesis with a confidence number was stated in the first turn
 - [ ] Every confidence number below ~70% was accompanied by a one-line reason (what's still unresolved or missing)
-- [ ] Questions were asked one at a time, each with the agent's guess attached
+- [ ] Questions were asked one at a time with clear choices where useful, custom answers allowed, and honest hypotheses distinguished from recommendations
+- [ ] Supported recommendations appeared first with a brief reason; factual questions did not prescribe an answer
 - [ ] At least one "what would you actually want if you didn't have to justify it?" probe ran when the user gave a sophistication-signaling or convention-signaling answer
 - [ ] A concrete restate (Outcome / User / Why now / Success / Constraint / Out of scope) was written back to the user
 - [ ] Material intent is resolved from actual answers or authorized delegation; no new confirmation was required for an unchanged decision

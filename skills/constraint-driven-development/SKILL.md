@@ -56,36 +56,32 @@ Report what you found in two lines, then ask only what's left.
 
 ### Step 2: Four questions, each with a default
 
-Follow the one-question-at-a-time discipline from `interview-me`, with one change: every question here has a default, so "I don't know" is a complete answer that still produces a working config.
+Follow the one-question-at-a-time discipline from `interview-me`. Use an available interactive question tool with concise choices and a custom-answer path. Put the supported **Recommended** choice first, explain its consequence, and use it as the default if the user explicitly delegates or says "I don't know." A preselection or silence is not an answer. Resolve these choices before writing their constraints; continue independent inspection meanwhile.
 
 ```
-Q1: Beyond the floor, which of these do you want enforced?
-    (a) Test coverage on new code
-    (b) Security scanning
-    (c) Performance budgets
-    (d) Accessibility
-    (e) Architecture boundaries
-GUESS: (a) and (b) — you have a test runner already and you're handling user input.
-DEFAULT if unsure: (a) and (b).
-Say what each pick costs: (c) and (d) need a running URL, (e) needs a rules file written.
+Q1: Beyond the floor, which checks should we add?
+A. Coverage and security scanning (Recommended) — build on your existing tests and check untrusted input handling.
+B. Also performance and accessibility — add checks that need a running URL.
+C. Custom set — name dimensions, including architecture boundaries if useful; those need a rules file.
 ```
 
 ```
-Q2: When a check fails while the agent is mid-task, should it block or warn?
-GUESS: Block. You're running agents unattended and a warning nobody reads is a warning.
-DEFAULT if unsure: Block on the floor, warn on everything else for the first two weeks.
+Q2: How should additional checks behave during adoption? The floor always blocks.
+A. Warn for two weeks, then review enforcement (Recommended) — calibrate new checks before making them blockers.
+B. Block immediately — enforce all selected checks from the start, accepting initial remediation work.
 ```
 
 ```
-Q3: Do you have target numbers in mind, or should I measure where you are today and hold that line?
-GUESS: Measure. Most teams don't have a number, and an invented one gets ignored.
-DEFAULT if unsure: Measure and hold. See "Ratchets" below.
+Q3: How should we set thresholds?
+A. Measure and hold (Recommended) — prevent regressions from today's baseline; see "Ratchets" below.
+B. Set targets now — supply the numbers and accept the work needed to reach them.
 ```
 
 ```
-Q4: What's the slowest check you'll tolerate before the agent hands work back?
-GUESS: About 90 seconds. Longer and you'll stop running it.
-DEFAULT if unsure: 90 seconds at task end, unlimited in CI.
+Q4: What local verification budget should we use?
+A. 90 seconds at task end (Recommended) — keep handoffs responsive; longer checks run in CI.
+B. Wait for all checks locally — slower handoffs, earlier complete results.
+C. Custom budget — give a duration suited to your workflow.
 ```
 
 Stop at four. A twelve-question intake produces a config nobody understands and a user who regrets starting.
