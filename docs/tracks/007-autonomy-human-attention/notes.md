@@ -9,8 +9,8 @@ status: draft
 
 ## Resume
 
-- Phase: implementation, deterministic checks, behavioral evaluation, and review complete; record the implementation revision and evidence in the local commits. Track completion remains after merge.
-- Sources: [spec](spec.md), [existing autonomy policy](../../../skills/using-agent-skills/SKILL.md#autonomous-execution-and-critical-human-gates).
+- Phase: local implementation, verification, and review complete. Continue through merge or release when authorized; track completion remains after merge.
+- Sources: [spec](spec.md), [verification](verification.md), [review](review.md), [autonomy policy](../../../skills/using-agent-skills/SKILL.md#autonomous-execution-and-critical-human-gates).
 
 ## Decisions and observations
 
@@ -24,3 +24,5 @@ status: draft
 - Checks — 71 Node regression tests, 163 routing checks (98% rank-1), 29 skill validations, 11-command parity, lifecycle/artifact/link/version checks, both hook suites, and plugin validation pass. Historical tracks 001–006 are unchanged.
 - Validator recovery — The default Python lacked PyYAML. Both changed skills pass the skill-creator validator through an offline isolated uv environment using cached PyYAML; no repository dependency or configuration changed. Changed YAML and TOML parse, and the Gemini/Antigravity build adapters are identical.
 - Behavioral evidence — All five meta-skill scenarios passed (19/19 expectations). The new choice case kept internal details autonomous and asked about the unresolved delivery cost/latency trade-off while independent work continued. The new incident case notified the user before diagnosis, used already authorized containment, and retained separate restoration/external-communication boundaries. These are representative dialogue checks, not a production incident exercise.
+- Commit — Implementation is `0f392827f1729b738d1a79192c516ab81a84258d`. Later track reports and grader records preserve that revision's evidence without expanding its scope.
+- Closeout — The accepted workflow improvements are in their owning skill, commands, documentation, and capability contract. No separate knowledge promotion or unresolved follow-up is needed within the local update.

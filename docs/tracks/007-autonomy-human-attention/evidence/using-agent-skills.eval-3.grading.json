@@ -1,0 +1,35 @@
+{
+  "expectations": [
+    {
+      "text": "The failed verification result is preserved as evidence and the readiness verdict remains FAIL or INCOMPLETE",
+      "passed": true,
+      "evidence": "Step 0 requires recording the failure in notes.md (observed vs. expected, failing criterion id, revision under test) before diagnosing; step 1 says \"Preserve the failing evidence first — the exact command, output, and revision\"; step 4 states \"Keep the earlier FAIL evidence; verification evidence is revision-specific and the history of the failure is part of the record.\" The draft PR explicitly stays draft and the track is not marked complete, so no premature ready/PASS verdict is asserted. It also forbids loosening/rewording/dropping the criterion to obtain a pass."
+    },
+    {
+      "text": "The route enters debugging-and-error-recovery only because a check failed",
+      "passed": true,
+      "evidence": "The response frames the failed acceptance-criterion check as \"an *exception path*\" and routes step 1 to `debugging-and-error-recovery`, noting \"Debugging is explicitly *not* the ordinary Verify phase; you are in an exception branch and you leave it as soon as the cause is known.\" It also scopes re-entry: step 5 returns to debugging only with new evidence after a second re-verify failure, and review Critical/Required findings route back through fix → re-verify rather than ad-hoc debugging."
+    },
+    {
+      "text": "A behavioral fix uses RED-GREEN-REFACTOR and updates the plan/spec only if scope or acceptance criteria genuinely changed",
+      "passed": true,
+      "evidence": "Step 2 invokes `test-driven-development` to \"Get a failing test that captures the defect before you fix it (RED)\", step 3 applies \"the smallest correction to the root cause\" (GREEN) with `incremental-implementation` for multi-step corrections, and refactor discipline is stated as the constraint \"Don't refactor adjacent code you touched while diagnosing.\" Spec/plan changes are gated: reconciliation is \"either the updated contract, or a justified no-change disposition,\" and only an approved requirement change goes through `spec-driven-development`; editing a scope-authorized criterion to go green is explicitly prohibited and instead raises a Blocking question."
+    },
+    {
+      "text": "Focused checks are followed by /verify again on the new revision",
+      "passed": true,
+      "evidence": "Step 4: \"Return to the phase that failed — full `verification-and-validation`, not a spot check … The re-verify must redo the whole gate against the *new* revision\", enumerating the complete acceptance trace (every criterion, not just the failing one), repository checks (build, lint, type, full suite), runtime evidence at the real boundary, and surrounding behavior the fix could have disturbed, written to verification.md with a PASS verdict naming the implementation revision."
+    },
+    {
+      "text": "/pr ready remains blocked until current-revision verification evidence is complete",
+      "passed": true,
+      "evidence": "Step 6: \"Only once `verification.md` carries a PASS for the current revision does `git-workflow-and-versioning` flip the draft to ready,\" plus preconditions that todo.md, spec reconciliation, ship.md (if production-affecting), and the PR body are current for the new revision. Step 0 keeps the PR in draft during the exception path, and completion is explicitly deferred past PASS to review and merge."
+    }
+  ],
+  "summary": {
+    "passed": 5,
+    "failed": 0,
+    "total": 5,
+    "pass_rate": 1
+  }
+}
