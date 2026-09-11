@@ -9,7 +9,7 @@ status: draft
 
 ## Resume
 
-- Phase: bounded requirements recorded; implement the central policy and its consumers, then verify and review.
+- Phase: implementation, deterministic checks, behavioral evaluation, and review complete; record the implementation revision and evidence in the local commits. Track completion remains after merge.
 - Sources: [spec](spec.md), [existing autonomy policy](../../../skills/using-agent-skills/SKILL.md#autonomous-execution-and-critical-human-gates).
 
 ## Decisions and observations
@@ -19,3 +19,8 @@ status: draft
 - Review baseline — Clean `main` at `a7dbd15f6634af3c9555f1f050de98a7250f954b`. Core commands already preserve autonomy, but orchestration/comparison guidance and Copilot examples retain manual defaults.
 - Verification design — Existing structural checks miss semantic contradictions. Reuse existing behavioral cases and add only focused dialogue cases covering consequential choice and urgent notification; no runtime code or new validator is needed.
 - Scope — This updates reusable policy in its existing home, with no new skill or knowledge bundle and no remote publication.
+- Applied — Central policy separates consequential decisions from urgent incident notices. Build adapters and the standalone incremental skill carry the minimum behavior; orchestration, comparison, and Copilot guidance now reflect autonomous defaults and explicit step limits.
+- Claim under review — The policy preserves autonomous progress and prompt human visibility without expanding authority. A fresh-context same-model reviewer inspected the central policy/build/capability diff against acceptance criteria 1–4 and found no issues. This is agent evidence, not human approval.
+- Checks — 71 Node regression tests, 163 routing checks (98% rank-1), 29 skill validations, 11-command parity, lifecycle/artifact/link/version checks, both hook suites, and plugin validation pass. Historical tracks 001–006 are unchanged.
+- Validator recovery — The default Python lacked PyYAML. Both changed skills pass the skill-creator validator through an offline isolated uv environment using cached PyYAML; no repository dependency or configuration changed. Changed YAML and TOML parse, and the Gemini/Antigravity build adapters are identical.
+- Behavioral evidence — All five meta-skill scenarios passed (19/19 expectations). The new choice case kept internal details autonomous and asked about the unresolved delivery cost/latency trade-off while independent work continued. The new incident case notified the user before diagnosis, used already authorized containment, and retained separate restoration/external-communication boundaries. These are representative dialogue checks, not a production incident exercise.

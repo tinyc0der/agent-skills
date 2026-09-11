@@ -75,21 +75,21 @@ If any answer is "no," fall back to direct invocation or a single-persona comman
 
 ---
 
-### 4. Sequential pipeline as user-driven slash commands
+### 4. Sequential lifecycle with scoped autonomy
 
-The user runs slash commands in a defined order, carrying context (or commit history) between them. There is no orchestrator agent — the user IS the orchestrator.
+The main session follows the lifecycle in dependency order through the user's authorized endpoint, preserving artifacts and evidence between phases. Users can also invoke individual phase commands or explicitly request manual checkpoints. No separate router persona is needed.
 
 ```
-user runs:  /spec → /plan → /pr draft → /build → /verify → /pr ready → /review → merge → /ship
+lifecycle:  /spec → /plan → /pr draft → /build → /verify → /pr ready → /review → merge → /ship
 ```
 
-**Use when:** the workflow has dependencies (each step needs the previous step's output) and human judgment between steps adds value.
+**Use when:** the workflow has dependencies and each transition needs evidence from the previous phase. The command sequence does not itself authorize remote actions, merge, or deployment.
 
 **Examples in this repo:** the entire DEFINE → PLAN → DRAFT PR → BUILD → VERIFY → READY PR → REVIEW → MERGE → SHIP lifecycle.
 
-**Cost:** one sub-agent context per step. Free for the orchestration layer because there is no orchestrator agent.
+**Cost:** ordinary phase work in the main session; additional reviewer contexts only when needed.
 
-**Why not automate it:** an LLM "lifecycle orchestrator" would (a) lose nuance between steps because it has to summarize for hand-off, (b) skip the human checkpoints that catch wrong-direction work early, and (c) double the token cost via paraphrasing turns.
+**Human attention:** Apply the [autonomy policy](../skills/using-agent-skills/SKILL.md#autonomous-execution-and-critical-human-gates). Ask for unresolved consequential decisions or authority, continue safe independent work, and resume after resolution. Notify the user promptly about active incidents while authorized containment proceeds. Routine phase transitions and equivalent implementation approaches do not require another approval.
 
 ---
 
@@ -315,15 +315,15 @@ A `code-reviewer` that internally invokes `security-auditor` when it sees auth c
 
 ### C. Sequential orchestrator that paraphrases
 
-An agent that calls `/spec`, then `/plan`, then `/build`, etc. on the user's behalf.
+A separate router persona that spawns a new agent for each lifecycle phase and passes paraphrased summaries between them.
 
 **Why it fails:**
-- Loses the human checkpoints that catch wrong-direction work
+- Can lose unresolved human decisions and their dependency boundaries during hand-off
 - Each hand-off summarizes context — accumulated drift over a long pipeline
 - Doubles token cost: orchestrator turn + sub-agent turn for every step
-- Removes user agency at exactly the points where judgment matters most
+- Can lose the original scope and authorization across layers
 
-**What to do instead:** keep the user as the orchestrator. Document the recommended sequence in `README.md` and let users invoke it.
+**What to do instead:** keep lifecycle control in the main session, retain the original request and authoritative artifacts, and proceed through the authorized endpoint. Preserve explicit manual checkpoints and use the human attention policy above for decisions and incidents.
 
 ---
 

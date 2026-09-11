@@ -25,4 +25,4 @@ Update the central skill, standalone build guidance, canonical contract, and the
 
 ## Spec reconciliation
 
-Reconcile these accepted distinctions into the linked capability specification in the implementation commit. Keep historical tracks and their evidence unchanged.
+Reconciled the accepted decision/notification distinctions into the linked capability specification and its skill/command consumers. Historical tracks and their evidence remain unchanged. All acceptance criteria pass focused review and the applicable repository/behavioral checks; the track remains open until merge.

@@ -20,12 +20,12 @@ People often ask how **agent-skills** relates to the two other "skills for codin
 | **Organizing principle** | SDLC **phases** (Define to Ship) behind a meta-skill router | A single disciplined loop: brainstorm, plan, execute, review | A curated toolbox of focused, composable commands |
 | **Catalog size** | 29 skills spanning the whole lifecycle | ~14 skills, deep on the inner build loop | ~30 skills, grouped into engineering / productivity / in-progress / deprecated |
 | **Lifecycle coverage** | Broad: idea refinement, API and UI design, security, performance, CI/CD, observability, deprecation, ADRs, launch | Deep but narrow: TDD, debugging, planning, review, skill authoring | Define and Build heavy: grilling, PRDs, issues, TDD, architecture, bug triage, knowledge management |
-| **Entry points** | Lifecycle commands (`/spec` `/plan` `/pr` `/build` `/verify` `/review` `/ship`) plus focused `/test`, `/code-simplify`, and `/webperf`, with a `/build auto` full-plan mode | Skill-chained pipeline (`brainstorming`, `writing-plans`, `subagent-driven-development`) | Slash commands (`/grill-me`, `/tdd`, `/to-prd`, `/diagnosing-bugs`, `/grill-with-docs`) |
+| **Entry points** | Lifecycle commands (`/spec` `/plan` `/pr` `/build` `/verify` `/review` `/ship`) plus focused `/test`, `/code-simplify`, and `/webperf`; `/build` executes the authorized scope, with explicit `step` mode | Skill-chained pipeline (`brainstorming`, `writing-plans`, `subagent-driven-development`) | Slash commands (`/grill-me`, `/tdd`, `/to-prd`, `/diagnosing-bugs`, `/grill-with-docs`) |
 | **Distinctive mechanisms** | Anti-rationalization tables and Red Flags in every skill; parallel review **personas** in `/ship`; reference checklists; a **three-tier eval framework** in CI | Subagent-driven development with a task reviewer (spec + quality) and a fix loop; git-worktree isolation; skills-that-write-skills, pressure-tested | The **grilling** primitive (one question at a time, design-tree walking); seam-based TDD; explicit user-invoked vs model-invoked split; issue-tracker integration |
 | **Quality measurement** | Trigger, routing, and behavioral evals run against the catalog (in-repo, some in CI) | Pressure-testing methodology is core to its philosophy; the eval suite itself now lives in a separate repo | None shipped in-repo |
 | **Tooling reach** | Claude Code, Cursor, Gemini CLI, Antigravity, OpenCode, Windsurf, Copilot, Kiro, Codex, Command Code, plus the `npx skills` CLI | One of the widest and most actively churned surfaces: Claude Code, Codex, Cursor, Copilot CLI, OpenCode, Kimi, Factory Droid, Antigravity, Pi | Claude Code first, distributed via `npx skills add`; other agents work with varying fidelity |
 | **Governance** | Actively reviews and merges community contributions; every skill ships an eval | Largely solo-authored; a substantial backlog of unmerged community PRs | Solo-authored, self-merged, developed openly in public |
-| **Best for** | Driving a feature through every phase with a human checkpoint at each | Long, autonomous, reasoning-heavy or exploratory work | A pragmatic, battle-tested daily loop, strongest at requirements and TDD |
+| **Best for** | Driving a feature through every phase autonomously, with evidence gates and focused human escalation | Long, autonomous, reasoning-heavy or exploratory work | A pragmatic, battle-tested daily loop, strongest at requirements and TDD |
 
 *(We deliberately leave out star counts and adoption figures: they are cited wildly differently across blogs and change weekly. All three are actively used and maintained.)*
 
@@ -51,7 +51,7 @@ Its strengths are authenticity and sharpness: this is how one very good engineer
 
 ### agent-skills (this project)
 
-agent-skills organizes the **entire product lifecycle** as skills, with a meta-skill (`using-agent-skills`) that routes a task to the right one. Every skill carries a **Common Rationalizations** table (the excuses an agent makes to skip a step, each rebutted) and **Red Flags**. Slash commands map one-to-one to lifecycle phases; `/build auto` runs a whole approved plan in one pass; and `/ship` reuses revision-matched evidence, refreshes stale `code-reviewer`, `security-auditor`, and `test-engineer` reports in parallel when needed, then merges them into a go/no-go. It keeps a human checkpoint at each phase, ships seven optional reference checklists including a Definition of Done, and runs across most major agent tools with a single-command install on several of them.
+agent-skills organizes the **entire product lifecycle** as skills, with a meta-skill (`using-agent-skills`) that routes a task to the right one. Every skill carries a **Common Rationalizations** table (the excuses an agent makes to skip a step, each rebutted) and **Red Flags**. Slash commands map one-to-one to lifecycle phases; `/build` runs the authorized scope in verified slices, with `auto`/`all` aliases and explicit `step` mode; and `/ship` reuses revision-matched evidence, refreshes stale `code-reviewer`, `security-auditor`, and `test-engineer` reports in parallel when needed, then merges them into a go/no-go. Human decisions are reserved for unresolved consequential trade-offs, access/authority, or risks the agent cannot resolve safely; active incidents receive prompt notification while authorized recovery continues. It ships seven optional reference checklists including a Definition of Done and runs across most major agent tools with a single-command install on several of them.
 
 What is newer, and the current point of difference: a **three-tier eval framework** lives in the repo. Tier 1 checks structure, Tier 2 checks that each skill's description carries the vocabulary users actually say and that no two skills collide on routing (deterministic, runs in CI), and Tier 3 grades an agent's real execution trace against per-skill expectations. Neither of the other two ships that kind of in-repo, catalog-wide measurement today. The honest trade-off in the other direction: agent-skills has less of a single opinionated "run" than Superpowers, and none of the three has yet solved durable cross-session memory well.
 
@@ -79,19 +79,19 @@ The at-a-glance table tells you how they are shaped. This is how to choose in pr
 
 ### Start with the shape of your work
 
-- **A whole feature, front to back?** agent-skills. It is the only one of the three that carries you from spec through security, performance, and launch with a checkpoint at each phase, so nothing quietly skips the review or the pre-flight.
+- **A whole feature, front to back?** agent-skills carries authorized work from spec through security, performance, and launch with evidence checks at each phase and human escalation when needed.
 - **A big, ambiguous chunk you want to hand off and walk away from?** Superpowers. Its pipeline and subagent review are built to run for a long time and hand back a result that has already been reviewed against the spec.
 - **A fast, focused daily loop, especially getting requirements right before code?** Matt Pocock's skills. The grilling loop is the sharpest requirements tool of the three, and the toolkit stays out of your way.
 
 ### Then weight what you actually care about
 
 - **Breadth of coverage** (security, performance, CI/CD, observability, launch): agent-skills is the clear pick; the others are inner-loop focused.
-- **Autonomy over a long run**: Superpowers, by design.
+- **Autonomy over a long run**: agent-skills defaults to autonomous execution through the authorized endpoint, retaining evidence gates and focused human escalation; Superpowers emphasizes its subagent execution pipeline.
 - **Low ceremony on small changes**: Pocock's toolkit is lightest; agent-skills offers a middle gear (a small change can skip straight to `/test` and `/review`); Superpowers is the most process-heavy.
 - **Confidence that the skills themselves work**: agent-skills is the only one with catalog-wide evals in the repo, so a description or routing regression fails CI rather than surfacing as a mysterious "why didn't the skill fire" later.
 - **Requirements interrogation**: Pocock's grilling is the reference implementation; agent-skills' `interview-me` is close in spirit and gaining an opt-in collaborative mode.
 - **Platform spread**: agent-skills and Superpowers both run almost everywhere; Pocock is happiest on Claude Code.
-- **A human gate at each step vs. a hands-off run**: agent-skills checkpoints by default; Superpowers minimizes mid-run check-ins on purpose.
+- **Control over human checkpoints**: agent-skills supports explicit manual checkpoints and `/build step`; its default is autonomous progress with decision requests and urgent notifications under the [human attention policy](../skills/using-agent-skills/SKILL.md#autonomous-execution-and-critical-human-gates).
 
 ### Concrete scenarios
 

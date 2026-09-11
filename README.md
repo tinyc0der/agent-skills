@@ -43,6 +43,8 @@ lifecycle and artifacts are identical.
 
 **`/build` runs the authorized scope autonomously**, with `/build auto` and `/build all` as aliases. Use `/build step` for one task. Required plans and checkpoints are checked without repeated approval: behavioral slices use the minimum-sufficient test gate and RED-GREEN-REFACTOR, every slice is verified and committed, and failures enter debugging. Human gates are reserved for material decisions, access/authority, or consequential risks the agent cannot resolve itself. Existing scope and release/merge authorization limits still apply.
 
+Multiple valid approaches stay autonomous when established intent and delegated judgment settle the choice. Unresolved consequential trade-offs need options and a recommendation. Active outages, suspected compromise, and ongoing data loss need prompt notification even while authorized fixes continue. See the [human attention policy](skills/using-agent-skills/SKILL.md#autonomous-execution-and-critical-human-gates) for decision requests, urgent notices, and resumption.
+
 Skills also activate automatically based on what you're doing — designing an API triggers `api-and-interface-design`, building UI triggers `frontend-ui-engineering`, and so on.
 
 ---
