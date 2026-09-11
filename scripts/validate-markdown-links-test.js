@@ -100,7 +100,7 @@ test('treats eval fixture Markdown as test input rather than repository document
   const root = makeSandbox();
   writeFile(root, 'evals/README.md', 'See [fixture](fixtures/memory/docs/knowledge/project.md).\n');
   writeFile(root, 'evals/fixtures/memory/docs/knowledge/project.md',
-    'A bundle-relative [decision](/decisions/store.md) and an intentionally [missing concept](missing.md).\n');
+    'A bundle-relative [decision](/decision-records/store.md) and an intentionally [missing concept](missing.md).\n');
 
   const result = run(root);
 

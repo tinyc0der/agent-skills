@@ -8,7 +8,7 @@ description: Accepted requirements, ownership, and acceptance criteria for Memor
 
 ## Objective
 
-Preserve trustworthy project knowledge across sessions while keeping accepted capability requirements, change history, and reusable lessons in their canonical homes.
+Preserve trustworthy project knowledge so future sessions can understand the project broadly, explain individual decisions, and execute recurring procedures. Keep accepted capability requirements, change history, current guidance, and reusable lessons in their canonical homes.
 
 ## Ownership and Discovery
 
@@ -17,6 +17,16 @@ Preserve trustworthy project knowledge across sessions while keeping accepted ca
 - Tracks use a change spec or bug report, running notes, and only the plan, tasks, verification, review, and launch files needed for the work. They link affected capability specs without copying whole contracts.
 - Reusable project knowledge lives in an OKF bundle under `docs/knowledge/`, or the owning package's knowledge directory. Discover established ADR and runbook homes before applying defaults; preserve their ownership, numbering, and format.
 - Rules files point to the knowledge bundle. Indexes provide concise discovery; external homes are linked through typed catalog concepts instead of copied into bundle concepts.
+
+## Knowledge Collection Goals
+
+- `project.md` anchors compact project identity, purpose, direction, and constraints.
+- `steering/` provides broad, enduring understanding of the current project: product/domain context, technology, structure, architecture, standards, risks, and lessons. Organize by topic and explain its rationale, with concrete examples where useful.
+- `decision-records/` records individual contextual choices as they arise: the problem, choice, alternatives, rationale, and consequences. Current architecture and technology overviews may cite these records while the records retain decision history. Repository and package bundles use this collection name.
+- Read existing `decisions/` collections permissively. When their rename is authorized, move records and update indexes, concept links, and source references together, preserving contents, numbering, metadata, and the OKF version. Established external ADR homes retain their locations unless separately included in the migration.
+- `runbooks/` holds procedural knowledge: prerequisites, ordered steps, validation, and recovery for recurring operations. Link to steering for background and to scripts/configuration for executable details.
+- Potential steering topics include product, tech, structure, architecture, APIs, testing, code conventions, security, component/form patterns, deployment context, troubleshooting, performance, commands, preferences, and project-specific domains. These are optional, content-driven suggestions, not a required file catalog. Extend existing concepts and combine overlapping topics.
+- Keep deeper product context distinct from the compact `project.md` anchor. Route deployment and troubleshooting overviews to steering and their executable procedures to runbooks according to content, regardless of filename. Each source retains its purpose and links to related knowledge instead of duplicating contracts or decision histories.
 
 ## Working Notes
 
@@ -32,8 +42,8 @@ Preserve trustworthy project knowledge across sessions while keeping accepted ca
 - Before review, reconcile implemented, verified requirement changes into the owning capability specs in the same implementation PR. Record target links or a justified no-change disposition in the track's spec or bug report.
 - Deferred, canceled, and unverified requirements remain in the track. Mark the track complete after merge and retain it as history.
 - Candidate reusable knowledge stays in the track's notes until the applicable release GO or completed closeout review for work without a production launch. Perform the review autonomously within authorization; reserve human input for unresolved critical ownership, intent, access, or authority. Record acceptance, rejection, or deferral with rationale and target links, and never label an agent review as human approval.
-- Route project constraints, deliberate decisions, declarative guidance, and repeatable procedures to their resolved canonical owners. Cite track evidence and capability specs rather than duplicating them.
-- Promote only verified, reusable lessons and durable preferences. Ineffective, reverted experiments that established no reusable constraint stay out of the knowledge bundle; retain them in track notes when they help avoid repeated work. An already-recorded fact produces a no-op with links.
+- Route project constraints, specific decisions, current project/domain understanding, and repeatable procedures to their resolved canonical owners. Cite track evidence and capability specs rather than duplicating them.
+- Promote only verified, reusable project knowledge and durable preferences, including current understanding grounded in verified code or documentation. Ineffective, reverted experiments that established no reusable constraint stay out of the knowledge bundle; retain them in track notes when they help avoid repeated work. An already-recorded fact produces a no-op with links.
 
 ## Format, Trust, and Maintenance
 
