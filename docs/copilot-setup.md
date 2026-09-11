@@ -110,7 +110,7 @@ Natural language is the fallback, and works in any Copilot surface whether or no
 
 VS Code's extension-host local agents support [prompt files](https://code.visualstudio.com/docs/agent-customization/prompt-files) at `.github/prompts/<name>.prompt.md`, and each becomes a `/<name>` slash command. The Agent Host does **not** use prompt files — there, use the skill names above.
 
-An alias is a thin shortcut to one skill, nothing more. These aliases do not implement the orchestration in this repo's Claude Code commands — `/build auto`'s single-approval plan-and-implement pass and `/ship`'s parallel persona fan-out. Reproducing that on Copilot is its own piece of work, not something a one-file alias covers. Prefer the skill names as your default; reach for aliases only if the short form is worth the extra file.
+An alias is a thin shortcut to its listed skills. These examples preserve the autonomous default and explicit phase-only or step limits; they do not reproduce Claude Code's full command orchestration or `/ship` persona fan-out. Follow the [autonomy and human attention policy](../skills/using-agent-skills/SKILL.md#autonomous-execution-and-critical-human-gates): ask only for unresolved consequential decisions, notify promptly about active incidents, and reuse existing authorization. Prefer the skill names as your default; reach for aliases only if the short form is worth the extra file.
 
 Create one, without clobbering an existing file:
 
@@ -123,22 +123,24 @@ description: Write a structured spec before writing code
 
 Use the spec-driven-development skill.
 
-Ask clarifying questions about the objective and target users, core features and
-acceptance criteria, stack preferences and constraints, and known boundaries.
-Then write a spec covering objective, commands, project structure, code style,
-testing strategy, and boundaries. Save it as SPEC.md in the project root and
-confirm with me before any code is written.
+Resolve the objective, target users, acceptance criteria, and boundaries from
+the request and project context; ask only for material unresolved decisions.
+Follow the skill's branch and numbered-track contract, read the affected
+capability specs, and save the proposal to docs/tracks/<track-id>/spec.md.
+Check readiness using existing scope authorization. A spec-only request ends
+with its handoff; an end-to-end request continues into planning without
+routine reapproval.
 EOF
 ```
 
 Reload the window, then type `/spec`.
 
-For the rest, run the same `mkdir`/`cat` block with the filename swapped (the filename *is* the command name), and take the `description` and body from this table. **Replace the entire body below the `---` frontmatter**, not just the skill name — the spec body's SPEC.md and clarifying-question instructions belong to Define only, and leaving them in would make `/plan` or `/test` write a spec.
+For the rest, run the same `mkdir`/`cat` block with the filename swapped (the filename *is* the command name), and take the `description` and body from this table. **Replace the entire body below the `---` frontmatter**, not just the skill name — the specification instructions belong to Define only, and leaving them in would make `/plan` or `/test` write a spec.
 
 | Alias file | `description` | Complete body — everything below the frontmatter |
 |------------|---------------|--------------------------------------------------|
-| `.github/prompts/plan.prompt.md` | Break an approved spec into ordered, verifiable tasks | Use the planning-and-task-breakdown skill. Read the spec, then break the work into small, independently verifiable tasks, each with acceptance criteria and explicit dependency order. Save the result to `tasks/plan.md` and `tasks/todo.md`. Write no product code — show me the plan and wait for my approval. |
-| `.github/prompts/build.prompt.md` | Implement the next planned task, test-first | Use the incremental-implementation and test-driven-development skills. Read `tasks/plan.md` and `tasks/todo.md`, then take the next unchecked task and only that one. Write a failing test first, make it pass, refactor, run the suite, and tick the task off. Stop there and report what changed. |
+| `.github/prompts/plan.prompt.md` | Break authorized requirements into ordered, verifiable tasks | Use the planning-and-task-breakdown skill. Resolve the active numbered track and its requirements; save the ordered plan and task ledger to `docs/tracks/<track-id>/plan.md` and `docs/tracks/<track-id>/todo.md`. Check acceptance coverage and dependencies using existing authorization. A plan-only request ends with its handoff; an end-to-end request continues without routine reapproval. |
+| `.github/prompts/build.prompt.md` | Implement the authorized scope in verified slices; use step for one task | Use the incremental-implementation and test-driven-development skills. Resolve the active numbered track and execute the authorized task scope in dependency order with the test admission gate, verification, and a local commit per slice. `auto` and `all` are aliases for this default; `step` executes one task. Ask for unresolved consequential trade-offs, access/authority, or uncontained risks; continue safe independent work and resume after the answer. Notify the user promptly about active incidents while authorized containment continues. Do not infer permission to push, merge, deploy, or contact others. |
 | `.github/prompts/test.prompt.md` | Write tests before the code that satisfies them | Use the test-driven-development skill. For new behavior, write a failing test that captures it before any implementation. For a bug, reproduce it with a failing test first, then fix it. Run the suite after each step and show me the red and the green output. |
 
 Write the body yourself, or take it from this table, rather than copying `.claude/commands/*.md` verbatim: those files reference skills as `agent-skills:<name>`, a Claude Code plugin namespace that means nothing to Copilot.

@@ -1,0 +1,25 @@
+{
+  "expectations": [
+    {
+      "text": "The chosen skill matches the decision tree in the meta-skill",
+      "passed": true,
+      "evidence": "The agent routed the 'login page broken after yesterday's deploy' scenario to the Bug Fix and Regression route with `debugging-and-error-recovery` as the entry skill, then laid out a downstream sequence consistent with the catalog's phases (test-driven-development → incremental-implementation → verification-and-validation with browser-testing-with-devtools → code-review-and-quality, with git-workflow-and-versioning as cross-cutting). This matches the meta-skill's treatment of debugging-and-error-recovery as the Exception-phase entry for defects/regressions, and correctly rejects spec-driven-development (Feature route) and frontend-ui-engineering (Build phase, no authorized change yet)."
+    },
+    {
+      "text": "The rationale references the routing logic rather than guessing",
+      "passed": true,
+      "evidence": "The answer quotes the route's entry condition verbatim ('existing behavior is incorrect or regressed, and expected behavior can be established from an accepted contract or confirmed requirement') and maps the facts onto it (pre-deploy revision = confirmed expected behavior). It explicitly eliminates competing routes by their entry criteria ('No product decision is open, so this is not a Feature'; 'not a task with explicit acceptance criteria, so it's not a Bounded task'), invokes the classify-by-work-not-label rule, and cites the skill's reroute rule ('an active production outage requires incident mitigation and recovery first'). It also names the expected artifact (`docs/tracks/<NNN-name>/bug.md`) and the no-change-disposition rule. Caveat: no Read/Grep of the meta-skill file appears in the trace — the citations are from in-context material rather than freshly verified — but the quoted logic is specific and internally consistent rather than hand-waved."
+    },
+    {
+      "text": "Core operating behaviors (assumptions surfaced) are respected",
+      "passed": true,
+      "evidence": "The agent closes with an explicit assumptions paragraph: \"Two assumptions I'd otherwise proceed on: 'broken' means login is non-functional rather than cosmetically off, and yesterday's deploy is the only change in the window. Correct either and the localization step changes.\" It also isolates a genuinely blocking ambiguity (live production outage vs. dev/staging repro) with a labeled, scoped block ('Blocking — blocks the first action only; reproduction and reading yesterday's deploy diff can start either way'), offers three concrete options with a recommendation, and notes that containment via rollback would preserve the failing revision as evidence — respecting the confirm-before-irreversible-outward-facing-action norm rather than silently rolling back."
+    }
+  ],
+  "summary": {
+    "passed": 3,
+    "failed": 0,
+    "total": 3,
+    "pass_rate": 1
+  }
+}

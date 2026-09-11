@@ -1,0 +1,35 @@
+{
+  "expectations": [
+    {
+      "text": "The happy path is ordered as discovery/definition, specification, planning, draft PR, incremental TDD build, feature verification, ready PR, merge review, merge, and production shipping",
+      "passed": true,
+      "evidence": "The lifecycle table runs in exactly that order: 0 Discovery (`interview-me` → `idea-refine`), 1 Define (`spec-driven-development`), 2 Plan (`planning-and-task-breakdown`), 3 Draft PR, 4 Build (`incremental-implementation` + `test-driven-development`), 5 Verify (`verification-and-validation`), 6 Ready PR, 7 Review (`code-review-and-quality`), 8 Merge, 9 Ship (`shipping-and-launch`), 10 Observe."
+    },
+    {
+      "text": "The route distinguishes /test as the focused TDD entry point from /verify as assembled-feature validation",
+      "passed": true,
+      "evidence": "TDD is scoped to the Build phase (`test-driven-development`, plus `test-case-design-review` \"when test selection is non-trivial\"), exiting on \"independently revertible implementation commits\"; the separate Verify phase is assembled-feature validation via `verification-and-validation` producing \"`verification.md` with acceptance trace, repository checks, runtime evidence, and a PASS verdict naming the implementation revision.\" It also rules out conflating Verify with debugging: \"Debugging is not the ordinary Verify phase.\" The distinction is carried by phase roles rather than by naming the slash commands."
+    },
+    {
+      "text": "The draft PR is created within the authorized endpoint after checked, scope-authorized spec and plan artifacts, while readiness requires current-revision verification. Routine phase transitions reuse authorization; human input is reserved for unresolved critical decisions or enforced approval.",
+      "passed": true,
+      "evidence": "Draft PR sits at the Plan → Build boundary \"before implementation starts\" after a \"Scope-authorized, checked `spec.md`\" and \"Checked `plan.md` + `todo.md` ... No routine reapproval\"; readiness: \"Marked ready only after verification produces a PASS verdict naming the implementation revision.\" Posture: \"Run steps 1–8 autonomously ... without asking permission at each phase boundary. Pause only at a genuine gate: an unresolved material requirement ... a credential/approval only a person can supply ... Critical/Required findings are not human gates.\" Merge requires \"human approval only where the user or enforced policy requires it,\" and the endpoint assumption is surfaced (\"If you authorized implementation only, I stop at merge\")."
+    },
+    {
+      "text": "The response names the branch-scoped docs/tracks/<track-id>/ bundle, using NNN-name ids and including spec.md or bug.md, plan.md, todo.md, PR context, verification.md, review.md, and ship.md release/rollback evidence; canonical specs remain capability-based and are reconciled before review",
+      "passed": true,
+      "evidence": "\"assign a repo-wide `NNN-name` track id, and create a non-default branch. Track artifacts live in `docs/tracks/<track-id>/`; accepted contracts live in `docs/specs/<capability>/spec.md`.\" Bundle members named across rows: spec.md (+ capability-map.md), plan.md, todo.md, ship.md, notes.md, verification.md, review.md, plus draft-PR body content (scope, non-goals, risks, acceptance criteria, rollout, rollback) and Ship-phase \"release-revision evidence + `ship.md` dossier ... rollback plan.\" Capability specs are reconciled during Build (\"Spec reconciliation in the owning capability specs (or justified no-change dispositions)\"), i.e. before Review at step 7. bug.md is not mentioned, but the classification is Feature, not Bug; PR context is described as PR body content rather than a named file."
+    },
+    {
+      "text": "Git, CI, security, documentation, and observability are treated as cross-cutting disciplines rather than late cleanup",
+      "passed": true,
+      "evidence": "A dedicated \"Cross-cutting skills (not phases — they run alongside)\" section lists `git-workflow-and-versioning` (\"branch creation through merge and versioning\"), `security-and-hardening` (\"from design onward wherever trust boundaries exist\"), `documentation-and-adrs` (\"whenever decisions or public behavior change\"), and `observability-and-instrumentation` (\"designed and built with production-critical paths, not bolted on at step 10\"). CI is handled as a merge gate (`ci-cd-and-automation`, \"green required CI\") rather than listed in the cross-cutting block — a minor gap, but it is still a gating discipline, not deferred cleanup."
+    }
+  ],
+  "summary": {
+    "passed": 5,
+    "failed": 0,
+    "total": 5,
+    "pass_rate": 1
+  }
+}

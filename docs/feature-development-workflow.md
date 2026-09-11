@@ -16,6 +16,8 @@ Discover -> Define -> Plan -> Draft PR -> Build slices -> Verify
 
 The workflow proceeds autonomously through the authorized endpoint. Major transitions retain their evidence gates; routine approval prompts are unnecessary. Use the [critical-human-gate policy](../skills/using-agent-skills/SKILL.md#autonomous-execution-and-critical-human-gates) for unresolved material intent, access/authority, or risk that cannot be handled autonomously. Inside a phase, independent checks may run together. Explicit read-only, stepwise, and endpoint limits still apply.
 
+Human attention takes two forms: a decision request for unresolved consequential choices or authority, and prompt notification of an active outage, suspected compromise, or ongoing data loss. Multiple approaches alone do not require a question. A required decision pauses its dependent work while safe independent work continues; an urgent notice must not wait for complete diagnosis and does not stop authorized containment or recovery. Neither expands authorization. Resume dependent work when its blocker is resolved.
+
 ## Durable Artifact Structure
 
 Accepted contracts live by capability; execution history lives by numbered change:
