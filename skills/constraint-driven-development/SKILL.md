@@ -59,26 +59,26 @@ Report what you found in two lines, then ask only what's left.
 Follow the one-question-at-a-time discipline from `interview-me`. Use an available interactive question tool with concise choices and a custom-answer path. Put the supported **Recommended** choice first, explain its consequence, and use it as the default if the user explicitly delegates or says "I don't know." A preselection or silence is not an answer. Resolve these choices before writing their constraints; continue independent inspection meanwhile.
 
 ```
-Q1: Beyond the floor, which checks should we add?
+Q1 (Blocking): Beyond the floor, which checks should we add? Selecting constraint tools depends on this answer.
 A. Coverage and security scanning (Recommended) — build on your existing tests and check untrusted input handling.
 B. Also performance and accessibility — add checks that need a running URL.
 C. Custom set — name dimensions, including architecture boundaries if useful; those need a rules file.
 ```
 
 ```
-Q2: How should additional checks behave during adoption? The floor always blocks.
+Q2 (Blocking): How should additional checks behave during adoption? Enforcement configuration depends on this answer. The floor always blocks.
 A. Warn for two weeks, then review enforcement (Recommended) — calibrate new checks before making them blockers.
 B. Block immediately — enforce all selected checks from the start, accepting initial remediation work.
 ```
 
 ```
-Q3: How should we set thresholds?
+Q3 (Blocking): How should we set thresholds? Writing threshold rules depends on this answer.
 A. Measure and hold (Recommended) — prevent regressions from today's baseline; see "Ratchets" below.
 B. Set targets now — supply the numbers and accept the work needed to reach them.
 ```
 
 ```
-Q4: What local verification budget should we use?
+Q4 (Blocking): What local verification budget should we use? Assigning checks to local runs or CI depends on this answer.
 A. 90 seconds at task end (Recommended) — keep handoffs responsive; longer checks run in CI.
 B. Wait for all checks locally — slower handoffs, earlier complete results.
 C. Custom budget — give a duration suited to your workflow.

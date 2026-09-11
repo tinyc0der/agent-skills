@@ -57,13 +57,13 @@ When confidence is below ~70%, append a brief reason on the same line — what's
 Format:
 
 ```
-Q: <one focused question, and what its answer changes>
+Q (Blocking / Non-blocking): <one focused question; work blocked or answer needed by when>
 A. <choice> — <practical consequence>
 B. <choice> — <practical consequence>
 READ: <your best hypothesis and brief reason, if supported>
 ```
 
-Default to 2–3 choices and use an available interactive question tool; otherwise use a short labeled list. Allow a custom answer. For a decision where you have a supported lean, put that option first and mark it **Recommended**, with a short reason tied to the user's priorities. A hypothesis about their audience or experience is not a recommendation about what that fact should be. Use a focused free-text prompt when choices would distort the answer. Say whether the answer blocks work or can wait, and wait for the user to react before asking the next dependent question.
+Default to 2–3 choices and use an available interactive question tool; otherwise use a short labeled list. Allow a custom answer. For a decision where you have a supported lean, put that option first and mark it **Recommended**, with a short reason tied to the user's priorities. A hypothesis about their audience or experience is not a recommendation about what that fact should be. Use a focused free-text prompt when choices would distort the answer. Label the question **Blocking** and name the work awaiting its answer, or **Non-blocking** and state when the answer is needed. Wait for the user to react before asking the next dependent question.
 
 **Why one at a time, not a batch:**
 
@@ -160,7 +160,7 @@ Agent:
 HYPOTHESIS: You want a way to answer "how are we doing?" in standup, and "dashboard" came to mind because that's the conventional answer.
 CONFIDENCE: ~30% — missing: who it's for, what "metrics" are, and what success looks like
 
-Q: Who needs this view? This determines which information to show and needs answering before design.
+Q (Blocking): Who needs this view? This determines which information to show and needs answering before design.
 A. Just me — organize information for personal decisions.
 B. Engineering team — support shared discussion in standup.
 C. Leadership — summarize outcomes for reporting.
@@ -171,7 +171,7 @@ User: It's actually for me. I keep losing track of which experiments are running
 Agent:
 Updated read: not a team dashboard at all. It's a personal experiment tracker. Confidence: ~60% — still missing: what "early signal" means and what done looks like.
 
-Q: Which gap matters most? This determines the first useful feature.
+Q (Blocking): Which gap matters most? Selecting the first useful feature depends on this answer.
 A. Finding which experiments exist — collect an inventory.
 B. Seeing results together — combine their early signals.
 READ: Possibly B because you mentioned signals; correct me if neither fits.
