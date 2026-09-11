@@ -191,6 +191,13 @@ codex plugin add agent-skills@agent-skills
 
 The first command registers the marketplace; the second installs the plugin. Codex reads the root `skills/` directory directly through `.codex-plugin/plugin.json`. Once installed, invoke skills in chat using `@` (e.g., `@spec-driven-development`). See [docs/codex-setup.md](docs/codex-setup.md) for local installation and troubleshooting.
 
+To update the plugin, refresh the marketplace and reinstall:
+
+```bash
+codex plugin marketplace upgrade agent-skills
+codex plugin add agent-skills@agent-skills
+```
+
 </details>
 
 <details>
