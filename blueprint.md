@@ -4,6 +4,8 @@ This blueprint guides how we build, evaluate, and improve a harness for an AI te
 
 The details describe design responsibilities and ways to assess them. The architecture, tools, storage, and workflows used to fulfill these responsibilities can vary.
 
+The Harness Design section defines capability families, component responsibilities, and their relationships. Implementations can choose their own platforms, storage, formats, and organization while fulfilling the same principles.
+
 ## Core principles
 
 | Principle | Promise |
@@ -118,3 +120,69 @@ The harness should turn verified experience into improvements that affect future
 5. **Make future work benefit.** Ensure the relevant agents and future sessions receive and apply the verified improvement. Evaluate actual adoption and changed behavior so a recorded lesson has a clear path to influencing work.
 
 6. **Measure and refine the effect.** Assess repeated mistakes, unnecessary interventions, rework, quality, and effort. Account for variation before drawing conclusions. Extend useful improvements and revise or withdraw ineffective ones while retaining the evidence behind those decisions.
+
+## Harness Design
+
+Build the harness around **skills, hooks, evals, and scripts**. References and documentation support those components. Commands and agent personas are outside the supported harness scope.
+
+This design defines what each part owns and how the parts work together. File layouts, storage schemas, installation formats, and platform integrations belong to implementation. Judge an implementation by whether it fulfills the responsibilities and promises described here.
+
+### Skill set
+
+Organize skills into five families. A family identifies the responsibility a skill owns; each skill still provides an actionable procedure with clear activation conditions and assessable results.
+
+| Family | Responsibility | Examples |
+|---|---|---|
+| **Workflow** | Coordinate activities toward a complete outcome. | Deliver a change, investigate a failure, produce a research report. |
+| **Memory** | Preserve, retrieve, and reconcile shared understanding. | Restore context, maintain decisions, consolidate verified knowledge, retire stale information. |
+| **Method** | Provide a reusable approach to performing an activity well. | Clarify requirements, plan work, analyze causes, assess evidence, review a result. |
+| **Expertise** | Apply knowledge specific to a field, technology, or tool. | Assess accessibility, design a data model, operate a browser, manage repository changes. |
+| **Meta** | Select, compose, evaluate, and improve harness capabilities. | Route requests to skills, resolve overlapping guidance, evaluate behavior, improve a skill. |
+
+#### Boundaries and composition
+
+- **Workflow coordinates; Method provides the approach.** A workflow connects activities and their dependencies. Methods provide reusable ways to perform those activities. A focused request can use one method directly.
+- **Memory maintains understanding; Meta improves the harness.** Memory owns retrieval, reconciliation, and maintenance of knowledge. Meta uses evidence from experience to improve capability selection and behavior. A verified project fact belongs in project knowledge; a correction to a flawed procedure belongs in the skill that owns it.
+- **Expertise covers both domains and tools.** Keep domain and tool as descriptive tags within this family. A general method such as root-cause analysis can draw on database expertise and the operating procedures of a particular diagnostic tool.
+- **Each skill has one primary home.** Classify it by its main responsibility and describe other concerns through tags and dependencies. Reuse shared procedures across families. Split a skill when its responsibilities can be selected and improved independently.
+
+The families guide discovery, ownership, and evaluation. Organize the catalog so the relevant skills and their dependencies are easy to identify. Keep each skill's identity and responsibility clear across different storage and distribution arrangements.
+
+Every skill should make its purpose, required context, procedure, outputs, completion evidence, and conditions for returning control understandable. A family assignment does not change its authority or replace shared rules.
+
+### Component responsibilities
+
+| Component | Responsibility |
+|---|---|
+| **Skills** | Own reusable procedures, workflow coordination, decision criteria, and evidence requirements across the five families. Make required guidance and dependencies accessible when a skill is used. |
+| **Hooks** | Respond to defined events by making relevant context available or invoking the appropriate skill or script. Keep event handling focused and shared decision rules in their owning skills. |
+| **Evals** | Define scenarios, fixtures, and expectations for discovery and observed behavior. Assess individual skills and interactions that determine whether the six promises hold. |
+| **Scripts** | Automate repeatable operations, validation, and evaluation execution. Give each script a clear owner and make its inputs, outputs, failures, and effects understandable to its callers. |
+
+References supply supporting knowledge, and documentation explains behavior, decisions, and usage. Give shared guidance a clear owner and make it accessible to the components that need it. Knowledge and work records preserve the context and evidence needed for continuity and recovery.
+
+The execution environment provides access to models, tools, events, and controls. Define which capabilities the harness needs from that environment and make their availability and limits visible. Implementations may satisfy these needs in different ways.
+
+### How work flows
+
+Human requests and direction enter an execution context. Meta guidance helps select a workflow or a focused skill. Workflow skills coordinate the required methods and expertise; Memory skills supply and maintain relevant understanding. Skills use available tools and scripts to perform operations and collect evidence, then return results or the decisions needed to continue.
+
+Maintain clear responsibility for reaching the agreed endpoint. Choose subsequent work from observed results, preserve the current agreement, and respond to human direction. Hooks support this process at relevant events, such as resuming work or completing an action. Hook-triggered work remains subject to the same scope and authority as other work.
+
+Deliverable verification assesses the current task's result. Harness evals assess whether the components reliably select, perform, and assess work as intended. Use evidence from both to identify improvements, while keeping their claims distinct.
+
+### Memory, work state, and recovery
+
+Memory skills maintain the requirements, decisions, project understanding, and work context needed across tasks and sessions. Keep durable knowledge distinguishable from temporary observations, and make scope, sources, and current status clear. Storage layouts and document formats are implementation choices.
+
+Keep current agreements and authority distinguishable from historical notes. A meaningful checkpoint connects outputs, decisions, task progress, and the evidence that supports them. Recovery must reassess dependent work and preserve the latest human corrections and permission limits. Record external effects and their recovery limits separately.
+
+Recovery and authority enforcement depend on the capabilities of the execution environment and tools. Make those dependencies and their limits explicit. Evaluate the claimed guarantees against the behavior of the running harness.
+
+### Improvement and adoption
+
+Capture observations with the work that produced them. Route verified facts into scoped knowledge through Memory, procedural corrections into the owning skill, and execution or event-handling fixes into the responsible component or integration. Meta skills coordinate the assessment and improvement process within the agreed authority.
+
+Compare a proposed behavior change with the previous approach on the original failure and related situations. Identify the version evaluated and verify that future sessions receive and apply the improvement. Preserve a way to withdraw changes that increase mistakes, rework, or unnecessary effort.
+
+First demonstrate the structure through one complete workflow. Exercise human correction, interruption, resumption, a late-discovered mistake, recovery, and a verified lesson used in a later session. Use the results to decide which capabilities need strengthening before expanding the catalog or team size.
