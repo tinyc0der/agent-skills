@@ -85,6 +85,19 @@ Before asking, complete safe preparation so the user can decide on a concrete ar
 
 Record scope authorization, agent readiness, and actual human approval separately. Specs, plans, checkpoints, and review reports are reviewable artifacts; their existence does not impose a new human gate. If a user explicitly requests manual checkpoints, retain them. Otherwise follow this autonomous default and ask only at the critical boundary above.
 
+### Make Questions Easy to Answer
+
+Before asking, inspect available evidence and reuse prior answers. Research factual unknowns; ask the user only for missing facts or decisions that need their judgment.
+
+- Default to 2–3 distinct, concise choices for each decision. Use an available interactive question tool; otherwise use a short labeled list. Honor the user's preferred format and the tool's limits.
+- When you have a supported lean, put it first, label it **Recommended**, and give one short reason tied to the user's priorities. Explain each alternative's practical consequence. Do not manufacture a recommendation when the evidence does not favor a choice.
+- Distinguish a hypothesis about what the user wants from advice about what to choose. Never recommend an answer to a factual question or deliberately offer a misleading guess to provoke disagreement.
+- Allow a custom answer. Offer “Choose for me” when delegation is appropriate; reuse judgment already delegated instead of asking again. Use free text for facts or experiences that choices would distort, with a focused prompt or example of the needed detail.
+- Ask one decision at a time when answers determine later questions. Batch only independent decisions when doing so reduces effort; keep batches small.
+- Label each question **Blocking** or **Non-blocking** relative to current work. **Blocking** means specific work cannot proceed without the answer; name that work. **Non-blocking** means current work can continue; state when or before which step the answer is needed. Reclassify it when that dependency becomes current. Continue independent work. A recommended or preselected option is not consent; silence never resolves a required question.
+
+Keep both labels in one saved **Open Questions** list. Make each user decision answerable: include its **Blocking** or **Non-blocking** label, question, choices, supported recommendation and reason, and what is blocked or when the answer is needed. Track agent research separately with a next action, rather than handing factual investigation to the user. Remove resolved questions from the open list and record the decision where it governs the work.
+
 ### 1. Surface Assumptions
 
 Before implementing anything non-trivial, explicitly state your assumptions:

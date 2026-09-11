@@ -120,10 +120,17 @@ SMS-first (not app-first) is likely the right channel. A text saying "Hey, want 
 - **Analytics dashboards** — the owner is in the kitchen. Build reporting that's passive (weekly text summary) not active (log in and look at charts).
 
 ## Open Questions
-- What's the legal/compliance landscape for SMS marketing to restaurant customers?
-- How do you handle menu/price changes for "usual" orders?
-- Is there a way to bootstrap the regular customer list from existing POS data instead of manual entry?
-- What's the pricing model? Per-order fee? Monthly subscription?
+- **Blocking**: How should a changed menu affect a saved order? Blocks the reorder flow design.
+  - A. Require review when an item or price changes (Recommended) — keep repeat ordering predictable without silently substituting items or prices.
+  - B. Require a fresh order whenever the menu changes — simpler rules, more customer effort.
+- **Non-blocking**: Which pricing model should the pilot test? Reorder flow design can continue; answer needed before recruiting paying restaurants.
+  - A. Monthly subscription (Recommended) — predictable cost aligned with the goal of avoiding per-order commissions.
+  - B. Per-order fee — lower fixed commitment, but cost grows with usage.
+  - Custom answers are welcome for either decision.
+
+## Research Follow-ups
+- SMS marketing requirements — investigate applicable consent and messaging rules before designing enrollment.
+- Importing regular customers — inspect candidate POS export capabilities and consent records before proposing an import flow.
 
 ---
 

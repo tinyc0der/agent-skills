@@ -70,7 +70,7 @@ When the user invokes this skill with an idea (`$ARGUMENTS`), guide them through
    - What's been tried before?
    - Why now?
 
-   Use the `AskUserQuestion` tool to gather this input. Do NOT proceed until you understand who this is for and what success looks like.
+   Use an available interactive question tool, with 2–3 concise choices and a custom-answer path; otherwise use short labeled options. Ask dependent questions one at a time. Put a supported recommendation first with a brief reason for decisions; do not prescribe answers to factual questions. Use focused free text when choices would distort the user's experience. Label each question **Blocking** with the work awaiting its answer, or **Non-blocking** with when the answer is needed. Do NOT proceed until you understand who this is for and what success looks like.
 
 3. **Generate 5-8 idea variations** using these lenses:
    - **Inversion:** "What if we did the opposite?"
@@ -136,7 +136,12 @@ Produce a concrete artifact — a markdown one-pager that moves work forward:
 - [Thing 3] — [reason]
 
 ## Open Questions
-- [Question that needs answering before building]
+- **[Blocking / Non-blocking — choose one]**: [Decision question] — [work blocked, or answer needed by when]
+  - A. [Recommended option, when supported] — [reason and consequence]
+  - B. [Alternative] — [consequence; custom answers welcome]
+
+## Research Follow-ups
+- [Factual unknown for the agent to investigate] — [next action]
 ```
 
 **The "Not Doing" list is arguably the most valuable part.** Focus is about saying no to good ideas. Make the trade-offs explicit.

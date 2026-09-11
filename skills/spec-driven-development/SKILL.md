@@ -77,7 +77,7 @@ Build order: identity → billing, notifications → reporting
 
 ### Phase 1: Specify
 
-Start with a high-level vision. Ask the human clarifying questions until requirements are concrete.
+Start with a high-level vision. Inspect available evidence and reuse prior answers before asking the human for unresolved requirements. For decisions, use an available interactive question tool with 2–3 concise choices and a custom-answer path, or short labeled options when no tool is available. Put a supported recommendation first with a brief reason and explain each option's consequence. Ask dependent questions one at a time. Label each question **Blocking** with the work awaiting its answer, or **Non-blocking** with when the answer is needed. Use focused free text for facts that choices would distort; investigate factual unknowns yourself where possible. A recommendation or silence is not approval.
 
 **Surface assumptions immediately.** Before writing any spec content, list what you're assuming:
 
@@ -164,7 +164,12 @@ workflow_status: planned
 [How we'll know this is done — specific, testable conditions]
 
 ## Open Questions
-[Anything unresolved that needs human input]
+- **[Blocking / Non-blocking — choose one]**: [Decision question] — [work blocked, or answer needed by when]
+  - A. [Recommended option, when supported] — [reason and consequence]
+  - B. [Alternative] — [consequence; custom answers welcome]
+
+## Research Follow-ups
+- [Factual unknown for the agent to investigate] — [next action]
 
 ## Spec reconciliation
 [Before review: implemented requirements → canonical spec paths, or a justified no-change disposition. Deferred and canceled items remain here.]
