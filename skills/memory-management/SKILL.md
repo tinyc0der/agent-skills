@@ -28,11 +28,11 @@ Temporary context belongs in track notes when it helps continue the work. It doe
 
 ## A Note on Terms: Memory vs. `steering/`
 
-**Memory** is the whole durable-knowledge system: the portable OKF knowledge bundle, canonical capability specs, and change tracks that supply historical evidence. The bundle contains `project.md`, `decisions/`, `steering/`, and `runbooks/`; specs and tracks stay outside it.
+**Memory** is the whole durable-knowledge system: the portable OKF knowledge bundle, canonical capability specs, and change tracks that supply historical evidence. The bundle contains `project.md`, `decision-records/`, `steering/`, and `runbooks/`; specs and tracks stay outside it.
 
 **`steering/`** provides broad, enduring project understanding: product context, technology, structure, architecture, standards, and domain knowledge. It used to be called `memory/`; the name `steering/` distinguishes this purpose from the wider memory system.
 
-Within the bundle, `project.md` anchors project identity and direction; `steering/` explains how the project works today; `decisions/` records individual, contextual choices as they arise; and `runbooks/` holds ordered procedures. Together they support orientation, informed judgment, and repeatable execution across sessions.
+Within the bundle, `project.md` anchors project identity and direction; `steering/` explains how the project works today; `decision-records/` records individual, contextual choices as they arise; and `runbooks/` holds ordered procedures. Together they support orientation, informed judgment, and repeatable execution across sessions.
 
 ## The Mental Model: Three Tiers
 
@@ -50,7 +50,7 @@ An abandoned or reverted experiment that established no reusable constraint stay
 
 ## Where Knowledge Lives
 
-Route durable memory by the reader's need: *"What should I understand about this project?"* → `project.md` and `steering/`; *"Why did we make this particular choice?"* → `decisions/`; *"How do I perform this operation?"* → `runbooks/`. Related documents link to each other while each owns its distinct purpose.
+Route durable memory by the reader's need: *"What should I understand about this project?"* → `project.md` and `steering/`; *"Why did we make this particular choice?"* → `decision-records/`; *"How do I perform this operation?"* → `runbooks/`. Related documents link to each other while each owns its distinct purpose.
 
 **Discover existing owners before applying the defaults below.** Inspect project rules, documentation indexes, existing ADRs and runbooks, and configuration such as `.adr-dir`. Established homes such as `docs/adr/` or `Documentation/Decisions/` remain canonical, including their numbering, format, and links. Follow `documentation-and-adrs` for decisions in those homes. Directory names alone do not identify a legacy memory layout or authorize moving it.
 
@@ -62,7 +62,7 @@ When an established home is outside the bundle, route its new knowledge there. I
 docs/knowledge/
   index.md              → OKF bundle entrypoint and version declaration
   project.md            → stable (but evolving) project contract, direction, constraints
-  decisions/            → individual, dated decisions and their context
+  decision-records/     → individual, dated decisions and their context
     index.md
     NNNN-*.md
   steering/             → broad project understanding, current architecture, standards
@@ -163,7 +163,7 @@ description: Complete fixture seeding before running database assertions.
 status: draft
 sources:
   - id: test-isolation
-    resource: /decisions/0003-test-isolation.md
+    resource: /decision-records/0003-test-isolation.md
 ---
 
 Await fixture seeding so assertions cannot race database initialization.[^test-isolation]
@@ -187,7 +187,7 @@ The collections describe complementary views of the project and share the same r
 |---|---|
 | `<bundle-root>/project.md` | Compact project identity, purpose, direction, and constraints; entry point to deeper understanding. |
 | `<bundle-root>/steering/` | Broad current understanding: product/domain concepts, technology, structure, architecture, API and testing standards, security, deployment context, performance, conventions, risks, and lessons. |
-| `<bundle-root>/decisions/` | Specific decisions made as needs arise: the problem, context, choice, alternatives, rationale, and consequences. Each record explains one decision. |
+| `<bundle-root>/decision-records/` | Specific decisions made as needs arise: the problem, context, choice, alternatives, rationale, and consequences. Each record explains one decision. |
 | `<bundle-root>/runbooks/` | Procedural knowledge: prerequisites, ordered steps, validation, and recovery for deployment, rollback, troubleshooting, or other recurring operations. |
 | `docs/specs/<capability>/spec.md` | Accepted capability requirements and their acceptance criteria. |
 | `docs/tracks/<track-id>/` | One change's proposals, bugs, plans, running notes, and evidence. |
@@ -230,7 +230,7 @@ Resolve the active scope and existing knowledge owners first. A request only to 
 
 In the bootstrap handoff, explicitly present the generated guidance as a proposal for review, cite the verified source facts, and identify any unresolved inferences. A local commit may package that proposal as a reviewable diff; it does not count as review or approval.
 
-**Migrate** — project rules, existing memory pointers, or the user's instructions identify an earlier memory layout, and the task authorizes its migration. Its homes may include `<memory-root>/project.md`, `steering/`, `decisions/`, or `runbooks/`, or custom paths discovered above. If a confirmed legacy memory layout and `<memory-root>/knowledge/` both exist, reconcile unresolved ownership with the user; reuse any ownership decision already supplied. Otherwise inventory and move the identified legacy artifacts, repair missing required profile files from verified codebase evidence, add concept frontmatter, rewrite links, and update rules-file pointers in one reviewable change. Established external ADR/runbook homes are preserved unless their migration is authorized. Preflight reserved legacy `index.md` and `log.md` names: keep files that already have the reserved meaning, but rename ambiguous concept collisions with user approval and rewrite inbound links. Before trimming a human-authored rules file, route its unique durable facts into the bundle and preserve its tool-specific controls. Never bootstrap a second copy, leave compatibility copies or symlinks claiming the same canonical home, or discard partial legacy content. Without migration authorization, read the legacy layout best-effort and keep changes in its existing homes.
+**Migrate** — project rules, existing memory pointers, or the user's instructions identify an earlier memory layout, and the task authorizes its migration. Its homes may include `<memory-root>/project.md`, `steering/`, `decisions/`, or `runbooks/`, or custom paths discovered above. If a confirmed legacy memory layout and `<memory-root>/knowledge/` both exist, reconcile unresolved ownership with the user; reuse any ownership decision already supplied. Otherwise inventory and move the identified legacy artifacts, repair missing required profile files from verified codebase evidence, add concept frontmatter, rewrite links, and update rules-file pointers in one reviewable change. Established external ADR/runbook homes are preserved unless their migration is authorized. Preflight reserved legacy `index.md` and `log.md` names: keep files that already have the reserved meaning, but rename ambiguous concept collisions with user approval and rewrite inbound links. Before trimming a human-authored rules file, route its unique durable facts into the bundle and preserve its tool-specific controls. Never bootstrap a second copy, leave compatibility copies or symlinks claiming the same canonical home, or discard partial legacy content. Without migration authorization, read the legacy layout best-effort and keep changes in its existing homes. For a bundle collection rename, move `<bundle-root>/decisions/` to `<bundle-root>/decision-records/` and rewrite its index entries, concept links, and source references together; preserve record contents, numbering, metadata, and the declared OKF version. Reading an older `decisions/` collection alone never authorizes this migration.
 
 **Bridge the agent's rules file to memory (pointer only).** After bootstrap or migration writes a bundle, update the existing rules file at the same scope — repository `CLAUDE.md`, `AGENTS.md`, `.cursorrules`, `.github/copilot-instructions.md`, etc., or a package-local rules file for a package bundle. Create `AGENTS.md` only when no rules file exists and the user wants one. This block does **not** duplicate memory; it is a signpost.
 
@@ -313,7 +313,7 @@ Discovered knowledge does not get written straight into durable memory. It flows
 
 1. **Throughout a track**, capture working context in `docs/tracks/<track-id>/notes.md`. Mark verified, reusable findings as promotion candidates when they emerge; observations, hypotheses, and local execution notes remain working context. The file's existence or a phase completing does not establish durable knowledge.
 2. **At ship or closeout, resolve scope first.** For work with no production launch, use the completed closeout review as the promotion gate; perform it autonomously within authorization, seeking human input only for unresolved critical ownership, intent, or authority. Never call an agent review human approval. Choose the memory root before the concept type: `docs/` for repo-wide or cross-package knowledge; `packages/<pkg>/docs/` only for an established or justified independent package bundle. Otherwise keep package-scoped knowledge in the repository bundle. The target OKF bundle is `<memory-root>/knowledge/`.
-3. **GO — review, record, and promote.** Review the reusable-knowledge candidates for bundle promotion; skill/workflow improvements and ad hoc follow-ups use their own destinations above. Give each knowledge candidate a disposition with rationale: accepted, rejected as unverified, or retained as track-local. Route accepted items within the resolved bundle: project direction or constraints → `<bundle-root>/project.md`; specific choices and their rationale → `<bundle-root>/decisions/`; current project/domain understanding, standards, risks, or lessons → `<bundle-root>/steering/`; repeatable procedures → `<bundle-root>/runbooks/`. At repository scope these resolve to `docs/knowledge/project.md`, `docs/knowledge/decisions/`, `docs/knowledge/steering/`, and `docs/knowledge/runbooks/`. Create or update an OKF concept with the required frontmatter, update the affected collection index, and keep the root index current. Promote the accepted set in **one batched PR** and record target links in `notes.md`.
+3. **GO — review, record, and promote.** Review the reusable-knowledge candidates for bundle promotion; skill/workflow improvements and ad hoc follow-ups use their own destinations above. Give each knowledge candidate a disposition with rationale: accepted, rejected as unverified, or retained as track-local. Route accepted items within the resolved bundle: project direction or constraints → `<bundle-root>/project.md`; specific choices and their rationale → `<bundle-root>/decision-records/`; current project/domain understanding, standards, risks, or lessons → `<bundle-root>/steering/`; repeatable procedures → `<bundle-root>/runbooks/`. At repository scope these resolve to `docs/knowledge/project.md`, `docs/knowledge/decision-records/`, `docs/knowledge/steering/`, and `docs/knowledge/runbooks/`. Create or update an OKF concept with the required frontmatter, update the affected collection index, and keep the root index current. Promote the accepted set in **one batched PR** and record target links in `notes.md`.
 4. **NO-GO — preserve workflow state.** Record why the launch was blocked, leave every candidate unpromoted in `notes.md`, and make no durable-memory edit. A later GO decision performs the review and promotion.
 5. **Knowledge discovered outside a track** (a standalone correction, a preference, or an incident with no active track) resolves root-versus-package scope and goes straight to its canonical home through a reviewable commit/PR; do not create a track just to store the note.
 
@@ -327,7 +327,7 @@ Never load all of memory at once. Load the context appropriate to the current wo
 
 - **Project core** — `docs/knowledge/index.md` + `docs/knowledge/project.md` when the bundle exists. Small, durable, and read at session start: the bundle map plus project identity.
 - **Active-track context** — read the resume checkpoint and relevant notes in `docs/tracks/<track-id>/notes.md` at each phase entry and resume, alongside the linked capability specs and current task. Missing track notes do not require bootstrapping an OKF bundle.
-- **Load-on-demand** — load the relevant steering, decisions, or runbooks index on demand from the root map, then load only the concepts that index says the current task needs.
+- **Load-on-demand** — load the relevant `steering/`, `decision-records/`, or `runbooks/` index on demand from the root map, then load only the concepts that index says the current task needs.
 
 Each `index.md` does real work — it is **not** a bare table of contents. It carries a one-line summary per entry plus the path to the full file, so a session can often answer a question from the index alone and only open the full file when it needs detail. *Surface context at the level the moment requires.*
 
@@ -385,24 +385,24 @@ docs/knowledge/                         # repo-wide OKF bundle
   project.md                            # monorepo contract and shared direction
   bundles.md                            # typed catalog of independent package bundles, when needed
   steering/index.md + <domain>.md       # shared project understanding and standards
-  decisions/index.md + NNNN-*.md        # cross-package decisions
+  decision-records/index.md + NNNN-*.md # cross-package decisions
   runbooks/index.md + <procedure>.md    # workspace procedures
 
 packages/<pkg>/docs/knowledge/          # independent package OKF bundle
   index.md
   project.md                            # package contract, direction, constraints
   steering/index.md + <domain>.md
-  decisions/index.md + NNNN-*.md
+  decision-records/index.md + NNNN-*.md
   runbooks/index.md + <procedure>.md
 ```
 
 The required package core resolves exactly to `packages/<pkg>/docs/knowledge/index.md`,
 `packages/<pkg>/docs/knowledge/project.md`,
 `packages/<pkg>/docs/knowledge/steering/index.md`,
-`packages/<pkg>/docs/knowledge/decisions/index.md`, and
+`packages/<pkg>/docs/knowledge/decision-records/index.md`, and
 `packages/<pkg>/docs/knowledge/runbooks/index.md`.
 
-**Routing rule:** resolve scope before type. A fact that affects **one package** lives in `packages/<pkg>/docs/knowledge/` when that independent bundle exists; until the split is justified, it remains in `docs/knowledge/` with the package named in its concept ID, title, or tags. A fact that affects multiple packages or the workspace itself always lives in the repository bundle. Within the chosen bundle, route project contract → `project.md`, a specific decision → `decisions/`, current project/domain understanding → `steering/`, and procedure → `runbooks/`. A cross-package contract is a root-bundle ADR. Reference it from a package concept using a durable repository URL when independent bundle portability matters.
+**Routing rule:** resolve scope before type. A fact that affects **one package** lives in `packages/<pkg>/docs/knowledge/` when that independent bundle exists; until the split is justified, it remains in `docs/knowledge/` with the package named in its concept ID, title, or tags. A fact that affects multiple packages or the workspace itself always lives in the repository bundle. Within the chosen bundle, route project contract → `project.md`, a specific decision → `decision-records/`, current project/domain understanding → `steering/`, and procedure → `runbooks/`. A cross-package contract is a root-bundle ADR. Reference it from a package concept using a durable repository URL when independent bundle portability matters.
 
 **Loading stays progressive:** always load `docs/knowledge/index.md` and `docs/knowledge/project.md`. When the active package has its own bundle, also load `packages/<pkg>/docs/knowledge/index.md` and `packages/<pkg>/docs/knowledge/project.md`. Consult each bundle's collection indexes on demand; never load every package bundle. If discovery from the root is needed, add package links to a typed `docs/knowledge/bundles.md` concept. Do not put cross-bundle links in `steering/index.md`, because a reserved OKF index inventories only its own directory.
 
@@ -493,6 +493,6 @@ Apply these checks to the authorized changes and their affected indexes, not as 
 - [ ] The change went through a reviewable diff (commit/PR), not a silent in-place edit.
 - [ ] The corresponding root or package-local bundle and collection index is updated so a future session can find the new content without reading everything.
 - [ ] Each file covers one concern; tiny/overlapping files were merged, multi-topic files split.
-- [ ] Steering provides coherent current understanding, decisions explain individual choices, and runbooks contain procedures; suggested filenames remain optional and overlapping sources are linked.
+- [ ] Steering provides coherent current understanding, decision records explain individual choices, and runbooks contain procedures; suggested filenames remain optional and overlapping sources are linked.
 - [ ] Any pruning removed something *stale or wrong*, and preserved stable-but-rare facts.
 - [ ] Runbooks link to real scripts/CI rather than restating commands.

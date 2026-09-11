@@ -18,8 +18,8 @@
     {
       "id": 1,
       "name": "link-not-copy",
-      "prompt": "The fixture project is in memory-management/link-not-copy/; use that directory as the project scope. Please make sure future sessions discover that we use trunk-based development and chose PostgreSQL as our datastore. The provided OKF bundle already has docs/knowledge/project.md and docs/knowledge/decisions/0002-datastore-postgres.md. This is an existing v0.1 bundle; leave its version and contents unchanged.",
-      "expected_output": "Recognizes that trunk-based development already lives in docs/knowledge/project.md and the PostgreSQL choice already lives in the typed, indexed docs/knowledge/decisions/0002-datastore-postgres.md concept. Does NOT duplicate either into docs/knowledge/steering/ and makes no content change. The one-canonical-location rule wins over creating a second copy.",
+      "prompt": "The fixture project is in memory-management/link-not-copy/; use that directory as the project scope. Please make sure future sessions discover that we use trunk-based development and chose PostgreSQL as our datastore. The provided OKF bundle already has docs/knowledge/project.md and docs/knowledge/decision-records/0002-datastore-postgres.md. This is an existing v0.1 bundle; leave its version and contents unchanged.",
+      "expected_output": "Recognizes that trunk-based development already lives in docs/knowledge/project.md and the PostgreSQL choice already lives in the typed, indexed docs/knowledge/decision-records/0002-datastore-postgres.md concept. Does NOT duplicate either into docs/knowledge/steering/ and makes no content change. The one-canonical-location rule wins over creating a second copy.",
       "files": [
         "memory-management/link-not-copy"
       ],

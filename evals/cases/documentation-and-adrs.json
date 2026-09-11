@@ -50,7 +50,7 @@
         "documentation-and-adrs/mixed-documents"
       ],
       "expectations": [
-        "Inspects .adr-dir and the existing ADR, then creates the next 0002-*.md record in docs/adr with the existing native Markdown section convention, including a body Status for the approved decision. Does not impose OKF frontmatter, create docs/decisions or a bundle copy, or alter the existing ADR.",
+        "Inspects .adr-dir and the existing ADR, then creates the next 0002-*.md record in docs/adr with the existing native Markdown section convention, including a body Status for the approved decision. Does not impose OKF frontmatter, create docs/decision-records or a bundle copy, or alter the existing ADR.",
         "Adds parseable YAML frontmatter to the authorized plan with type: Implementation Plan and non-empty string title and description, preserving its Markdown body and in-progress state. Does not treat document maturity as implementation completion or infer generated/verified events.",
         "The new ADR records the supplied replay rationale, decision, and projection-lag/rebuild trade-offs without inventing decision dates, authors, review, or historical evidence. Creates or edits only the new ADR and named plan; no notes, rules files, capability specs, or other artifacts."
       ]

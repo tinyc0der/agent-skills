@@ -60,7 +60,7 @@ If the available evidence conflicts, surface the conflict rather than silently i
 
 ### ADR Template
 
-Store ADRs in `docs/decisions/` with sequential numbering (unless the project already uses another location — see above):
+Store ADRs in `docs/decision-records/` with sequential numbering (unless the project already uses another location — see above):
 
 ```markdown
 # ADR-001: Use PostgreSQL for primary database
