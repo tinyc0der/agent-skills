@@ -9,8 +9,9 @@ status: draft
 
 ## Resume
 
-- Phase: implementation; next action is validation and review of the documentation diff.
+- Phase: local implementation, verification, and review complete at `dea534f2c25a5600c25ae851a6ace50b83c529de`; ready for handoff. The track remains unmerged.
 - Scope and acceptance: [change spec](spec.md); owner: [memory-management capability](../../specs/memory-management/spec.md).
+- Evidence: [verification](verification.md) and [review](review.md). No unresolved issue within the requested local endpoint.
 - Local changes and a local commit are within the requested endpoint. No merge or publishing is requested.
 
 ## Notes
