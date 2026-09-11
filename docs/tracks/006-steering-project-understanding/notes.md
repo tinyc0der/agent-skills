@@ -9,10 +9,10 @@ status: draft
 
 ## Resume
 
-- Phase: the user-authorized rename to `decision-records/` is implemented, verified, and reviewed at `5dea3642ed8363464a6526905938a8bd74e7d78a`; ready for local handoff. The track remains unmerged.
+- Phase: implementation is verified and reviewed at `5dea3642ed8363464a6526905938a8bd74e7d78a`; proceeding to PR creation and merge into `tinyc0der/agent-skills:main` under the user's follow-up authorization.
 - Scope and acceptance: [change spec](spec.md); owner: [memory-management capability](../../specs/memory-management/spec.md).
 - Current evidence: [verification](verification.md) and [review](review.md) cover the renamed revision and retain the earlier revision's evidence separately. No unresolved issue remains within the requested local endpoint.
-- Local changes and a local commit are within the requested endpoint. No merge or publishing is requested.
+- The user explicitly requested PR creation and merge into main. Follow the PR's checks and enforced review requirements; record completion in that PR after merge. Earlier reports' local-only authority statements describe the scope before this follow-up.
 
 ## Notes
 
