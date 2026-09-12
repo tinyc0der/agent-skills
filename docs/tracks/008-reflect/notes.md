@@ -9,9 +9,9 @@ status: draft
 
 ## Resume
 
-- Phase: verification of the skill, eval fixtures, catalog integration, and canonical contract.
-- Next action: finish independent fixture execution, inspect resulting artifacts, then record verification and review.
-- Source: [change spec](spec.md).
+- Phase: local implementation, verification, and review complete at `43d33f3c380b5b815fedf5a5c7a43bda940994b8`.
+- Next action: maintainers can review the local branch; merge and installation remain separate endpoints.
+- Sources: [change spec](spec.md), [verification](verification.md), [review](review.md).
 
 ## Notes
 
@@ -24,3 +24,5 @@ status: draft
 - Observed: final routing restores the baseline rate: 170 checks pass at 98% rank-1 (103/105). All three new positive prompts rank `reflect` first.
 - Observed: the standard behavioral runner stopped before execution because the configured Claude OAuth session expired and could not refresh. No behavioral result was produced. Used skill-creator's independent forward-testing procedure with fresh agents and the same three fixture requests; each workspace is disposable and isolated from the source repository.
 - Observed: the Markdown-link check caught the adoption guide's old catalog anchor after the count changed. Updated that inbound link and current catalog counts; historical verification counts remain intact.
+- Observed: all three independent forward tests satisfy their expectations. Direct Git comparison confirms only the two authorized fixture skills changed in case 1 and no files or history changed in cases 2–3. [Evidence](evidence/forward-tests.md).
+- Observed: 71 regression tests, structural/routing/link/lifecycle/command/hook/manifest checks, skill-creator validation, and metadata checks pass. The default Claude behavioral path remains unavailable until its authentication is renewed; no claim of a successful run or long-term effectiveness is made.
