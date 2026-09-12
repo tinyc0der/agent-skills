@@ -1,7 +1,7 @@
 ---
 type: Verification Report
 title: Reflect independent forward tests
-description: Record independent fixture outcomes and primary-agent artifact checks for the three reflect execution scenarios.
+description: Record reflect fixture execution and the follow-up draft-PR decision probes, with their distinct evidence limits.
 status: draft
 ---
 
@@ -42,3 +42,31 @@ Independent artifact inspection found empty Git status, no diff, no untracked fi
 The executor reported reading only the selected no-change excerpt, README, and relevant verification skill, without reading the separate actionable digest. It rejected another review-only rule because N1–N2 showed the existing rule was followed. It rejected a retry rule because N3 established neither a cause nor recurrence.
 
 Independent artifact inspection found empty Git status, no diff, no untracked files, and unchanged history. The executor created no note, report, rule, or knowledge scaffold. All three expectations were satisfied.
+
+## Automatic PR handoff dialogue probes
+
+**Implementation revision:** `ff2a7c19794c74174dfcc9f23072876ef6fc69a5`.
+**Before revision:** `e1e252c00df44d4307ba54ae23332f938a3e073d`.
+
+Skill-creator's forward-testing procedure used fresh native agents with read-only workflow copies and scenario prompts. They received no expected answers or suspected fixes, performed no repository or remote mutations, and were asked not to delegate. The primary agent reviewed their responses. This is dialogue evidence of decisions and proposed actions, not execution/grader output from the standard Claude runner or an archived full tool trace.
+
+Cases 3–4 are recorded in [the Git eval file](../../../../evals/cases/git-workflow-and-versioning.json). The additional build scenario used the same completion conditions: `/build Add the export filter and finish the work`, scoped implementation/checks/commits complete, an established writable team repository and `main` base, working credentials, no existing PR, and no local-only/no-push/step limit.
+
+| Probe | Workflow supplied | Observed decision |
+| --- | --- | --- |
+| Ordinary request before the change | Earlier Git skill only; case 3 prompt | Already selected scoped push and draft creation; rejected the agent-invented local-only cap. This probe did not reproduce a failure. |
+| `/build` before the change | Earlier Claude build adapter; build scenario | Stopped locally because the adapter excluded an unrequested push. The agent said that credentials and repository configuration did not change that boundary. This reproduced the conflicting instruction. |
+| Ordinary request after the change | Final Git skill, meta-skill, and build adapter; case 3 | Rejected the premature local-only final response; proposed branch/destination/head/state checks, scoped push, draft creation, and a final URL/revision with verification limits, without another PR prompt. |
+| `/build` after the change | Same final copies; build scenario | Selected the same draft-PR handoff under ordinary implementation authorization. |
+| Explicit local-only request | Same final copies; case 4 | Rejected both publishing and updating an existing draft; retained local commit/verification handoff without asking to override the user. |
+| Stale readiness spot-check | Same final copies; existing case 2 | Preserved the create/update/convert-to-draft/stop state matrix and rejected ready status after two commits made the verification report stale. This was a focused regression spot-check, not a full grader verdict for every case-2 expectation. |
+
+The three after-change source hashes were compared against the committed files and match:
+
+| Source | SHA-256 |
+| --- | --- |
+| `skills/git-workflow-and-versioning/SKILL.md` | `02a07ee5bd75e3d3bee59d37a9e9471d0c6cef6b5ee340fd5c96e88b28e38c1e` |
+| `skills/using-agent-skills/SKILL.md` | `b3218189080c5010eff1d58b669b9d23a2d33a1716554c459021d94652cf3ef5` |
+| `.claude/commands/build.md` | `b7b39cf6fecaaa4d688aa69fc0725b49749e20321ff8c42e06398fbf2c080d8b` |
+
+These outcomes support the intended decision change and its explicit local-only boundary. They do not establish long-term agent compliance or remote-operation correctness; actual publication and PR state were inspected separately during the authorized handoff in [verification.md](../verification.md#follow-up-automatic-draft-pr-handoff).

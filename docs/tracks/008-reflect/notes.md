@@ -9,8 +9,8 @@ status: draft
 
 ## Resume
 
-- Phase: implementing the user's follow-up to include automatic draft-PR handoff in ordinary implementation work.
-- Next action: align endpoint guidance, evaluate normal/local-only decisions, verify, and update existing PR #5.
+- Phase: implementation, local verification, and review complete; the handoff is draft [PR #5](https://github.com/tinyc0der/agent-skills/pull/5).
+- Next action: review PR #5. The track remains open until merge; installed-plugin updates are a separate endpoint.
 - Sources: [change spec](spec.md), [verification](verification.md), [review](review.md).
 
 ## Notes
@@ -31,3 +31,4 @@ status: draft
 - Decision: the user now requests the durable correction. Normal implementation includes a scoped draft PR after destination/access resolution, with explicit local-only/phase limits and genuine blockers preserved. Update the existing PR instead of requiring another PR request. Keep prior revision-scoped reports intact and add follow-up evidence.
 - Observed: an isolated probe of the earlier Git skill already selected draft creation, confirming it was not universally broken. A separate probe of the earlier `/build` adapter stopped locally because its text excluded an unrequested push. The revised combined guidance selects publication and draft creation for both ordinary implementation and `/build`; the explicit no-push scenario remains local, and a stale-readiness spot-check keeps the PR draft.
 - Observed: follow-up checks pass: 71 Node tests, 170 routing checks at 98%, skill/command/lifecycle/path/link validators, the session-start hook, skill-creator validation, metadata parsing, and build-adapter parity. Dialogue probes evaluate decisions and proposed actions; they do not execute remote operations or measure long-term reliability.
+- Observed: the scoped push succeeded, and GitHub returned open draft PR #5 at follow-up implementation revision `ff2a7c19794c74174dfcc9f23072876ef6fc69a5`. Final source hashes match the independent probe inputs. Follow-up [verification](verification.md#follow-up-automatic-draft-pr-handoff), [review](review.md#follow-up-automatic-draft-pr-handoff), and [dialogue evidence](evidence/forward-tests.md#automatic-pr-handoff-dialogue-probes) preserve the original revision's results and disclose the standard-runner limitation.

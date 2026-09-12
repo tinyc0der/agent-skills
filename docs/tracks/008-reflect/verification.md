@@ -1,16 +1,37 @@
 ---
 type: Verification Report
 title: Reflect skill verification
-description: Record local acceptance evidence, repository checks, and the behavioral-runner limitation for the reflect skill.
+description: Record acceptance evidence, repository checks, and evaluation limits for reflect and the automatic draft-PR handoff correction.
 status: draft
 ---
 
 # Verification: PASS
 
+## Follow-up: automatic draft-PR handoff
+
+**Implementation revision:** `ff2a7c19794c74174dfcc9f23072876ef6fc69a5`.
+**Comparison revision:** `e1e252c00df44d4307ba54ae23332f938a3e073d`.
+
+This section covers acceptance criteria 7–8 added to the [change spec](spec.md). The earlier reflect results below remain scoped to their original implementation revision.
+
+| Criterion | Evidence | State |
+| --- | --- | --- |
+| Ordinary implementation includes its draft PR | The meta-skill, Git workflow, all three build adapters, and canonical lifecycle contract agree. Independent dialogue probes select publication and draft creation for both ordinary implementation and `/build`. | PASS |
+| Explicit scope limits and separate merge/deployment authority | The local-only probe rejects both publication and an existing-PR update without asking to override the user. A stale-readiness spot-check keeps the PR draft. | PASS |
+| Concrete blockers and current handoff | Source review confirms destination/access/ownership inspection and safe preparation before reporting a blocker. The actual scoped branch was pushed, and GitHub returned open draft [PR #5](https://github.com/tinyc0der/agent-skills/pull/5) with head `ff2a7c19794c74174dfcc9f23072876ef6fc69a5`. | PASS |
+
+The [dialogue evidence](evidence/forward-tests.md#automatic-pr-handoff-dialogue-probes) distinguishes the reproduced build-adapter conflict from the earlier Git skill, which already selected draft creation. These are proposed-action evaluations; they do not execute remote operations or establish long-term reliability. Actual publication was checked separately in this authorized handoff. The standard Claude behavioral executor remains unverified because of the authentication limitation recorded below.
+
+Checks rerun against the follow-up implementation all pass: 71 Node regression tests; 170 routing checks at 98% rank-1 (103/105), retaining the 95% floor; skill, reference-link, Markdown-link (130 files), command (11), artifact-path (34 consumers), and lifecycle validators; session-start hook; skill-creator validation for both edited skills; YAML metadata parsing; TOML parsing and build-adapter parity; and whitespace checks. Final source hashes match the copies used by the independent probes. The policy and scope changes received fresh checks rather than reusing the original verdict. Subsequent evidence-only edits receive link, metadata, and whitespace checks.
+
+The follow-up has no outstanding Required finding in [review.md](review.md). PR #5 remains a draft; this report does not claim ready status, merge, release, or installed-plugin updates.
+
+## Original reflect implementation
+
 **Implementation revision:** `43d33f3c380b5b815fedf5a5c7a43bda940994b8`.
 **Baseline:** `d06ba0b1ae72365d80c580de60fa3e912af33e40`.
 
-Checks ran against the content committed at this revision. Later changes in this track only persist evidence and the closeout checkpoint. PASS covers the local implementation endpoint, with the behavioral substitution described below; it does not claim a successful Claude behavioral-runner execution.
+The following original checks ran against the content committed at this revision. PASS covered the then-recorded local implementation endpoint, with the behavioral substitution described below; it does not claim a successful Claude behavioral-runner execution. The follow-up above corrects that endpoint and verifies its added scope.
 
 ## Acceptance trace
 
