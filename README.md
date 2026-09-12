@@ -54,7 +54,7 @@ Skills also activate automatically based on what you're doing — designing an A
 **Fastest path — any agent, one command.** The open [skills CLI](https://github.com/vercel-labs/skills) installs into 70+ agents (Claude Code, Cursor, Codex, Copilot, Cline, and more):
 
 ```bash
-npx skills add addyosmani/agent-skills            # install all 29 skills
+npx skills add addyosmani/agent-skills            # install all 30 skills
 npx skills add addyosmani/agent-skills --list     # browse before installing
 ```
 
@@ -234,16 +234,19 @@ Already installed? How you roll the pack out depends on your codebase. The **[Ad
 
 ---
 
-## All 29 Skills
+## All 30 Skills
 
-The commands above are entry points. The pack includes 29 skills covering lifecycle work, discovery, and Orca phase delegation. Each skill is a structured workflow with steps, verification gates, and anti-rationalization tables. You can also reference any skill directly.
+The commands above are entry points. The pack includes 30 skills covering lifecycle work, discovery, harness reflection, and Orca phase delegation. Each skill is a structured workflow with steps, verification gates, and anti-rationalization tables. You can also reference any skill directly.
 
 ### Meta - Discover and coordinate workflows
 
 | Skill | What It Does | Use When |
 |-------|-------------|----------|
 | [using-agent-skills](skills/using-agent-skills/SKILL.md) | Maps incoming work to the right skill workflow and defines shared operating rules | Starting a session or deciding which skill applies |
+| [reflect](skills/reflect/SKILL.md) | Examines session evidence and makes scoped, verified improvements to skills, discovery, instructions, or tooling | Reflecting on a conversation or learning from repeated agent corrections |
 | [delegate](skills/delegate/SKILL.md) | Coordinates separate Orca sessions for planning, implementation, independent verification, and review | Codex should plan and review while OpenCode or Antigravity implements and verifies in separate sessions |
+
+Ask “Reflect on this session and improve our harness” to use `reflect`. Add “review only” for proposals without file changes. Reflection can conclude that no change is justified; it does not run automatically after every task.
 
 `delegate` requires Orca and its separately installed `orca-cli` and `orchestration` skills. Those dependencies provide session control and tracked completion; they are not bundled in this pack.
 
@@ -376,7 +379,8 @@ Every skill follows a consistent anatomy:
 
 ```
 agent-skills/
-├── skills/                            # 29 skills
+├── skills/                            # 30 skills
+│   ├── reflect/                       #   Meta: learn from agent sessions
 │   ├── interview-me/                  #   Define
 │   ├── idea-refine/                   #   Define
 │   ├── spec-driven-development/       #   Define

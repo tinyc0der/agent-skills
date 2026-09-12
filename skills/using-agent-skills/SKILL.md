@@ -45,6 +45,7 @@ Task arrives
     ├── Deprecating/migrating? ────────→ deprecation-and-migration
     ├── Writing docs/ADRs? ───────────→ documentation-and-adrs
     ├── Adding logs/metrics/alerts? ───→ observability-and-instrumentation
+    ├── Session retrospective / harness corrections? → reflect
     └── Deploying/launching? ─────────→ shipping-and-launch
 ```
 
@@ -353,5 +354,6 @@ Validate task readiness -> Implement -> Verify -> Review -> Merge
 | Cross-cutting | security-and-hardening | Trust boundaries, input validation, least privilege |
 | Cross-cutting | documentation-and-adrs | Document decisions and public behavior when they change |
 | Cross-cutting | observability-and-instrumentation | Instrument production-critical behavior as it is built |
+| Cross-cutting | reflect | Turn scoped session evidence into verified harness corrections or a justified no-change result |
 | Ship | deprecation-and-migration | Remove old systems and migrate users safely |
 | Ship | shipping-and-launch | Pre-launch checklist, monitoring, rollback plan |
