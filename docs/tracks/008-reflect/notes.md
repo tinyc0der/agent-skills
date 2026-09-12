@@ -9,8 +9,8 @@ status: draft
 
 ## Resume
 
-- Phase: PR handoff for implementation verified and reviewed at `43d33f3c380b5b815fedf5a5c7a43bda940994b8`.
-- Next action: review the proposed change; merge and installation remain separate endpoints.
+- Phase: implementing the user's follow-up to include automatic draft-PR handoff in ordinary implementation work.
+- Next action: align endpoint guidance, evaluate normal/local-only decisions, verify, and update existing PR #5.
 - Sources: [change spec](spec.md), [verification](verification.md), [review](review.md).
 
 ## Notes
@@ -27,3 +27,7 @@ status: draft
 - Observed: all three independent forward tests satisfy their expectations. Direct Git comparison confirms only the two authorized fixture skills changed in case 1 and no files or history changed in cases 2–3. [Evidence](evidence/forward-tests.md).
 - Observed: 71 regression tests, structural/routing/link/lifecycle/command/hook/manifest checks, skill-creator validation, and metadata checks pass. The default Claude behavioral path remains unavailable until its authentication is renewed; no claim of a successful run or long-term effectiveness is made.
 - Decision: the user requested PR creation. Target `tinyc0der/agent-skills:main`, whose fetched head matches the implementation baseline. No existing PR was found for this branch. The handoff retains the behavioral-runner limitation and the independent evaluation evidence.
+- Observed: reflection traced premature completion to an agent-authored local-only endpoint despite existing draft-PR guidance. Further inspection found `/build` explicitly excluded an unrequested push, and the Git dialogue eval exercised only explicit remote authorization.
+- Decision: the user now requests the durable correction. Normal implementation includes a scoped draft PR after destination/access resolution, with explicit local-only/phase limits and genuine blockers preserved. Update the existing PR instead of requiring another PR request. Keep prior revision-scoped reports intact and add follow-up evidence.
+- Observed: an isolated probe of the earlier Git skill already selected draft creation, confirming it was not universally broken. A separate probe of the earlier `/build` adapter stopped locally because its text excluded an unrequested push. The revised combined guidance selects publication and draft creation for both ordinary implementation and `/build`; the explicit no-push scenario remains local, and a stale-readiness spot-check keeps the PR draft.
+- Observed: follow-up checks pass: 71 Node tests, 170 routing checks at 98%, skill/command/lifecycle/path/link validators, the session-start hook, skill-creator validation, metadata parsing, and build-adapter parity. Dialogue probes evaluate decisions and proposed actions; they do not execute remote operations or measure long-term reliability.

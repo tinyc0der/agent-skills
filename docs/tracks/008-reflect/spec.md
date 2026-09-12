@@ -7,7 +7,7 @@ status: draft
 
 # Reflect
 
-**Route:** Bounded task using skill-creator. The requested outcome is a reusable `reflect` skill in this repository, informed by Cursor's pstack example. Implement, evaluate, review, and commit locally.
+**Route:** Bounded task using skill-creator. The requested outcome is a reusable `reflect` skill in this repository, informed by Cursor's pstack example, and the automatic draft-PR handoff correction identified through its first use. Implement, evaluate, review, commit, and update the existing draft PR.
 
 ## Scope and gap
 
@@ -23,10 +23,14 @@ Preflight checked the catalog, the open PRs returned by `gh pr list --state open
 4. Existing owners are preferred. Unsupported, duplicate, and transient observations can produce a no-change result; reflection has no finding quota or automatic new-skill creation.
 5. Local improvements proceed within existing authorization. Review-only requests produce no writes; global/shared configuration and external actions retain their existing authority boundaries. The skill requires no specific provider, model, transcript layout, or parallel reviewers.
 6. Edits are reviewable and verified with appropriate structural, routing, and behavioral evidence. Validation does not weaken existing checks or claim unmeasured improvement.
+7. Ordinary implementation requests include publishing the scoped branch and creating or updating its draft PR once the destination is established and access is available. The agent does not require a separate “create PR” prompt or invent a local-only endpoint in its own spec. Explicit local-only, no-push, review-only, and phase-limited requests retain their scope.
+8. Missing access or unresolved destination/ownership produces a concrete handoff blocker, with safe preparation completed. Final handoff includes a current PR URL or the actual blocker/explicit scope limit; merge and deployment retain separate authorization. The meta-skill, Git workflow, build adapters, and canonical lifecycle contract agree.
 
 ## Validation plan
 
 Use the existing skill validators, routing floor of 95%, link/lifecycle/hook checks, and Node regression suite. Add realistic positive/negative triggers and three execution evals using a small fixture: actionable corrections, the same evidence under review-only scope, and a clean session. These protect different mutation boundaries; no wording-matching tests or new validation framework are needed.
+
+For the follow-up, extend the Git skill's existing dialogue eval coverage of authorization and lifecycle decisions with normal implementation and explicit local-only scenarios. These check the selected endpoint and proposed actions; they do not claim to execute remote mutations. Preserve the existing stale-readiness and PR-state expectations. Verify actual branch publication and existing-PR update during this authorized handoff.
 
 ## Source adaptation
 
@@ -34,4 +38,4 @@ Read [pstack reflect](https://github.com/cursor/plugins/tree/main/pstack/skills/
 
 ## Spec reconciliation
 
-The new capability is recorded in [the reflect contract](../../specs/reflect/spec.md) with its implementation. Existing memory-management and feature-development-workflow contracts remain unchanged: reflection selects improvements and then respects the owning workflow's implementation, promotion, and authorization gates. This track remains open until merge.
+The new capability is recorded in [the reflect contract](../../specs/reflect/spec.md). The user's follow-up changes the default implementation endpoint in [feature-development-workflow](../../specs/feature-development-workflow/spec.md); reconcile that contract with the meta-skill, Git workflow, and build adapters. Memory-management and the reflect workflow remain unchanged. Earlier verification reports cover their recorded revisions, not this added scope. This track remains open until merge.
