@@ -9,8 +9,8 @@ status: draft
 
 ## Resume
 
-- Phase: local implementation, verification, and review complete at `43d33f3c380b5b815fedf5a5c7a43bda940994b8`.
-- Next action: maintainers can review the local branch; merge and installation remain separate endpoints.
+- Phase: PR handoff for implementation verified and reviewed at `43d33f3c380b5b815fedf5a5c7a43bda940994b8`.
+- Next action: review the proposed change; merge and installation remain separate endpoints.
 - Sources: [change spec](spec.md), [verification](verification.md), [review](review.md).
 
 ## Notes
@@ -26,3 +26,4 @@ status: draft
 - Observed: the Markdown-link check caught the adoption guide's old catalog anchor after the count changed. Updated that inbound link and current catalog counts; historical verification counts remain intact.
 - Observed: all three independent forward tests satisfy their expectations. Direct Git comparison confirms only the two authorized fixture skills changed in case 1 and no files or history changed in cases 2–3. [Evidence](evidence/forward-tests.md).
 - Observed: 71 regression tests, structural/routing/link/lifecycle/command/hook/manifest checks, skill-creator validation, and metadata checks pass. The default Claude behavioral path remains unavailable until its authentication is renewed; no claim of a successful run or long-term effectiveness is made.
+- Decision: the user requested PR creation. Target `tinyc0der/agent-skills:main`, whose fetched head matches the implementation baseline. No existing PR was found for this branch. The handoff retains the behavioral-runner limitation and the independent evaluation evidence.
