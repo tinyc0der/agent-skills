@@ -7,6 +7,16 @@ status: draft
 
 # Verification: PASS
 
+## Pre-merge integration
+
+**Revision:** `4ad8caaf22bbd81fd47d6e26924303392b201a9d`, integrating PR head `8541329b3d03ead64bc68276680151ec4b03e290` with `main` at `456fbf15d8caa20e598033570481e450b71f5d87`.
+
+The README conflict was resolved by keeping the new `tinyc0der/agent-skills` URL and the 30-skill count. The first integrated artifact-path check failed with `duplicate track number 008`: both independent branches had allocated that number. Renaming this track to `009-reflect` and updating its canonical inbound link restored the repository's existing unique-number contract. The existing duplicate-allocation regression test remains the guard; no validator was weakened.
+
+PASS after resolution: `node --test scripts/*-test.js scripts/lib/*-test.js` (71 tests, none skipped); `node scripts/run-evals.js --min-rank1 95` (170 checks, 98%, 103/105); all skill, version, reference-link, Markdown-link (133 files), command, artifact-path (34 consumers), and lifecycle validators; `bash hooks/session-start-test.sh`; `claude plugin validate .`; and whitespace checks. Artifact paths, Markdown links, and the full regression suite were rerun after the track rename.
+
+All acceptance criteria retain the evidence traced below. Byte comparison confirmed that the reflect and Git workflows, meta-skill, three build adapters, eval definitions, and requirements were unchanged by integration; the only canonical-spec edit repairs the renamed track's link. The prior independent behavior evidence remains applicable, with the standard-runner authentication limitation retained. The [integration review](review.md#pre-merge-integration) found no outstanding Critical or Required issue. GitHub CI must pass for the pushed head before merge; later evidence-only commits do not alter the evaluated behavior.
+
 ## Follow-up: automatic draft-PR handoff
 
 **Implementation revision:** `ff2a7c19794c74174dfcc9f23072876ef6fc69a5`.
