@@ -45,6 +45,7 @@ Task arrives
     ├── Deprecating/migrating? ────────→ deprecation-and-migration
     ├── Writing docs/ADRs? ───────────→ documentation-and-adrs
     ├── Adding logs/metrics/alerts? ───→ observability-and-instrumentation
+    ├── Session retrospective / harness corrections? → reflect
     └── Deploying/launching? ─────────→ shipping-and-launch
 ```
 
@@ -71,6 +72,10 @@ These behaviors apply at all times, across all skills. They are non-negotiable.
 ### Autonomous Execution and Critical Human Gates
 
 Automate the selected workflow through the endpoint the user authorized. Resolve routine choices, write requirements and plans, implement, test, debug, review, update documentation, and commit locally without asking for permission at each phase. Reuse decisions and authorization already supplied. Honor explicit read-only, single-step, review-only, and endpoint limits; an implementation request does not by itself authorize a production deployment or messages to other people.
+
+**Default implementation handoff:** An ordinary repository implementation request includes pushing the scoped branch and creating or updating its draft PR once the intended repository, base branch, and access are established. Follow `git-workflow-and-versioning` after the checked plan or first coherent implementation commit; do not wait for a separate “create PR” request. Preserve explicit local-only, no-push, review-only, and phase-limited instructions. An agent-authored spec or note cannot invent a local-only endpoint that narrows the user's request and this default.
+
+Before the final implementation handoff, provide the PR URL with its current branch revision, or identify the actual access/destination/ownership blocker or explicit scope limit. Complete safe preparation before requesting missing input. An absent PR without such a reason is unfinished handoff work; draft creation does not authorize merge or deployment.
 
 Quality gates remain mandatory. Critical and Required findings block dependent progress and merge until fixed, reverified, and rereviewed; severity alone does not require a human decision. Remediate within scope and resume automatically. Use stronger tests, isolation, review, and rollback preparation where the risk warrants them.
 
@@ -353,5 +358,6 @@ Validate task readiness -> Implement -> Verify -> Review -> Merge
 | Cross-cutting | security-and-hardening | Trust boundaries, input validation, least privilege |
 | Cross-cutting | documentation-and-adrs | Document decisions and public behavior when they change |
 | Cross-cutting | observability-and-instrumentation | Instrument production-critical behavior as it is built |
+| Cross-cutting | reflect | Turn scoped session evidence into verified harness corrections or a justified no-change result |
 | Ship | deprecation-and-migration | Remove old systems and migrate users safely |
 | Ship | shipping-and-launch | Pre-launch checklist, monitoring, rollback plan |
