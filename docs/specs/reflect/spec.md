@@ -25,4 +25,4 @@ The [reflect skill](../../../skills/reflect/SKILL.md) examines a requested sessi
 
 `reflect` diagnoses and selects harness improvements. `memory-management` retains ownership of notes, durable knowledge, and promotion; `context-engineering` retains context setup; implementation and debugging skills retain their execution and verification responsibilities.
 
-The fixture-backed [eval cases](../../../evals/cases/reflect.json) exercise authorized edits, review-only proposals, and a no-change session. The introducing [track](../../tracks/008-reflect/spec.md) records preflight, source adaptation, and revision-scoped validation.
+The fixture-backed [eval cases](../../../evals/cases/reflect.json) exercise authorized edits, review-only proposals, and a no-change session. The introducing [track](../../tracks/009-reflect/spec.md) records preflight, source adaptation, and revision-scoped validation.
