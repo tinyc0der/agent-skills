@@ -93,13 +93,14 @@ Understand the repository before making feature-level decisions, and create an i
 
 - Current project rules and commands, recorded in the repository's existing rules file when missing
 - Baseline test, build, lint, and type-check results
-- A short-lived feature branch or isolated worktree
+- A short-lived feature branch in a linked worktree, including for solo work
 
 **Exit gate**
 
 - Repository conventions, validation commands, boundaries, and known risks are understood
 - The baseline state is recorded, including pre-existing failures
 - Feature work is isolated from unrelated changes
+- The primary worktree remains on `main` or the configured default branch; edits, tests, and commits run in the task's linked worktree, following `git-workflow-and-versioning`
 
 ## Phase 3: Define
 
