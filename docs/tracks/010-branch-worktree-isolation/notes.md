@@ -32,5 +32,9 @@ status: draft
   `uv` tool with an isolated PyYAML environment; no repository dependency changed.
 - PR destination verified as `tinyc0der/agent-skills`, default branch `main`,
   with write access and no open PR or issue overlap.
-- Next: commit the checked implementation, record revision-specific verification
-  and review, and complete the repository's draft-PR handoff.
+- Implementation committed as `e9b2387`; [verification.md](verification.md)
+  records PASS and [review.md](review.md) records the author review with no
+  Critical or Required findings. Subsequent track edits record evidence and
+  progress only.
+- Next: publish the branch and draft PR with these reports. Merge is pending;
+  the primary checkout remains on `main`.

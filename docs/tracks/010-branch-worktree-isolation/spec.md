@@ -3,7 +3,7 @@ type: Change Specification
 title: Require worktrees for branch creation
 description: Keep the primary checkout on the default branch and isolate every new branch in a linked worktree.
 status: draft
-workflow_status: in_progress
+workflow_status: awaiting_merge
 ---
 
 # Require worktrees for branch creation
