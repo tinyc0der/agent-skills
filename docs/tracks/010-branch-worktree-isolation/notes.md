@@ -36,5 +36,6 @@ status: draft
   records PASS and [review.md](review.md) records the author review with no
   Critical or Required findings. Subsequent track edits record evidence and
   progress only.
-- Next: publish the branch and draft PR with these reports. Merge is pending;
-  the primary checkout remains on `main`.
+- Published [draft PR #7](https://github.com/tinyc0der/agent-skills/pull/7) with
+  the scoped branch and these reports. Next: repository review and authorized
+  merge; the primary checkout remains on `main`.
