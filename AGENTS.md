@@ -12,6 +12,10 @@ A collection of skills for Claude.ai and Claude Code for senior software enginee
 
 Automate authorized work through its agreed endpoint, including planning, implementation, debugging, review, documentation, and local commits. Reuse existing approval; multiple approaches require a human decision only when consequential trade-offs remain unresolved. Pause dependent work at an unresolved decision, authority, access, ownership, or risk boundary. Notify the user promptly about active incidents while continuing authorized containment and recovery. Keep verification and enforced external approvals intact. The reusable policy is in [using-agent-skills](skills/using-agent-skills/SKILL.md#autonomous-execution-and-critical-human-gates); explicit stepwise or read-only requests still control scope.
 
+## Branch Isolation
+
+Create every new work branch in a linked worktree and keep the primary worktree on `main`. This applies to solo work and documentation edits. Follow [git-workflow-and-versioning](skills/git-workflow-and-versioning/SKILL.md#working-with-worktrees) before branching or editing, reuse an existing task worktree, and run edits and commits from that directory.
+
 ## OpenCode Integration
 
 OpenCode uses a **skill-driven execution model** powered by the `skill` tool and this repository's `/skills` directory.

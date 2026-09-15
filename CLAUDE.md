@@ -37,6 +37,10 @@ docs/         → Setup guides for different tools
 - Shared references are in the root `references/` directory; the emerging convention for self-contained, distributable skills keeps a skill's own references inside `skills/<name>/references/`
 - Supporting files only created when content exceeds 100 lines
 
+## Branch Isolation
+
+Create every new work branch in a linked worktree and keep the primary worktree on `main`. This applies to solo work and documentation edits. Follow [git-workflow-and-versioning](skills/git-workflow-and-versioning/SKILL.md#working-with-worktrees) before branching or editing, reuse an existing task worktree, and run edits and commits from that directory.
+
 ## Contributing
 
 Before adding a new skill or significantly reworking an existing one, run the pre-flight checks in [CONTRIBUTING.md](CONTRIBUTING.md#before-proposing-a-new-skill): search the catalog, check open PRs, confirm the idea fits [docs/skill-anatomy.md](docs/skill-anatomy.md), and justify the gap. Prefer extending an existing skill over adding a near-duplicate. CONTRIBUTING.md is the single source of truth for this workflow; do not restate its checklist here or elsewhere, link to it.

@@ -15,6 +15,8 @@ Git is your safety net. Treat commits as save points, branches as sandboxes, and
 
 Always. Every code change flows through git.
 
+Before creating a branch or editing repository files, complete the worktree check below.
+
 ## Core Principles
 
 ### Trunk-Based Development (Recommended)
@@ -132,7 +134,7 @@ main (always deployable)
   └── fix/duplicate-tasks      ← Bug fixes
 ```
 
-- Branch from `main` (or the team's default branch)
+- Create each branch in a linked worktree, based on `main` (or the team's default branch unless the task specifies another base)
 - Keep branches short-lived (merge within 1-3 days) — long-lived branches are hidden costs
 - Delete branches after merge
 - Prefer feature flags over long-lived branches for incomplete features
@@ -148,29 +150,27 @@ refactor/<short-description>  → refactor/auth-module
 
 ## Working with Worktrees
 
-For parallel AI agent work, use git worktrees to run multiple branches simultaneously:
+**Required for every new work branch**, including single-agent work, small fixes, and documentation changes. Keep the main (primary) worktree on `main` or the repository's configured default branch. A branch alone does not isolate the checkout: never use `git switch -c`, `git checkout -b`, or an equivalent in-place branch switch to start work. Creating a new branch from an existing linked worktree also requires a separate linked worktree.
+
+1. **Inspect before branching.** Run `git worktree list --porcelain` and `git status --short --branch`. Identify the primary worktree, default branch, intended branch, and base revision; the current directory is not necessarily the primary worktree.
+2. **Reuse or create the correct worktree.** If the intended branch already has a linked worktree, continue there. If it exists without a checkout, use `git worktree add <path> <branch>`. For a new branch, use `git worktree add -b <branch> <path> <base>`, with an explicit base and an unused directory following the repository's worktree convention. Use the workspace manager's worktree workflow when one governs the repository.
+3. **Preserve existing work.** Leave unrelated staged, unstaged, and untracked changes where they are; transfer only authorized task changes when needed. If the primary worktree is already on a work branch, establish ownership and preserve its work in a linked worktree before restoring the default branch. Never force checkout, reset, clean, blindly stash, or remove someone else's worktree to satisfy this rule; pause only the affected action if ownership cannot be resolved.
+4. **Work from the linked directory.** Set the shell/tool working directory to that worktree before editing, testing, or committing. Verify `git rev-parse --show-toplevel` and `git branch --show-current` there, and confirm the primary worktree still has the default branch with `git worktree list --porcelain`. Repeat this check before committing and at handoff.
 
 ```bash
-# Create a worktree for a feature branch
-git worktree add ../project-feature-a feature/task-creation
-git worktree add ../project-feature-b feature/user-settings
+# From the primary checkout, which stays on main
+git worktree list --porcelain
+git status --short --branch
+git worktree add -b feature/task-creation ../project-task-creation main
 
-# Each worktree is a separate directory with its own branch
-# Agents can work in parallel without interfering
-ls ../
-  project/              ← main branch
-  project-feature-a/    ← task-creation branch
-  project-feature-b/    ← user-settings branch
-
-# When done, merge and clean up
-git worktree remove ../project-feature-a
+# All task work happens here
+cd ../project-task-creation
+git rev-parse --show-toplevel
+git branch --show-current
+git worktree list --porcelain
 ```
 
-Benefits:
-- Multiple agents can work on different features simultaneously
-- No branch switching needed (each directory has its own branch)
-- If one experiment fails, delete the worktree — nothing is lost
-- Changes are isolated until explicitly merged
+Remove a task worktree with `git worktree remove <path>` only after its work is merged or otherwise safely retained and the directory has no needed uncommitted or untracked files. Keep the primary worktree on the default branch during cleanup.
 
 ## The Save Point Pattern
 
@@ -393,6 +393,7 @@ Write the entry in the same change that makes the change, while the impact is fr
 | "The message doesn't matter" | Messages are documentation. Future you (and future agents) will need to understand what changed and why. |
 | "I'll squash it all later" | Squashing destroys the development narrative. Prefer clean incremental commits from the start. |
 | "Branches add overhead" | Short-lived branches are free and prevent conflicting work from colliding. Long-lived branches are the problem — merge within 1-3 days. |
+| "I'm the only agent; a branch here is enough" | Every new branch needs a linked worktree. Solo work and small edits still change the primary checkout if you switch its branch. |
 | "I'll split this change later" | Large changes are harder to review, riskier to deploy, and harder to revert. Split before submitting, not after. |
 | "I don't need a .gitignore" | Until `.env` with production secrets gets committed. Set it up immediately. |
 | "It's just a small fix, bump the patch" | Check what consumers can observe. A behavior change they relied on is a major, whatever the diff size. |
@@ -408,6 +409,7 @@ Write the entry in the same change that makes the change, while the impact is fr
 - Committing `node_modules/`, `.env`, or build artifacts
 - Long-lived branches that diverge significantly from main
 - Force-pushing to shared branches
+- Creating a branch in place, leaving the primary worktree off the default branch, or editing and committing from the wrong worktree
 - A breaking change shipped under a minor or patch version bump
 - A release with no tag, or a version number hand-edited out of sync with the tag
 - A user-facing release with no changelog entry, or a changelog that's just dumped commit messages
@@ -416,6 +418,12 @@ Write the entry in the same change that makes the change, while the impact is fr
 - A merge performed without required review, green CI, or explicit authorization
 
 ## Verification
+
+Before branch work and at handoff:
+
+- [ ] `git worktree list --porcelain` shows the primary worktree on the default branch and the task branch in its linked worktree
+- [ ] The working directory and branch were verified before edits and commits; an existing matching worktree was reused
+- [ ] Unrelated changes and other worktrees were preserved; any removed task worktree had its work safely retained
 
 For every commit:
 

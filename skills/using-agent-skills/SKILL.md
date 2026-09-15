@@ -69,6 +69,10 @@ The selected route defines the required Define and Plan work. Downstream skills 
 
 These behaviors apply at all times, across all skills. They are non-negotiable.
 
+### Branch and Worktree Isolation
+
+Before creating a branch or editing repository files, apply `git-workflow-and-versioning`. Every new work branch requires its own linked worktree, including solo work and documentation-only changes. Keep the primary worktree on `main` or the configured default branch; never switch it to a task branch. Reuse a linked worktree already assigned to the task branch, preserve existing changes, and run the task's edits, tests, and commits from that directory. Verify the worktree/branch mapping before committing and at handoff.
+
 ### Autonomous Execution and Critical Human Gates
 
 Automate the selected workflow through the endpoint the user authorized. Resolve routine choices, write requirements and plans, implement, test, debug, review, update documentation, and commit locally without asking for permission at each phase. Reuse decisions and authorization already supplied. Honor explicit read-only, single-step, review-only, and endpoint limits; an implementation request does not by itself authorize a production deployment or messages to other people.
