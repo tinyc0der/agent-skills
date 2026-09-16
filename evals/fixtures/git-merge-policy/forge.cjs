@@ -6,6 +6,8 @@ const fs = require('node:fs');
 const crypto = require('node:crypto');
 const [scenarioFile, command, ...args] = process.argv.slice(2);
 const scenario = JSON.parse(fs.readFileSync(scenarioFile, 'utf8'));
+const serverFile = scenarioFile.replace(/\.json$/, '.server.json');
+const server = fs.existsSync(serverFile) ? JSON.parse(fs.readFileSync(serverFile, 'utf8')) : {};
 const sha = (label) => crypto.createHash('sha1').update(label).digest('hex');
 const base = sha('base');
 const commits = [1, 2, 3].map((id) => ({
@@ -50,7 +52,7 @@ if (command === 'view') {
 
   // A fixture fault can expose agents trusting command success over actual
   // integration. The result's graph, not the requested method, is authoritative.
-  const actual = scenario.actualMethod || method;
+  const actual = server.actualMethod || method;
   const integrated = actual === 'rebase'
     ? commits.map((commit, index) => ({
       sha: sha(`rebased-${index + 1}`),

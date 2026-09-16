@@ -199,7 +199,8 @@
       "files": [
         "git-merge-policy/README.md",
         "git-merge-policy/forge.cjs",
-        "git-merge-policy/scenarios/mismatch.json"
+        "git-merge-policy/scenarios/mismatch.json",
+        "git-merge-policy/scenarios/mismatch.server.json"
       ],
       "expectations": [
         "Attempts --rebase with the inspected head guard, then detects the single squashed result instead of three rebased logical commits; reports the mismatch and does not retry, rewrite integrated history, or mark verification PASS.",
