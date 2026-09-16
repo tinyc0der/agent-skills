@@ -35,3 +35,11 @@ status: draft
   isolated plan artifacts with no live worker dispatch or external mutations.
 - Destination: `tinyc0der/agent-skills`, base `main`, write access verified; no
   existing PR for this branch. End at a reviewed draft PR, without merge.
+- The standard behavioral runner stopped before evaluation with "OAuth session
+  expired and could not be refreshed." Isolated fresh-session forward tests use
+  the same fixtures as separate evidence, not a claimed Claude/grader result.
+- Initial coordinated-plan forward test preserved runner and acceptance gates
+  but omitted necessary blocking replies from the packet, instructing workers
+  to stop when blocked. Clarified the packet's stopping condition to include
+  the live ask/reply mechanism before declaring an unresolved blocker. Rerun
+  that scenario in a fresh session; the other three scenarios passed inspection.

@@ -66,7 +66,7 @@ Prepare one self-contained task packet per phase or independent implementation s
 - Absolute repository/worktree path and branch, input artifact paths, and the revision or dirty working state the worker must inspect.
 - Allowed write paths, exclusions, dependencies, expected output/report path, and checks whose evidence must be returned.
 - Decisions and relevant user instructions from earlier phases, so a fresh session can work without chat history.
-- A stopping condition and result owner: write the assigned result artifact and end the task, including when blocked. In coordinated mode, return the required report to the coordinator. Do not start another phase, spawn descendants, or wait for more assignments.
+- A stopping condition and result owner: write the assigned result artifact and end after completion or an unresolved blocker. For coordinated tasks, include the live blocking ask/reply mechanism in the packet: seek a necessary coordinator answer before declaring the task blocked, then return the required completion report. A one-shot child records unresolved blockers for its result owner without creating coordinator obligations. Do not start another phase, spawn descendants, or wait for more assignments.
 
 Local sessions read shared artifacts and skills directly. Reference the relevant files and sections instead of copying whole documents or earlier conversations into the task packet. Each session reads the applicable project instructions, its assigned lifecycle skill, and the referenced inputs at phase entry. Resolve project paths from the named worktree and use absolute paths for skills outside it; confirm the inputs are accessible from that session.
 
