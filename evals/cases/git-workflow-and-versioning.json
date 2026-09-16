@@ -60,12 +60,13 @@
     {
       "id": 3,
       "kind": "dialogue",
-      "prompt": "Evaluate the final handoff in this scenario; respond with your decision and the actions the agent should take, without executing commands. The user asked: 'Add the export filter and finish the work.' The scoped implementation is verified and committed on a feature branch. Project configuration establishes the writable team repository and main as the PR destination; credentials work, and branch lookup found no PR. The agent's own task spec says 'implement, verify, and commit locally,' but the user never requested that limit. Its proposed final response is 'Done; committed locally. Let me know if you want a PR.' What should happen before the final response?",
-      "expected_output": "Rejects the premature local-only handoff, resolves and publishes the scoped branch, and creates a draft PR using existing implementation authorization; final handoff includes its URL and actual evidence without waiting for another user prompt.",
+      "prompt": "Evaluate the final handoff in this scenario; respond with your decision and the actions the agent should take, without executing commands. The user asked: 'Add the export filter and finish the work.' The scoped implementation is committed on a clean feature branch. Verification PASS names its exact head, the pre-review Definition of Done and acceptance criteria pass, spec reconciliation is recorded, and no Critical or Required finding remains. Project configuration establishes the writable team repository and main as the PR destination; credentials work, and branch lookup found no PR. The agent's own task spec says 'implement, verify, and commit locally,' but the user never requested that limit. Its proposed final response is 'Done; committed locally. Let me know if you want a PR.' What should happen before the final response?",
+      "expected_output": "Rejects the premature local-only handoff, publishes the scoped branch, creates the PR with current evidence, and marks it ready using existing implementation authorization; final handoff confirms its URL, revision, and review state without waiting for another user prompt.",
       "expectations": [
-        "Treats the ordinary implementation request as including a draft PR in the established writable repository, and does not ask the user whether to push or create it or require a separate PR command.",
-        "Identifies the agent-authored local-only endpoint as unsupported by the user's scope, so the proposed local-commit-only final response is premature.",
-        "Calls for confirming the current branch, destination, head, working-tree state, and existing PR state, then publishing only the scoped branch and creating a draft when absent; the final handoff contains the PR URL and accurate verification/limitations. Does not infer merge or deployment authorization."
+        "Treats ordinary implementation as including PR publication and readiness when the established gates pass, without asking the user whether to push, create the PR, or mark it ready.",
+        "Identifies the agent-authored local-only endpoint as unsupported by the user’s scope, so the proposed local-commit-only final response is premature.",
+        "Confirms the branch, destination, head, working-tree state, and existing PR state; publishes only the scoped branch and creates the missing PR with a current body. With the stated readiness gates satisfied, explicitly marks it ready and confirms the actual state rather than stopping at draft or merely offering the transition.",
+        "The final handoff contains the PR URL, current revision, review state, and accurate evidence. Does not infer merge or deployment authorization."
       ]
     },
     {
@@ -206,6 +207,16 @@
         "Attempts --rebase with the inspected head guard, then detects the single squashed result instead of three rebased logical commits; reports the mismatch and does not retry, rewrite integrated history, or mark verification PASS.",
         "The merge record identifies the selected method (or blocked decision), the actual policy source and any prohibitions, repository/PR/base and inspected head, and actual command arguments/outcome. For executed merges it records the resulting commit and graph-based verification; a one-parent commit or matching file tree alone does not establish rebase versus squash.",
         "Execution evidence includes the unmodified fake forge action log and, when merged, a post-merge view. Claims are grounded in attempted actions and actual results, not just a proposed command or a success message. No real forge, remote operation, or test-fixture modification is used."
+      ]
+    },
+    {
+      "id": 13,
+      "kind": "dialogue",
+      "prompt": "Evaluate this final handoff; state the decision and actions without executing commands. The user asked: 'Finish the export filter, verify it, and update the PR, but leave it in draft for my walkthrough.' The work is committed, the tree is clean, the correct remote has the exact local head, the existing PR is draft, and its body is current. Verification PASS names this head, acceptance criteria and pre-review Definition of Done pass, spec reconciliation is recorded, and no Critical or Required findings remain. What should happen before the final response?",
+      "expected_output": "Keeps the verified PR in draft because the user explicitly chose that endpoint, confirms its state, and reports the completed work without asking to override the instruction.",
+      "expectations": [
+        "Preserves the explicit draft-only endpoint despite all readiness gates passing; does not mark ready, merge, deploy, or ask for redundant permission.",
+        "Confirms the PR remains draft and reports its URL, current revision, verification, and the user-requested reason for draft state."
       ]
     }
   ]

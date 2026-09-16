@@ -254,7 +254,7 @@ Feature verification proves that the integrated result satisfies the approved sp
 - Every acceptance criterion has concrete evidence
 - The pre-review Definition of Done profile passes; review evidence, merge CI, and human approval are evaluated after `/pr ready`
 - No unexplained failing or skipped checks remain
-- The draft PR is ready to be marked for review
+- The PR is marked ready under the [Git skill's readiness gates](../skills/git-workflow-and-versioning/SKILL.md#ready-for-review), unless the requested endpoint is draft-only or phase-limited
 
 ## Phase 8: Review, Remediate, and Merge
 
