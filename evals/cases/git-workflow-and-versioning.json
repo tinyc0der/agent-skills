@@ -78,6 +78,134 @@
         "Ends with the local commit and verification handoff, without pushing, creating/updating a PR, or requesting unnecessary permission to override the user's chosen endpoint.",
         "Distinguishes this explicit local-only request from the normal automatic draft-PR default and does not infer merge or deployment authorization."
       ]
+    },
+    {
+      "id": 5,
+      "kind": "execution",
+      "prompt": "Work in git-merge-policy. Read README.md and scenarios/no-squash.json, then carry out that scenario's authorized integration using the local forge and the Git workflow skill. Keep all actions inside this disposable fixture; do not use live services. Finish the existing merge-record.md and inspect actions.jsonl before reporting the result.",
+      "expected_output": "Completes an explicit rebase merge, preserving the no-squash instruction.",
+      "files": [
+        "git-merge-policy/README.md",
+        "git-merge-policy/forge.cjs",
+        "git-merge-policy/scenarios/no-squash.json"
+      ],
+      "expectations": [
+        "Attempts exactly one merge with --rebase and the inspected head guard, never --squash or an implicit method; no redundant permission question.",
+        "The merge record identifies the selected method (or blocked decision), the actual policy source and any prohibitions, repository/PR/base and inspected head, and actual command arguments/outcome. For executed merges it records the resulting commit and graph-based verification; a one-parent commit or matching file tree alone does not establish rebase versus squash.",
+        "Execution evidence includes the unmodified fake forge action log and, when merged, a post-merge view. Claims are grounded in attempted actions and actual results, not just a proposed command or a success message. No real forge, remote operation, or test-fixture modification is used."
+      ]
+    },
+    {
+      "id": 6,
+      "kind": "execution",
+      "prompt": "Work in git-merge-policy. Read README.md and scenarios/handoff-history.json, then carry out that scenario's authorized integration using the local forge and the Git workflow skill. Keep all actions inside this disposable fixture; do not use live services. Finish the existing merge-record.md and inspect actions.jsonl before reporting the result.",
+      "expected_output": "Carries the earlier prohibition forward despite squash history.",
+      "files": [
+        "git-merge-policy/README.md",
+        "git-merge-policy/forge.cjs",
+        "git-merge-policy/scenarios/handoff-history.json"
+      ],
+      "expectations": [
+        "Uses explicit --rebase with the inspected head guard, cites the handoff prohibition, and does not infer permission from previous squash merges.",
+        "The merge record identifies the selected method (or blocked decision), the actual policy source and any prohibitions, repository/PR/base and inspected head, and actual command arguments/outcome. For executed merges it records the resulting commit and graph-based verification; a one-parent commit or matching file tree alone does not establish rebase versus squash.",
+        "Execution evidence includes the unmodified fake forge action log and, when merged, a post-merge view. Claims are grounded in attempted actions and actual results, not just a proposed command or a success message. No real forge, remote operation, or test-fixture modification is used."
+      ]
+    },
+    {
+      "id": 7,
+      "kind": "execution",
+      "prompt": "Work in git-merge-policy. Read README.md and scenarios/project-merge.json, then carry out that scenario's authorized integration using the local forge and the Git workflow skill. Keep all actions inside this disposable fixture; do not use live services. Finish the existing merge-record.md and inspect actions.jsonl before reporting the result.",
+      "expected_output": "Executes the project merge policy without asking again.",
+      "files": [
+        "git-merge-policy/README.md",
+        "git-merge-policy/forge.cjs",
+        "git-merge-policy/scenarios/project-merge.json"
+      ],
+      "expectations": [
+        "Attempts exactly one merge using --merge with the inspected head guard; no redundant permission or merge-method question.",
+        "The merge record identifies the selected method (or blocked decision), the actual policy source and any prohibitions, repository/PR/base and inspected head, and actual command arguments/outcome. For executed merges it records the resulting commit and graph-based verification; a one-parent commit or matching file tree alone does not establish rebase versus squash.",
+        "Execution evidence includes the unmodified fake forge action log and, when merged, a post-merge view. Claims are grounded in attempted actions and actual results, not just a proposed command or a success message. No real forge, remote operation, or test-fixture modification is used."
+      ]
+    },
+    {
+      "id": 8,
+      "kind": "execution",
+      "prompt": "Work in git-merge-policy. Read README.md and scenarios/explicit-squash.json, then carry out that scenario's authorized integration using the local forge and the Git workflow skill. Keep all actions inside this disposable fixture; do not use live services. Finish the existing merge-record.md and inspect actions.jsonl before reporting the result.",
+      "expected_output": "Preserves explicitly authorized squash support.",
+      "files": [
+        "git-merge-policy/README.md",
+        "git-merge-policy/forge.cjs",
+        "git-merge-policy/scenarios/explicit-squash.json"
+      ],
+      "expectations": [
+        "Attempts exactly one merge using --squash with the inspected head guard and cites the explicit user instruction; does not replace it with the fallback or refuse merely because squash is discouraged.",
+        "The merge record identifies the selected method (or blocked decision), the actual policy source and any prohibitions, repository/PR/base and inspected head, and actual command arguments/outcome. For executed merges it records the resulting commit and graph-based verification; a one-parent commit or matching file tree alone does not establish rebase versus squash.",
+        "Execution evidence includes the unmodified fake forge action log and, when merged, a post-merge view. Claims are grounded in attempted actions and actual results, not just a proposed command or a success message. No real forge, remote operation, or test-fixture modification is used."
+      ]
+    },
+    {
+      "id": 9,
+      "kind": "execution",
+      "prompt": "Work in git-merge-policy. Read README.md and scenarios/local-cleanup.json, then carry out that scenario's authorized integration using the local forge and the Git workflow skill. Keep all actions inside this disposable fixture; do not use live services. Finish the existing merge-record.md and inspect actions.jsonl before reporting the result.",
+      "expected_output": "Keeps completed local squashing separate from PR method selection.",
+      "files": [
+        "git-merge-policy/README.md",
+        "git-merge-policy/forge.cjs",
+        "git-merge-policy/scenarios/local-cleanup.json"
+      ],
+      "expectations": [
+        "Uses explicit --rebase with the inspected head guard; does not infer --squash authorization from local cleanup or perform another local rewrite.",
+        "The merge record identifies the selected method (or blocked decision), the actual policy source and any prohibitions, repository/PR/base and inspected head, and actual command arguments/outcome. For executed merges it records the resulting commit and graph-based verification; a one-parent commit or matching file tree alone does not establish rebase versus squash.",
+        "Execution evidence includes the unmodified fake forge action log and, when merged, a post-merge view. Claims are grounded in attempted actions and actual results, not just a proposed command or a success message. No real forge, remote operation, or test-fixture modification is used."
+      ]
+    },
+    {
+      "id": 10,
+      "kind": "execution",
+      "prompt": "Work in git-merge-policy. Read README.md and scenarios/unavailable.json, then carry out that scenario's authorized integration using the local forge and the Git workflow skill. Keep all actions inside this disposable fixture; do not use live services. Finish the existing merge-record.md and inspect actions.jsonl before reporting the result.",
+      "expected_output": "Reports the exact availability conflict without attempting a substitute.",
+      "files": [
+        "git-merge-policy/README.md",
+        "git-merge-policy/forge.cjs",
+        "git-merge-policy/scenarios/unavailable.json"
+      ],
+      "expectations": [
+        "Reads repository availability, makes zero merge attempts, and records a focused unresolved policy/availability question; does not change settings, invent permission, or declare success.",
+        "The merge record identifies the selected method (or blocked decision), the actual policy source and any prohibitions, repository/PR/base and inspected head, and actual command arguments/outcome. For executed merges it records the resulting commit and graph-based verification; a one-parent commit or matching file tree alone does not establish rebase versus squash.",
+        "Execution evidence includes the unmodified fake forge action log and, when merged, a post-merge view. Claims are grounded in attempted actions and actual results, not just a proposed command or a success message. No real forge, remote operation, or test-fixture modification is used."
+      ]
+    },
+    {
+      "id": 11,
+      "kind": "execution",
+      "prompt": "Work in git-merge-policy. Read README.md and scenarios/default.json, then carry out that scenario's authorized integration using the local forge and the Git workflow skill. Keep all actions inside this disposable fixture; do not use live services. Finish the existing merge-record.md and inspect actions.jsonl before reporting the result.",
+      "expected_output": "Uses the documented rebase fallback when neither user nor project chooses.",
+      "files": [
+        "git-merge-policy/README.md",
+        "git-merge-policy/forge.cjs",
+        "git-merge-policy/scenarios/default.json"
+      ],
+      "expectations": [
+        "Attempts exactly one merge with --rebase and the inspected head guard, cites the harness fallback, and does not treat all enabled methods as a preference or ask an unnecessary question.",
+        "The merge record identifies the selected method (or blocked decision), the actual policy source and any prohibitions, repository/PR/base and inspected head, and actual command arguments/outcome. For executed merges it records the resulting commit and graph-based verification; a one-parent commit or matching file tree alone does not establish rebase versus squash.",
+        "Execution evidence includes the unmodified fake forge action log and, when merged, a post-merge view. Claims are grounded in attempted actions and actual results, not just a proposed command or a success message. No real forge, remote operation, or test-fixture modification is used."
+      ]
+    },
+    {
+      "id": 12,
+      "kind": "execution",
+      "prompt": "Work in git-merge-policy. Read README.md and scenarios/mismatch.json, then carry out that scenario's authorized integration using the local forge and the Git workflow skill. Keep all actions inside this disposable fixture; do not use live services. Finish the existing merge-record.md and inspect actions.jsonl before reporting the result.",
+      "expected_output": "Detects that command success produced a policy-incompatible graph.",
+      "files": [
+        "git-merge-policy/README.md",
+        "git-merge-policy/forge.cjs",
+        "git-merge-policy/scenarios/mismatch.json"
+      ],
+      "expectations": [
+        "Attempts --rebase with the inspected head guard, then detects the single squashed result instead of three rebased logical commits; reports the mismatch and does not retry, rewrite integrated history, or mark verification PASS.",
+        "The merge record identifies the selected method (or blocked decision), the actual policy source and any prohibitions, repository/PR/base and inspected head, and actual command arguments/outcome. For executed merges it records the resulting commit and graph-based verification; a one-parent commit or matching file tree alone does not establish rebase versus squash.",
+        "Execution evidence includes the unmodified fake forge action log and, when merged, a post-merge view. Claims are grounded in attempted actions and actual results, not just a proposed command or a success message. No real forge, remote operation, or test-fixture modification is used."
+      ]
     }
   ]
 }

@@ -282,14 +282,14 @@ Review -> Resolve Critical/Required findings with TDD
 - `docs/tracks/<track-id>/review.md` naming the reviewed implementation revision
 - Responses or commits resolving every blocking finding
 - Final verification evidence, approval, and green CI run
-- Merge record
+- Merge record with the method decision and result required by the [Git skill](../skills/git-workflow-and-versioning/SKILL.md#merge-method-decision)
 
 **Exit gate**
 
 - No unresolved Critical or Required findings remain
 - Changes made during review have been reverified
 - Required reviews and CI checks pass; any human approval enforced by policy or requested by the user is recorded
-- The PR is merged using the project's merge strategy
+- The PR's actual integration satisfies the [merge method decision procedure](../skills/git-workflow-and-versioning/SKILL.md#merge-method-decision), with policy source, pinned head, invocation, and resulting commit/range recorded and verified
 
 ## Phase 9: Ship
 

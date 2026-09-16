@@ -283,6 +283,19 @@ Stale evidence is not transferable to a newer revision. Canonical spec changes a
 
 Use the loop `review -> fix -> reverify -> rereview` autonomously within scope. Required fixes that change behavior follow `test-driven-development`. Merge only when the user has authorized that endpoint, required reviews and CI pass, and the project's merge strategy permits it. Obtain human approval when enforced policy or an explicit user checkpoint requires it; do not add a separate human gate to an already authorized, policy-compliant merge or impersonate a required reviewer.
 
+#### Merge method decision
+
+Apply this procedure before every PR merge, including delegated integration:
+
+1. **Resolve policy.** Read explicit user instructions, applicable project policy, and recorded decisions from earlier sessions. User instructions take precedence over project preferences; enforced repository rules still apply. Carry prohibitions and their sources forward until explicitly superseded. Enabled methods describe availability, not preference; past PRs, UI defaults, CLI defaults, and a large commit count do not authorize a method.
+2. **Separate cleanup from integration.** Permission to squash local fixups does not select squash-and-merge. Permission to use a PR merge method does not authorize additional local history rewrites or force-pushes. Treat each decision in its own scope.
+3. **Use the harness fallback.** When neither user instructions nor project policy selects a method, use **rebase merge**: preserve the logical commits in linear history, with rewritten commit IDs. Explicit merge-commit or squash policies remain supported. Check availability and branch/queue constraints against the effective policy. If the selected method is prohibited, unavailable, or incompatible with an enforced rule, report the conflict and ask only for the unresolved decision; do not silently substitute another method, change settings, or bypass a gate. A resolved, authorized method needs no repeated permission question.
+4. **Pin and record the decision.** Confirm the repository, PR, base branch/revision, and reviewed head immediately before integration. In the existing merge record (PR/track/release record), save the selected method, policy source (user decision or file/section, including the fallback when used), relevant prohibitions, pinned head, and intended command arguments or API parameters. Hand this effective policy and its source to the integration owner; a fresh session must not infer it again from availability or history.
+5. **Execute explicitly.** Select the method in the command or API call and guard the head against changes. For GitHub CLI, use exactly one of `--rebase`, `--merge`, or `--squash` with `--match-head-commit <reviewed-head>`, naming the repository and PR. A changed head requires fresh checks and a new decision record before retrying. If an enforced queue controls the method, verify its configured strategy matches the selected policy before enqueueing; do not bypass it. Record the actual arguments, timestamp, exit status, and outcome. Queued or auto-merge-enabled is pending, not merged.
+6. **Verify the landed result.** Read authoritative merge metadata and the resulting commit graph; record the resulting commit or integrated range and verification outcome. A merge commit must retain the reviewed head in its ancestry. For rebase, compare the ordered logical changes in the landed range with the reviewed commits, accounting for new IDs and any already-applied or empty changes; do not require the original head to remain an ancestor. For squash, verify the selected combined change. A one-parent commit or matching file tree alone cannot distinguish squash from rebase. If the result differs from the policy or cannot be established, report that outcome, preserve the evidence, and stop dependent release work. Do not retry a completed merge or rewrite deployed history to conceal a mismatch.
+
+GitHub-specific mechanics: [CLI merge flags and queue behavior](https://cli.github.com/manual/gh_pr_merge), [merge method semantics](https://docs.github.com/en/pull-requests/reference/pull-request-merges). Use the forge's equivalent explicit method and concurrency guard elsewhere.
+
 ## Pre-Commit Hygiene
 
 Before every commit:
@@ -416,6 +429,7 @@ Write the entry in the same change that makes the change, while the impact is fr
 - A PR opened without resolving whether one already exists for the branch
 - A PR marked ready with stale, FAIL, or INCOMPLETE verification evidence
 - A merge performed without required review, green CI, or explicit authorization
+- A merge method inferred from enabled options or past PRs, omitted from the command/record, or silently substituted after a conflict
 
 ## Verification
 
@@ -448,3 +462,4 @@ For every pull request:
 - [ ] Ready status is backed by a PASS report for the exact head revision
 - [ ] Critical and Required findings are resolved before merge
 - [ ] Required human approval and CI gates pass before merge
+- [ ] The [merge method decision](#merge-method-decision) is recorded with its policy source, pinned head, actual invocation, resulting commit/range, and verified outcome; handoffs preserve the effective policy

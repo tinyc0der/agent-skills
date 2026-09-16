@@ -1,0 +1,7 @@
+{
+  "request": "Earlier I asked you to squash local fixup commits. That cleanup is complete and the resulting three logical commits were reviewed. Merge PR #359 now; approval and checks apply to this head.",
+  "handoff": {
+    "localCleanup": "Completed and verified; no further branch rewrite is needed.",
+    "mergeMethod": "Unspecified."
+  }
+}

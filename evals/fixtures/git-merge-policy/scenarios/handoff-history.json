@@ -1,0 +1,11 @@
+{
+  "request": "Finish the already-authorized integration of PR #359 using the previous session handoff.",
+  "handoff": {
+    "userInstruction": "Do not squash-and-merge.",
+    "source": "Prior session user decision, recorded in integration handoff."
+  },
+  "pastMerges": [
+    "squash",
+    "squash"
+  ]
+}

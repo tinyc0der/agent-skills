@@ -1,0 +1,4 @@
+{
+  "request": "Complete the approved merge of PR #359.",
+  "projectPolicy": "PRs use merge commits. Merge approval and all required checks for this head are already recorded."
+}

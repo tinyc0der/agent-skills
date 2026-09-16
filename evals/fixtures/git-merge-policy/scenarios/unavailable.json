@@ -1,0 +1,6 @@
+{
+  "request": "Merge PR #359 now, but do not squash-and-merge. Reviews and CI pass.",
+  "available": [
+    "squash"
+  ]
+}
