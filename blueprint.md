@@ -121,6 +121,19 @@ The harness should turn verified experience into improvements that affect future
 
 6. **Measure and refine the effect.** Assess repeated mistakes, unnecessary interventions, rework, quality, and effort. Account for variation before drawing conclusions. Extend useful improvements and revise or withdraw ineffective ones while retaining the evidence behind those decisions.
 
+## Rules
+
+Use these rules when implementing and reviewing the harness.
+
+- **Use simple English.** Write short, direct sentences in skills and documentation. Explain unfamiliar terms. Preserve exact commands, identifiers, and technical meaning.
+- **Make instructions actionable.** State when guidance applies, what to do, and how to know the work is complete.
+- **Make obligations clear.** Distinguish required steps, optional advice, and conditions that need human input.
+- **Keep skills self-contained.** Keep required instructions and supporting files inside each skill. References outside the skill may point only to other skills, listed as dependencies.
+- **Give shared guidance one owner.** Reference its owning skill and keep dependent guidance consistent.
+- **Keep procedures proportional.** Add steps and artifacts when they help achieve or verify the intended outcome.
+
+Make rules that govern agent behavior available through the relevant skills or hooks, and check that behavior through evaluations.
+
 ## Harness Design
 
 Build the harness around **skills, hooks, evals, and scripts**. References and documentation support those components. Commands and agent personas are outside the supported harness scope.
