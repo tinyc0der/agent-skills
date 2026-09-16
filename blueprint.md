@@ -128,8 +128,7 @@ Use these rules when implementing and reviewing the harness.
 - **Use simple English.** Write short, direct sentences in skills and documentation. Explain unfamiliar terms. Preserve exact commands, identifiers, and technical meaning.
 - **Make instructions actionable.** State when guidance applies, what to do, and how to know the work is complete.
 - **Make obligations clear.** Distinguish required steps, optional advice, and conditions that need human input.
-- **Keep skills self-contained.** Keep required instructions and supporting files inside each skill. Declare dependencies on other skills. External source links are allowed for attribution and update checks, but using the skill must not require fetching its original source.
-- **Track sources and review updates.** When adapting another skill, record its source, exact version or commit, local changes, and update history in maintenance documentation shipped with the skill, such as `README.md`. Keep this information separate from task instructions. Review newer versions and verify useful changes before adopting them. Record accepted and skipped changes, and track the last reviewed version separately from the adopted version.
+- **Track sources and review updates.** Record sources, adopted and reviewed versions, local changes, and update decisions in the skill's maintenance docs, such as `README.md`. Verify updates before adopting them.
 - **Give shared guidance one owner.** Reference its owning skill and keep dependent guidance consistent.
 - **Keep procedures proportional.** Add steps and artifacts when they help achieve or verify the intended outcome.
 
