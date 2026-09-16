@@ -290,8 +290,8 @@ Before an authorized merge:
 1. Follow explicit user instructions, then project policy. Carry recorded prohibitions and their sources across handoffs. Enabled methods and past PRs do not establish preference.
 2. Default to **rebase merge** when neither selects a method. Explicit merge-commit or squash choices remain valid. Local commit cleanup and PR merge method are separate decisions.
 3. Check availability and repository rules. If they conflict with the selected method, report the conflict and ask for a decision; never silently substitute.
-4. Record the method, policy source, and reviewed PR head in the existing merge record. Execute with an explicit method and a head guard, then add the actual invocation and resulting commit.
-5. Verify the landed result against the selected method, not just command success. For rebase, confirm the logical commits remain despite rewritten IDs. Report mismatches without retrying a completed merge or rewriting history.
+4. Record the method, policy source, target, and reviewed PR head in the existing merge record. Execute with an explicit method and a head guard, then add the actual invocation, outcome, and resulting commit.
+5. Verify the landed result against the selected method, not just command success. Queued merges remain pending. For rebase, confirm the logical commits remain despite rewritten IDs. Report mismatches without retrying a completed merge or rewriting history.
 
 For GitHub method flags and head guards, see [gh pr merge](https://cli.github.com/manual/gh_pr_merge).
 
