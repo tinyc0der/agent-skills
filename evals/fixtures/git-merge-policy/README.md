@@ -9,7 +9,7 @@ The local forge supports:
 
 ```sh
 node forge.cjs <scenario.json> view
-node forge.cjs <scenario.json> merge --rebase --match-head-commit <sha>
+node forge.cjs <scenario.json> merge <method-flag> --match-head-commit <sha>
 ```
 
 `view` returns repository settings, the pinned PR, and the actual integrated

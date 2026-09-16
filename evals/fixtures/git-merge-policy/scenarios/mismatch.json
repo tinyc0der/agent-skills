@@ -1,5 +1,4 @@
 {
   "request": "Complete the approved merge of PR #359.",
-  "projectPolicy": "Use rebase merges.",
-  "actualMethod": "squash"
+  "projectPolicy": "Use rebase merges."
 }
