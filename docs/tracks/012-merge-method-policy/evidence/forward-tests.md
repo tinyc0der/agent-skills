@@ -85,3 +85,24 @@ graphs. It performs no network or real Git merge. Live forge behavior, merge
 queues, concurrency races, and repeated-session compliance are not established
 by these probes. Fixture tests validate the fake's logging and rejection
 behavior; structural and routing checks remain separate evidence.
+
+## Readiness follow-up
+
+Revision `b598be5ee531f6c9088a8e27acd229086e60f36f` adds the final readiness
+transition. Three fresh native agents received only the complete frozen Git
+skill and one dialogue prompt each, with no expected answer or prior findings.
+They did not inspect other cases or perform live forge operations. The author
+inspected their saved responses against the case expectations.
+
+| Case | Observed decision | Result |
+| --- | --- | --- |
+| 3: ordinary completed implementation | Publish, create the missing PR, explicitly mark ready, and confirm its state without another request | PASS |
+| 13: user requests draft for a walkthrough | Retain draft and report the user's reason despite passing gates | PASS |
+| 2: verification predates the current head | Keep draft, refresh affected verification, then mark ready once gates pass | PASS |
+
+The frozen skill SHA-256 is
+`0e1353b722f2db1a3ee7fe9d65cd5a5c6d8a5e27346e62d6d3b93e19a7c19e94`.
+Prompts, responses, and their hash manifest are retained locally under
+`evals/results/merge-policy/readiness/` (ignored). These probes establish sampled
+decisions, not live state transitions or a reliability rate. The standard Claude
+executor/grader remains unavailable because the CLI is unauthenticated.

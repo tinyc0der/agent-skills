@@ -61,9 +61,16 @@ status: draft
   and pending queue status explicit: 162 words total. The final clarification
   was checked in source; it does not claim another behavioral run.
 - Owner feedback: completed PRs should be ready for review. The earlier handoff
-  stopped at draft after verification; transition PR #8 once the final checks pass.
+  stopped at draft after verification; PR #8 was marked ready at `2d00423`.
 - Integration: `960f255` brings in `main` at `47b1bbc`. Resolve the adjacent
   delegation bullets by retaining both the merge-policy handoff and the updated
   stopping condition. Move this track to `012` because merged work owns `011`.
   The merge procedure and its fixtures are unchanged. All 74 tests and repository
   validators pass; routing now checks 171 cases at 98% rank-1 (104/106).
+- Owner requested a reusable correction. At `b598be5`, the Git skill makes
+  readiness part of the final implementation handoff once its existing gates
+  pass. Explicit draft-only and phase limits still control scope. The router,
+  lifecycle guide, and canonical contract reference that owner; no gate was added.
+  All 74 tests and validators pass. Three fresh dialogue probes cover readiness,
+  requested draft state, and stale evidence; they do not claim forge execution.
+  Independent review found no blocking issue. Keep PR #8 ready after publication.
