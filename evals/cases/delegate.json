@@ -13,6 +13,10 @@
       {
         "prompt": "Supervise the remaining phases across agent sessions and wait for each result before starting the next one.",
         "top_k": 3
+      },
+      {
+        "prompt": "Delegate this approved task once and return after handing it to the worker.",
+        "top_k": 1
       }
     ],
     "negative": [
@@ -42,7 +46,56 @@
         "The plan gives local sessions file and section references to the accepted requirements and plan, directs them to read the assigned lifecycle skills, and includes a shared handoff template tied to the worktree, target state, and existing phase reports; it does not create a parallel handoff store or require copying complete source documents into each prompt",
         "The plan requires an independent verifier report tied to the implementation revision and blocks review and final acceptance on FAIL or INCOMPLETE",
         "Blocking findings return to the implementation runner, followed by verification and review of the changed revision; the coordinator retains final acceptance",
-        "The only created project artifact is delegate/delegation-plan.md; no agent is launched, no Orca runtime state is created, and no task or dispatch completion is fabricated"
+        "The only created project artifact is delegate/delegation-plan.md; no agent is launched, no Orca runtime state is created, and no task or dispatch completion is fabricated",
+        "The coordinated plan uses a fresh session for every phase and repair, sends one complete task packet, and preserves necessary blocking replies without routine follow-up prompts"
+      ]
+    },
+    {
+      "id": 2,
+      "kind": "execution",
+      "prompt": "Use delegate to resolve the recorded handoff in delegate/one-shot.md. Write only delegate/one-shot-decision.md. This is an isolated decision exercise; do not contact Orca or any external service.",
+      "expected_output": "A handoff decision ending the parent turn at confirmed delivery, without monitoring or unsolicited prompts, and assigning later repair to a fresh bounded session",
+      "files": [
+        "delegate"
+      ],
+      "expectations": [
+        "Creates delegate/one-shot-decision.md and performs no live runtime calls, messages, worker launches, or other project mutations",
+        "Treats accepted prompt delivery as the parent handoff endpoint and reports the recorded session/worktree and implementation.md destination without claiming implementation success",
+        "Rejects periodic terminal checks, completion waits, unsolicited reminders, and creating Run/Task/Dispatch state for this handoff",
+        "Assigns later repair to a fresh session with the saved artifacts and a bounded packet, after resolving prior ownership and proving the previous attempt ended before another writer starts"
+      ]
+    },
+    {
+      "id": 3,
+      "kind": "execution",
+      "prompt": "Use delegate to assess delegate/missing-completion.md. Write only delegate/recovery-decision.md with actionable decisions for each recorded attempt. Do not execute recovery or contact external services.",
+      "expected_output": "Evidence-based recovery decisions separating proven termination, unverifiable liveness, and replayed delivery without fabricated completion or follow-up prompts",
+      "files": [
+        "delegate"
+      ],
+      "expectations": [
+        "Creates delegate/recovery-decision.md without runtime mutation, messages, worker launches, or implementation edits",
+        "Keeps A unknown or incomplete despite its saved report, preserves artifacts, follows the live missing-report recovery contract, and blocks dependent verification/review until the implementation result is authoritatively resolved and accepted",
+        "Keeps B unverifiable; timeout, idle, and contact loss do not justify stop, release, success, or a duplicate implementation worker",
+        "Handles C as replay of the original accepted attempt rather than dispatching work again or creating a new lifecycle completion",
+        "Rejects prompting old sessions to send done or continue; any authorized recovery uses a fresh session and artifacts after the prior attempt settles or is confirmed stopped",
+        "Identifies independent attempt-end detection and durable notification delivery as runtime responsibilities, distinguishes them from work acceptance, and does not claim the recorded runtime already provides them or fabricate worker_done"
+      ]
+    },
+    {
+      "id": 4,
+      "kind": "execution",
+      "prompt": "Use delegate to prepare the readiness decision requested in delegate/runtime-capability.md. Write only delegate/runtime-decision.md using the recorded runtime facts; do not launch workers or contact external services.",
+      "expected_output": "A concrete capability-gap decision that prepares the requested phase mapping without promising unattended continuation, silently switching to polling, or reducing the assignment",
+      "files": [
+        "delegate"
+      ],
+      "expectations": [
+        "Creates delegate/runtime-decision.md without requiring live runtime access, launching workers, changing external state, or implementing a watcher",
+        "Preserves Codex planning/review and separate OpenCode implementation/verification sessions while identifying execution as pending for the requested unattended progression",
+        "Does not treat durable enqueue, a Run, or best-effort wake as independent attempt-end detection or guaranteed coordinator resumption",
+        "Names the missing runtime capabilities and prepares safe task or phase context instead of inventing commands or promising the child will always send completion",
+        "Presents the needed endpoint choice between supported explicit supervision and a one-shot handoff, or retaining the original request pending runtime support; does not silently select a polling loop or drop dependent phases"
       ]
     }
   ]
