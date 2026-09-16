@@ -9,11 +9,14 @@ status: draft
 
 ## Resume
 
-- Phase: source correction implemented; isolated execution evals in progress.
+- Phase: simplification, refreshed verification, and agent review complete;
+  draft PR awaits repository review.
 - Worktree: `galeocerdo`, branch `tinyc0der/fix-merge-method-policy`, based on
   `0e9bac9`; the primary checkout remains on `main`.
-- Scope and criteria: [bug.md](bug.md). Next: inspect behavioral probe actions,
-  record verification and review, and update the draft PR.
+- Scope and criteria: [bug.md](bug.md). Evidence: [verification.md](verification.md)
+  and [review.md](review.md). Next: repository review of
+  [draft PR #8](https://github.com/tinyc0der/agent-skills/pull/8), then separately
+  authorized merge and release.
 
 ## Notes
 
@@ -38,7 +41,22 @@ status: draft
   merge and verified its three logical changes. It did not reproduce the prior
   incident. Its record chose linear history by agent judgment; the new owner
   decision makes that choice a documented fallback rather than an inference.
-- Verification so far: 74 Node tests pass, all repository validators pass,
+- Verification: 74 Node tests pass, all repository validators pass,
   170 routing checks retain 98% rank-1, the hook and plugin checks pass, and
-  both changed skills pass the skill-creator validator. Behavioral evidence is
-  still being collected separately.
+  both changed skills pass the skill-creator validator. All eight behavioral
+  scenarios were repeated after simplification and pass action/record inspection.
+- Review refinement: moved simulated fault configuration out of the assigned
+  request and removed the rebase hint from the CLI example. A fresh neutral
+  comparison chose merge under the old skill and the documented rebase fallback
+  under the updated skill. See [forward tests](evidence/forward-tests.md) for
+  exact evidence and limitations.
+- No Critical or Required review findings remain. Original implementation:
+  `689a0d3`; fixture refinements: `3ee379d`; simplified-procedure probes:
+  `a296cd3`; final source clarification: `532dce2`. Evidence records distinguish
+  these revisions. The installed cache remains unchanged.
+- Owner feedback: the method procedure was too complicated. At `a296cd3`,
+  shortened it from 503 to 156 words, removed repeated cautions and detailed
+  mechanics, and retained the five essential decisions. All existing cases
+  passed again. Final review restored six words to make record target/outcome
+  and pending queue status explicit: 162 words total. The final clarification
+  was checked in source; it does not claim another behavioral run.
