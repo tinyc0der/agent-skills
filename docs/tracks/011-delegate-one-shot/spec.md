@@ -3,7 +3,7 @@ type: Change Specification
 title: One-shot delegation and missing completion recovery
 description: Bound delegated sessions and separate prompt delivery, attempt termination, and accepted work.
 status: draft
-workflow_status: in_progress
+workflow_status: awaiting_merge
 ---
 
 # One-shot delegation and missing completion recovery

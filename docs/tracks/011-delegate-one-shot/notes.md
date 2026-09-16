@@ -43,3 +43,13 @@ status: draft
   to stop when blocked. Clarified the packet's stopping condition to include
   the live ask/reply mechanism before declaring an unresolved blocker. Rerun
   that scenario in a fresh session; the other three scenarios passed inspection.
+- The fresh coordinated-plan rerun includes blocking ask/reply in the shared
+  packet before declaring an unresolved blocker. Final artifact review meets
+  23/23 expectations across four scenarios; see
+  [forward-test evidence](evidence/forward-tests.md) for method and limits.
+- Implementation revision: `6ff4dfef8f16061c4c757b2ee0cec1d44e6fa2c3`.
+  [Verification](verification.md) passes for the instruction contract and
+  [author review](review.md) has no unresolved Critical or Required findings.
+- [Draft PR #9](https://github.com/tinyc0der/agent-skills/pull/9) carries the scoped
+  change. Remaining work is repository review and authorized merge; runtime-owned
+  completion notification remains deferred to Orca.
