@@ -215,6 +215,19 @@ codex plugin marketplace remove agent-skills
 </details>
 
 <details>
+<summary><b>Grok Build</b></summary>
+
+Install as a native Grok Build plugin:
+
+```bash
+grok plugin install tinyc0der/agent-skills
+```
+
+Accept the trust prompt, then start a new Grok session. Open `/skills` to browse the installed skills, or invoke one directly, such as `/spec-driven-development`. See [docs/grok-setup.md](docs/grok-setup.md) for local installation, verification, updates, removal, and troubleshooting.
+
+</details>
+
+<details>
 <summary><b>Command Code</b></summary>
 
 Install natively with the built-in `cmd skills` command. Command Code clones the repo, discovers every `SKILL.md`, and installs into `.commandcode/skills/`:
@@ -426,7 +439,7 @@ agent-skills/
 ├── .claude/commands/                  # 11 slash commands (Claude Code)
 ├── .gemini/commands/                  # 11 slash commands (Gemini CLI)
 ├── commands/                          # 11 slash commands (Antigravity CLI)
-├── plugin.json                        # Antigravity plugin manifest
+├── plugin.json                        # Shared plugin manifest
 └── docs/                              # Setup guides per tool
 ```
 
