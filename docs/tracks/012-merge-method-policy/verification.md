@@ -7,7 +7,8 @@ status: draft
 
 # Verification: PASS
 
-Implementation revision: `532dce246ae29155c6677b2fdb7f7f4b94c2d4d8`.
+Implementation revision: `960f255f7dea29f0990d79a194e4793fa5589a61`.
+This integrates the verified correction at `532dce2` with `main` at `47b1bbc`.
 Execution probes were refreshed at `a296cd3` after simplification. The final
 six-word record/queue clarification received source review and static checks;
 see the [execution evidence](evidence/forward-tests.md) for revision boundaries.
@@ -31,9 +32,9 @@ and lifecycle guide reference the Git skill's canonical procedure.
 
 - PASS — `node --test scripts/*-test.js scripts/lib/*-test.js`: 74 tests,
   none skipped. Rerun after fixture adjustments and simplification using the
-  dot reporter.
-- PASS — `node scripts/run-evals.js --min-rank1 95`: 170 checks; 98%
-  rank-1 (103/105); the 95% floor and existing cases are unchanged.
+  dot reporter, then again after integration.
+- PASS — `node scripts/run-evals.js --min-rank1 95`: 171 checks; 98%
+  rank-1 (104/106) after integration; the 95% floor and existing cases are unchanged.
 - PASS — `node scripts/validate-skills.js`, `validate-versions.js`,
   `validate-reference-links.js`, `validate-markdown-links.js`,
   `validate-commands.js`, `validate-artifact-paths.js`, and
@@ -48,6 +49,16 @@ and lifecycle guide reference the Git skill's canonical procedure.
 - NOT RUN — the standard `--behavioral git-workflow-and-versioning` Claude
   executor/grader path: CLI unauthenticated. Its dry-run passed; native forward
   tests supply behavioral evidence for the eight changed-scope cases.
+
+## Integration verification
+
+The author checked the conflict resolution against both parents. The delegation
+skill keeps `main`'s stopping condition and this PR's single merge-policy handoff
+bullet. The merge decision, fixtures, and action-based cases are byte-identical
+to `fd28bbf`; their recorded behavioral evidence remains applicable within the
+revision boundaries above. Repository gates were rerun after integration, and
+the delegation skill passed its format validator. Track `012` replaces this
+branch's conflicting `011` allocation; artifact and link validators pass.
 
 ## Conditional checks and limitations
 
