@@ -200,6 +200,18 @@ codex plugin marketplace upgrade agent-skills
 codex plugin add agent-skills@agent-skills
 ```
 
+To uninstall the plugin and remove its local cache:
+
+```bash
+codex plugin remove agent-skills@agent-skills
+```
+
+Optionally, remove the marketplace registration too:
+
+```bash
+codex plugin marketplace remove agent-skills
+```
+
 </details>
 
 <details>
