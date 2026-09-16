@@ -9,13 +9,13 @@ status: draft
 
 ## Resume
 
-- Phase: simplification, refreshed verification, and agent review complete;
-  draft PR awaits repository review.
+- Phase: implementation, integration verification, and agent review complete;
+  PR prepared for repository review.
 - Worktree: `galeocerdo`, branch `tinyc0der/fix-merge-method-policy`, based on
-  `0e9bac9`; the primary checkout remains on `main`.
+  `0e9bac9`, integrated with `main` at `47b1bbc`; the primary checkout remains on `main`.
 - Scope and criteria: [bug.md](bug.md). Evidence: [verification.md](verification.md)
   and [review.md](review.md). Next: repository review of
-  [draft PR #8](https://github.com/tinyc0der/agent-skills/pull/8), then separately
+  [PR #8](https://github.com/tinyc0der/agent-skills/pull/8), then separately
   authorized merge and release.
 
 ## Notes
@@ -60,3 +60,10 @@ status: draft
   passed again. Final review restored six words to make record target/outcome
   and pending queue status explicit: 162 words total. The final clarification
   was checked in source; it does not claim another behavioral run.
+- Owner feedback: completed PRs should be ready for review. The earlier handoff
+  stopped at draft after verification; transition PR #8 once the final checks pass.
+- Integration: `960f255` brings in `main` at `47b1bbc`. Resolve the adjacent
+  delegation bullets by retaining both the merge-policy handoff and the updated
+  stopping condition. Move this track to `012` because merged work owns `011`.
+  The merge procedure and its fixtures are unchanged. All 74 tests and repository
+  validators pass; routing now checks 171 cases at 98% rank-1 (104/106).

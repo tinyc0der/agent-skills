@@ -8,6 +8,7 @@ status: draft
 # Review: no blocking findings
 
 Implementation revision: `532dce246ae29155c6677b2fdb7f7f4b94c2d4d8`.
+Integration revision: `960f255f7dea29f0990d79a194e4793fa5589a61`.
 
 A separate GPT-5.6 reviewer inspected the source correction and fixture
 adjustments read-only using code-review-and-quality and test-case-design-review,
@@ -28,6 +29,13 @@ The fake does not implement the policy under test: it accepts implicit squash
 and records failed attempts. The lifecycle contract is reconciled and other
 consumers link to the canonical owner. No runtime dependency, live integration,
 or unrelated configuration change was introduced.
+
+The author reviewed integration with `main` at `47b1bbc`: the resolved
+delegation file differs from `main` by only the existing merge-policy handoff
+bullet. The canonical method procedure and fixtures are unchanged. Track `012`
+resolves the concurrent number allocation, all affected repository checks pass,
+and no new blocking finding remains. This integration check does not claim a
+new independent behavioral run.
 
 Verdict: suitable for repository review. This report is agent review evidence,
 not human approval or authorization to merge the PR.
