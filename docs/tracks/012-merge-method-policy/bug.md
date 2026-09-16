@@ -3,7 +3,7 @@ type: Bug Report
 title: Traceable pull request merge methods
 description: Resolve, execute, record, and verify a merge method before completing a pull request merge.
 status: draft
-workflow_status: in_progress
+workflow_status: awaiting_review
 ---
 
 # Traceable pull request merge methods
@@ -53,6 +53,7 @@ the fake forge.
 ## Spec reconciliation
 
 Owner: [Feature Development Workflow](../../specs/feature-development-workflow/spec.md).
-Update its merge contract and the lifecycle guide to reference the Git skill's
+Updated its merge contract and the lifecycle guide to reference the Git skill's
 canonical procedure. The delegation skill carries the effective policy to the
-integration owner without duplicating resolution rules.
+integration owner without duplicating resolution rules. Verification and review
+are recorded in [verification.md](verification.md) and [review.md](review.md).
