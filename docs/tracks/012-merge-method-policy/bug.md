@@ -22,6 +22,12 @@ history and the installed cache. The owner selected **rebase merges** as the
 harness fallback in this conversation: linear history with rewritten commit IDs.
 This does not prohibit an explicitly selected squash or merge commit.
 
+Follow-up evidence: PR #8 remained in draft after verified implementation until
+the owner requested readiness. The existing default handoff explicitly included
+a draft PR but did not require its final readiness transition. Clarify that
+transition without adding another approval gate or changing explicit draft-only
+and phase-limited requests.
+
 ## Acceptance criteria
 
 1. The Git skill owns one procedure: resolve explicit user instructions and
@@ -40,6 +46,9 @@ This does not prohibit an explicitly selected squash or merge commit.
    no-squash instruction; old squash history versus current prohibition;
    project merge policy; explicit squash; local squashing; incompatible enabled
    methods. Also cover the newly chosen default and a mismatched actual result.
+6. Ordinary implementation ends with a ready PR once the existing readiness
+   gates pass, without another user request. Confirm its actual state and explain
+   any remaining draft state. Preserve explicit draft-only and other scope limits.
 
 ## Test selection
 
@@ -50,10 +59,17 @@ to ensure rejected attempts remain visible and head guards work. Do not test
 policy by matching Markdown phrases or implement a second policy resolver in
 the fake forge.
 
+Extend the existing final-handoff decision eval to catch stopping at draft with
+all gates satisfied. Add its explicit draft-only boundary; retain the existing
+stale-evidence and no-push cases. These dialogue cases check decisions, not live
+forge mutations.
+
 ## Spec reconciliation
 
 Owner: [Feature Development Workflow](../../specs/feature-development-workflow/spec.md).
 Updated its merge contract and the lifecycle guide to reference the Git skill's
 canonical procedure. The delegation skill carries the effective policy to the
-integration owner without duplicating resolution rules. Verification and review
+integration owner without duplicating resolution rules. The readiness follow-up
+updates the same lifecycle contract and links the router and guide to the Git
+skill's existing gates. Verification and review
 are recorded in [verification.md](verification.md) and [review.md](review.md).

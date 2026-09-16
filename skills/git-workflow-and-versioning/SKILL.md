@@ -214,7 +214,7 @@ This pattern catches wrong assumptions early and gives reviewers a clear map of 
 
 A pull request is the durable handoff between implementation, verification, review, and merge. Open it as a draft after the approved plan or first coherent implementation commit; do not wait until the entire diff is difficult to review.
 
-For an ordinary repository implementation request, the scoped push and draft-PR handoff are included once the intended repository, base branch, and access are established. Do not wait for another PR command or ask the user to repeat that authorization. Honor explicit local-only, no-push, review-only, and phase-limited requests. A local-only endpoint written by the agent in its own spec or notes cannot narrow this default without a user or project constraint. Merge and deployment keep their separate authorization requirements.
+For an ordinary repository implementation request, the scoped push and PR handoff are included once the intended repository, base branch, and access are established. Do not wait for another PR command or ask the user to repeat that authorization. Honor explicit local-only, no-push, review-only, and phase-limited requests. A local-only endpoint written by the agent in its own spec or notes cannot narrow this default without a user or project constraint. Merge and deployment keep their separate authorization requirements.
 
 ### Draft
 
@@ -264,11 +264,11 @@ The draft body should stand alone:
 
 Use a temporary file for CLI body input instead of interpolating Markdown or untrusted text into a shell command. Invoking `/pr draft` authorizes the scoped push and PR creation/update, but not merge or deploy.
 
-Before the final implementation response, confirm the remote branch contains the current scoped commits and the PR body reflects their evidence. Return the PR URL and revision. If the PR handoff is excluded by an explicit scope limit or blocked by access, destination, or ownership, state that concrete reason and what preparation is complete; do not finish with an offer to create the PR later.
+Before the final implementation response, confirm the remote branch contains the current scoped commits and the PR body reflects their evidence. Return the PR URL, revision, and confirmed review state; explain any remaining draft state. If the PR handoff is excluded by an explicit scope limit or blocked by access, destination, or ownership, state that concrete reason and what preparation is complete; do not finish with an offer to create the PR later.
 
 ### Ready for review
 
-Mark a draft ready only when:
+For ordinary implementation requests, mark the PR ready before the final handoff without waiting for `/pr ready`, unless the user requested a draft-only or phase-limited endpoint. All of these gates must pass:
 
 - The working tree is clean and the remote contains the exact local head
 - A `verification-and-validation` PASS report names that head revision
