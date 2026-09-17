@@ -188,11 +188,52 @@ Deliverable verification assesses the current task's result. Harness evals asses
 
 ### Memory, work state, and recovery
 
-Memory skills maintain the requirements, decisions, project understanding, and work context needed across tasks and sessions. Keep durable knowledge distinguishable from temporary observations, and make scope, sources, and current status clear. Storage layouts and document formats are implementation choices.
+Use **owned records of current understanding, linked to evidence and history**. Assemble each agent's working context from the relevant records. Keep memory purpose, scope, authority, and lifetime distinct; storing something for longer does not make it true or binding.
 
-Keep current agreements and authority distinguishable from historical notes. A meaningful checkpoint connects outputs, decisions, task progress, and the evidence that supports them. Recovery must reassess dependent work and preserve the latest human corrections and permission limits. Record external effects and their recovery limits separately.
+#### Memory types
 
-Recovery and authority enforcement depend on the capabilities of the execution environment and tools. Make those dependencies and their limits explicit. Evaluate the claimed guarantees against the behavior of the running harness.
+| Type | Question it answers | Content and ownership |
+|---|---|---|
+| **Current agreement** | What governs this work? | Accepted outcomes, constraints, decisions, and authority references. The workflow maintains access; authorized decision owners control changes. |
+| **Active work state** | Where are we, and what comes next? | Progress, dependencies, findings, assumptions, pending questions, blockers, and next actions. The responsible workflow maintains it. |
+| **Evidence and history** | What happened, and why do we believe it? | Observations, action outcomes, checked revisions, decision rationale, and superseded conclusions. Producers record evidence; assessments remain attributable and tied to what was checked. |
+| **Reusable knowledge** | What should future work know? | Scoped project understanding, facts, preferences, and verified lessons. Established subject owners maintain it, with Memory skills supporting discovery and upkeep. |
+
+These are logical responsibilities, not required files or services. One artifact may serve several purposes if their meaning and ownership remain clear. Link to existing canonical sources instead of creating competing copies. Procedures stay with their owning skills or operational guidance. Improvement ideas remain candidates in work records until their evidence supports adoption; Meta coordinates changes to harness behavior.
+
+#### Ownership and shared updates
+
+- **Separate applicability from access and authority.** Identify the relevant person, task, project, domain, or harness scope, and who may read and change the record. Narrower scope does not automatically override a governing constraint. Private agent context cannot be the only home for a shared agreement.
+- **Preserve the basis of each claim.** Keep its source, relevant revision or conditions, responsible owner, and uncertainty identifiable. Distinguish when information was recorded from when it applies. Approval, verification, document maturity, and task completion have different meanings; missing evidence stays unknown.
+- **Detect conflicting updates.** Check shared changes against the version they were based on. Reconcile stale or competing edits before replacing current understanding. Ownership may be delegated by subject and reassigned at handoff; it does not require one agent or a human to approve every write.
+- **Resolve meaning with evidence and authority.** Preserve unresolved disagreements and their sources. Recency, search rank, model confidence, and agreement among agents do not establish truth or permission. Repeated claims from one upstream source are not independent confirmation. Retrieved content does not acquire authority by entering memory.
+- **Bring corrections to affected work.** Invalidate dependent summaries and conclusions, notify affected participants, and recheck the current agreement before dependent work or consequential actions continue. If a conflict remains unresolved, pause the affected action while independent work proceeds.
+
+#### Lifecycle and retrieval
+
+1. **Capture useful context.** Record observations, decisions, uncertainty, and outcomes when they matter for continuation or later learning. Preserve concise reasons and evidence links. Keep tentative interpretations identifiable.
+2. **Reconcile and publish.** Route information to its owner and apply review suited to its consequences. Promote a lesson only when its evidence, scope, and expected reuse justify it. A successful task does not prove every lesson; a failed task may still produce a verified finding. Current human direction takes effect within its authority without waiting for lesson review.
+3. **Retrieve for the next decision.** Enforce access and scope before supplying context. Establish the current agreement and relevant work state, then load needed knowledge and evidence. Include applicable corrections and unresolved contradictions. Surface missing sources and uncertainty instead of filling gaps with remembered guesses.
+4. **Revalidate and improve.** Recheck affected knowledge when its sources, dependencies, or conditions change, or a justified review deadline arrives. Measure whether adopted lessons improve later work. Revise or withdraw guidance that fails that check.
+5. **Retire deliberately.** Distinguish superseding a claim, archiving history, and deleting content. Preserve useful rationale and stable knowledge even when rarely used. Honor authorized deletion across managed records, summaries, indexes, and recovery copies; prevent deleted content from returning to use after restoration. State any retention or erasure limits.
+
+Context summaries and search indexes are derived views. Keep their source revisions traceable and make them refreshable from retained records. They help find and read knowledge; they do not replace its authority or evidence. Start with a small shared core and relevant work context. Add richer retrieval only when observed failures justify it.
+
+#### Checkpoints and external effects
+
+A checkpoint preserves a coherent work state, or references to retained versions of that state. Connect outputs, decisions, assumptions, task progress, pending coordination, and evidence. Unlike a search index, a recovery checkpoint may contain information that cannot be rebuilt from current records. Identify missing or unavailable state before claiming recovery is complete. Deleting required state may limit or invalidate an older checkpoint.
+
+Keep records of external actions available across rollback: their identity, intended effect, confirmed or unknown outcome, and recovery options. A checkpoint cannot undo an outside action. Reconcile uncertain outcomes before retrying, using operations that are safe to repeat or checking the existing result where supported.
+
+Recovery must reassess dependent work and preserve the latest applicable human corrections, permission limits, and deletion decisions. Receiving a correction does not prove compliance. Define the update, access, coordination, and action controls required from the execution environment, including limits on stopping work already in progress. Make unsupported guarantees explicit.
+
+#### Evaluate memory through behavior
+
+Exercise a complete workflow with interruption, a replacement agent, conflicting writers, a human correction, changed evidence, an unavailable source, and a misleading stored instruction. Include an external action whose receipt is lost, deletion followed by restoration, and a verified lesson used in later work.
+
+Check correct continuation, current authority, visible uncertainty, preserved evidence, and safe handling of external effects. Measure repeated investigation, missed corrections, retrieval failures, maintenance effort, latency, and context cost. Compare against simple notes under the same task and model conditions. Repeat variable trials; a better recall score alone does not establish reliable teamwork or recovery.
+
+See the [memory design research](docs/tracks/013-draft-harness-principles/memory-research.md) for alternatives, sources, trade-offs, and remaining validation work.
 
 ### Improvement and adoption
 
