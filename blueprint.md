@@ -132,6 +132,7 @@ Use these rules when implementing and reviewing the harness.
 - **Track sources and review updates.** Record sources, adopted and reviewed versions, local changes, and update decisions in the skill's maintenance docs, such as `README.md`. Verify updates before adopting them.
 - **Give shared guidance one owner.** Reference its owning skill and keep dependent guidance consistent.
 - **Keep procedures proportional.** Add steps and artifacts when they help achieve or verify the intended outcome.
+- **Automate repeatable work.** Use tested automation for frequent steps with clear inputs, checks, and outcomes. Use agents for decisions and exceptions that need judgment. Preserve progress and evidence so work can resume after recovery.
 
 Make rules that govern agent behavior available through the relevant skills or hooks, and check that behavior through evaluations.
 
