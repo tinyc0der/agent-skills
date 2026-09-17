@@ -195,8 +195,20 @@ Recovery and authority enforcement depend on the capabilities of the execution e
 
 ### Improvement and adoption
 
-Capture observations with the work that produced them. Route verified facts into scoped knowledge through Memory, procedural corrections into the owning skill, and execution or event-handling fixes into the responsible component or integration. Meta skills coordinate the assessment and improvement process within the agreed authority.
+Capture observations with the work that produced them. Use the cause of a problem to choose where to make a change. These areas guide improvements across the existing components; several areas may need to change together. Meta skills coordinate the assessment and improvement process within the agreed authority.
 
-Compare a proposed behavior change with the previous approach on the original failure and related situations. Identify the version evaluated and verify that future sessions receive and apply the improvement. Preserve a way to withdraw changes that increase mistakes, rework, or unnecessary effort.
+| Area | What to improve | Example |
+|---|---|---|
+| **Skills** | Instructions, decision criteria, and workflows. | Clarify an unclear completion rule. |
+| **Memory** | Stored facts, decisions, and lessons within their relevant scope. | Correct an outdated project test command. |
+| **Automation: scripts and hooks** | Repeatable operations, checks, and event triggers. | Run validation before a commit. |
+| **Evaluations** | Scenarios and expectations that show whether the harness works. | Check whether the agent reports a failed test honestly. |
+| **Tools and execution environment** | Available capabilities and controls, where changes are possible and authorized. | Provide a missing browser tool or reliable checkpoints. |
+
+- **Distinguish memory content from memory procedures.** Route verified facts into scoped knowledge through Memory. Correcting a stored fact changes memory. Improving how facts are retrieved or maintained changes the responsible skill, script, or hook.
+- **Treat scripts and hooks as automation.** Lint checks can follow fixed rules. Hooks respond to events and may invoke a model whose output varies, so the work they start is not always deterministic.
+- **Check how guidance reaches the agent.** When correct guidance is missed, inspect skill selection and context loading. Improve the part responsible for delivering that guidance.
+
+Fix the part that caused the problem. Use evaluations to compare a proposed behavior change with the previous approach on the original failure and related situations, including checks for new failures. Identify the version evaluated and verify that future sessions receive and apply the improvement. Preserve a way to withdraw changes that increase mistakes, rework, or unnecessary effort.
 
 First demonstrate the structure through one complete workflow. Exercise human correction, interruption, resumption, a late-discovered mistake, recovery, and a verified lesson used in a later session. Use the results to decide which capabilities need strengthening before expanding the catalog or team size.
