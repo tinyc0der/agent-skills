@@ -50,7 +50,11 @@ Record the revision or working-tree state being verified. Read:
 
 If the target changes after a check runs, rerun each affected check. Evidence belongs to a revision, not merely to a feature name.
 
-**Initiative vs child.** Apply the [delivery fork](../using-agent-skills/SKILL.md#delivery-fork). Child `/verify` is Feature verification of that child's revision. Parent `/verify` evaluates initiative integration acceptance against an assembled revision that includes the required merged children. Cite child `docs/tracks/<track-id>/verification.md` files as supporting evidence. A child PASS does not make the parent PASS. Missing required children, or substituting child reports for integration evidence, is INCOMPLETE. Integration failures stay on the parent track.
+**Initiative vs child.** Apply the [delivery fork](../using-agent-skills/SKILL.md#delivery-fork). Child `/verify` is Feature verification of that child's revision.
+
+Parent **planning** `/verify` (docs PR before children exist) traces artifact completeness only: capability map, initiative spec, child-track index, stub ids, and shared-contract notes. Runtime integration is NOT APPLICABLE. That completeness PASS may mark the planning PR ready.
+
+Parent **integration** `/verify` runs after required children have merged. Freeze the **assembled revision** as the remote default-branch head that includes those children. Cite child `docs/tracks/<track-id>/verification.md` files as supporting evidence. A child PASS does not make the parent PASS. Missing required children, or substituting child reports for integration evidence, is INCOMPLETE. Record the integration report on a follow-up parent docs PR; do not attach parent PASS to a child PR. Integration failures stay on the parent track.
 
 ### 2. Build an acceptance trace
 
@@ -202,4 +206,4 @@ Before declaring the feature ready for review:
 - [ ] No required check is FAIL or NOT RUN for a PASS verdict
 - [ ] The report contains enough evidence for a reviewer to reproduce the decision
 - [ ] The report is saved to `docs/tracks/<track-id>/verification.md` and names its implementation revision
-- [ ] An initiative parent report evaluates assembled-revision integration criteria; child PASS reports are citations only
+- [ ] An initiative parent **planning** report traces artifact completeness; an initiative parent **integration** report evaluates assembled-revision criteria (remote default-branch head with required children merged); child PASS reports are citations only

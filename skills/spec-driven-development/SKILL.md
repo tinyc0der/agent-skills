@@ -50,12 +50,12 @@ Most requests describe one capability. If this one does, skip this phase and go 
 ```markdown
 ---
 type: Capability Map
-title: "[Initiative] capability map"
-description: "Capability boundaries, dependencies, and build order for [initiative]."
+title: "[Feature] capability map"
+description: "Capability boundaries, dependencies, and build order for [feature]."
 status: draft
 ---
 
-# Capability Map: [Initiative Name]
+# Capability Map: [Feature Name]
 
 | Module id | Responsibility | Depends on | Delivery | Canonical path |
 |---|---|---|---|---|
@@ -132,7 +132,7 @@ title: "[Change] specification"
 description: "Proposed requirements and acceptance criteria for [change]."
 status: draft
 workflow_status: planned
-role: feature
+role: feature  # or initiative
 ---
 
 # Spec: [Project/Feature Name]

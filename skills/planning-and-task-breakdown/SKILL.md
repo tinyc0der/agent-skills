@@ -70,7 +70,9 @@ Read the capability map's Delivery column and the [delivery fork](../using-agent
 4. Create each child directory with a stub `docs/tracks/<track-id>/spec.md` (`role: feature`, `parent:` set to the initiative id) to reserve the id. Detailed child specs, plans, and tasks wait for that child's Feature `/spec` and `/plan` unless the parent already recorded a bounded child.
 5. Set `role: initiative` on the parent spec if missing.
 
-When the active track is already a child (`parent:` set), plan that child's tasks only.
+**Stop.** Do not run Steps 4–6 on an Epic parent. Hand off to `/build`, which opens the next child. A parent plan is complete when the child index, order, shared contracts, and integration checkpoints are recorded. Check parent planning against the parent verification list below, not the Feature task checklist.
+
+When the active track is already a child (`parent:` set), continue at Step 4 for that child's tasks only.
 
 ```markdown
 ## Children
@@ -81,7 +83,7 @@ When the active track is already a child (`parent:` set), plan that child's task
 - [ ] Parent `/verify` on the assembled revision after required children merge
 ```
 
-### Step 4: Slice Vertically
+### Step 4: Slice Vertically (Feature and child tracks only)
 
 Instead of building all the database, then all the API, then all the UI — build one complete feature path at a time:
 
@@ -201,6 +203,10 @@ The task list target is where tasks and checkpoints are recorded. It is defined 
 
 When using an external tracker, note it in `docs/tracks/<track-id>/plan.md` (e.g. "Tasks tracked in Linear project FOO") so downstream steps and future sessions know where to look. Keep both the plan's Task List section and `docs/tracks/<track-id>/todo.md` as compact ordered indexes rather than duplicate checklists.
 
+## Plan Document Template (Feature and child tracks)
+
+An Epic parent `docs/tracks/<track-id>/plan.md` records child order, shared contracts, and integration checkpoints — not this implementation-task template.
+
 ## Plan Document Template
 
 ```markdown
@@ -295,7 +301,16 @@ When multiple agents or sessions are available:
 
 ## Verification
 
-Before starting implementation, confirm:
+**Epic parent** (stop after Step 3; do not require implementation tasks):
+
+- [ ] Each independently deliverable row has a unique child track id in the map, parent `children` list, and parent `docs/tracks/<track-id>/todo.md`
+- [ ] Parent `docs/tracks/<track-id>/plan.md` records child order, shared contracts, and integration checkpoints
+- [ ] Parent `docs/tracks/<track-id>/todo.md` indexes child tracks, not identity/billing/notifications/reporting task bodies
+- [ ] Child stub specs exist with `role: feature` and `parent:` set
+- [ ] Production-affecting work has an initialized parent `docs/tracks/<track-id>/ship.md`
+- [ ] No pre-existing incomplete plan was overwritten without explicit user confirmation
+
+**Feature and child tracks:**
 
 - [ ] Every task has acceptance criteria
 - [ ] Every task has a verification step
