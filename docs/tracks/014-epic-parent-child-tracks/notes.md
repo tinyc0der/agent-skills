@@ -9,8 +9,8 @@ status: draft
 
 ## Resume
 
-- Phase: BUILD complete; local validators passed
-- Next action: Commit on tinyc0der/epic-child-tracks; draft PR if authorized
+- Phase: REVIEW fix
+- Next action: Commit R1–R3 fixes on tinyc0der/epic-child-tracks and push PR #12
 - Sources: this track spec; `using-agent-skills` Epic section; user design for flat parent/child artifacts
 
 ## Notes

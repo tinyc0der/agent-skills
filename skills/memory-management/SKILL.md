@@ -124,7 +124,7 @@ Optional track-graph fields on track `spec.md` and `bug.md` (omit on historical 
 
 | Field | Meaning |
 | --- | --- |
-| `role` | `initiative`, `feature`, `bug`, or `task` |
+| `role` | `initiative`, `feature`, `bug`, or `task`. Epic parents use `initiative`, never `epic`. |
 | `parent` | Track id of the initiative this change belongs to |
 | `children` | List of child track ids the initiative indexes |
 

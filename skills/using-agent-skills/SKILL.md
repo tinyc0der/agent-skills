@@ -308,10 +308,10 @@ Classify from whether a piece can merge, ship, and be verified without the rest 
 | Shape | When | Artifacts |
 |---|---|---|
 | **Feature with a capability map** | Several capabilities must land as one change | One track. Map **Delivery** cells point at sections of that track spec (`docs/tracks/<track-id>/spec.md#identity`). `docs/tracks/<track-id>/todo.md` holds implementation tasks. |
-| **Epic** | A child could merge, ship, and be verified without the rest | Parent track plus flat sibling child tracks. Map **Delivery** cells point at child track ids. Parent `docs/tracks/<track-id>/todo.md` indexes children, not their tasks. |
-| **Migration phases** | Expand/contract or strangler steps that must stay independently deployable | Epic when phases are separately shippable; otherwise Feature slices. Destructive steps never share a PR with expands. Follow `deprecation-and-migration`. |
+| **Epic** | A child could merge, ship, and be verified without the rest | Parent track (`role: initiative`) plus flat sibling child tracks. Map **Delivery** cells point at child track ids. Parent `docs/tracks/<track-id>/todo.md` indexes children, not their tasks. Use `role: initiative`, not `epic`. |
+| **Migration phases** | Expand/contract or strangler steps that must stay independently deployable | A single-capability rename or expand/contract stays a **Feature** with separately mergeable slices on the same track. Open a **new PR** before a destructive contract. Use Epic children only when the migration is several independently deliverable *features*. Follow `deprecation-and-migration`. |
 
-Do not flatten an Epic into one Feature track with a large task list. Do not spawn child tracks for work that cannot land independently.
+Do not flatten an Epic into one Feature track with a large task list. Do not spawn child tracks for a column rename or other single-capability expand/contract. Destructive steps never share a PR with expands.
 
 #### Process
 
@@ -325,7 +325,7 @@ Clarify outcome -> Define feature boundaries -> Map dependencies
 3. Use `planning-and-task-breakdown` to allocate child track ids, record child order and integration checkpoints, and index children in the parent `docs/tracks/<track-id>/todo.md`. Establish the feature split before detailed child implementation, reusing approval already provided for that scope.
 4. Give each independently delivered feature its own numbered track, linked worktree, branch, and PR, and run the Feature workflow for it. Link each child to the initiative; child tracks own their detailed change proposals and evidence.
 5. Resolve shared contract decisions before dependent implementation, using `api-and-interface-design` when needed. Freeze contracts that more than one child consumes; sequence children that would edit the same capability spec. Reconcile concurrent changes against the latest accepted capability specs.
-6. Invoke `verification-and-validation` against the assembled revision to prove the initiative's cross-feature acceptance criteria. Child reports are supporting evidence; they do not substitute for integrated verification. Route integration failures through debugging in the parent track.
+6. Parent planning may merge first as a docs PR. That PR verifies artifact completeness (map, initiative spec, child index, stub ids), not integration, and may become ready on that completeness PASS. After required children merge to the remote default branch, freeze that default-branch head as the **assembled revision**, run parent `/verify` against it on a follow-up parent docs PR, and do not attach parent PASS to a child PR. Child reports are supporting evidence; they do not substitute for integrated verification. Route integration failures through debugging in the parent track.
 
 #### Artifact organization
 
@@ -339,9 +339,9 @@ Load a child session with the parent map, parent outcomes, and that child's file
 
 - `/spec` on a new epic writes the parent spec and map, not full child feature specs.
 - `/plan` on a parent allocates child ids and indexes them; it does not write child implementation tasks.
-- `/build` on a parent selects or opens the next unblocked child in that child's worktree; it does not implement children in the parent checkout.
-- `/verify` on a child is Feature verification. On a parent it is integration of an assembled revision.
-- `/pr` is per child. Parent planning documents may merge separately as docs.
+- `/build` on a parent selects or opens the next unblocked child in that child's worktree (reuse the allocated child track id; do not mint a second prefix). Treat the track as a parent when `role` is `initiative` or `docs/tracks/<track-id>/todo.md` indexes child track ids, even if leftover implementation tasks exist. If the child spec is still a stub, run that child's `/spec` then `/plan` and stop; run incremental only after that child has a checked spec and task list.
+- `/verify` on a child is Feature verification. On a parent **planning** PR it is artifact completeness, not integration. On a parent **integration** PR it evaluates the assembled revision (remote default-branch head that includes the required merged children). Do not attach parent PASS to a child PR.
+- `/pr` is per child. Parent planning documents may merge separately as docs once completeness verification PASSes.
 
 **Exit:** Required child work is reviewed and merged, the integrated outcome passes verification, any integration fixes pass review and merge, and deferred scope has an explicit disposition. Keep the parent open until these conditions hold; merging its initial planning documents or completing one child does not complete the initiative. Deployment follows the agreed release scope.
 

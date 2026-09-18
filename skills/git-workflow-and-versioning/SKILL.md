@@ -135,11 +135,13 @@ main (always deployable)
 ```
 
 - Create each branch in a linked worktree, based on `main` (or the team's default branch unless the task specifies another base)
-- Keep **child** feature branches short-lived (merge within 1-3 days) — long-lived branches are hidden costs
+- Keep branches short-lived (merge within 1-3 days) — long-lived branches are hidden costs
 - Delete branches after merge
 - Prefer feature flags over long-lived branches for incomplete features
 
-**Initiative vs child branches.** Apply the [delivery fork](../using-agent-skills/SKILL.md#delivery-fork). An Epic is not one long-lived code branch. Merge parent planning documents early, then give each child its own linked worktree, short-lived branch, and PR. Branch children from the default branch after shared contracts exist; use a stacked or documented base only when a child must land after another. Never implement an epic in a single checkout. One writer per worktree still applies.
+**Initiative vs child branches.** Apply the [delivery fork](../using-agent-skills/SKILL.md#delivery-fork). An Epic is not one long-lived code branch. Merge parent planning documents early (planning-completeness `/verify`, not integration), then give each child its own linked worktree, short-lived branch named from the allocated track id, and PR. Branch children from the default branch after shared contracts exist; use a stacked or documented base only when a child must land after another. Never implement an epic in a single checkout. One writer per worktree still applies.
+
+**Destructive contract slices.** On a Feature expand/contract, keep the same track but open a new PR before drop/rename. Do not land expand and contract in one PR because `/build auto` still had remaining tasks.
 
 ### Branch Naming
 
@@ -273,7 +275,7 @@ Before the final implementation response, confirm the remote branch contains the
 For ordinary implementation requests, mark the PR ready before the final handoff without waiting for `/pr ready`, unless the user requested a draft-only or phase-limited endpoint. All of these gates must pass:
 
 - The working tree is clean and the remote contains the exact local head
-- A `verification-and-validation` PASS report names that head revision
+- A `verification-and-validation` PASS report names that head revision. A parent **planning** PR may use a completeness PASS (map, initiative spec, child index, stub ids) and must not wait for integration PASS. Parent **integration** `/verify` runs later against the assembled revision (remote default-branch head that includes required merged children) on a follow-up parent docs PR. Do not attach parent PASS to a child PR.
 - Acceptance criteria and the pre-review Definition of Done profile are satisfied
 - Spec reconciliation is recorded in the numbered track's spec or bug report: verified requirement changes update `docs/specs/<capability>/spec.md` in the same PR, or unchanged contracts have a justified no-change disposition
 - The PR body, task state, screenshots, migration notes, and risk notes are current
@@ -406,7 +408,7 @@ Write the entry in the same change that makes the change, while the impact is fr
 | "I'll commit when the feature is done" | One giant commit is impossible to review, debug, or revert. Commit each slice. |
 | "The message doesn't matter" | Messages are documentation. Future you (and future agents) will need to understand what changed and why. |
 | "I'll squash it all later" | Squashing destroys the development narrative. Prefer clean incremental commits from the start. |
-| "Branches add overhead" | Short-lived branches are free and prevent conflicting work from colliding. Long-lived branches are the problem — merge children within 1-3 days; do not keep an epic on one branch. |
+| "Branches add overhead" | Short-lived branches are free and prevent conflicting work from colliding. Long-lived branches are the problem — merge within 1-3 days; do not keep an epic on one branch. |
 | "I'm the only agent; a branch here is enough" | Every new branch needs a linked worktree. Solo work and small edits still change the primary checkout if you switch its branch. |
 | "I'll split this change later" | Large changes are harder to review, riskier to deploy, and harder to revert. Split before submitting, not after. |
 | "I don't need a .gitignore" | Until `.env` with production secrets gets committed. Set it up immediately. |
