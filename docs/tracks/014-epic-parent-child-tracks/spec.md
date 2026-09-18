@@ -3,7 +3,7 @@ type: Change Specification
 title: Epic parent and child tracks
 description: Proposed requirements for classifying large work and organizing parent/child track artifacts.
 status: draft
-workflow_status: in_progress
+workflow_status: completed
 role: feature
 ---
 

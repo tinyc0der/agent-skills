@@ -9,8 +9,8 @@ status: draft
 
 ## Resume
 
-- Phase: MERGE authorized
-- Next action: Rebase-merge PR #12 into `tinyc0der/agent-skills` `main`
+- Phase: MERGED
+- Next action: none — PR #12 rebase-merged to `main` at `a646917`
 - Sources: [spec](spec.md), [verification](verification.md), [review](review.md)
 
 ## Notes
@@ -28,8 +28,11 @@ status: draft
 - Prohibitions: none recorded
 - Target: [tinyc0der/agent-skills#12](https://github.com/tinyc0der/agent-skills/pull/12) → `main`
 - Reviewed implementation: `cf9f620796dfc30e9294a67009a93fb42c8c83c1`
-- Pinned PR head (pre-rereview-commit): `78019579bb380a0d453108ac013b81929ff2bc23`
-- Invocation / outcome / resulting commit: pending execution
+- Pinned PR head: `67ccf80d2aecdac334c22ba4dcbf1769d733410a`
+- Invocation: `gh pr merge 12 --rebase --match-head-commit 67ccf80d2aecdac334c22ba4dcbf1769d733410a`
+- Outcome: MERGED at 2026-09-18T15:13:23Z
+- Resulting range on `main`: `424aa77` … `a646917` (five linear commits, one parent each; trees match `67ccf80`)
+- Tip: `a646917e68abdd5ff2e5d3b49f4cee986ed30ccc`
 
 ## Follow-ups and promotion candidates
 
