@@ -135,9 +135,11 @@ main (always deployable)
 ```
 
 - Create each branch in a linked worktree, based on `main` (or the team's default branch unless the task specifies another base)
-- Keep branches short-lived (merge within 1-3 days) — long-lived branches are hidden costs
+- Keep **child** feature branches short-lived (merge within 1-3 days) — long-lived branches are hidden costs
 - Delete branches after merge
 - Prefer feature flags over long-lived branches for incomplete features
+
+**Initiative vs child branches.** Apply the [delivery fork](../using-agent-skills/SKILL.md#delivery-fork). An Epic is not one long-lived code branch. Merge parent planning documents early, then give each child its own linked worktree, short-lived branch, and PR. Branch children from the default branch after shared contracts exist; use a stacked or documented base only when a child must land after another. Never implement an epic in a single checkout. One writer per worktree still applies.
 
 ### Branch Naming
 
@@ -404,7 +406,7 @@ Write the entry in the same change that makes the change, while the impact is fr
 | "I'll commit when the feature is done" | One giant commit is impossible to review, debug, or revert. Commit each slice. |
 | "The message doesn't matter" | Messages are documentation. Future you (and future agents) will need to understand what changed and why. |
 | "I'll squash it all later" | Squashing destroys the development narrative. Prefer clean incremental commits from the start. |
-| "Branches add overhead" | Short-lived branches are free and prevent conflicting work from colliding. Long-lived branches are the problem — merge within 1-3 days. |
+| "Branches add overhead" | Short-lived branches are free and prevent conflicting work from colliding. Long-lived branches are the problem — merge children within 1-3 days; do not keep an epic on one branch. |
 | "I'm the only agent; a branch here is enough" | Every new branch needs a linked worktree. Solo work and small edits still change the primary checkout if you switch its branch. |
 | "I'll split this change later" | Large changes are harder to review, riskier to deploy, and harder to revert. Split before submitting, not after. |
 | "I don't need a .gitignore" | Until `.env` with production secrets gets committed. Set it up immediately. |
@@ -419,7 +421,7 @@ Write the entry in the same change that makes the change, while the impact is fr
 - Formatting changes mixed with behavior changes
 - No `.gitignore` in the project
 - Committing `node_modules/`, `.env`, or build artifacts
-- Long-lived branches that diverge significantly from main
+- Long-lived branches that diverge significantly from main, including an Epic implemented on one branch
 - Force-pushing to shared branches
 - Creating a branch in place, leaving the primary worktree off the default branch, or editing and committing from the wrong worktree
 - A breaking change shipped under a minor or patch version bump

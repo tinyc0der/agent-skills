@@ -44,7 +44,9 @@ review workflow; `test-driven-development` retains RED-GREEN-REFACTOR execution.
   Individual changes use numbered `docs/tracks/<track-id>/` directories with
   `spec.md` or `bug.md`, and only the planning, task, verification, review,
   running notes, and launch evidence needed for that work. Multi-capability
-  proposals use sections of the track spec and an optional capability map.
+  proposals use an optional capability map: Feature+map keeps sections in one
+  track spec; independently shippable children use a parent track plus flat
+  sibling child tracks.
 - Track ids use the next repository-wide three-digit number followed by a
   kebab-case name, starting at `001`. Preserve historical ids and resolve
   concurrent allocations before merge. Explicit track selection takes precedence

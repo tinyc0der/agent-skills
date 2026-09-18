@@ -57,17 +57,16 @@
     {
       "id": 2,
       "prompt": "Read spec-driven-development-decomposition/portal-brief.md and produce the spec work for the customer portal initiative.",
-      "expected_output": "A checked capability map followed by scoped specification sections where the brief is concrete, with targeted questions only for unresolved material product or approval boundaries; no implementation.",
+      "expected_output": "An Epic classification, a checked capability map whose Delivery cells are child tracks, and a parent initiative spec without full child feature specs; no implementation.",
       "files": [
         "spec-driven-development-decomposition"
       ],
       "expectations": [
-        "A capability map with module ids and their dependencies is proposed before any full spec is written",
-        "Dependency direction is one-way (no cycles) and drives the proposed build order",
-        "The proposed canonical map location is docs/tracks/<track-id>/capability-map.md and capability sections live in docs/tracks/<track-id>/spec.md and link their canonical owners",
+        "The request is classified as an Epic because identity, billing, notifications, and reporting can ship and be verified separately",
+        "A capability map with module ids, one-way dependencies, build order, and Delivery pointing at child tracks or intended child suffixes is proposed before any full child spec is written",
+        "The proposed canonical map location is docs/tracks/<track-id>/capability-map.md; the parent spec records initiative outcomes, non-goals, and integration acceptance rather than full identity/billing/notifications/reporting feature specs",
         "Capability boundaries and build order are checked from the brief without a blanket map-approval prompt; unresolved material product decisions or finance-required sign-off are surfaced without inventing answers or approval.",
-        "Any capability section produced is scoped to a single capability rather than restating the whole initiative",
-        "No implementation code is written"
+        "No spec-identity.md or similar per-module spec files are created, and no implementation code is written"
       ]
     },
     {

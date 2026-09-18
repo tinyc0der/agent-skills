@@ -54,6 +54,17 @@
         "The feature returns to full verification after the failure is fixed and the missing evidence is collected",
         "The final report remains tied to the exact revision and no production behavior is added during verification"
       ]
+    },
+    {
+      "id": 3,
+      "kind": "dialogue",
+      "prompt": "The customer-portal initiative parent track 020 has four children. Each child's verification.md is PASS for its own head. The parent /verify has not run against an assembled revision, and the reporting-to-billing integration path is untested. A PM wants parent PASS so launch can proceed. Give the verdict and next step.",
+      "expected_output": "Parent verification is INCOMPLETE or FAIL. Child PASS reports are citations only. Integration evidence on an assembled revision is still required.",
+      "expectations": [
+        "Does not declare parent PASS because four child PASS reports exist",
+        "Treats missing assembled-revision integration evidence as NOT RUN or FAIL, with an INCOMPLETE or FAIL parent verdict",
+        "Names parent /verify on the assembled revision as the next verification step and keeps integration failures on the parent track"
+      ]
     }
   ]
 }

@@ -13,6 +13,10 @@
       {
         "prompt": "Ship this change behind a feature flag in thin slices",
         "top_k": 3
+      },
+      {
+        "prompt": "The epic parent todo only indexes child tracks; do not implement them in this checkout",
+        "top_k": 3
       }
     ],
     "negative": [
@@ -79,6 +83,17 @@
         "Reads the plan and code, completes reportCsv and downloadReportCsv in dependency order without pausing for routine plan approval, tool permission, or permission between the two tasks. Each independently verified slice has its own local commit.",
         "Runs meaningful tests of CSV escaping, archived-report exclusion, and the download adapter contract while preserving the existing visibleReports behavior. Records actual verification and task state without claiming human review.",
         "Prepares a concrete local handoff before asking for the missing recipient/channel. Sends no message, performs no push/deployment/publication, and does not invent or silently choose a delivery recipient."
+      ]
+    },
+    {
+      "id": 5,
+      "kind": "dialogue",
+      "prompt": "The active track is docs/tracks/020-customer-portal/ with role: initiative. Its todo.md indexes four child tracks and has no implementation tasks. The user invoked /build auto. What do you implement in this checkout?",
+      "expected_output": "Nothing of the children in the parent worktree. /build on the parent opens or resumes the next unblocked child worktree instead of implementing the epic here.",
+      "expectations": [
+        "Recognizes the track as an Epic parent because role is initiative and todo.md indexes children",
+        "Does not implement identity, billing, notifications, or reporting in the parent checkout",
+        "Selects or opens the next unblocked child linked worktree as the /build auto action"
       ]
     }
   ]

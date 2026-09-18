@@ -131,7 +131,7 @@ confirmation before expanding scope. Never silently expand the release range.
 
 ### Feature launch dossiers
 
-For every included PR with a workflow bundle, read `docs/tracks/<track-id>/ship.md`. It is the durable feature-level launch dossier and should contain rollout prerequisites, feature flags, migrations, success thresholds, monitoring, acknowledged risks, rollback triggers and steps, and ownership. Missing required feature launch information is release evidence to collect, not a reason to guess.
+For every included PR with a workflow bundle, read `docs/tracks/<track-id>/ship.md`. It is the durable feature-level launch dossier and should contain rollout prerequisites, feature flags, migrations, success thresholds, monitoring, acknowledged risks, rollback triggers and steps, and ownership. Missing required feature launch information is release evidence to collect, not a reason to guess. An initiative parent dossier lists included child tracks and does not replace those children's `docs/tracks/<track-id>/ship.md` files.
 
 When authoring or deliberately updating a dossier in an authorized workspace, use YAML frontmatter with `type: Launch Dossier`, `title`, and `description`. OKF `status` describes document maturity; GO/NO-GO and deployment state remain explicit release evidence. Header adoption must not mutate the pinned target or rewrite historical release claims.
 

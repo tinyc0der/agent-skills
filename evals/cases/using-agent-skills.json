@@ -13,6 +13,10 @@
       {
         "prompt": "Route this request to the right skill in the pack",
         "top_k": 3
+      },
+      {
+        "prompt": "Should this multi-feature initiative be one feature workflow or an epic with child tracks?",
+        "top_k": 3
       }
     ],
     "negative": [
@@ -87,6 +91,19 @@
         "The first user-facing update promptly reports evidence of ongoing data loss and the unknown cause; it does not defer notification until diagnosis, repair, or a complete incident report.",
         "Proceeds to pause the specifically authorized cleanup job and investigate without asking for that approval again or treating the notification as a blanket stop; avoids actions that could worsen the incident.",
         "Keeps production restoration behind its separate approval, prepares the concrete recovery decision when evidence permits, and does not treat urgency or notification as authority to contact customers or other people."
+      ]
+    },
+    {
+      "id": 6,
+      "kind": "dialogue",
+      "name": "epic-vs-feature-map",
+      "prompt": "Two requests arrive. A: a customer portal with separately shippable identity, billing, notifications, and reporting, each with a different owner. B: rename the users.name column to full_name without downtime. Classify each workflow, name the artifact shape, and say what /spec, /plan, /build, and /verify must not do.",
+      "expected_output": "A is an Epic with a parent track and child tracks. B is a Feature using deprecation expand/contract phases, not an Epic. Commands on a parent do not implement or verify children as a substitute for integration.",
+      "expectations": [
+        "Classifies the portal as Epic because the four areas can merge, ship, and be verified independently; does not treat touching several modules as sufficient for Epic",
+        "Parent artifacts are initiative spec, capability map with Delivery pointing at child tracks, and a todo.md that indexes children rather than listing their implementation tasks",
+        "Classifies the column rename as Feature plus deprecation-and-migration expand/contract, not Epic, with destructive contract in its own mergeable slice",
+        "/spec on the epic writes parent outcomes not full child specs; /plan allocates child tracks; /build on the parent does not implement children in that checkout; /verify on the parent requires assembled-revision integration evidence and does not treat child PASS as parent PASS"
       ]
     }
   ]
