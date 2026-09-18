@@ -182,6 +182,8 @@ The execution environment provides access to models, tools, events, and controls
 
 Human requests and direction enter an execution context. Meta guidance helps select a workflow or a focused skill. Workflow skills coordinate the required methods and expertise; Memory skills supply and maintain relevant understanding. Skills use available tools and scripts to perform operations and collect evidence, then return results or the decisions needed to continue.
 
+An execution context runs work. It may be one session, a sequence of handoffs, or a graph of dependent steps. It is not the harness. The harness is the skills, hooks, evals, scripts, and owned records that keep the six promises when the participant, session, or arrangement of work changes. A graph of steps can coordinate dependencies, parallel work, and recovery. It does not replace shared understanding, evidence, authority, or learning.
+
 Maintain clear responsibility for reaching the agreed endpoint. Choose subsequent work from observed results, preserve the current agreement, and respond to human direction. Hooks support this process at relevant events, such as resuming work or completing an action. Hook-triggered work remains subject to the same scope and authority as other work.
 
 Deliverable verification assesses the current task's result. Harness evals assess whether the components reliably select, perform, and assess work as intended. Use evidence from both to identify improvements, while keeping their claims distinct.

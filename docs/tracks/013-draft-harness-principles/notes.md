@@ -9,7 +9,8 @@ status: draft
 
 ## Current checkpoint
 
-- Phase: memory design research complete. The user requested independent research by multiple agents, mutual validation, and an update to `blueprint.md`.
+- Phase: execution-context boundary added to [How work flows](../../../blueprint.md#how-work-flows). The user asked to record that a session, handoff sequence, or graph of steps runs work and is not the harness. Do not name graph engineering as a layer or add a seventh principle.
+- Earlier phase: memory design research complete. The user requested independent research by multiple agents, mutual validation, and an update to `blueprint.md`.
 - The user confirmed the design must stay platform-neutral: define memory types, ownership, and lifecycle. File layouts, record formats, and storage products remain implementation choices.
 - [The blueprint](../../../blueprint.md#memory-work-state-and-recovery) now defines four logical record types, their ownership and lifecycle, and a separate recovery contract. [The research brief](memory-research.md) records eight alternatives, primary sources, peer disagreements, and the proposed workflow trial.
 - Three agents researched independently, each reviewed both peers, and all three approved the final documentation with no material required fixes. This is design review, not runtime proof or human approval of an implementation.
