@@ -120,6 +120,16 @@ The **document-metadata profile** requires parseable YAML frontmatter with non-e
 
 Use OKF `status` only for document maturity: `draft`, `stable`, or `deprecated`. New unreviewed documents start as `draft`; `stable` means ready for consumption, not approved requirements, implemented behavior, a PASS verdict, or a completed track. Record work progress separately in `workflow_status` when useful, using the project's vocabulary (for example `planned`, `in_progress`, or `completed`). Keep one authoritative representation of progress; task checkboxes and report verdicts keep their own meanings. An existing prose “Status” label may describe work or evidence; never automatically convert it to OKF `status`.
 
+Optional track-graph fields on track `spec.md` and `bug.md` (omit on historical or standalone tracks):
+
+| Field | Meaning |
+| --- | --- |
+| `role` | `initiative`, `feature`, `bug`, or `task` |
+| `parent` | Track id of the initiative this change belongs to |
+| `children` | List of child track ids the initiative indexes |
+
+These are structural links for the [delivery fork](../using-agent-skills/SKILL.md#delivery-fork). They are not OKF `status`, `workflow_status`, approval, or a verification verdict.
+
 Optional `sources`, `generated`, and `verified` follow the v0.2 rules below and record only actual evidence. Document-relative source paths resolve from the containing file. Keep evaluated revisions and report verdicts explicit; adding a header does not reverify content or extend earlier evidence. Whole-document maturity never turns a hypothesis in working notes into verified knowledge.
 
 Read older headerless documents permissively. Add or repair metadata only within an authorized edit, preserving unknown fields, useful contents, links, and historical revision claims. A bulk header migration preserves historical bodies and adds only known descriptive metadata; do not infer authorship, maturity, review events, or completion. Explicit file-scope and read-only limits still apply.

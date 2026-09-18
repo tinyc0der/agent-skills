@@ -38,7 +38,7 @@ docs/tracks/<track-id>/      # NNN-name, e.g. 001-user-auth
 └── ship.md                  # Only when production launch facts are needed
 ```
 
-Create only the files needed for the change. One track can affect several capabilities; each capability keeps one canonical spec across tracks. Allocate the next repository-wide three-digit track number above the highest existing prefix, starting at `001`, followed by a kebab-case name. Preserve ids and gaps and resolve concurrent allocation collisions before merge.
+Create only the files needed for the change. One track can affect several capabilities; each capability keeps one canonical spec across tracks. When several capabilities must land together, the optional map points at sections of that track spec. When a child could merge, ship, and be verified without the rest, keep a flat parent track plus sibling child tracks; the parent `todo.md` indexes children. Allocate the next repository-wide three-digit track number above the highest existing prefix, starting at `001`, followed by a kebab-case name. Preserve ids and gaps and resolve concurrent allocation collisions before merge. Do not nest `docs/tracks/` or add `docs/epics/`.
 
 Start each authored capability spec and track document with YAML frontmatter containing `type`, `title`, and `description`, following the [document-metadata profile](../skills/memory-management/SKILL.md#document-metadata-for-specs-and-tracks). It defines types for each artifact while preserving their Markdown bodies and ownership. New unreviewed documents use `status: draft`; OKF maturity stays separate from workflow progress, approval, task checkboxes, and report verdicts. Add optional provenance only from actual evidence.
 
@@ -116,7 +116,7 @@ Specify what will be built without duplicating the planning or implementation ph
 **Artifacts**
 
 - `docs/tracks/<track-id>/spec.md` describing proposed changes and linking `docs/specs/<capability>/spec.md` owners
-- Optional `docs/tracks/<track-id>/capability-map.md` selecting per-capability sections of the track spec
+- Optional `docs/tracks/<track-id>/capability-map.md` selecting per-capability sections of a Feature spec, or child tracks of an Epic parent
 - `docs/tracks/<track-id>/bug.md` may stand alone for a bounded defect
 - Acceptance criteria, non-goals, boundaries, success measures, and open questions
 

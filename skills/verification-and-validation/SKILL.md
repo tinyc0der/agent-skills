@@ -50,6 +50,8 @@ Record the revision or working-tree state being verified. Read:
 
 If the target changes after a check runs, rerun each affected check. Evidence belongs to a revision, not merely to a feature name.
 
+**Initiative vs child.** Apply the [delivery fork](../using-agent-skills/SKILL.md#delivery-fork). Child `/verify` is Feature verification of that child's revision. Parent `/verify` evaluates initiative integration acceptance against an assembled revision that includes the required merged children. Cite child `docs/tracks/<track-id>/verification.md` files as supporting evidence. A child PASS does not make the parent PASS. Missing required children, or substituting child reports for integration evidence, is INCOMPLETE. Integration failures stay on the parent track.
+
 ### 2. Build an acceptance trace
 
 Map every acceptance criterion to the lowest-cost evidence that proves it:
@@ -169,6 +171,7 @@ After FAIL, preserve the evidence and invoke `debugging-and-error-recovery`. If 
 | Rationalization | Reality |
 |---|---|
 | "The slice tests passed, so the feature is done" | Individually correct slices can fail when integrated. Verify the assembled behavior. |
+| "Every child verified PASS, so the epic is done" | Child reports support the parent; they do not replace parent integration evidence on the assembled revision. |
 | "The build proves it works" | Compilation proves structural validity, not runtime behavior or user outcomes. |
 | "CI will catch it" | CI can run checks, but it cannot invent missing acceptance evidence or manual runtime validation. |
 | "I could not run it, but the code looks right" | That is NOT RUN, not PASS. Preserve the uncertainty. |
@@ -176,6 +179,7 @@ After FAIL, preserve the evidence and invoke `debugging-and-error-recovery`. If 
 
 ## Red Flags
 
+- Declaring parent PASS from child verification reports without assembled-revision integration evidence
 - Declaring PASS without an acceptance-criteria trace
 - Treating skipped or unavailable checks as passing
 - Verifying a different revision than the one under review
@@ -198,3 +202,4 @@ Before declaring the feature ready for review:
 - [ ] No required check is FAIL or NOT RUN for a PASS verdict
 - [ ] The report contains enough evidence for a reviewer to reproduce the decision
 - [ ] The report is saved to `docs/tracks/<track-id>/verification.md` and names its implementation revision
+- [ ] An initiative parent report evaluates assembled-revision integration criteria; child PASS reports are citations only

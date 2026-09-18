@@ -1,6 +1,6 @@
 ---
 name: using-agent-skills
-description: Discovers and invokes agent skills and selects workflows for engineering requests. Use when starting a session, choosing the skill for an activity, or routing a scoped change through its lifecycle. This is the meta-skill that governs how all other skills are discovered and invoked.
+description: Discovers and invokes agent skills and selects workflows for engineering requests. Use when starting a session, choosing the skill for an activity, deciding which workflow applies, or routing a scoped change through its lifecycle. Use when classifying work as a feature, bug, epic, or bounded task.
 ---
 
 # Using Agent Skills
@@ -192,6 +192,7 @@ These are the subtle errors that look like productivity but create problems:
 8. Removing things you don't fully understand
 9. Building without the selected workflow's written requirements and acceptance criteria because "it's obvious"
 10. Skipping verification because "it looks right"
+11. Flattening an Epic into one Feature track, task list, branch, or PR because a capability map already exists
 
 ## Skill Rules
 
@@ -227,7 +228,7 @@ Accepted capability contracts live at `docs/specs/<capability>/spec.md`; change 
 
 | Transition | Required artifact or evidence |
 |---|---|
-| Define → Plan | Scope-authorized, checked `docs/tracks/<track-id>/spec.md` with per-capability sections and an optional `docs/tracks/<track-id>/capability-map.md`; bounded bugs may use `docs/tracks/<track-id>/bug.md` |
+| Define → Plan | Scope-authorized, checked `docs/tracks/<track-id>/spec.md` and optional `docs/tracks/<track-id>/capability-map.md`; Feature+map specs use per-capability sections, Epic parents use initiative outcomes and a child index, bounded bugs may use `docs/tracks/<track-id>/bug.md` |
 | Plan → Draft PR | Checked `docs/tracks/<track-id>/plan.md`, `docs/tracks/<track-id>/todo.md`, and `docs/tracks/<track-id>/ship.md` when production-affecting; no routine reapproval |
 | Draft PR → Build | Draft PR body linking the spec and plan, with scope, non-goals, risks, acceptance criteria, rollout, and rollback context |
 | Build → Verify | Independently revertible implementation commits, current task state, Spec reconciliation in the owning capability specs (or justified no-change dispositions), launch dossier, and current context and unresolved ideas in `docs/tracks/<track-id>/notes.md` |
@@ -300,19 +301,47 @@ Define scope and invariants -> Establish baseline -> Simplify incrementally
 
 Use when one requested outcome requires several separately deliverable features with distinct acceptance criteria and coordinated dependencies. Touching several modules or capabilities alone does not make work an Epic; one coordinated deliverable can remain a Feature.
 
+#### Delivery fork
+
+Classify from whether a piece can merge, ship, and be verified without the rest — not from file count or ticket labels. This table is the single home for the fork; spec, plan, build, git, verify, and deprecation apply it.
+
+| Shape | When | Artifacts |
+|---|---|---|
+| **Feature with a capability map** | Several capabilities must land as one change | One track. Map **Delivery** cells point at sections of that track spec (`docs/tracks/<track-id>/spec.md#identity`). `docs/tracks/<track-id>/todo.md` holds implementation tasks. |
+| **Epic** | A child could merge, ship, and be verified without the rest | Parent track plus flat sibling child tracks. Map **Delivery** cells point at child track ids. Parent `docs/tracks/<track-id>/todo.md` indexes children, not their tasks. |
+| **Migration phases** | Expand/contract or strangler steps that must stay independently deployable | Epic when phases are separately shippable; otherwise Feature slices. Destructive steps never share a PR with expands. Follow `deprecation-and-migration`. |
+
+Do not flatten an Epic into one Feature track with a large task list. Do not spawn child tracks for work that cannot land independently.
+
+#### Process
+
 ```text
 Clarify outcome -> Define feature boundaries -> Map dependencies
 -> Run child workflows -> Verify integrated outcome -> Close initiative
 ```
 
 1. Use `interview-me` or `idea-refine` only when the initiative's outcome is unclear. Reuse existing discovery and approved requirements.
-2. Use `spec-driven-development` to establish the overall outcome, scope, capability boundaries, and integration acceptance criteria.
-3. Use `planning-and-task-breakdown` to identify deliverable features, dependency order, milestones, and shared interface decisions. Establish the approved feature split before detailed child implementation, reusing approval already provided for that scope.
-4. Give each independently delivered feature its own numbered track and branch and run the Feature workflow for it. Link each child to the initiative; child tracks own their detailed change proposals and evidence.
-5. Resolve shared contract decisions before dependent implementation, using `api-and-interface-design` when needed. Sequence dependent work and reconcile concurrent changes against the latest accepted capability specs.
+2. Use `spec-driven-development` to write the parent spec (initiative outcomes, non-goals, integration acceptance, shared contracts) and the capability map. Do not write full child feature specs in the parent.
+3. Use `planning-and-task-breakdown` to allocate child track ids, record child order and integration checkpoints, and index children in the parent `docs/tracks/<track-id>/todo.md`. Establish the feature split before detailed child implementation, reusing approval already provided for that scope.
+4. Give each independently delivered feature its own numbered track, linked worktree, branch, and PR, and run the Feature workflow for it. Link each child to the initiative; child tracks own their detailed change proposals and evidence.
+5. Resolve shared contract decisions before dependent implementation, using `api-and-interface-design` when needed. Freeze contracts that more than one child consumes; sequence children that would edit the same capability spec. Reconcile concurrent changes against the latest accepted capability specs.
 6. Invoke `verification-and-validation` against the assembled revision to prove the initiative's cross-feature acceptance criteria. Child reports are supporting evidence; they do not substitute for integrated verification. Route integration failures through debugging in the parent track.
 
-**Artifacts:** In the parent track, `docs/tracks/<track-id>/spec.md` records initiative-level outcomes; `docs/tracks/<track-id>/plan.md` records dependencies and integration checkpoints; `docs/tracks/<track-id>/todo.md` indexes child tracks instead of duplicating their task lists. Use `docs/tracks/<track-id>/capability-map.md` when capability decomposition is needed. Canonical specs remain per-capability. Child tracks retain their own requirements, verification, review, and release evidence; the parent's `docs/tracks/<track-id>/verification.md` records the assembled revision and integration results.
+#### Artifact organization
+
+Tracks stay a flat `docs/tracks/<NNN-name>/` list. Do not nest tracks or add `docs/epics/`. Parent/child is links (`role`, `parent`, `children` on the track spec or bug report; see `memory-management`).
+
+**Parent** owns initiative outcomes, the capability map, child order, the child index, integration verification, and the initiative launch dossier. **Each child** is a Feature track with its own spec, plan, todo, notes, verification, review, ship, branch, and PR. Child specs are that feature's change, not a copy of the parent. Canonical specs remain per-capability.
+
+Load a child session with the parent map, parent outcomes, and that child's files — not sibling implementation artifacts. Load a parent session with the map, parent spec, and child index.
+
+#### Command roles
+
+- `/spec` on a new epic writes the parent spec and map, not full child feature specs.
+- `/plan` on a parent allocates child ids and indexes them; it does not write child implementation tasks.
+- `/build` on a parent selects or opens the next unblocked child in that child's worktree; it does not implement children in the parent checkout.
+- `/verify` on a child is Feature verification. On a parent it is integration of an assembled revision.
+- `/pr` is per child. Parent planning documents may merge separately as docs.
 
 **Exit:** Required child work is reviewed and merged, the integrated outcome passes verification, any integration fixes pass review and merge, and deferred scope has an explicit disposition. Keep the parent open until these conditions hold; merging its initial planning documents or completing one child does not complete the initiative. Deployment follows the agreed release scope.
 

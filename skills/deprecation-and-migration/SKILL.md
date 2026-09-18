@@ -182,7 +182,7 @@ the old one            the app                  a later, separate deploy
 4. **Switch reads.** Point the app at `full_name`, keep writing both. Deploy and bake.
 5. **Contract.** Stop writing `name`, then — in a *separate, later* deploy — drop the column.
 
-Each step is independently deployable and reversible: if step 4 misbehaves, roll the code back and `full_name` is still being populated. Treat each phase as a thin vertical slice — see the `incremental-implementation` skill.
+Each step is independently deployable and reversible: if step 4 misbehaves, roll the code back and `full_name` is still being populated. Treat each phase as a thin, separately mergeable slice — see the `incremental-implementation` skill. If phases can ship and be verified on their own, apply the [delivery fork](../using-agent-skills/SKILL.md#delivery-fork) and index them as Epic children. `/build auto` must not put a destructive contract step in the same PR as an expand.
 
 **Rules:**
 - **Additive first, destructive last and alone.** Adds (new nullable column, new table, new index) are safe in any deploy; drops and renames get their own deploy *after* no code references the old shape.
@@ -227,6 +227,7 @@ Zombie code is code that nobody owns but everybody depends on. It's not actively
 - Deprecation without measuring current usage
 - Removing code without verifying zero active consumers
 - A schema change and the code that depends on it shipped in the same deploy
+- Expand and contract (or dual-write and drop) landed in the same PR because `/build auto` ran the whole migration
 - A column renamed or dropped in place rather than via expand/contract
 - A migration merged with no tested down path, or a backfill that locks the table
 

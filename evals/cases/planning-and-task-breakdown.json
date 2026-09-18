@@ -13,6 +13,10 @@
       {
         "prompt": "Plan the work into implementable chunks before we start coding",
         "top_k": 3
+      },
+      {
+        "prompt": "Index this epic's child tracks in the parent todo instead of one giant task list",
+        "top_k": 3
       }
     ],
     "negative": [
@@ -38,6 +42,21 @@
         "Tasks are ordered by dependency",
         "Tasks are vertical slices rather than horizontal layers",
         "No implementation code is written during planning"
+      ]
+    },
+    {
+      "id": 2,
+      "kind": "execution",
+      "prompt": "Read planning-and-task-breakdown-epic/docs/tracks/020-customer-portal/spec.md and capability-map.md. Produce the parent plan and task ledger for that initiative, then stop. Do not implement children.",
+      "expected_output": "Parent plan.md with child order and integration checkpoints; parent todo.md indexing child track ids; no child implementation task bodies and no production code.",
+      "files": [
+        "planning-and-task-breakdown-epic"
+      ],
+      "expectations": [
+        "Classifies the track as an Epic parent and allocates unique NNN-name child track ids for independently deliverable map rows",
+        "docs/tracks/020-customer-portal/todo.md indexes those child tracks plus integration checkpoints instead of identity/billing/notifications/reporting implementation tasks",
+        "docs/tracks/020-customer-portal/plan.md records child order, shared contracts, and integration verification rather than child implementation slices",
+        "No production source is written; child Feature specs are stubbed or deferred rather than fully implemented in the parent"
       ]
     }
   ]

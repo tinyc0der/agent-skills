@@ -6,7 +6,7 @@ Invoke the agent-skills:verification-and-validation skill.
 
 **Workflow notes:** For an active track, read `docs/tracks/<track-id>/notes.md` at phase entry or resume and update it when useful context changes or before handoff. Capture observations, tentative ideas, outcomes, blockers, and next actions with evidence links. Follow the memory-management running-note and document-metadata protocols; honor explicit read-only or file-scope limits and keep writes outside pinned verification or release targets.
 
-Verify the current completed change against its approved specification:
+Verify the current completed change against its approved specification. Child tracks use Feature verification. An initiative parent verifies integration on the assembled revision; child PASS reports are citations, not a substitute.
 
 1. Freeze and report the revision or working-tree state being verified.
 2. Map every acceptance criterion to concrete evidence and an evidence state.

@@ -1,6 +1,6 @@
 ---
 name: planning-and-task-breakdown
-description: Breaks work into ordered tasks. Use when you have a spec or clear requirements and need to break work into implementable tasks. Use when a task feels too large to start, when you need to estimate scope, or when parallel work is possible.
+description: Breaks work into ordered tasks. Use when you have a spec or clear requirements and need to break work into implementable tasks. Use when a task feels too large to start, when you need to estimate scope, or when parallel work is possible. Use when an Epic parent needs child-track allocation and a parent todo that indexes children instead of duplicating their tasks.
 ---
 
 # Planning and Task Breakdown
@@ -56,7 +56,32 @@ Database schema
 
 Implementation order follows the dependency graph bottom-up: build foundations first.
 
-### Step 3: Slice Vertically
+### Step 3: Apply the Delivery Fork
+
+Read the capability map's Delivery column and the [delivery fork](../using-agent-skills/SKILL.md#delivery-fork).
+
+**Feature (including Feature+map).** Continue to vertical task slices in this track. Map rows whose Delivery is `docs/tracks/<track-id>/spec.md#<id>` stay in this `docs/tracks/<track-id>/todo.md`.
+
+**Epic parent.** Stop slicing implementation tasks here.
+
+1. Allocate a unique `NNN-name` child track id per independently deliverable row (next unused prefixes; intended suffixes from the map are not ids until numbered). Write the ids into the map Delivery column, the parent spec `children` list, and parent `docs/tracks/<track-id>/todo.md`.
+2. Write `docs/tracks/<track-id>/plan.md` as child order, shared contracts, integration checkpoints, and risks — not child implementation tasks.
+3. Parent `docs/tracks/<track-id>/todo.md` is an index of child tracks plus integration checkpoints. Do not copy child task bodies.
+4. Create each child directory with a stub `docs/tracks/<track-id>/spec.md` (`role: feature`, `parent:` set to the initiative id) to reserve the id. Detailed child specs, plans, and tasks wait for that child's Feature `/spec` and `/plan` unless the parent already recorded a bounded child.
+5. Set `role: initiative` on the parent spec if missing.
+
+When the active track is already a child (`parent:` set), plan that child's tasks only.
+
+```markdown
+## Children
+- [ ] `021-portal-identity` — accounts and SSO. Depends: none
+- [ ] `022-portal-billing` — plans and invoices. Depends: 021-portal-identity
+
+## Integration
+- [ ] Parent `/verify` on the assembled revision after required children merge
+```
+
+### Step 4: Slice Vertically
 
 Instead of building all the database, then all the API, then all the UI — build one complete feature path at a time:
 
@@ -78,7 +103,7 @@ Task 4: User can view task list (query + API + UI for list view)
 
 Each vertical slice delivers working, testable functionality.
 
-### Step 4: Write Tasks
+### Step 5: Write Tasks
 
 Each task follows this structure, whether it lands in the markdown task list or as an item in an external tracker (see Output Files):
 
@@ -109,7 +134,7 @@ Each task follows this structure, whether it lands in the markdown task list or 
 
 For a non-trivial behavioral task, use the compact test ledger from `test-case-design-review`. Skip it for an obviously sufficient one-test change. Do not populate happy/empty/boundary/error/concurrency matrices unless each retained row protects a distinct material risk.
 
-### Step 5: Order and Checkpoint
+### Step 6: Order and Checkpoint
 
 Arrange tasks so that:
 
@@ -140,7 +165,7 @@ Run routine checkpoints autonomously. Diagnose, fix, and reverify failed checks 
 | **L** | 5-8 | Multi-component feature | Search with filtering and pagination |
 | **XL** | 8+ | **Too large — break it down further** | — |
 
-If a task is L or larger, it should be broken into smaller tasks. An agent performs best on S and M tasks.
+If a task is L or larger, it should be broken into smaller tasks. An agent performs best on S and M tasks. If the oversized item could merge, ship, and be verified without the rest of this track, it is a child track (Epic), not a longer task list.
 
 **When to break a task down further:**
 - It would take more than one focused session (roughly 2+ hours of agent work)
@@ -171,7 +196,7 @@ The same rule applies to an external task list target: never bulk-close or delet
 
 The task list target is where tasks and checkpoints are recorded. It is defined once, here; every other reference in this skill defers to it.
 
-- **Default:** write the complete checklist to `docs/tracks/<track-id>/todo.md`. This is the convention `/build` and downstream tooling expect.
+- **Default:** write the complete checklist to `docs/tracks/<track-id>/todo.md`. This is the convention `/build` and downstream tooling expect. An Epic parent uses this file as a child-track index, not an implementation checklist.
 - **External tracker:** if the project's agent rules (`CLAUDE.md`, `AGENTS.md`, etc.) or the user designate an issue tracker (e.g. GitHub Issues, Jira, Linear, `bd`/beads), create one tracker item per task. Map the Step 4 structure onto the tracker's fields: acceptance criteria and verification steps in the item body, dependencies via the tracker's linking mechanism (`bd dep add`, "blocked by", etc.). Keep `docs/tracks/<track-id>/todo.md` as an ordered index of tracker item IDs or repository-relative links plus local lifecycle checkpoints; do not duplicate the full tracker bodies.
 
 When using an external tracker, note it in `docs/tracks/<track-id>/plan.md` (e.g. "Tasks tracked in Linear project FOO") so downstream steps and future sessions know where to look. Keep both the plan's Task List section and `docs/tracks/<track-id>/todo.md` as compact ordered indexes rather than duplicate checklists.
@@ -241,9 +266,9 @@ When tasks live in an external tracker, keep the Task List section above as an o
 
 When multiple agents or sessions are available:
 
-- **Safe to parallelize:** Independent feature slices, tests for already-implemented features, documentation
-- **Must be sequential:** Database migrations, shared state changes, dependency chains
-- **Needs coordination:** Features that share an API contract (define the contract first, then parallelize)
+- **Safe to parallelize:** Independent feature slices, independent Epic children after shared contracts exist, tests for already-implemented features, documentation
+- **Must be sequential:** Database migrations, shared state changes, dependency chains, children that edit the same capability spec
+- **Needs coordination:** Features that share an API contract (define the contract first, then parallelize); Epic children that consume a provider contract (land the provider child first)
 
 ## Common Rationalizations
 
@@ -254,6 +279,7 @@ When multiple agents or sessions are available:
 | "Planning is overhead" | Planning is the task. Implementation without a plan is just typing. |
 | "I can hold it all in my head" | Context windows are finite. Written plans survive session boundaries and compaction. |
 | "The old `docs/tracks/<track-id>/plan.md` is stale, I'll just replace it" | Unchecked tasks may be mid-build in another session. Overwriting them destroys work state that exists nowhere else. Stop and ask. |
+| "An Epic is just a long task list" | Independently shippable children get their own tracks. The parent indexes them. |
 
 ## Red Flags
 
@@ -263,6 +289,7 @@ When multiple agents or sessions are available:
 - Tasks that say "implement the feature" without acceptance criteria
 - No verification steps in the plan
 - All tasks are XL-sized
+- An Epic parent `docs/tracks/<track-id>/todo.md` filled with child implementation tasks instead of child track ids
 - No checkpoints between tasks
 - Dependency order isn't considered
 
@@ -277,7 +304,7 @@ Before starting implementation, confirm:
 - [ ] Tasks are recorded or indexed in `docs/tracks/<track-id>/todo.md`
 - [ ] Production-affecting work has an initialized `docs/tracks/<track-id>/ship.md`
 - [ ] No pre-existing incomplete plan was overwritten without explicit user confirmation
-- [ ] No task touches more than ~5 files
+- [ ] No implementation task touches more than ~5 files; independently shippable outcomes are child tracks, not XL tasks
 - [ ] Checkpoints exist between major phases
 - [ ] The plan matches authorized requirements, is checked for dependencies and verification, and has no unresolved decision requiring the user
 

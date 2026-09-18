@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+### Changed
+
+- Epic and multi-capability work uses a delivery fork: Feature+map stays one track; independently shippable children get flat sibling tracks; parent `todo.md` indexes children; `/build` and `/verify` on a parent do not stand in for child implementation or integration evidence.
+
 ## 0.7.0
 
 ### Added

@@ -44,7 +44,8 @@
       "expectations": [
         "Consumers are notified with a timeline before any breaking change",
         "A compatibility or migration window exists with monitoring of remaining usage",
-        "Removal is gated on measured migration, not a calendar date alone"
+        "Removal is gated on measured migration, not a calendar date alone",
+        "Each expand, dual-write, and contract phase is a separately mergeable slice; a destructive drop is not planned in the same PR as the additive expand"
       ]
     }
   ]

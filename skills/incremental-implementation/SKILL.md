@@ -1,6 +1,6 @@
 ---
 name: incremental-implementation
-description: Delivers changes incrementally in thin, verifiable vertical slices. Use when implementing any feature or change that touches more than one file, or when picking up the next task from a plan. Use when rolling a change out behind a feature flag, when you're about to write a large amount of code at once, or when a task feels too big to land in one step.
+description: Delivers changes incrementally in thin, verifiable vertical slices. Use when implementing any feature or change that touches more than one file, or when picking up the next task from a plan. Use when rolling a change out behind a feature flag, when you're about to write a large amount of code at once, or when a task feels too big to land in one step. Use when an Epic parent todo indexes child tracks so implementation must move to a child worktree rather than building the epic in the parent checkout.
 ---
 
 # Incremental Implementation
@@ -36,6 +36,8 @@ Build in thin vertical slices — implement one piece, test it, verify it, then 
 ```
 
 For each slice:
+
+If the active track is an initiative (`role: initiative`, or `todo.md` indexes child tracks rather than implementation tasks), do not implement those children here. Apply the [delivery fork](../using-agent-skills/SKILL.md#delivery-fork): open or resume the next unblocked child in its own linked worktree and run this skill there. `/build auto` on a parent advances the next child; it does not implement the epic. Destructive migration phases stay on their own child.
 
 Execute all slices within the user's authorized scope by default, preserving per-slice checks and commits. If the user asks for one task or stepwise review, stop at that endpoint. A normal test failure enters debugging and re-verification; a human gate is needed only for unresolved material intent, missing authority/access, or consequential risk that cannot be contained and verified autonomously. Reuse the user's existing authorization for the plan and routine implementation choices.
 
@@ -235,6 +237,7 @@ After each increment, verify with the repository's own commands (see the test-dr
 - "Let me just quickly add this too" scope expansion
 - Skipping the test/verify step to move faster
 - Build or tests broken between increments
+- Implementing child features in an initiative parent worktree because `/build auto` was invoked on the parent
 - Large uncommitted changes accumulating
 - Building abstractions before the third use case demands it
 - Touching files outside the task scope "while I'm here"

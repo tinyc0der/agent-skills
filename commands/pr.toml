@@ -15,7 +15,7 @@ Invoking this command authorizes the scoped remote push and pull-request mutatio
 ## Common checks
 
 1. Resolve the current branch, default branch, remote, head SHA, working-tree state, and any existing PR. Never guess a branch or create a duplicate PR.
-2. Resolve the numbered track under docs/tracks/<track-id>/; read its approved spec or bug report, linked docs/specs/<capability>/spec.md files, plan and task ledger when present, relevant commits, and existing PR body.
+2. Resolve the numbered track under docs/tracks/<track-id>/; read its approved spec or bug report, linked docs/specs/<capability>/spec.md files, plan and task ledger when present, relevant commits, and existing PR body. One PR per child feature branch; do not open a single PR for an Epic's children. Parent planning documents may use a separate docs PR.
 3. Do not expose secrets or include unrelated working-tree changes.
 
 ## Draft mode

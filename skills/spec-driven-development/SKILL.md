@@ -1,6 +1,6 @@
 ---
 name: spec-driven-development
-description: Creates specs before coding. Use when starting a new project, feature, or significant change and no specification exists yet. Use when drafting a PRD or requirements document with objectives and scope, or when requirements are unclear, ambiguous, or only exist as a vague idea. Use when a single requirement spans several independently testable capabilities and needs decomposing into a capability map of modules before specifying.
+description: Creates specs before coding. Use when starting a new project, feature, or significant change and no specification exists yet. Use when drafting a PRD or requirements document with objectives and scope, or when requirements are unclear, ambiguous, or only exist as a vague idea. Use when a single requirement spans several independently testable capabilities and needs decomposing into a capability map, and when deciding whether that map stays on one Feature track or an Epic parent with child tracks.
 ---
 
 # Spec-Driven Development
@@ -57,23 +57,25 @@ status: draft
 
 # Capability Map: [Initiative Name]
 
-| Module id | Responsibility | Depends on |
-|---|---|---|
-| identity | Accounts, sessions, SSO | — |
-| billing | Plans, invoices, payments | identity |
-| notifications | Email and webhook fan-out | identity |
-| reporting | Usage dashboards | billing, notifications |
+| Module id | Responsibility | Depends on | Delivery | Canonical path |
+|---|---|---|---|---|
+| identity | Accounts, sessions, SSO | — | docs/tracks/<track-id>/spec.md#identity | docs/specs/identity/spec.md |
+| billing | Plans, invoices, payments | identity | docs/tracks/<track-id>/spec.md#billing | docs/specs/billing/spec.md |
 
-Build order: identity → billing, notifications → reporting
+Build order: identity → billing
 ```
 
 - **Stable module ids.** Kebab-case, chosen once, never renamed mid-initiative. Specs, plans, and downstream commands select work by these ids instead of guessing which spec is active.
 - **Dependency direction, no cycles.** Arrows point one way. If two modules each need the other, they are one module.
-- **Interfaces live at the boundary.** The map records that `billing` depends on `identity`; proposed contract changes belong in the provider's track-spec section and accepted contracts in its capability spec (see `api-and-interface-design` for designing them).
+- **Interfaces live at the boundary.** The map records that `billing` depends on `identity`; proposed contract changes belong in the provider's Feature spec (section or child track) and accepted contracts in its capability spec (see `api-and-interface-design` for designing them).
+- **Delivery.** Apply the [delivery fork](../using-agent-skills/SKILL.md#delivery-fork). `docs/tracks/<track-id>/spec.md#<id>` means this Feature track owns that section. A child track id (or intended suffix before planning allocates the number) means this track is the Epic parent and that row is a separately shippable child.
 
-**Check the map before detailing the spec.** Validate capability boundaries, dependency direction, and build order against the authorized outcome. Resolve routine design choices autonomously; ask only when a material scope or ownership decision requires the user. Do not infer human review from this check.
+**Check the map before detailing the spec.** Validate capability boundaries, dependency direction, build order, and Delivery against the authorized outcome. Resolve routine design choices autonomously; ask only when a material scope or ownership decision requires the user. Do not infer human review from this check.
 
-**Then specify each capability's changes.** Save the checked, scope-authorized map as `docs/tracks/<track-id>/capability-map.md`. Each row links a section in `docs/tracks/<track-id>/spec.md` and the owning `docs/specs/<capability>/spec.md` (or names its intended path for a new capability). Scope each section to that capability's objective, boundaries, contracts, and success criteria. Reuse existing capability ids across tracks; the map selects spec sections rather than separate module-spec files.
+**Then specify from Delivery, not by defaulting to one fat spec.** Save the checked map as `docs/tracks/<track-id>/capability-map.md`. Reuse existing capability ids; never create extra module specification files beside the track spec, or a second canonical spec for an existing capability.
+
+- **Feature with a map.** Each Delivery cell is `docs/tracks/<track-id>/spec.md#<id>`. Write a section per capability in this track spec, scoped to that capability's objective, boundaries, contracts, and success criteria, linking `docs/specs/<capability>/spec.md` (or naming the intended path).
+- **Epic.** Set `role: initiative` on this track spec. Delivery cells are child track ids or intended suffixes. This spec covers initiative objective, non-goals, integration acceptance, shared contracts, and boundaries. Do not write full child feature specs here. Planning allocates child ids and child Feature specs.
 
 ### Phase 1: Specify
 
@@ -130,6 +132,7 @@ title: "[Change] specification"
 description: "Proposed requirements and acceptance criteria for [change]."
 status: draft
 workflow_status: planned
+role: feature
 ---
 
 # Spec: [Project/Feature Name]
@@ -193,7 +196,7 @@ This lets you loop, retry, and problem-solve toward a clear goal rather than gue
 
 Before writing an artifact, require a non-default branch and resolve the active track. For a new track, allocate the next unused three-digit prefix above the repository's highest existing track number, starting at `001`, and append a kebab-case name. The branch can supply the suffix; it never supplies the capability id. Create `docs/tracks/<track-id>/` only for the selected or newly authorized change and preserve its id across branch renames.
 
-Save the scope-authorized change spec as `docs/tracks/<track-id>/spec.md`, with a section per affected capability when needed, and check its acceptance criteria and unresolved decisions. The orchestrator continues into `planning-and-task-breakdown` when the request covers implementation; a spec-only request ends at the documented handoff. This skill produces no plan or implementation code itself. The proposal remains track-local until implemented and verified; record actual human approval only when it occurred.
+Save the scope-authorized change spec as `docs/tracks/<track-id>/spec.md`. A Feature+map spec uses a section per affected capability; an Epic parent spec uses initiative-level outcomes and leaves child details to child tracks. Check acceptance criteria and unresolved decisions. The orchestrator continues into `planning-and-task-breakdown` when the request covers implementation; a spec-only request ends at the documented handoff. This skill produces no plan or implementation code itself. The proposal remains track-local until implemented and verified; record actual human approval only when it occurred.
 
 ## Keeping the Spec Alive
 
@@ -216,7 +219,8 @@ The track spec remains current while work proceeds:
 | "Requirements will change anyway" | That's why the spec is a living document. An outdated spec is still better than no spec. |
 | "The user knows what they want" | Even clear requests have implicit assumptions. The spec surfaces those assumptions. |
 | "It's one big feature; splitting it is overhead" | If acceptance criteria cluster into independently testable groups, a monolithic spec forces every downstream task to reason over the whole contract. A ten-line capability map is the cheap alternative. |
-| "I'll decompose during planning" | Planning slices tasks within a spec. By then the oversized artifact already exists — module boundaries and dependency direction must be decided before the spec is written, not after. |
+| "I'll decompose during planning" | Planning slices tasks within a spec, or allocates Epic children from a map. Module boundaries and Delivery must be decided before the spec is written, not after. |
+| "Independently shippable features can share one spec with sections" | That is Feature+map only when they must land together. If a child can merge and verify without the rest, the parent spec is initiative outcomes; the child owns the Feature spec. |
 
 ## Red Flags
 
@@ -225,8 +229,9 @@ The track spec remains current while work proceeds:
 - Implementing features not mentioned in any spec or task list
 - Making architectural decisions without documenting them
 - Skipping the spec because "it's obvious what to build"
-- A multi-capability track spec without separately scoped capability sections and canonical owners
-- Module boundaries or build order decided implicitly during implementation because no capability map was checked up front
+- A Feature+map spec without separately scoped capability sections and canonical owners
+- An Epic parent spec that contains full child feature specs, or child tracks spawned for work that cannot land independently
+- Module boundaries, Delivery, or build order decided implicitly during implementation because no capability map was checked up front
 - Implementing requirements that are outside authorization or still depend on unresolved material intent
 - A new canonical capability spec created for behavior already owned by an existing capability
 - An approved but unimplemented proposal written into the canonical capability spec
@@ -241,7 +246,7 @@ Before proceeding to implementation, confirm:
 - [ ] The testing strategy targets material coverage gaps without generic case matrices or duplicated test layers
 - [ ] Boundaries (Always/Ask First/Never) are defined
 - [ ] The spec is saved to a file in the repository
-- [ ] If the request bundles several independently testable capabilities, the capability map's stable ids, dependency direction, and build order were checked before detailed sections were written
-- [ ] Each proposed capability section links its canonical owner or names the intended path for a new capability
+- [ ] If the request bundles several independently testable capabilities, the capability map's stable ids, dependency direction, build order, and Delivery (section vs child track) were checked before detailed specs were written
+- [ ] Feature+map sections, or Epic child specs, each link a canonical owner or name the intended path for a new capability; an Epic parent spec does not duplicate those full child specs
 - [ ] The scope-authorized spec is saved under `docs/tracks/<track-id>/` and committed before implementation
 - [ ] The next step is explicitly handed to `planning-and-task-breakdown`
