@@ -9,17 +9,16 @@ status: draft
 
 ## Resume
 
-- Phase: extend the approved session policy to bounded rereviews in
+- Phase: worker and reviewer reuse are implemented, verified, and reviewed in
   `orca/018-delegate-worker-context`.
-- Next: reverify and rereview the updated policy, then refresh
-  [PR 17](https://github.com/tinyc0der/agent-skills/pull/17). Merge remains outside
-  the authorized task.
+- Next: repository review of [PR 17](https://github.com/tinyc0der/agent-skills/pull/17)
+  and a merge decision. Merge remains outside the authorized task.
 - Sources: [accepted scope](spec.md), [verification](verification.md),
   [review](review.md).
 
 ## Notes
 
-- User decision: routine verification and bounded review fixes stay with the
+- Initial user decision: routine verification and bounded review fixes stay with the
   implementation worker; review remains fresh and independent verification is
   conditional on requirements, risk, or unreliable evidence.
 - Observed: the old policy also forbids follow-up assignments and releases
@@ -41,4 +40,9 @@ status: draft
 - Follow-up user decision: preserve the original reviewer session for bounded
   rereviews while keeping it separate from implementation. Review all new changes
   and current evidence, and issue a new verdict for the latest target. Earlier
-  evidence describes the previous fresh-rereview policy and needs reconciliation.
+  evidence describes the previous fresh-rereview policy and stays historical.
+- Follow-up result: all 74 tests, 174 routing checks at 98%, and repository
+  validators pass. The existing isolated evaluator reran the revised fixture;
+  all six expectations pass, including full-diff rereview and the explicit fresh-
+  reviewer exception. Current reports name `e3d4899`; the prior raw artifact is
+  retained as historical evidence. No unresolved finding remains.

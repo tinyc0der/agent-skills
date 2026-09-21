@@ -1,13 +1,13 @@
 ---
 type: Verification Report
 title: Delegate worker context verification
-description: Acceptance evidence and validation limits for implementation-session reuse and conditional independent verification.
+description: Acceptance evidence and validation limits for separate implementation and reviewer session reuse with conditional independent verification.
 status: draft
 ---
 
 # Verification: PASS
 
-Implementation revision: `a5724ada0af49d16c6f97d3c18ee2bfebca3c109`.
+Implementation revision: `e3d4899ccdb6db52742a6779764fdc89accef4ee`.
 Checks ran on the same file contents before this commit. Later commits in this
 track add evidence and administrative state only.
 
@@ -18,26 +18,26 @@ track add evidence and administrative state only.
 | Routine verification stays in the worker and identifies self-verification | Skill steps 2 and 5; scenario A in the saved decision artifact | PASS |
 | Bounded repairs reuse context with separate assignment identities | Skill steps 3 and 4; scenario A uses `export-impl-1` with a new Task and Dispatch | PASS |
 | Independent verification preserves required gates and overrides | Skill steps 2 and 5; scenario B selects fresh OpenCode for tenant permissions; existing explicit-verifier fixtures retained | PASS |
-| Fresh review evaluates the changed revision after verification | All three scenarios require fresh Codex review with current evidence | PASS |
+| Initial review is separate; bounded rereviews retain reviewer context and cover all new changes | Scenario A reuses `export-review-1` with new identities, the full new diff, current verification, and a verdict for the latest target; scenario C honors its explicit fresh-reviewer rule | PASS |
 | Retention, ownership, fallback, and retry limits remain intact | Live guide inspection; scenario C uses a replacement worker and retains repair attempt 2 | PASS |
 | One-shot handoffs still stop at delivery | Manual inspection of step 4 and updated eval 2; missing-completion eval 3 is unchanged | PASS |
 | Direct consumers and validation agree | Capability contract, catalog, evals, and repository checks below | PASS |
 
 ## Behavioral evidence
 
-An isolated native subagent received only the skill and the new recorded-project
-fixture with its referenced requirements. It wrote
-[the decision artifact](evidence/review-repair-decision.md). The parent assessed
-the artifact against all six expectations in delegate eval 5: all pass.
+The existing isolated evaluator reread the final skill and revised fixture, then
+wrote [the current decision artifact](evidence/rereview-decision.md). The parent
+assessed all six current expectations in delegate eval 5: all pass. The evaluator
+received the current inputs without the grading rubric and retained its earlier
+exercise context; this was not a new fresh-context run. The final skill and both
+fixture inputs were byte-compared with the evaluated copies.
 
-The evaluator first worked without the intended answers or earlier conversation.
-After two wording clarifications, the same independent evaluator reread the
-final skill and reconciled its artifact. Project decisions were unchanged;
-runtime retry handling was clarified. The final skill and both fixture inputs
-were byte-compared with the tested copies.
+The [earlier artifact](evidence/review-repair-decision.md) remains historical
+evidence for `a5724ad`, which required fresh rereviews. It does not establish the
+current reviewer-reuse result.
 
 Final skill SHA-256:
-`8eaa8f77b979f08d02c91ec33a4fdb70e8913c67ef92d5c42aa92e984bdc61a7`.
+`45b70bb04e3d3937a8f09d9e0962460abb67071bd5bf5d10d7660a5189a124c6`.
 
 This is a preparation-only behavioral exercise, not a live Orca dispatch or the
 standard headless-Claude execution/grading run. The other four fixtures received
@@ -45,8 +45,8 @@ setup validation and policy review, not a new model execution.
 
 ## Repository gates
 
-All commands below exited 0. Affected checks were rerun after the final wording
-changes; the full regression suite still has 74 passes and no skips.
+All commands below were rerun for the reviewer-reuse update and exited 0. The
+full regression suite still has 74 passes and no skips.
 
 | Command | Result |
 | --- | --- |
