@@ -7,11 +7,12 @@ status: draft
 
 # Working notes
 
-- Phase: updating the optional stacked-PR handoff after the user's follow-up. Prior evidence covers `040af19`; reverify the new revision before readiness. Linked worktree `ling`, branch `orca/split-intent-into-reviewable`; primary worktree remains on `main`.
+- Phase: optional stacked-PR handoff verified and rereviewed at `d51f1d2`. Linked worktree `ling`, branch `orca/split-intent-into-reviewable`; primary worktree remains on `main`.
 - Route: bounded task. Requirements and checks are in [spec.md](spec.md); no separate plan is needed.
 - Observed before this change: the fork required independent shipping and kept migration phases on one track across PRs. Spec scope checks skipped single-capability work.
 - Decision: use one focused PR per implementation track. Parent initiatives remain coordination-only; dependent slices may share a capability and release.
 - Follow-up: mention `gh-stack` for dependent tracks when available. Keep ordinary PR delivery as the fallback and preserve worktree, test, verification, and merge rules.
+- Follow-up result: two skill handoffs and the capability contract updated; 74 script tests, 174 routing checks, and applicable validators pass. The external skill is explicitly optional and is not bundled with this pack.
 - Outcome: independent planning execution split the import rollout into four dependent tracks and kept the one-line copy task together. Five expectations passed; no implementation or external action occurred in the evaluation.
 - Correction: the artifact validator rejected a shorthand bug-report path. Restored the full path and reran it successfully without changing the check.
 - Evidence: [verification](verification.md), [review](review.md), [PR #16](https://github.com/tinyc0der/agent-skills/pull/16).
