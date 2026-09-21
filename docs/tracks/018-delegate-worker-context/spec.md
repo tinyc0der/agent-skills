@@ -1,7 +1,7 @@
 ---
 type: Change Specification
-title: Preserve implementation context during delegated review fixes
-description: Keep routine verification and review repairs with the implementation worker while preserving independent review and required verification.
+title: Preserve worker and reviewer context during delegated repairs
+description: Keep bounded follow-ups in separate implementation and reviewer sessions while preserving required independent verification.
 status: draft
 role: task
 workflow_status: in_progress
@@ -10,8 +10,9 @@ workflow_status: in_progress
 # Delegate worker context
 
 The user approved reusing the implementation session for bounded review fixes
-and routine verification. This avoids rebuilding useful context after every
-phase. Independent review remains fresh.
+and routine verification, then approved reusing the reviewer's own session for
+bounded rereviews. The first review starts fresh and stays separate from the
+implementation conversation.
 
 ## Scope and acceptance
 
@@ -25,8 +26,13 @@ phase. Independent review remains fresh.
 3. A separate fresh verifier is required by an explicit user or project rule,
    a high-risk change, or missing or unreliable evidence found during review.
    Explicit runner and session choices retain precedence.
-4. Review uses a fresh session against the changed revision after required
-   verification passes. The reviewer and independent verifier do not edit code.
+4. Initial review starts in a separate fresh session. Bounded rereviews reuse
+   that reviewer after required verification passes. Each rereview checks fixes,
+   all new changes, affected surrounding behavior, and current verification
+   evidence, then issues a verdict for the latest target. Use a fresh reviewer
+   when the original is unavailable, its context is too large or unreliable,
+   scope changes substantially, or the user or project requires one. The reviewer
+   and independent verifier do not edit code.
 5. Runtime retention, settlement, cleanup, and single-writer rules remain intact.
    Use a fresh implementation session when the original is unavailable, its
    context is no longer usable, the scope changes substantially, or it is stuck.
@@ -49,6 +55,7 @@ plugin cache changes are required.
 | One-shot endpoint and later ownership | Delegate eval 2 | Update later repair routing without adding supervision. |
 | Unknown attempts and duplicate writers | Delegate eval 3 | Keep unchanged; conversation reuse cannot bypass recovery. |
 | Ordinary reuse, risk-based verification, unavailable session | None | Add one recorded-decision fixture with these distinct policy boundaries. |
+| Reviewer context, complete rereview, and explicit fresh-review rule | Delegate eval 5 | Extend the existing fixture and expectations; protect reviewer reuse without accepting stale evidence or narrowing review to old findings. |
 
 ## Spec reconciliation
 

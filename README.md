@@ -269,7 +269,7 @@ The commands above are entry points. The pack includes 30 skills covering lifecy
 |-------|-------------|----------|
 | [using-agent-skills](skills/using-agent-skills/SKILL.md) | Maps incoming work to the right skill workflow and defines shared operating rules | Starting a session or deciding which skill applies |
 | [reflect](skills/reflect/SKILL.md) | Examines session evidence and makes scoped, verified improvements to skills, discovery, instructions, or tooling | Reflecting on a conversation or learning from repeated agent corrections |
-| [delegate](skills/delegate/SKILL.md) | Delegates bounded tasks; reuses implementation context for routine verification and review fixes | One-shot delegation or coordinated phases with fresh review and independent verification when required |
+| [delegate](skills/delegate/SKILL.md) | Delegates bounded tasks; preserves separate implementation and reviewer context through bounded follow-ups | One-shot delegation or coordinated phases with independent review and separate verification when required |
 
 Ask “Reflect on this session and improve our harness” to use `reflect`. Add “review only” for proposals without file changes. Reflection can conclude that no change is justified; it does not run automatically after every task.
 

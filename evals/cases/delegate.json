@@ -47,7 +47,7 @@
         "The plan requires an independent verifier report tied to the implementation revision and blocks review and final acceptance on FAIL or INCOMPLETE",
         "Blocking findings return to the implementation runner, followed by verification and review of the changed revision; the coordinator retains final acceptance",
         "The only created project artifact is delegate/delegation-plan.md; no agent is launched, no Orca runtime state is created, and no task or dispatch completion is fabricated",
-        "The coordinated plan keeps required independent verification and review in fresh sessions, routes bounded fixes back to the original Antigravity session when safe reuse is available, gives each assignment one bounded packet and fresh lifecycle identities, and preserves runtime retention rules without routine follow-up prompts"
+        "The coordinated plan keeps required independent verification and initial review in fresh sessions, routes bounded fixes to the original Antigravity session and bounded rereviews to the original Codex reviewer when safe reuse is available, gives each assignment one bounded packet and fresh lifecycle identities, and preserves runtime retention rules without routine follow-up prompts"
       ]
     },
     {
@@ -102,7 +102,7 @@
       "id": 5,
       "kind": "execution",
       "prompt": "Use delegate to assess the recorded projects in delegate/review-repair.md. Write only delegate/review-repair-decision.md with the next assignments, session owners, evidence requirements, and cleanup decisions. This is a decision exercise: do not contact Orca, launch workers, send messages, or implement any changes.",
-      "expected_output": "A scoped decision artifact preserving useful implementation context for ordinary verification and review repairs, requiring independent verification for the permissions change, and safely replacing an unavailable worker without resetting retry history",
+      "expected_output": "A scoped decision artifact preserving separate implementation and reviewer context for bounded follow-ups, requiring current evidence and review of all new changes, preserving independent verification for permissions and explicit fresh-review rules, and replacing an unavailable worker without resetting retry history",
       "files": [
         "delegate"
       ],
@@ -110,9 +110,9 @@
         "Creates only delegate/review-repair-decision.md with no live runtime calls, worker launches, messages, or implementation edits",
         "For A, assigns the filename repair and routine checks to export-impl-1, labels its evidence self-verification, and does not add a separate verifier without a stated risk or requirement",
         "For A, sends one bounded repair packet identifying the finding, current target, write scope, checks, and result destination; uses new Task and Dispatch identities after the recorded accepted settlement rather than reopening task-export or dispatch-export-1",
-        "For A, requires affected checks and applicable regression gates against the repaired revision followed by fresh Codex review; retained implementation work stays idle during review and has a final cleanup decision",
+        "For A, requires affected checks and applicable regression gates followed by rereview in export-review-1 with new Task and Dispatch identities after accepted settlement; requires the full new diff and current verification evidence rather than only closing the backslash finding, issues a verdict for the latest target, keeps roles separate and idle between assignments, and accounts for both sessions' cleanup",
         "For B, requires a fresh independent verifier for the access-control risk before final acceptance, preserves OpenCode as that explicitly selected verifier and Grok as implementer, and does not treat the worker's unit-test PASS as independent evidence",
-        "For C, uses a fresh implementation session with saved findings and artifacts because the old session cannot resume; preserves the recorded failed-fix count and does not repeat the same ineffective fix or reset the retry limit"
+        "For C, uses a fresh implementation session with saved findings and artifacts because the old session cannot resume, honors the project's explicit fresh-reviewer rule, preserves the recorded failed-fix count, and does not repeat the same ineffective fix or reset the retry limit"
       ]
     }
   ]

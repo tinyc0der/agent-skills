@@ -23,7 +23,8 @@ status: draft
   independent verifier. Explicit session boundaries remain binding.
 - New tasks and independent implementation slices start fresh. Routine
   verification and bounded repairs reuse the original implementation session by
-  default. Each assignment gets one complete packet with current artifact
+  default. Initial review uses a separate fresh session; bounded rereviews reuse
+  that reviewer. Each assignment gets one complete packet with current artifact
   references. Blocking replies, explicit user steering, and bounded follow-up
   assignments after accepted settlement are allowed; unsolicited nudges are not.
 - Reuse follows the live runtime's retention, resume, and cleanup rules, including
@@ -43,12 +44,18 @@ status: draft
   incomplete outcome. Timeout, idle, and contact loss cannot establish success,
   authorize cleanup, or justify a duplicate writer. Recovery preserves artifacts
   and follows the runtime contract before assigning fresh work.
-- Required independent verification and review inspect the actual target in
-  separate fresh sessions. Failed, incomplete, stale, or unauthenticated reports
-  cannot unlock dependent phases. Preparation-only requests launch no workers.
+- Required independent verification uses a fresh session. Review remains
+  separate from implementation and inspects the actual target. Failed,
+  incomplete, stale, or unauthenticated reports cannot unlock dependent phases.
+  Preparation-only requests launch no workers.
 - Review fixes return to the implementation worker, followed by verification
-  and fresh review of the updated target. One-shot handoffs do not gain automatic
-  follow-ups: later repairs require a new user-owned request and resolved ownership.
+  and rereview in the original reviewer session. Each rereview checks the fixes,
+  all new changes, affected surrounding behavior, and current evidence; it issues
+  a verdict for the latest target. Use a fresh reviewer when the original is
+  unavailable, its context is too large or unreliable, scope changes substantially,
+  or the user or project requires one. Preserve reviewer retention and cleanup
+  under the live runtime rules. One-shot handoffs do not gain automatic follow-ups:
+  later repairs require a new user-owned request and resolved ownership.
 
 ## Workflow and evidence
 
