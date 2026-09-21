@@ -57,11 +57,13 @@ Classify a whole change by its intended outcome and entry conditions, then state
 |---|---|
 | [Bug fix / regression](#bug-fix-and-regression) | Existing behavior is incorrect or regressed; expected behavior can be established from an accepted contract or confirmed requirement. |
 | [Refactoring / simplification](#refactoring-and-simplification) | Internal structure should improve while observable behavior remains unchanged. |
-| [Epic / multi-feature initiative](#epic-or-multi-feature-initiative) | One outcome requires several separately deliverable features with distinct acceptance criteria and coordinated dependencies. |
+| [Epic / multi-feature initiative](#epic-or-multi-feature-initiative) | The intent needs more than one focused PR, including a large change within one capability. |
 | [Bounded task](#bounded-task) | Scope, acceptance criteria, dependencies, and relevant contracts are explicit enough to implement without separate discovery or planning. |
 | [Feature](#lifecycle-sequence) | A capability change needs requirements or design development, or coordinated implementation planning beyond the bounded-task entry conditions. |
 
 Specialized routes take precedence over the general Feature or Bounded task route. Classify from the work, not its ticket label, file count, or expected diff size. If the request contains distinct kinds of work, separate or sequence them within the authorized scope. Risk determines additional checks and safeguards; it does not by itself make a bounded task a Feature.
+
+For every route, apply the [delivery fork](#delivery-fork) before detailed specs or tasks. Each implementation track must fit one small, reviewable PR; a large bug fix or refactor can use an initiative to coordinate tracks that retain their specialized workflows.
 
 The selected route defines the required Define and Plan work. Downstream skills use that route's requirement record and task state; intentionally omitted feature-only artifacts are not missing prerequisites. Verification, review, applicable release safeguards, and existing authorization boundaries still apply. Reuse approval already provided for the current scope.
 
@@ -299,19 +301,27 @@ Define scope and invariants -> Establish baseline -> Simplify incrementally
 
 ### Epic or Multi-feature Initiative
 
-Use when one requested outcome requires several separately deliverable features with distinct acceptance criteria and coordinated dependencies. Touching several modules or capabilities alone does not make work an Epic; one coordinated deliverable can remain a Feature.
+Use when the requested intent needs several reviewable PRs, even within one capability. Touching several modules alone does not make work an Epic; a small coordinated change can remain one Feature track.
 
 #### Delivery fork
 
-Classify from whether a piece can merge, ship, and be verified without the rest — not from file count or ticket labels. This table is the single home for the fork; spec, plan, build, git, verify, and deprecation apply it.
+**One implementation track = one focused PR.** Split intent before detailing implementation tasks. Each track needs one clear outcome, explicit exclusions, acceptance checks, dependencies and intended PR base, and a safe state after merge. Keep its code, necessary tests, and contract updates together. Small commits or many small tasks do not make a large combined PR reviewable.
+
+Check the whole proposed diff: can a reviewer assess its outcome and risks in one sitting? Split when it bundles distinct outcomes, separate rollout or destructive steps, or more reasoning than one focused review can cover. Use the sizing guidance in `git-workflow-and-versioning` as a signal, not a reason to split a coherent small fix into artificial tracks.
+
+Dependencies and a shared release date do not prevent splitting. A track must be verifiable and safe to merge on its declared base; it need not launch to users alone. Land prerequisites first or use an explicit stacked base, with compatibility code or disabled flags where needed. Several tracks may update the same canonical capability spec in sequence.
+
+This table is the single home for the fork; spec, plan, build, git, verify, and deprecation apply it.
 
 | Shape | When | Artifacts |
 |---|---|---|
-| **Feature with a capability map** | Several capabilities must land as one change | One track. Map **Delivery** cells point at sections of that track spec (`docs/tracks/<track-id>/spec.md#identity`). `docs/tracks/<track-id>/todo.md` holds implementation tasks. |
-| **Epic** | A child could merge, ship, and be verified without the rest | Parent track (`role: initiative`) plus flat sibling child tracks. Map **Delivery** cells point at child track ids. Parent `docs/tracks/<track-id>/todo.md` indexes children, not their tasks. Use `role: initiative`, not `epic`. |
-| **Migration phases** | Expand/contract or strangler steps that must stay independently deployable | A single-capability rename or expand/contract stays a **Feature** with separately mergeable slices on the same track. Open a **new PR** before a destructive contract. Use Epic children only when the migration is several independently deliverable *features*. Follow `deprecation-and-migration`. |
+| **One implementation track** | The whole change fits one focused PR | One track and PR. For multiple capabilities, map **Delivery** cells point at sections of that track spec (`docs/tracks/<track-id>/spec.md#identity`). `docs/tracks/<track-id>/todo.md` holds tasks within that PR boundary. |
+| **Initiative (Epic)** | The intent needs several PRs, whether for one capability or several | Coordination parent (`role: initiative`) plus flat sibling implementation tracks, each with its own PR. Map **Delivery** cells point at child track ids; one capability may list several ordered children. Parent `docs/tracks/<track-id>/todo.md` indexes children, not their tasks. |
+| **Migration phases** | Expand/contract or strangler work requires separate merge or rollout stages | Use separate implementation tracks and PRs for separately mergeable stages, coordinated by an initiative even for one capability. Destructive contract never shares the expand track or PR. Follow `deprecation-and-migration` for rollout evidence and removal gates. |
 
-Do not flatten an Epic into one Feature track with a large task list. Do not spawn child tracks for a column rename or other single-capability expand/contract. Destructive steps never share a PR with expands.
+**Scope growth:** Recheck the PR boundary during planning, build, and review. If it no longer fits, preserve existing work and split unmerged changes and remaining outcomes into tracks before continuing. Update the parent index and dependencies; if an existing child needs splitting, keep the new tracks as siblings. Reverify each resulting PR against its own base. Do not bundle several implementation tracks into one PR or use the parent as an implementation branch.
+
+The initiative is a coordination record, not an implementation track. Its planning and integration docs PRs remain separate and focused. Integration fixes get their own implementation tracks and PRs.
 
 #### Process
 
@@ -322,16 +332,16 @@ Clarify outcome -> Define feature boundaries -> Map dependencies
 
 1. Use `interview-me` or `idea-refine` only when the initiative's outcome is unclear. Reuse existing discovery and approved requirements.
 2. Use `spec-driven-development` to write the parent spec (initiative outcomes, non-goals, integration acceptance, shared contracts) and the capability map. Do not write full child feature specs in the parent.
-3. Use `planning-and-task-breakdown` to allocate child track ids, record child order and integration checkpoints, and index children in the parent `docs/tracks/<track-id>/todo.md`. Establish the feature split before detailed child implementation, reusing approval already provided for that scope.
-4. Give each independently delivered feature its own numbered track, linked worktree, branch, and PR, and run the Feature workflow for it. Link each child to the initiative; child tracks own their detailed change proposals and evidence.
+3. Use `planning-and-task-breakdown` to allocate child track ids, record each PR boundary, child order and integration checkpoints, and index children in the parent `docs/tracks/<track-id>/todo.md`. Establish the track split before detailed child implementation, reusing approval already provided for that scope.
+4. Give each implementation track its own numbered id, linked worktree, branch, and PR, and run its selected workflow. Link each child to the initiative; child tracks own their detailed change proposals and evidence.
 5. Resolve shared contract decisions before dependent implementation, using `api-and-interface-design` when needed. Freeze contracts that more than one child consumes; sequence children that would edit the same capability spec. Reconcile concurrent changes against the latest accepted capability specs.
-6. Parent planning may merge first as a docs PR. That PR verifies artifact completeness (map, initiative spec, child index, stub ids), not integration, and may become ready on that completeness PASS. After required children merge to the remote default branch, freeze that default-branch head as the **assembled revision**, run parent `/verify` against it on a follow-up parent docs PR, and do not attach parent PASS to a child PR. Child reports are supporting evidence; they do not substitute for integrated verification. Route integration failures through debugging in the parent track.
+6. Parent planning may merge first as a docs PR. That PR verifies artifact completeness (map, initiative spec, child index, stub ids), not integration, and may become ready on that completeness PASS. After required children merge to the remote default branch, freeze that default-branch head as the **assembled revision**, run parent `/verify` against it on a follow-up parent docs PR, and do not attach parent PASS to a child PR. Child reports are supporting evidence; they do not substitute for integrated verification. Record integration failures in the parent and route fixes through separate bug tracks.
 
 #### Artifact organization
 
 Tracks stay a flat `docs/tracks/<NNN-name>/` list. Do not nest tracks or add `docs/epics/`. Parent/child is links (`role`, `parent`, `children` on the track spec or bug report; see `memory-management`).
 
-**Parent** owns initiative outcomes, the capability map, child order, the child index, integration verification, and the initiative launch dossier. **Each child** is a Feature track with its own spec, plan, todo, notes, verification, review, ship, branch, and PR. Child specs are that feature's change, not a copy of the parent. Canonical specs remain per-capability.
+**Parent** owns initiative outcomes, the capability map, child order, the child index, integration verification, and the initiative launch dossier. **Each child** owns one PR and its selected workflow's required artifacts (spec or bug report, tasks when needed, notes, verification, review, and ship when applicable). Child requirements describe that PR's change, not a copy of the parent. Canonical specs remain per-capability.
 
 Load a child session with the parent map, parent outcomes, and that child's files — not sibling implementation artifacts. Load a parent session with the map, parent spec, and child index.
 
@@ -339,8 +349,8 @@ Load a child session with the parent map, parent outcomes, and that child's file
 
 - `/spec` on a new epic writes the parent spec and map, not full child feature specs.
 - `/plan` on a parent allocates child ids and indexes them; it does not write child implementation tasks.
-- `/build` on a parent selects or opens the next unblocked child in that child's worktree (reuse the allocated child track id; do not mint a second prefix). Treat the track as a parent when `role` is `initiative` or `docs/tracks/<track-id>/todo.md` indexes child track ids, even if leftover implementation tasks exist. If the child spec is still a stub, run that child's `/spec` then `/plan` and stop; run incremental only after that child has a checked spec and task list.
-- `/verify` on a child is Feature verification. On a parent **planning** PR it is artifact completeness, not integration. On a parent **integration** PR it evaluates the assembled revision (remote default-branch head that includes the required merged children). Do not attach parent PASS to a child PR.
+- `/build` on a parent selects or opens the next unblocked child in that child's worktree (reuse the allocated child track id; do not mint a second prefix). Treat the track as a parent when `role` is `initiative` or `docs/tracks/<track-id>/todo.md` indexes child track ids, even if leftover implementation tasks exist. If the child's requirements are still a stub, complete its selected route's prerequisites first; Feature children run `/spec` then `/plan` and stop. Run incremental only after the child's requirements and required task state are checked.
+- `/verify` on a child follows its selected workflow and PR boundary. On a parent **planning** PR it is artifact completeness, not integration. On a parent **integration** PR it evaluates the assembled revision (remote default-branch head that includes the required merged children). Do not attach parent PASS to a child PR.
 - `/pr` is per child. Parent planning documents may merge separately as docs once completeness verification PASSes.
 
 **Exit:** Required child work is reviewed and merged, the integrated outcome passes verification, any integration fixes pass review and merge, and deferred scope has an explicit disposition. Keep the parent open until these conditions hold; merging its initial planning documents or completing one child does not complete the initiative. Deployment follows the agreed release scope.
@@ -362,7 +372,7 @@ Validate task readiness -> Implement -> Verify -> Review -> Merge
 
 **Exit:** Acceptance criteria are met and verification passes. A parent task can be marked implementation-complete while its parent still awaits review or merge; standalone track completion follows review and merge.
 
-**Reroute:** Missing product decisions or unresolved scope require Feature definition. Several independently deliverable outcomes require Epic decomposition. Defects use the Bug workflow. Risk determines additional checks and safeguards; a small diff does not establish task readiness.
+**Reroute:** Missing product decisions or unresolved scope require Feature definition. Work that needs several focused PRs requires initiative decomposition. Defects use the Bug workflow. Risk determines additional checks and safeguards; a small diff does not establish task readiness.
 
 ## Quick Reference
 

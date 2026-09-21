@@ -37,11 +37,11 @@ Build in thin vertical slices — implement one piece, test it, verify it, then 
 
 For each slice:
 
-If the active track is an initiative (`role: initiative`, or `docs/tracks/<track-id>/todo.md` indexes child track ids — even if leftover implementation tasks exist), do not implement those children here. Apply the [delivery fork](../using-agent-skills/SKILL.md#delivery-fork): open or resume the next unblocked child in its own linked worktree, using the allocated child track id (do not mint a second prefix). If that child's spec is still a stub, run `spec-driven-development` then `planning-and-task-breakdown` in that worktree and stop; run this skill only after the child has a checked spec and task list. `/build auto` on a parent advances the next child; it does not implement the epic.
+If the active track is an initiative (`role: initiative`, or `docs/tracks/<track-id>/todo.md` indexes child track ids — even if leftover implementation tasks exist), do not implement those children here. Apply the [delivery fork](../using-agent-skills/SKILL.md#delivery-fork): open or resume the next unblocked child in its own linked worktree, using the allocated child track id (do not mint a second prefix). If the child's requirements are still a stub, complete its selected route's prerequisites first; Feature children run `spec-driven-development` then `planning-and-task-breakdown` there and stop. Run this skill only after the child's requirements and required task state are checked. `/build auto` on a parent advances the next child; it does not implement the epic.
 
-A destructive contract slice on a Feature expand/contract stays on the same track but requires a **new PR**; stop `/build auto` before landing drop/rename with the expand.
+Check the combined PR against the track's outcome and boundaries before each new task. If scope has outgrown one focused review, return to `planning-and-task-breakdown`, preserve existing work, and split unmerged changes and remaining outcomes into sibling tracks. Each implementation track gets its own branch, linked worktree, and PR. A destructive migration contract requires a separate track and PR from the expand.
 
-Execute remaining non-destructive slices within the user's authorized scope by default, preserving per-slice checks and commits. If the user asks for one task or stepwise review, stop at that endpoint. A normal test failure enters debugging and re-verification; a human gate is needed only for unresolved material intent, missing authority/access, or consequential risk that cannot be contained and verified autonomously. Reuse the user's existing authorization for the plan and routine implementation choices.
+Execute remaining slices within the current track's PR boundary and the user's authorized scope, preserving per-slice checks and commits. At that boundary, verify and hand off the PR before continuing authorized work in the next track's worktree; `/build auto` must not append the next track to this PR. If the user asks for one task or stepwise review, stop at that endpoint. A normal test failure enters debugging and re-verification; a human gate is needed only for unresolved material intent, missing authority/access, or consequential risk that cannot be contained and verified autonomously. Reuse the user's existing authorization for the plan and routine implementation choices.
 
 Multiple approaches alone do not require a question: choose within established intent and delegated judgment; ask with options and a recommendation when consequential trade-offs remain unresolved. Notify the user promptly in the active conversation about evidence of an active production outage, suspected compromise, or ongoing data loss, without waiting for complete diagnosis. Stop unsafe actions and continue authorized containment and fixes; notification grants no additional authority. Pause only work awaiting a required answer and continue safe independent work.
 
@@ -52,6 +52,8 @@ Multiple approaches alone do not require a question: choose within established i
 5. **Move to the next slice** — carry forward, don't restart
 
 ## Slicing Strategies
+
+These strategies find delivery boundaries as well as smaller implementation steps. Distinct outcomes such as create, list, edit, and delete usually become separate tracks and PRs. Several commits may implement one outcome, but commit boundaries do not replace PR boundaries. Dependent tracks may use an explicit stacked base or wait for prerequisites to merge.
 
 ### Vertical Slices (Preferred)
 
@@ -218,6 +220,7 @@ After each increment, verify with the repository's own commands (see the test-dr
 - [ ] Linting passes (the repository's lint command)
 - [ ] The new functionality works as expected
 - [ ] The change is committed with a descriptive message
+- [ ] The combined PR still fits the current track's single outcome; new outcomes were moved to separate tracks
 
 **Note:** Run each verification command after a change that could affect it. After a successful run, don't repeat the same command unless the code has changed since — re-running on unchanged code adds no information.
 

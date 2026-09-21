@@ -58,21 +58,21 @@ Implementation order follows the dependency graph bottom-up: build foundations f
 
 ### Step 3: Apply the Delivery Fork
 
-Read the capability map's Delivery column and the [delivery fork](../using-agent-skills/SKILL.md#delivery-fork).
+Read the [delivery fork](../using-agent-skills/SKILL.md#delivery-fork) and any capability map's Delivery column. Check the whole track's expected PR before writing tasks. Record one outcome, exclusions, acceptance checks, dependencies/base, and safe merge state. Small tasks cannot excuse a large combined PR. If it no longer fits, split the remaining intent into tracks and update the parent index before task planning, preserving existing work.
 
-**Feature (including Feature+map).** Continue to vertical task slices in this track. Map rows whose Delivery is `docs/tracks/<track-id>/spec.md#<id>` stay in this `docs/tracks/<track-id>/todo.md`.
+**One implementation track (including Feature+map).** Continue to vertical task slices only within its one-PR boundary. Map rows whose Delivery is `docs/tracks/<track-id>/spec.md#<id>` stay in this `docs/tracks/<track-id>/todo.md`.
 
 **Epic parent.** Stop slicing implementation tasks here.
 
-1. Allocate a unique `NNN-name` child track id per independently deliverable row (next unused prefixes; intended suffixes from the map are not ids until numbered). Write the ids into the map Delivery column, the parent spec `children` list, and parent `docs/tracks/<track-id>/todo.md`.
+1. Allocate a unique `NNN-name` child track id per focused PR (next unused prefixes; intended suffixes from the map are not ids until numbered). A capability row may need several child ids. Write the ids into the map Delivery column, the parent spec `children` list, and parent `docs/tracks/<track-id>/todo.md`. Record each child's outcome, exclusions, acceptance evidence, dependencies/base, and safe merge state; separate user releases are not required.
 2. Write `docs/tracks/<track-id>/plan.md` as child order, shared contracts, integration checkpoints, and risks — not child implementation tasks.
 3. Parent `docs/tracks/<track-id>/todo.md` is an index of child tracks plus integration checkpoints. Do not copy child task bodies.
-4. Create each child directory with a stub `docs/tracks/<track-id>/spec.md` (`role: feature`, `parent:` set to the initiative id) to reserve the id. Detailed child specs, plans, and tasks wait for that child's Feature `/spec` and `/plan` unless the parent already recorded a bounded child.
+4. Create each child directory with a stub `docs/tracks/<track-id>/spec.md` (or `docs/tracks/<track-id>/bug.md` for a defect), its selected workflow's `role`, and `parent:` set to the initiative id. Detailed requirements and tasks wait for that child's workflow; Feature children use `/spec` then `/plan`, while bounded children need only their route's artifacts.
 5. Set `role: initiative` on the parent spec if missing.
 
 **Stop.** Do not run Steps 4–6 on an Epic parent. Hand off to `/build`, which opens the next child. A parent plan is complete when the child index, order, shared contracts, and integration checkpoints are recorded. Check parent planning against the parent verification list below, not the Feature task checklist.
 
-When the active track is already a child (`parent:` set), continue at Step 4 for that child's tasks only.
+When the active track is already a child (`parent:` set), check its PR boundary too. If it is too large, update the existing parent with smaller sibling tracks; do not nest initiatives. Otherwise continue at Step 4 for that child's tasks only.
 
 ```markdown
 ## Children
@@ -95,15 +95,15 @@ Task 3: Build all UI components
 Task 4: Connect everything
 ```
 
-**Good (vertical slicing):**
+**Good (vertical delivery tracks, each with its own PR):**
 ```
-Task 1: User can create an account (schema + API + UI for registration)
-Task 2: User can log in (auth schema + API + UI for login)
-Task 3: User can create a task (task schema + API + UI for creation)
-Task 4: User can view task list (query + API + UI for list view)
+Track 1: User can create an account (schema + API + UI for registration)
+Track 2: User can log in (depends on Track 1)
+Track 3: User can create a task (depends on Track 2)
+Track 4: User can view the task list (depends on Track 3)
 ```
 
-Each vertical slice delivers working, testable functionality.
+Within one track, tasks are smaller steps toward that single PR outcome, such as account validation, persistence, and registration UI. Recheck the whole PR even when every task is small.
 
 ### Step 5: Write Tasks
 
@@ -167,7 +167,7 @@ Run routine checkpoints autonomously. Diagnose, fix, and reverify failed checks 
 | **L** | 5-8 | Multi-component feature | Search with filtering and pagination |
 | **XL** | 8+ | **Too large — break it down further** | — |
 
-If a task is L or larger, it should be broken into smaller tasks. An agent performs best on S and M tasks. If the oversized item could merge, ship, and be verified without the rest of this track, it is a child track (Epic), not a longer task list.
+If a task is L or larger, break it into smaller tasks. Then check the combined PR against Step 3: several S or M tasks can still make an oversized track. Separate reviewable outcomes become child tracks, including dependent slices of the same capability.
 
 **When to break a task down further:**
 - It would take more than one focused session (roughly 2+ hours of agent work)
@@ -221,6 +221,9 @@ status: draft
 
 ## Overview
 [One paragraph summary of what we're building]
+
+## PR Boundary
+[One reviewable outcome, exclusions, acceptance evidence, dependencies/base, and safe merge state]
 
 ## Architecture Decisions
 - [Key decision 1 and rationale]
@@ -285,7 +288,7 @@ When multiple agents or sessions are available:
 | "Planning is overhead" | Planning is the task. Implementation without a plan is just typing. |
 | "I can hold it all in my head" | Context windows are finite. Written plans survive session boundaries and compaction. |
 | "The old `docs/tracks/<track-id>/plan.md` is stale, I'll just replace it" | Unchecked tasks may be mid-build in another session. Overwriting them destroys work state that exists nowhere else. Stop and ask. |
-| "An Epic is just a long task list" | Independently shippable children get their own tracks. The parent indexes them. |
+| "Every task is small, so the track is small" | Reviewers see the combined PR. Split its outcomes into tracks before writing more tasks. |
 
 ## Red Flags
 
@@ -303,15 +306,16 @@ When multiple agents or sessions are available:
 
 **Epic parent** (stop after Step 3; do not require implementation tasks):
 
-- [ ] Each independently deliverable row has a unique child track id in the map, parent `children` list, and parent `docs/tracks/<track-id>/todo.md`
+- [ ] Each focused PR has a unique child track id in the map, parent `children` list, and parent `docs/tracks/<track-id>/todo.md`, with its outcome, evidence, dependencies/base, and safe merge state
 - [ ] Parent `docs/tracks/<track-id>/plan.md` records child order, shared contracts, and integration checkpoints
 - [ ] Parent `docs/tracks/<track-id>/todo.md` indexes child tracks, not identity/billing/notifications/reporting task bodies
-- [ ] Child stub specs exist with `role: feature` and `parent:` set
+- [ ] Child requirement stubs exist with the selected workflow's `role` and `parent:` set
 - [ ] Production-affecting work has an initialized parent `docs/tracks/<track-id>/ship.md`
 - [ ] No pre-existing incomplete plan was overwritten without explicit user confirmation
 
 **Feature and child tracks:**
 
+- [ ] All tasks together fit one focused PR; dependent outcomes that need separate reviews have separate tracks
 - [ ] Every task has acceptance criteria
 - [ ] Every task has a verification step
 - [ ] Every proposed test names the uncovered contract or distinct regression it protects, or the task records why existing coverage is sufficient
@@ -319,7 +323,7 @@ When multiple agents or sessions are available:
 - [ ] Tasks are recorded or indexed in `docs/tracks/<track-id>/todo.md`
 - [ ] Production-affecting work has an initialized `docs/tracks/<track-id>/ship.md`
 - [ ] No pre-existing incomplete plan was overwritten without explicit user confirmation
-- [ ] No implementation task touches more than ~5 files; independently shippable outcomes are child tracks, not XL tasks
+- [ ] No implementation task touches more than ~5 files; reducing task size has not hidden an oversized PR
 - [ ] Checkpoints exist between major phases
 - [ ] The plan matches authorized requirements, is checked for dependencies and verification, and has no unresolved decision requiring the user
 

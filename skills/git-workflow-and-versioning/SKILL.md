@@ -114,7 +114,7 @@ git commit -m "refactor validation and add phone number field"
 
 ### 5. Size Your Changes
 
-Target ~100 lines per commit/PR. Changes over ~1000 lines should be split. See the splitting strategies in `code-review-and-quality` for how to break down large changes.
+Each implementation track maps to one focused PR; apply the [delivery fork](../using-agent-skills/SKILL.md#delivery-fork) before branching and when scope grows. Size the whole diff against its intended base, not just individual commits. Target ~100 lines per commit/PR. Changes over ~1000 lines should be split. See `code-review-and-quality` for splitting strategies and mechanical-change exceptions.
 
 ```
 ~100 lines  → Easy to review, easy to revert
@@ -141,7 +141,7 @@ main (always deployable)
 
 **Initiative vs child branches.** Apply the [delivery fork](../using-agent-skills/SKILL.md#delivery-fork). An Epic is not one long-lived code branch. Merge parent planning documents early (planning-completeness `/verify`, not integration), then give each child its own linked worktree, short-lived branch named from the allocated track id, and PR. Branch children from the default branch after shared contracts exist; use a stacked or documented base only when a child must land after another. Never implement an epic in a single checkout. One writer per worktree still applies.
 
-**Destructive contract slices.** On a Feature expand/contract, keep the same track but open a new PR before drop/rename. Do not land expand and contract in one PR because `/build auto` still had remaining tasks.
+**Dependent tracks.** Give each reviewable outcome its own track and PR even when it shares a capability or release with others. Record the prerequisite and intended base; land the prerequisite first or use an explicit stacked branch. Verify the actual diff against that base so earlier tracks do not inflate the PR. Expand and destructive contract belong to separate tracks and PRs.
 
 ### Branch Naming
 
@@ -222,7 +222,7 @@ For an ordinary repository implementation request, the scoped push and PR handof
 
 ### Draft
 
-Create or update one PR for the current feature branch. Before mutating the remote, resolve the exact branch, remote, default branch, head revision, working-tree state, and any existing PR. Never create a duplicate because lookup was skipped.
+Create or update one PR for the current implementation track and branch. Check that its full diff still fits the recorded outcome; split oversized scope into tracks before continuing. Do not combine several implementation tracks in one PR. Before mutating the remote, resolve the exact branch, remote, default branch, head revision, working-tree state, and any existing PR. Never create a duplicate because lookup was skipped.
 
 Resolve the destination from the task, project configuration, and repository evidence; the presence of a remote alone is insufficient. If access, target, or ownership remains unresolved after inspection, prepare the scoped commits and PR body, report the precise blocker, and ask only for the missing input. Do not silently substitute local commits for the PR handoff or claim a blocker without checking.
 
@@ -458,6 +458,7 @@ For every release (anything with consumers):
 
 For every pull request:
 
+- [ ] One implementation track owns this focused PR, with dependencies/base and a safe merge state; initiative docs PRs contain coordination or evidence only
 - [ ] The PR identifies its spec, plan, scope, non-goals, risks, and head revision
 - [ ] Draft creation or readiness is within the user's authorized endpoint; existing authorization was reused before remote mutation
 - [ ] The implementation handoff includes the current PR URL and revision, or the explicit scope limit or verified blocker that prevents it

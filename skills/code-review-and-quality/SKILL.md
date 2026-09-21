@@ -117,6 +117,8 @@ Small, focused changes are easier to review, faster to merge, and safer to deplo
 
 **What counts as "one change":** A single self-contained modification that addresses one thing, includes any test changes justified by the admission gate or an explicit existing-coverage rationale, and keeps the system functional after submission. One part of a feature — not the whole feature.
 
+**Track boundary:** Check the entire PR against its implementation track's one outcome, declared base, and acceptance evidence. Many small commits, one capability name, or one release date do not justify a huge PR. An oversized or bundled implementation track is a Required finding: preserve the work, return to planning to split it into tracks and PRs, then reverify each resulting diff. Apply the [delivery fork](../using-agent-skills/SKILL.md#delivery-fork); initiative docs PRs must not carry child implementation.
+
 **Splitting strategies when a change is too large:**
 
 | Strategy | How | When |

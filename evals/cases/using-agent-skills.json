@@ -98,11 +98,11 @@
       "kind": "dialogue",
       "name": "epic-vs-feature-map",
       "prompt": "Two requests arrive. A: a customer portal with separately shippable identity, billing, notifications, and reporting, each with a different owner. B: rename the users.name column to full_name without downtime. Classify each workflow, name the artifact shape, and say what /spec, /plan, /build, and /verify must not do.",
-      "expected_output": "A is an Epic with a parent track and child tracks. B is a Feature using deprecation expand/contract phases, not an Epic. Commands on a parent do not implement or verify children as a substitute for integration.",
+      "expected_output": "A uses an initiative with one focused PR per child track. B uses a migration initiative with separate implementation tracks and PRs for mergeable expand/contract stages. Parent coordination never absorbs implementation or substitutes child PASS for integration.",
       "expectations": [
-        "Classifies the portal as Epic because the four areas can merge, ship, and be verified independently; does not treat touching several modules as sufficient for Epic",
+        "Classifies the portal as an initiative with focused child PRs; several modules alone do not require splitting when a change is small and coherent",
         "Parent artifacts are initiative spec, capability map with Delivery pointing at child tracks, and a todo.md that indexes children rather than listing their implementation tasks",
-        "Classifies the column rename as Feature plus deprecation-and-migration expand/contract, not Epic, with destructive contract in its own mergeable slice",
+        "Applies deprecation-and-migration to the column rename, with separate implementation tracks and PRs for mergeable stages; destructive contract cannot share the expand track or PR even though both affect one capability",
         "/spec on the epic writes parent outcomes not full child specs; /plan allocates child tracks; /build on the parent does not implement children in that checkout; /verify on the parent requires assembled-revision integration evidence and does not treat child PASS as parent PASS"
       ]
     }
