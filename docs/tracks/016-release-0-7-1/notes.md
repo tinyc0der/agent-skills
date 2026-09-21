@@ -9,9 +9,9 @@ status: draft
 
 ## Resume
 
-- Phase and current step: Implementing release metadata; track id corrected.
-- Next action: retag `0.7.1` on a tree whose track id passes artifact-path validation, then finish remaining validators.
-- Sources: [spec](spec.md); 0.7.0 process in [PR #4](https://github.com/tinyc0der/agent-skills/pull/4).
+- Phase and current step: Verification and review recorded for `f49fd66` / tag `0.7.1`. Next is push and PR.
+- Next action: push `chore/release-0.7.1` and annotated tag `0.7.1` to `orgin`, open the PR.
+- Sources: [spec](spec.md); [verification](verification.md); [review](review.md); 0.7.0 process in [PR #4](https://github.com/tinyc0der/agent-skills/pull/4).
 
 ## Notes
 
