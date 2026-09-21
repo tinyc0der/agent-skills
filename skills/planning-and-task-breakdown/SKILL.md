@@ -60,6 +60,8 @@ Implementation order follows the dependency graph bottom-up: build foundations f
 
 Read the [delivery fork](../using-agent-skills/SKILL.md#delivery-fork) and any capability map's Delivery column. Check the whole track's expected PR before writing tasks. Record one outcome, exclusions, acceptance checks, dependencies/base, and safe merge state. Small tasks cannot excuse a large combined PR. If it no longer fits, split the remaining intent into tracks and update the parent index before task planning, preserving existing work.
 
+**Stacked PR handoff.** Independent tracks use the default branch as their base. When a track needs an unmerged prerequisite and work should continue before that PR merges, record the dependency chain and one track per stack layer and PR. Through [Git workflow](../git-workflow-and-versioning/SKILL.md#branching-strategy), use the optional external skill named `gh-stack` when available; otherwise use the ordinary PR fallback there. Keep each track's tests, verification, and linked worktree.
+
 **One implementation track (including Feature+map).** Continue to vertical task slices only within its one-PR boundary. Map rows whose Delivery is `docs/tracks/<track-id>/spec.md#<id>` stay in this `docs/tracks/<track-id>/todo.md`.
 
 **Epic parent.** Stop slicing implementation tasks here.
