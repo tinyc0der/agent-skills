@@ -3,7 +3,7 @@ type: Change Specification
 title: Grok defaults for delegated implementation and verification
 description: Add Grok to the delegate runner choices and use it for implementation and independent verification by default.
 status: draft
-workflow_status: in_progress
+workflow_status: awaiting_merge
 ---
 
 # Grok delegation defaults

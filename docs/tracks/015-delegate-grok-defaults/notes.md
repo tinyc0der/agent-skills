@@ -19,3 +19,10 @@ status: draft
   both roles and must retain that mapping.
 - Destination confirmed as `tinyc0der/agent-skills`, remote `orgin`, base `main`,
   with write access and no existing PR for this branch.
+- Implementation revision: `5ca44818d12d303f011a08ee01a9b0f73e779178`.
+  [Verification](verification.md) passes and [author review](review.md) has no
+  blocking findings. Live behavioral evals and Grok dispatch were not run; this
+  change updates the instruction policy only.
+- Repository gates pass: 74 script tests, 174 eval checks, hook tests, all content
+  validators, plugin validation, and skill-creator validation. The four existing
+  delegate behavioral cases load in dry-run mode.
