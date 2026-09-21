@@ -1,20 +1,20 @@
 ---
 name: delegate
-description: Delegates bounded engineering tasks and phases to fresh Orca agent sessions with configurable runner choices. Use when the user asks for one-shot delegation, to coordinate phases across Codex, OpenCode, or Antigravity, to supervise a mixed-agent workflow, or to run delegate on a task.
+description: Delegates bounded engineering tasks and phases to fresh Orca agent sessions with configurable runner choices. Use when the user asks for one-shot delegation, to coordinate phases across Codex, Grok, OpenCode, or Antigravity, to supervise a mixed-agent workflow, or to run delegate on a task.
 ---
 
 # Delegate
 
 ## Overview
 
-Give each bounded task one complete prompt in a fresh Orca session. Default to a one-shot handoff; keep a coordinator only when the user requests supervision, returned results, or automatic dependent phases. Default to Codex for specification, planning, and review, and OpenCode for implementation and independent verification; allow Antigravity or an explicit runner override.
+Give each bounded task one complete prompt in a fresh Orca session. Default to a one-shot handoff; keep a coordinator only when the user requests supervision, returned results, or automatic dependent phases. Default to Codex for specification, planning, and review, and Grok for implementation and independent verification; allow OpenCode, Antigravity, or an explicit runner override.
 
 This skill owns task boundaries and phase-to-runner policy. Orca's separately installed `orca-cli` and `orchestration` workflows own transport and lifecycle mechanics; the project's lifecycle skills own the engineering work. Runner choice is a preference, not evidence of quality.
 
 ## When to Use
 
 - The user invokes `delegate` for a bounded task, requests a one-shot delegation, or asks to supervise phases across agent sessions.
-- Planning or review should run in Codex while OpenCode or Antigravity implements and independently verifies.
+- Planning or review should run in Codex while Grok, OpenCode, or Antigravity implements and independently verifies.
 - A phase result must return to the coordinator before another phase begins.
 
 Use `orca-cli` directly for a plain ownership transfer needing no phase or runner policy. For ordinary work with no delegation request, use the relevant lifecycle skill directly. If the user asks only to discuss or draft a delegation plan, stop at that requested deliverable without launching workers or requiring access to a live runtime.
@@ -45,18 +45,18 @@ Apply choices in this order: the user's current instruction, an existing project
 | Required phase | Default runner | Deliverable |
 | --- | --- | --- |
 | Specification and planning | Codex | Requirements, acceptance criteria, and an actionable plan |
-| Implementation, tests, and fixes | OpenCode | Scoped changes and the implementer's check results |
-| Independent verification | OpenCode in a fresh session | Acceptance trace, applicable check results, runtime evidence, and a readiness verdict |
+| Implementation, tests, and fixes | Grok | Scoped changes and the implementer's check results |
+| Independent verification | Grok in a fresh session | Acceptance trace, applicable check results, runtime evidence, and a readiness verdict |
 | Independent review | Codex in a fresh session | Findings against the actual revision and acceptance criteria |
 | Integration and final acceptance | Current coordinator | Reconciled evidence and the requested final outcome |
 
-Antigravity can replace OpenCode for implementation, fixes, the implementer's own checks, or independent verification. Resolve the implementation and verifier runners separately: an override naming only one role changes only that role. Preserve explicitly chosen runners, models, reasoning effort, accounts, and budgets. Otherwise use the runner's configured model defaults. Do not infer a model from a CLI name or pass one provider's model flags to another.
+OpenCode and Antigravity can replace Grok for implementation, fixes, the implementer's own checks, or independent verification. Resolve the implementation and verifier runners separately: an override naming only one role changes only that role. Preserve explicitly chosen runners, models, reasoning effort, accounts, and budgets. Otherwise use the runner's configured model defaults. Do not infer a model from a CLI name or pass one provider's model flags to another.
 
 For coordinated work, the default order of required phases is planning → implementation → independent verification → independent review → coordinator acceptance. Every phase, implementation slice, and repair uses a fresh session, even when the runner is unchanged. Reuse files and accepted artifacts rather than a growing conversation. A one-shot handoff assigns only its agreed bounded scope and does not promise later phases will run automatically.
 
 State the selected mapping before launch and proceed within existing authorization. Do not add a planning phase to an already planned task or a review phase to a planning-only request. A phase transition does not itself require new user approval; preserve actual project gates and reuse approvals already given.
 
-Verify that the requested runner is installed and supported by the selected Orca launch path. Agent IDs and executable names can differ: Antigravity is commonly the `antigravity` agent running `agy`. A binary on PATH does not prove prompt delivery or, in coordinated mode, tracked completion support. If a selected runner is unavailable or rejects dispatch, use an already authorized fallback or ask for a replacement; do not silently change runners or drop required completion tracking.
+Verify that the requested runner is installed and supported by the selected Orca launch path. Grok refers to the Grok Build CLI (`grok`). Agent IDs and executable names can differ: Antigravity is commonly the `antigravity` agent running `agy`. A binary on PATH does not prove prompt delivery or, in coordinated mode, tracked completion support. If a selected runner is unavailable or rejects dispatch, use an already authorized fallback or ask for a replacement; do not silently change runners or drop required completion tracking.
 
 ### 3. Give each session a bounded phase
 
@@ -128,7 +128,7 @@ Delivery describes whether the assigned phase produced its result; it does not a
 
 ### 5. Verify independently
 
-When verification is required, dispatch it to a fresh session using the selected verifier runner after accepting the implementation output. The default verifier is OpenCode; Antigravity is an alternative. The implementer still runs checks while building; the verifier independently tests the assembled result against acceptance criteria. Load the project's `verification-and-validation` skill when available; otherwise use its documented verification workflow with the minimum report contract below.
+When verification is required, dispatch it to a fresh session using the selected verifier runner after accepting the implementation output. The default verifier is Grok; OpenCode and Antigravity are alternatives. The implementer still runs checks while building; the verifier independently tests the assembled result against acceptance criteria. Load the project's `verification-and-validation` skill when available; otherwise use its documented verification workflow with the minimum report contract below.
 
 Give the verifier the requirements, accepted plan, exact implementation revision or reproducible working-tree snapshot, environment and check instructions, and the implementer's report. Require the verifier to run applicable checks and observe relevant runtime behavior itself. The implementer's report supplies context, not a substitute for independent evidence. For changes with no runtime surface, record why runtime checks do not apply.
 
@@ -147,7 +147,7 @@ Keep the coordinator responsible for integration, any lifecycle checks still req
 ## Example Requests
 
 - `Use delegate for a one-shot implementation of this approved task. Return after delivery; save the child's result in the existing track.`
-- `Use delegate to build this feature. Codex plans and reviews; OpenCode implements and verifies in separate sessions.`
+- `Use delegate to build this feature. Codex plans and reviews; Grok implements and verifies in separate sessions.`
 - `Use delegate with Antigravity for implementation, fixes, and verification in separate sessions. Keep all phases in this worktree.`
 - `Use delegate for implementation and review only; the existing plan is already approved.`
 

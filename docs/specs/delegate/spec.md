@@ -15,6 +15,10 @@ status: draft
 - Coordinated work preserves the requested phases and coordinator acceptance.
   The skill owns runner policy and task boundaries; the live Orca guides own
   transport, lifecycle authority, recovery, and cleanup.
+- Runner selection follows the user's instruction, then the project mapping,
+  then skill defaults: Codex for specification, planning, and review; Grok for
+  implementation, tests, fixes, and independent verification. OpenCode and
+  Antigravity remain alternatives. An override for one role changes only that role.
 - Every phase, slice, and repair gets one complete packet in a fresh session.
   Artifact references carry context. Blocking replies and explicit user steering
   are allowed; unsolicited nudges and follow-up assignments are not.
@@ -36,3 +40,6 @@ The [delegate skill](../../../skills/delegate/SKILL.md) defines runner defaults,
 task packets, and acceptance. [Track 011](../../tracks/011-delegate-one-shot/spec.md)
 records the change and its verification. This contract governs agent decisions;
 it does not implement Orca's lifecycle or notification service.
+
+[Track 015](../../tracks/015-delegate-grok-defaults/spec.md) records the Grok runner
+defaults and preserves explicit overrides and separate verification sessions.
