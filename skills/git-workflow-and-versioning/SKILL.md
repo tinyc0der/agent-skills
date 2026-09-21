@@ -143,6 +143,8 @@ main (always deployable)
 
 **Dependent tracks.** Give each reviewable outcome its own track and PR even when it shares a capability or release with others. Record the prerequisite and intended base; land the prerequisite first or use an explicit stacked branch. Verify the actual diff against that base so earlier tracks do not inflate the PR. Expand and destructive contract belong to separate tracks and PRs.
 
+**Optional external skill.** When dependent tracks should progress before their prerequisite PRs merge, invoke `gh-stack` if that skill is available in the agent environment; it is not bundled with this pack. Map one implementation track to each stack layer, branch, and PR; keep independent tracks based on the default branch. Keep necessary tests and contract updates with their owning track. Preserve linked-worktree isolation, per-track verification, and the merge-method and authorization rules below when following external guidance. If the skill or tool is unavailable, use explicit dependent branches through this Git workflow or land prerequisites first; do not require installation to proceed.
+
 ### Branch Naming
 
 ```
