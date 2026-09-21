@@ -9,7 +9,7 @@ role: task
 
 # Small tracks for reviewable PRs
 
-**Authorization:** The user asked to update the skills so intent is split into small tracks, each with a reviewable PR.
+**Authorization:** The user asked to update the skills so intent is split into small tracks, each with a reviewable PR. The follow-up authorizes an optional `gh-stack` handoff for dependent tracks in planning and Git workflow.
 **Affected capability:** [Feature development workflow](../../specs/feature-development-workflow/spec.md).
 
 ## Outcome and scope
@@ -27,6 +27,7 @@ Small coherent changes keep one track. Do not impose a new hard line-count limit
 3. Build and PR review check the whole track, not only commit size. Scope growth returns to planning and preserves existing work. Migration expand and destructive contract use separate tracks and PRs.
 4. Skills, all three command adapters, and the canonical workflow spec agree. Initiative parents remain coordination records with separate integration evidence.
 5. Behavioral cases cover dependent work within one capability and a small-change control. Structural, routing, link, lifecycle, and hook checks pass.
+6. Planning and Git workflow mention optional `gh-stack` for work that depends on an unmerged prerequisite. Independent tracks stay based on the default branch. Each stack layer retains one track and PR, its tests, verification, and linked worktree. Missing tooling does not block ordinary PR delivery or require installation.
 
 ## Work and verification
 
