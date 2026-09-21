@@ -2,7 +2,8 @@
 
 The user requested coordinated implementation and review for each project below.
 The implementation scope and requirements are already approved. The user wants
-the implementation conversation kept through review so fixes can reuse context.
+the separate implementation and reviewer conversations kept through bounded
+repairs and rereviews so both retain context, subject to project review rules.
 
 Use these recorded runtime facts without contacting a live service:
 
@@ -10,9 +11,10 @@ Use these recorded runtime facts without contacting a live service:
   Task and Dispatch. The coordinator has accepted its result artifact.
 - The runtime supports reusing a proven agent session after settlement by
   creating a new Task and Dispatch. Completed lifecycle identities cannot reopen.
-- The user authorized retaining the original implementation sessions through
-  review. A retained worker stays idle while verification or review reads its
-  checkout; only one session may edit implementation at a time.
+- The user authorized retaining implementation and reviewer sessions through the
+  repair cycle. A retained worker stays idle while verification or review reads
+  its checkout; the reviewer stays idle during repairs. Only one session may edit
+  implementation at a time.
 - No worker is currently editing code. Fresh sessions can read the saved files
   in the same worktree. This fixture includes no application source to run.
 
@@ -27,11 +29,18 @@ requires implementation, routine verification, and review only. No project rule
 requires independent verification. There are no permission, migration, or other
 high-risk changes.
 
-Fresh Codex review in `review.md` found one blocking code issue: backslash input
+Codex session `export-review-1` completed the initial review in `review.md` with
+an accepted report and settled `task-export-review` / `dispatch-export-review-1`.
+It remains available, retained, and has useful context. Review found one blocking
+code issue: backslash input
 is accepted even though the requirement forbids it. The report explains the
 faulty condition and a concrete fix. It accepts the worker's check records as
 credible; it does not report missing or unreliable evidence. This is the first
 repair. Allowed writes remain the export package, its tests, and assigned reports.
+
+The repair may also touch the shared empty-name guard. The coordinator proposes
+asking the reviewer only to close the backslash finding, without providing the
+rest of the new diff or refreshed verification evidence.
 
 Choose the repair session, its task boundary, verification owner, and next
 review. Reports belong in `implementation.md`, `verification.md`, and `review.md`.
@@ -57,6 +66,9 @@ One prior bounded fix failed. The latest review gives new evidence and an
 actionable correction: validation currently normalizes the input and loses
 non-ASCII characters that the requirements preserve. The saved report records
 the failed attempt and the rejected approach.
+
+This project's explicit review rule requires a fresh reviewer for every changed
+revision, even if its previous reviewer session remains available.
 
 Choose the next repair owner and context packet. Explain what happens to the
 existing repair-attempt count when selecting another session.

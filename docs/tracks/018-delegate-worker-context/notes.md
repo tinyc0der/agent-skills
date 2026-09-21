@@ -9,10 +9,11 @@ status: draft
 
 ## Resume
 
-- Phase: implementation, verification, and agent review passed in
+- Phase: extend the approved session policy to bounded rereviews in
   `orca/018-delegate-worker-context`.
-- Next: repository review of [PR 17](https://github.com/tinyc0der/agent-skills/pull/17)
-  and a merge decision. Merge is not authorized by this task.
+- Next: reverify and rereview the updated policy, then refresh
+  [PR 17](https://github.com/tinyc0der/agent-skills/pull/17). Merge remains outside
+  the authorized task.
 - Sources: [accepted scope](spec.md), [verification](verification.md),
   [review](review.md).
 
@@ -37,3 +38,7 @@ status: draft
   sessions and that runtime retries remain distinct from new follow-up tasks.
   The evaluator reconciled its result with the final skill; no project decision
   changed. No unresolved skill-improvement item remains in this track.
+- Follow-up user decision: preserve the original reviewer session for bounded
+  rereviews while keeping it separate from implementation. Review all new changes
+  and current evidence, and issue a new verdict for the latest target. Earlier
+  evidence describes the previous fresh-rereview policy and needs reconciliation.

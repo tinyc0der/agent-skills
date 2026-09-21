@@ -7,7 +7,7 @@ description: Delegates bounded engineering tasks and phases to Orca agent sessio
 
 ## Overview
 
-Start new bounded tasks in fresh Orca sessions. Keep routine verification and bounded review fixes in the original implementation session by default, preserving its working context. Default to a one-shot handoff; keep a coordinator only when the user requests supervision, returned results, or automatic dependent phases. Default to Codex for specification, planning, and fresh review, and Grok for implementation and verification; allow OpenCode, Antigravity, or an explicit runner override.
+Start new bounded tasks in fresh Orca sessions. Keep routine verification and bounded fixes in the original implementation session, and bounded rereviews in the original reviewer session. Keep those roles separate. Default to a one-shot handoff; keep a coordinator only when the user requests supervision, returned results, or automatic dependent phases. Default to Codex for specification, planning, and review, and Grok for implementation and verification; allow OpenCode, Antigravity, or an explicit runner override.
 
 This skill owns task boundaries and phase-to-runner policy. Orca's separately installed `orca-cli` and `orchestration` workflows own transport and lifecycle mechanics; the project's lifecycle skills own the engineering work. Runner choice is a preference, not evidence of quality.
 
@@ -47,35 +47,35 @@ Apply choices in this order: the user's current instruction, an existing project
 | Specification and planning | Codex | Requirements, acceptance criteria, and an actionable plan |
 | Implementation, routine verification, and fixes | Grok in the same implementation session | Scoped changes, acceptance trace, check results, runtime evidence, and a readiness verdict |
 | Independent verification, when required | Grok in a fresh session | Independently observed acceptance evidence and a readiness verdict |
-| Independent review | Codex in a fresh session | Findings against the actual revision and acceptance criteria |
+| Independent review | Codex: fresh initial review, same reviewer for bounded rereviews | Findings against the actual revision and acceptance criteria |
 | Integration and final acceptance | Current coordinator | Reconciled evidence and the requested final outcome |
 
 OpenCode and Antigravity can replace Grok for implementation, fixes, routine verification, or independent verification. Resolve the implementation and independent verifier runners separately: an implementation override carries its routine checks and fixes but does not change the independent verifier. An explicit assignment to a separate verifier, including a different verification runner, selects independent verification. Preserve explicitly chosen runners, session boundaries, models, reasoning effort, accounts, and budgets. Otherwise use the runner's configured model defaults. Do not infer a model from a CLI name or pass one provider's model flags to another.
 
-For coordinated work, the default order of required phases is planning → implementation and routine verification → independent verification when required → fresh review → coordinator acceptance. New implementation tasks and independent slices start fresh; bounded repairs and routine verification reuse their implementation session. Use a fresh implementation session when the original is unavailable, its context is too large or unreliable, the scope changes substantially, or it is stuck. Carry saved artifacts and record the reason; a new conversation does not reset fix-attempt or runtime retry limits. A one-shot handoff assigns only its agreed bounded scope and does not promise later phases will run automatically.
+For coordinated work, the default order of required phases is planning → implementation and routine verification → independent verification when required → independent review → coordinator acceptance. New implementation tasks and independent slices start fresh; bounded repairs and routine verification reuse their implementation session. Initial review starts fresh; bounded rereviews reuse that reviewer. Use a fresh implementation session when the original is unavailable, its context is too large or unreliable, the scope changes substantially, or it is stuck. Carry saved artifacts and record the reason; a new conversation does not reset fix-attempt or runtime retry limits. A one-shot handoff assigns only its agreed bounded scope and does not promise later phases will run automatically.
 
-State the selected mapping, verification mode, and intended implementation-session retention before launch and proceed within existing authorization. Follow the live runtime's retention and resume rules, including any explicit retention requirement; reuse approval already given. If safe session reuse is unavailable, report why and use a fresh session with the saved context. Do not add a planning phase to an already planned task or a review phase to a planning-only request. A phase transition does not itself require new user approval; preserve actual project gates.
+State the selected mapping, verification mode, and intended implementation and reviewer session retention before launch and proceed within existing authorization. Follow the live runtime's retention and resume rules, including any explicit retention requirement; reuse approval already given. If safe session reuse is unavailable, report why and use a fresh session with the saved context. Do not add a planning phase to an already planned task or a review phase to a planning-only request. A phase transition does not itself require new user approval; preserve actual project gates.
 
 Verify that the requested runner is installed and supported by the selected Orca launch path. Grok refers to the Grok Build CLI (`grok`). Agent IDs and executable names can differ: Antigravity is commonly the `antigravity` agent running `agy`. A binary on PATH does not prove prompt delivery or, in coordinated mode, tracked completion support. If a selected runner is unavailable or rejects dispatch, use an already authorized fallback or ask for a replacement; do not silently change runners or drop required completion tracking.
 
 ### 3. Give each assignment a bounded scope
 
-Prepare one self-contained task packet per assignment, including each repair in a reused session; create tracked Tasks only in coordinated mode. Supply:
+Prepare one self-contained task packet per assignment, including each repair or rereview in a reused session; create tracked Tasks only in coordinated mode. Supply:
 
 - Objective, phase, acceptance criterion references, and the exact lifecycle skill name and resolved `SKILL.md` path to apply.
 - Absolute repository/worktree path and branch, input artifact paths, and the revision or dirty working state the worker must inspect.
 - Allowed write paths, exclusions, dependencies, expected output/report path, and checks whose evidence must be returned.
 - Decisions and relevant user instructions from earlier phases, so a fresh session can work without chat history.
 - For integration, the effective merge policy, prohibitions, and source from the [Git skill's merge method decision](../git-workflow-and-versioning/SKILL.md#merge-method-decision); carry them to the integration owner and subsequent handoffs.
-- A stopping condition and result owner: write the assigned result artifact and end the assignment after completion or an unresolved blocker. For coordinated tasks, include the live blocking ask/reply mechanism in the packet: seek a necessary coordinator answer before declaring the task blocked, then return the required completion report. A retained implementation session stays idle until a new authorized assignment arrives; it does not poll for work. A one-shot child records unresolved blockers for its result owner without creating coordinator obligations. Do not start another phase or spawn descendants on your own.
+- A stopping condition and result owner: write the assigned result artifact and end the assignment after completion or an unresolved blocker. For coordinated tasks, include the live blocking ask/reply mechanism in the packet: seek a necessary coordinator answer before declaring the task blocked, then return the required completion report. A retained session stays idle until a new authorized assignment arrives; it does not poll for work. A one-shot child records unresolved blockers for its result owner without creating coordinator obligations. Do not start another phase or spawn descendants on your own.
 
-Local sessions read shared artifacts and skills directly. Reference the relevant files and sections instead of copying whole documents or earlier conversations into the task packet. At assignment entry, read the applicable project instructions, assigned lifecycle skill, and current inputs, even when reusing a conversation. A repair packet names the review findings, changed target, allowed scope, and required checks. Resolve project paths from the named worktree and use absolute paths for skills outside it; confirm the inputs are accessible from that session.
+Local sessions read shared artifacts and skills directly. Reference the relevant files and sections instead of copying whole documents or earlier conversations into the task packet. At assignment entry, read the applicable project instructions, assigned lifecycle skill, and current inputs, even when reusing a conversation. A repair packet names the review findings, changed target, allowed scope, and required checks. A rereview packet supplies the prior reviewed revision and findings, current target, all changes since that review, and current verification evidence. Resolve project paths from the named worktree and use absolute paths for skills outside it; confirm the inputs are accessible from that session.
 
 Use the project's existing artifact locations and lifecycle report formats. In a track workflow, keep running context in `docs/tracks/<track-id>/notes.md` and link the existing spec or bug report, plan, task ledger, verification, and review as relevant. Otherwise use the task's designated brief and report paths. Delegation alone does not require a new track, handoff directory, or duplicate report. Planning may write its specified documents; verification and review may write their designated reports and evidence but must not edit implementation or test source. Route fixes to the selected implementation runner, including fixes discovered during PR preparation when PR work is authorized.
 
 A fresh session does not require a new worktree. When a new session is needed, use the required current worktree by default, especially when inputs are uncommitted. Allow only one implementation writer at a time in that checkout. Freeze implementation edits while verification or review examines it. Use another checkout only as permitted by the selected Orca workflow, with an explicit base and a verified way to carry required artifacts and changes into it.
 
-Send the complete packet once per assignment. Do not send progress inquiries, reminders, unsolicited advice, or vague "continue" prompts. A necessary blocking reply or explicit user correction/cancellation is allowed through the live transport contract. After accepted settlement, a bounded repair or routine-verification assignment may reuse the implementation session through the documented dispatch path. New scope starts fresh. Never reuse an active or unresolved attempt, or use a follow-up to bypass missing-completion recovery. An ambiguous send receipt is a reason to inspect the original request, never to send the packet again blindly.
+Send the complete packet once per assignment. Do not send progress inquiries, reminders, unsolicited advice, or vague "continue" prompts. A necessary blocking reply or explicit user correction/cancellation is allowed through the live transport contract. After accepted settlement, route bounded repairs and routine verification to the original implementer and bounded rereviews to the original reviewer through the documented dispatch path. New scope starts fresh. Never reuse an active or unresolved attempt, or use a follow-up to bypass missing-completion recovery. An ambiguous send receipt is a reason to inspect the original request, never to send the packet again blindly.
 
 ### 4. Dispatch once and honor the selected endpoint
 
@@ -89,7 +89,7 @@ Start dependent phases only after their inputs have been accepted. Task completi
 
 For explicit supervised waiting, use the longest documented event-wait window compatible with host responsiveness. Where the host supports background execution, keep one outstanding event wait across tool yields instead of issuing a new short check each time. Do not build a repeated short-timeout loop such as `--timeout-ms 40000` as the default. Process and acknowledge deliveries according to the live guide; a timeout never calls for a prompt to the child.
 
-After settlement, record the worker's next owner and cleanup decision through the live guide. Keep or resume the implementation session through review when authorized and supported; freeze its edits while another session verifies or reviews. Each new follow-up assignment gets its own Task and Dispatch identity, receipt, and completion report, even in the same conversation. Do not reuse settled identities for new work; retries of a failed assignment follow the live recovery contract and retain their history. Release workers when no further authorized work needs them, or account for explicit retention; fresh reviewers and independent verifiers keep separate sessions.
+After settlement, record the worker's next owner and cleanup decision through the live guide. Keep or resume the implementation and reviewer sessions through the repair cycle when authorized and supported. Freeze implementation edits while another session verifies or reviews; keep the reviewer idle during repairs. Each new follow-up assignment gets its own Task and Dispatch identity, receipt, and completion report, even in the same conversation. Do not reuse settled identities for new work; retries of a failed assignment follow the live recovery contract and retain their history. Release workers when no further authorized work needs them, or account for explicit retention. Review and independent verification remain separate from implementation.
 
 Require an accepted completion report from the actual dispatched worker with the correct task/dispatch identity and explicit outcome. Failed or stale completion reports cannot release dependent phases. Never manufacture worker completion from the coordinator, and do not use a manual completed status to disguise an unsupported runner.
 
@@ -143,17 +143,19 @@ Route failures to the original implementation session for a bounded fix under th
 
 ### 6. Review, repair, and finish
 
-Give review a fresh Codex session with the accepted plan, acceptance criteria, actual diff, and accepted verification evidence, including the separate verifier's report when independence is required. Review assesses code quality, risks, and the credibility of that evidence. Record the reviewed commit plus any uncommitted changes, or another reproducible snapshot identity. Do not accept an earlier verification or review report after the implementation changes.
+Start the first review in a fresh Codex session with the accepted plan, acceptance criteria, actual diff, and accepted verification evidence, including the separate verifier's report when independence is required. Keep the reviewer separate from implementation throughout the cycle. Review assesses code quality, risks, and the credibility of that evidence. Record the reviewed commit plus any uncommitted changes, or another reproducible snapshot identity. Do not accept an earlier verification or review report after the implementation changes.
 
-When review finds a blocking issue, create a bounded fix task for the original implementation session by default. The worker fixes it and reruns affected checks and project regression gates; obtain fresh independent verification when required, then fresh review of the updated revision. If review finds missing or unreliable evidence, require the independent pass before accepting the result. Continue authorized, actionable fixes autonomously. If the same blocker persists after two fix attempts without new evidence or an actionable next step, preserve the artifacts and raise the concrete blocker instead of looping indefinitely. Honor Orca's dispatch circuit breaker separately.
+When review finds a blocking issue, create a bounded fix task for the original implementation session by default. The worker fixes it and reruns affected checks and project regression gates; obtain fresh independent verification when required, then return the updated revision to the original reviewer. Each rereview checks the fixes, all changes since the prior review, affected surrounding behavior, and current verification evidence, not just the earlier findings. Return a new verdict naming the current target. Use a fresh reviewer when the original is unavailable, its context is too large or unreliable, scope changes substantially, or the user or project requires a new reviewer. Record the reason and carry prior findings and artifacts.
+
+If review finds missing or unreliable evidence, require the independent pass before accepting the result. Continue authorized, actionable fixes autonomously. If the same blocker persists after two fix attempts without new evidence or an actionable next step, preserve the artifacts and raise the concrete blocker instead of looping indefinitely. Honor Orca's dispatch circuit breaker separately.
 
 Keep the coordinator responsible for integration, any lifecycle checks still required, and final acceptance. Delegating phases does not add permission to publish, merge, deploy, or message people. Complete the requested endpoint, then report the phase owners, artifact locations, verification results, and any remaining blocker. Distinguish a prepared delegation plan from phases that actually ran.
 
 ## Example Requests
 
 - `Use delegate for a one-shot implementation of this approved task. Return after delivery; save the child's result in the existing track.`
-- `Use delegate to build this feature. Codex plans and reviews; keep Grok's implementation session for verification and review fixes.`
-- `Use delegate with Antigravity for implementation and fixes, a separate Grok verifier, and fresh Codex review. Keep all phases in this worktree.`
+- `Use delegate to build this feature. Keep Grok's implementation session for verification and fixes, and the separate Codex reviewer for rereviews.`
+- `Use delegate with Antigravity for implementation and fixes, a separate Grok verifier, and Codex review. Keep all phases in this worktree.`
 - `Use delegate for implementation and review only; the existing plan is already approved.`
 
 ## Common Rationalizations
@@ -168,6 +170,7 @@ Keep the coordinator responsible for integration, any lifecycle checks still req
 | A short check timed out, so nudge the child. | Silence does not call for another prompt; use the selected completion path. |
 | The process ended, so the work passed. | Termination proves the attempt ended; acceptance still needs its report and evidence. |
 | Every review fix needs a fresh worker. | Reuse the original implementation session when its context is useful and runtime ownership allows it. |
+| Rereview only needs to close the old findings. | The reviewer must assess all new changes and current evidence before issuing a verdict for the latest revision. |
 | Reusing the session means reusing its completed task. | Each follow-up needs new lifecycle identities after accepted settlement. |
 
 ## Red Flags
@@ -177,6 +180,7 @@ Keep the coordinator responsible for integration, any lifecycle checks still req
 - Verification or review reads a changing checkout, or later sessions cannot access predecessor artifacts.
 - The verifier patches code or approves the result using only the implementer's report.
 - Worker self-verification is presented as independent evidence, or a required independent pass is dropped.
+- A reused reviewer ignores new changes, carries forward an old approval, or shares the implementation conversation.
 - An old report or a failed dispatch unlocks dependent work.
 - A default handoff grows a polling loop, or a coordinator promises automatic continuation without runtime support.
 - Missing completion triggers repeated prompts, invented success, or another writer while the prior attempt may still be active.
@@ -189,6 +193,7 @@ Apply these checks to the requested execution scope; a plan-only request needs a
 - [ ] A one-shot handoff has a confirmed send receipt and result destination, with no supervision or claim of completed work.
 - [ ] Coordinated phases have valid Orca task/dispatch provenance and accepted results; automatic continuation uses verified runtime support.
 - [ ] New tasks started fresh; routine verification and bounded repairs reused the implementation session where suitable, with a recorded reason for replacement.
+- [ ] Initial review used a separate fresh session; bounded rereviews reused that reviewer where suitable, with current findings and evidence and a recorded reason for replacement.
 - [ ] Each assignment received one complete packet; coordinated follow-ups used new lifecycle identities after accepted settlement, without nudges or ongoing coaching.
 - [ ] Missing completion preserves an unknown/incomplete outcome and work; timeout, idle, and contact loss never manufacture success or authorize a duplicate.
 - [ ] Each session received accessible inputs and stayed within its phase and write scope.
