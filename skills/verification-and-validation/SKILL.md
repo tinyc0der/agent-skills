@@ -50,11 +50,11 @@ Record the revision or working-tree state being verified. Read:
 
 If the target changes after a check runs, rerun each affected check. Evidence belongs to a revision, not merely to a feature name.
 
-**Initiative vs child.** Apply the [delivery fork](../using-agent-skills/SKILL.md#delivery-fork). Child `/verify` is Feature verification of that child's revision.
+**Initiative vs child.** Apply the [delivery fork](../using-agent-skills/SKILL.md#delivery-fork). Each implementation track verifies its one PR against its declared base and acceptance criteria, including dependencies and the safe state after merge. A stacked child must not claim unmerged prerequisites have landed. An oversized or mixed-track diff returns to planning before readiness. Child `/verify` follows that child's selected workflow.
 
 Parent **planning** `/verify` (docs PR before children exist) traces artifact completeness only: capability map, initiative spec, child-track index, stub ids, and shared-contract notes. Runtime integration is NOT APPLICABLE. That completeness PASS may mark the planning PR ready.
 
-Parent **integration** `/verify` runs after required children have merged. Freeze the **assembled revision** as the remote default-branch head that includes those children. Cite child `docs/tracks/<track-id>/verification.md` files as supporting evidence. A child PASS does not make the parent PASS. Missing required children, or substituting child reports for integration evidence, is INCOMPLETE. Record the integration report on a follow-up parent docs PR; do not attach parent PASS to a child PR. Integration failures stay on the parent track.
+Parent **integration** `/verify` runs after required children have merged. Freeze the **assembled revision** as the remote default-branch head that includes those children. Cite child `docs/tracks/<track-id>/verification.md` files as supporting evidence. A child PASS does not make the parent PASS. Missing required children, or substituting child reports for integration evidence, is INCOMPLETE. Record the integration report on a follow-up parent docs PR; do not attach parent PASS to a child PR. Record integration failures in the parent; fixes need separate implementation tracks and PRs.
 
 ### 2. Build an acceptance trace
 

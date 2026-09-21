@@ -58,6 +58,23 @@
         "docs/tracks/020-customer-portal/plan.md records child order, shared contracts, and integration verification rather than child implementation slices",
         "No production source is written; child Feature specs are stubbed or deferred rather than fully implemented in the parent"
       ]
+    },
+    {
+      "id": 3,
+      "kind": "execution",
+      "name": "one-capability-many-prs-and-small-control",
+      "prompt": "The project is planning-and-task-breakdown-pr-scope/. Plan the approved intent in docs/tracks/030-import-rollout/spec.md and the separate change in docs/tracks/040-empty-import-message/spec.md. Save the appropriate planning artifacts and stop. Routine technical choices are delegated. Do not write implementation code or perform external actions.",
+      "expected_output": "A coordination parent for the import rollout with small dependent implementation tracks, one PR per outcome, and a single unchanged track boundary for the small copy edit.",
+      "files": [
+        "planning-and-task-breakdown-pr-scope"
+      ],
+      "expectations": [
+        "The import rollout becomes an initiative whose numbered sibling child tracks each own one focused PR outcome; the one capability name, prerequisite chain, and shared user launch do not justify one large implementation track.",
+        "The parent plan and todo index children and integration checkpoints rather than copying their implementation task lists. Each child boundary records outcome, exclusions, acceptance evidence, dependencies or intended PR base, and a safe merge state.",
+        "The upload, preview, execution, and undo dependency chain is preserved. Child work can merge safely with the new path disabled, without claiming that unmerged prerequisites have landed or inventing new capability ids.",
+        "Track 040-empty-import-message stays one small implementation track and PR with its original scope; no initiative or artificial child tracks are added for it.",
+        "No implementation or external mutation occurs; scope authorization is reused without asking for routine approval to split the plan."
+      ]
     }
   ]
 }

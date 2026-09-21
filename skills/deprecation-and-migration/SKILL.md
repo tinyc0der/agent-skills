@@ -182,7 +182,7 @@ the old one            the app                  a later, separate deploy
 4. **Switch reads.** Point the app at `full_name`, keep writing both. Deploy and bake.
 5. **Contract.** Stop writing `name`, then — in a *separate, later* deploy — drop the column.
 
-Each step is independently deployable and reversible: if step 4 misbehaves, roll the code back and `full_name` is still being populated. Treat each phase as a thin, separately mergeable slice on the **same Feature track** — see the `incremental-implementation` skill. Open a **new PR** before the destructive contract; do not spawn Epic child tracks for a column rename. `/build auto` must stop before a destructive contract that is still on this PR. Apply the [delivery fork](../using-agent-skills/SKILL.md#delivery-fork) only when the migration is several independently deliverable features.
+Each step is independently deployable and reversible: if step 4 misbehaves, roll the code back and `full_name` is still being populated. Apply the [delivery fork](../using-agent-skills/SKILL.md#delivery-fork): give separately mergeable stages their own implementation tracks and PRs under a coordination initiative, even for one column rename. Record rollout dependencies and removal evidence in the parent index and each stage's acceptance criteria. Expand and destructive contract must use separate tracks and PRs; `/build auto` cannot cross that boundary on the same branch. Deployment and backfill checkpoints alone do not require extra implementation tracks.
 
 **Rules:**
 - **Additive first, destructive last and alone.** Adds (new nullable column, new table, new index) are safe in any deploy; drops and renames get their own deploy *after* no code references the old shape.
