@@ -2,9 +2,26 @@
 
 ## Unreleased
 
+## 0.7.1
+
+### Added
+
+- `reflect` skill for turning scoped session evidence into verified harness corrections.
+- Grok Build setup, plus Grok as the default runner for delegated implementation and independent verification.
+- Epic parent and child tracks: independently shippable features get their own track, worktree, PR, and verification, with parent `todo.md` indexing children.
+
 ### Changed
 
-- Epic and multi-capability work uses a delivery fork: Feature+map stays one track; independently shippable children get flat sibling tracks; parent `todo.md` indexes children; `/build` and `/verify` on a parent do not stand in for child implementation or integration evidence.
+- Implementation requests include a scoped draft pull-request handoff once the repository, base branch, and access are established.
+- New work branches are created in linked worktrees; the primary checkout stays on the default branch.
+- Pull-request merge methods are chosen from policy, recorded with a head guard, and verified against the landed result.
+- Clone and install URLs, marketplace identity, and setup docs use `tinyc0der/agent-skills`. Codex plugin removal is documented.
+- Feature+map work stays on one track; independently shippable children use the delivery fork. Parent `/build` and `/verify` cover parent planning or assembled-revision integration.
+
+### Fixed
+
+- Delegated sessions stay bounded and recover when a worker does not report completion.
+- Pull-request readiness requires revision-matched verification evidence.
 
 ## 0.7.0
 
