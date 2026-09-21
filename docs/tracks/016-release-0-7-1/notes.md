@@ -9,8 +9,8 @@ status: draft
 
 ## Resume
 
-- Phase and current step: Verification and review recorded for `f49fd66` / tag `0.7.1`. Next is push and PR.
-- Next action: push `chore/release-0.7.1` and annotated tag `0.7.1` to `orgin`, open the PR.
+- Phase and current step: PR https://github.com/tinyc0der/agent-skills/pull/15 is ready at `6b07372`. Merge is a separate endpoint.
+- Next action: wait for authorized merge. Tag `0.7.1` is on `f49fd66`.
 - Sources: [spec](spec.md); [verification](verification.md); [review](review.md); 0.7.0 process in [PR #4](https://github.com/tinyc0der/agent-skills/pull/4).
 
 ## Notes

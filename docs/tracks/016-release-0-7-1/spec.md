@@ -3,7 +3,7 @@ type: Change Specification
 title: Release Agent Skills 0.7.1
 description: Publish plugin manifests and changelog at 0.7.1 for changes merged since 0.7.0.
 status: draft
-workflow_status: in_progress
+workflow_status: awaiting_merge
 role: task
 ---
 
