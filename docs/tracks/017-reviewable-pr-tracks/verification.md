@@ -1,13 +1,13 @@
 ---
 type: Verification Report
 title: Reviewable PR tracks verification
-description: Evidence for the one-PR track rule at implementation revision 040af19.
+description: Evidence for the one-PR track rule and optional stacked-PR handoff at revision d51f1d2.
 status: draft
 ---
 
 # Verification: PASS
 
-Implementation revision: `040af190efe4829a638ce99c20abed5c1199c90e`.
+Implementation revision: `d51f1d2e7faa02688d77164879e86b86445989b8`.
 Base: `1b5f7f3739aad8fc03a441731891fc8dda41edcd` (`main`). Later commits only save track evidence.
 
 ## Acceptance trace
@@ -19,6 +19,13 @@ Base: `1b5f7f3739aad8fc03a441731891fc8dda41edcd` (`main`). Later commits only sa
 | Build and review check the combined PR and handle scope growth | Reviewed delivery fork, build, Git, and review rules; migration expand and destructive contract require separate tracks and PRs | PASS |
 | Skills, adapters, and accepted contract agree | Reviewed all three adapters; command, lifecycle, artifact, and link validators pass; capability spec reconciled | PASS |
 | Behavioral cases and repository checks protect the change | Five planning expectations passed; checks below pass | PASS |
+| Optional stacked-PR handoff preserves ordinary delivery and track checks | Reviewed independent, dependent, and missing-tool paths in planning and Git workflow; no required installation, bundled-skill claim, or weaker merge/worktree rules | PASS |
+
+## Stacked-PR follow-up
+
+The user authorized the optional `gh-stack` reference after the initial review. The follow-up changes two skills and the owning capability spec. Source review confirms: independent tracks use the default branch; dependent work can invoke the external skill with one track per layer/PR; unavailable tooling falls back to ordinary dependent branches or landing prerequisites first. Tests, contract updates, verification, linked worktrees, and merge authority stay with each track.
+
+Reran the 74 script tests, 174 routing checks, skill/command/artifact/lifecycle/reference/Markdown validators, and skill-creator validation for both changed skills. All passed. The final skill lint has no warnings. No wording-only test or repeat agent execution was added for this small instruction change; the prior behavioral evidence below still covers the unchanged track-splitting rule.
 
 ## Behavioral evidence
 
@@ -53,7 +60,7 @@ All commands were run through `rtk`; each exited 0 after the path correction.
 | `claude plugin validate .` | PASS |
 | `git diff main...HEAD --check` | PASS |
 
-[GitHub CI for the implementation](https://github.com/tinyc0der/agent-skills/actions/runs/35584080316) also passed all four jobs, including plugin installation.
+[GitHub CI for the earlier implementation at `040af19`](https://github.com/tinyc0der/agent-skills/actions/runs/35584080316) passed all four jobs, including plugin installation. The PR checks report CI for the latest published head.
 
 ## Limits
 
