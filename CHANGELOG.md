@@ -2,6 +2,17 @@
 
 ## Unreleased
 
+## 0.7.2
+
+### Changed
+
+- Each implementation track owns one focused pull request. Large intent is split before detailed planning, and work that outgrows its track is split before implementation continues. Dependent tracks can use optional `gh-stack`; each layer keeps its own checks, worktree, and merge authority.
+
+### Fixed
+
+- Delegated repairs reuse the original implementation session for bounded fixes, and bounded rereviews reuse the same reviewer. The first review still starts fresh, and a separate verifier is still required when the change is high-risk or the evidence is missing.
+- Delegated workers check each review finding against the current target and the accepted requirements before editing. An unsupported blocker stays open until the reviewer resolves it.
+
 ## 0.7.1
 
 ### Added
