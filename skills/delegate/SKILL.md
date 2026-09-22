@@ -145,7 +145,11 @@ Route failures to the original implementation session for a bounded fix under th
 
 Start the first review in a fresh Codex session with the accepted plan, acceptance criteria, actual diff, and accepted verification evidence, including the separate verifier's report when independence is required. Keep the reviewer separate from implementation throughout the cycle. Review assesses code quality, risks, and the credibility of that evidence. Record the reviewed commit plus any uncommitted changes, or another reproducible snapshot identity. Do not accept an earlier verification or review report after the implementation changes.
 
-When review finds a blocking issue, create a bounded fix task for the original implementation session by default. The worker fixes it and reruns affected checks and project regression gates; obtain fresh independent verification when required, then return the updated revision to the original reviewer. Each rereview checks the fixes, all changes since the prior review, affected surrounding behavior, and current verification evidence, not just the earlier findings. Return a new verdict naming the current target. Use a fresh reviewer when the original is unavailable, its context is too large or unreliable, scope changes substantially, or the user or project requires a new reviewer. Record the reason and carry prior findings and artifacts.
+When review returns actionable findings, give the original implementation session a bounded task to validate and, where justified, fix them. Before editing, the worker checks each finding against the accepted requirements, current target, and relevant code or check evidence. Apply the project's review severity rules: valid Critical or Required findings need fixes within the assigned scope; Optional and Nit suggestions remain optional; FYI needs no change.
+
+Record each finding's disposition and supporting evidence in the existing result artifact. If a finding appears incorrect or unsupported, return the reasoning and evidence, or identify the missing evidence, through the coordinator for the reviewer or coordinator to confirm rejection or reclassification. The implementer cannot silently dismiss a blocker. Keep disputed blockers open until resolved; send unclear findings and fixes outside the assigned scope to the coordinator. Continue other authorized, actionable fixes while those decisions are pending.
+
+After a fix, the worker reruns affected checks and project regression gates; obtain fresh independent verification when required, then return the updated revision to the original reviewer. Each rereview checks the fixes, all changes since the prior review, affected surrounding behavior, and current verification evidence, not just the earlier findings. Return a new verdict naming the current target. Use a fresh reviewer when the original is unavailable, its context is too large or unreliable, scope changes substantially, or the user or project requires a new reviewer. Record the reason and carry prior findings and artifacts.
 
 If review finds missing or unreliable evidence, require the independent pass before accepting the result. Continue authorized, actionable fixes autonomously. If the same blocker persists after two fix attempts without new evidence or an actionable next step, preserve the artifacts and raise the concrete blocker instead of looping indefinitely. Honor Orca's dispatch circuit breaker separately.
 
@@ -166,6 +170,7 @@ Keep the coordinator responsible for integration, any lifecycle checks still req
 | The worker said done, so start the next phase. | Validate authoritative completion and accept its artifacts first. |
 | The implementer's tests passed, so independent verification is done. | The verifier must check the accepted target and return its own evidence. |
 | The coordinator can quickly fix the review findings. | Keep edits with the assigned implementation owner. |
+| The reviewer marked it Required, so implement it. | Check the claim and evidence before editing; disputed blockers stay open until resolved. |
 | Every phase needs another approval. | Continue under existing authorization unless a real gate applies. |
 | A short check timed out, so nudge the child. | Silence does not call for another prompt; use the selected completion path. |
 | The process ended, so the work passed. | Termination proves the attempt ended; acceptance still needs its report and evidence. |
@@ -199,6 +204,7 @@ Apply these checks to the requested execution scope; a plan-only request needs a
 - [ ] Each session received accessible inputs and stayed within its phase and write scope.
 - [ ] Each handoff identifies its target and links accessible local artifacts and skills using the existing workflow's report formats and locations.
 - [ ] Routine verification returned revision-specific evidence marked as self-verification; when independence was required, a separate fresh verifier also returned PASS against the final implementation state.
+- [ ] Actionable findings were checked before edits; decisions and evidence are recorded, optional feedback stayed optional, and the reviewer or coordinator resolved disputed blockers.
 - [ ] When review is required, it covers the final implementation state; blocking findings and required checks are resolved.
 - [ ] Worker resources are accounted for through the live orchestration cleanup contract.
 - [ ] Existing authorization was preserved and the requested endpoint is complete, or a concrete blocker is reported.
