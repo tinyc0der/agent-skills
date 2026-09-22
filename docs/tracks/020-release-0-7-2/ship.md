@@ -7,7 +7,7 @@ status: draft
 
 # Launch Dossier: Agent Skills 0.7.2
 
-**Release inclusion:** This pull request is the version cut. It is not merged, and no deployment identifier exists yet.
+**Release inclusion:** [PR #19](https://github.com/tinyc0der/agent-skills/pull/19) is the version cut. It is open and not merged. No deployment identifier exists yet.
 
 ## Rollout prerequisites
 

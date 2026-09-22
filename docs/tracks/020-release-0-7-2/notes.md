@@ -9,9 +9,9 @@ status: draft
 
 ## Resume
 
-- Phase: REVIEWED, ready for pull-request handoff
-- Next action: push `chore/release-0.7.2` and annotated tag `0.7.2` together, then open the release pull request
-- Sources: [spec](spec.md); [verification](verification.md); [review](review.md); [0.7.1 track](../016-release-0-7-1/notes.md)
+- Phase: PR READY
+- Next action: wait for merge authorization. Use a merge commit with a head guard; do not rebase.
+- Sources: [spec](spec.md); [verification](verification.md); [review](review.md); [PR #19](https://github.com/tinyc0der/agent-skills/pull/19); [0.7.1 track](../016-release-0-7-1/notes.md)
 
 ## Notes
 
@@ -22,6 +22,7 @@ status: draft
 - Observed — track slug is `020-release-0-7-2` because `validate-artifact-paths.js` rejects dots in `NNN-name` ids.
 - Decision — merge to `main` is not authorized by this request. When it is, use a merge commit so the annotated tag stays an ancestor of `main`. A rebase merge would rewrite the tagged commit and fail `validate-versions.js`.
 - Observed — annotated tag `0.7.2` points at `531453b9ae9ba47381ac4653c6366029b018874f`. Repository gates on that tree passed; see [verification](verification.md). Author review found no Critical or Required issues.
+- Observed — [PR #19](https://github.com/tinyc0der/agent-skills/pull/19) is open and ready against `main`. The branch and annotated tag were pushed to `orgin` together. Merge is not authorized.
 
 ## Follow-ups and promotion candidates
 
