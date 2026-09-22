@@ -48,6 +48,14 @@ status: draft
   separate from implementation and inspects the actual target. Failed,
   incomplete, stale, or unauthenticated reports cannot unlock dependent phases.
   Preparation-only requests launch no workers.
+- Before review-driven edits, the implementation worker validates each actionable
+  finding against accepted requirements, the current target, and relevant evidence.
+  Valid Critical or Required findings need fixes within scope; Optional and Nit
+  suggestions remain optional, and FYI needs no change. Record decisions and
+  evidence in existing result artifacts. Incorrect or unsupported findings return
+  through the coordinator for reviewer or coordinator resolution; disputed blockers
+  stay open until resolved. Unclear findings and fixes outside the assigned scope
+  return to the coordinator, while other authorized, actionable fixes may continue.
 - Review fixes return to the implementation worker, followed by verification
   and rereview in the original reviewer session. Each rereview checks the fixes,
   all new changes, affected surrounding behavior, and current evidence; it issues
@@ -67,3 +75,5 @@ it does not implement Orca's lifecycle or notification service.
 [Track 015](../../tracks/015-delegate-grok-defaults/spec.md) records the Grok runner
 defaults. [Track 018](../../tracks/018-delegate-worker-context/spec.md) updates
 session reuse and conditional independent verification while preserving overrides.
+[Track 019](../../tracks/019-delegate-finding-validation/spec.md) adds finding
+validation and evidence-based dispute resolution before repairs.
