@@ -1,0 +1,26 @@
+{
+  "reviewed_revision": "d7bb02a7708b1790b3f03fb0915e5ca25c2fe9d5",
+  "source_blobs": {
+    "hooks/simplify-ignore.sh": "a93c467c3de377b93b304a3c3b92fd03a0dfae0c",
+    "hooks/sdd-cache-pre.sh": "1c16aa073e5cd7ed136514be0121b42835ea27fb",
+    "hooks/sdd-cache-post.sh": "7a9c5b544ef93a6c33c7c32770b71138f868dcd7"
+  },
+  "simplify_hook": {
+    "baseline_exit": 0,
+    "read_hook_exit": 0,
+    "runtime_exit_after_read": 1,
+    "runtime_error": "ReferenceError: preserved is not defined",
+    "stop_hook_exit": 0,
+    "other_tool_edit_preserved": false,
+    "protected_function_restored": true
+  },
+  "cache_freshness": {
+    "post_exit": 0,
+    "cached_body": "version one",
+    "cached_etag": "\"v2\"",
+    "current_origin_body": "version two",
+    "pre_exit": 2,
+    "claims_revalidated": true,
+    "returned_old_body": true
+  }
+}
