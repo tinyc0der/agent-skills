@@ -9,8 +9,8 @@ status: draft
 
 ## Resume
 
-- Phase: PR READY
-- Next action: wait for merge authorization. Use a merge commit with a head guard; do not rebase.
+- Phase: MERGED
+- Next action: none — PR #19 merge-committed to `main` at `6cf420d`
 - Sources: [spec](spec.md); [verification](verification.md); [review](review.md); [PR #19](https://github.com/tinyc0der/agent-skills/pull/19); [0.7.1 track](../016-release-0-7-1/notes.md)
 
 ## Notes
@@ -20,10 +20,22 @@ status: draft
 - Observed — fetch remote is `orgin`. Primary worktree stays on `main`. This worktree is `/Users/maxwell/Projects/AI/agent-skills-release-0.7.2` on `chore/release-0.7.2`, based on `orgin/main` at `a193689d91dbeaa563baf73f7c042d2e58800607`.
 - Observed — open PR #13 stays out of this release.
 - Observed — track slug is `020-release-0-7-2` because `validate-artifact-paths.js` rejects dots in `NNN-name` ids.
-- Decision — merge to `main` is not authorized by this request. When it is, use a merge commit so the annotated tag stays an ancestor of `main`. A rebase merge would rewrite the tagged commit and fail `validate-versions.js`.
 - Observed — annotated tag `0.7.2` points at `531453b9ae9ba47381ac4653c6366029b018874f`. Repository gates on that tree passed; see [verification](verification.md). Author review found no Critical or Required issues.
-- Observed — [PR #19](https://github.com/tinyc0der/agent-skills/pull/19) is open and ready against `main`. The branch and annotated tag were pushed to `orgin` together. Merge is not authorized.
+- Decision — User authorized merge of PR #19. The Git skill's rebase fallback would rewrite `531453b` and leave annotated tag `0.7.2` unreachable from `main`, failing `validate-versions.js`. A merge commit keeps the tag as an ancestor, matching 0.7.0 (PR #4) and 0.7.1 (PR #15). The repository allows merge, squash, and rebase. No prohibitions were recorded. This request did not name a method.
+
+## Merge record
+
+- Method: **merge commit** (`gh pr merge --merge`)
+- Policy source: an already-pushed annotated tag must remain reachable from `main` for `validate-versions.js`. Rebase would rewrite the tagged commit. 0.7.0 and 0.7.1 used a merge commit for the same reason.
+- Prohibitions: none recorded
+- Target: [tinyc0der/agent-skills#19](https://github.com/tinyc0der/agent-skills/pull/19) → `main`
+- Reviewed implementation: `531453b9ae9ba47381ac4653c6366029b018874f` (tag `0.7.2`)
+- Pinned PR head: `e1ff7e600c06c0fdab28c543520569212e4afe78`
+- Invocation: `gh pr merge 19 --repo tinyc0der/agent-skills --merge --match-head-commit e1ff7e600c06c0fdab28c543520569212e4afe78`
+- Outcome: MERGED at 2026-09-22T08:33:21Z
+- Resulting commit on `main`: `6cf420d64ad65da8f7226e057e2ede5005ebc379` (parents `a193689`, `e1ff7e6`; tree matches PR head)
+- Tag ancestry: `0.7.2` is an ancestor of `6cf420d`; `git describe --tags --abbrev=0` reports `0.7.2`
 
 ## Follow-ups and promotion candidates
 
-- None yet. The merge-commit requirement for tagged releases is already recorded on [016-release-0-7-1](../016-release-0-7-1/notes.md).
+- None. The merge-commit requirement for tagged releases is already recorded on [016-release-0-7-1](../016-release-0-7-1/notes.md).

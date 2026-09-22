@@ -7,7 +7,7 @@ status: draft
 
 # Launch Dossier: Agent Skills 0.7.2
 
-**Release inclusion:** [PR #19](https://github.com/tinyc0der/agent-skills/pull/19) is the version cut. It is open and not merged. No deployment identifier exists yet.
+**Release inclusion:** [PR #19](https://github.com/tinyc0der/agent-skills/pull/19) merged to `main` at `6cf420d64ad65da8f7226e057e2ede5005ebc379` on 2026-09-22T08:33:21Z. Annotated tag `0.7.2` is `531453b9ae9ba47381ac4653c6366029b018874f`.
 
 ## Rollout prerequisites
 
@@ -45,13 +45,13 @@ status: draft
 3. Consumers stay on tag `0.7.1` (`f49fd6674622a5da9e34cc8857735d35122f9888`).
 4. Retarget manifests to the restored tag before opening a replacement release.
 
-Deleting a tag that anyone has already fetched is a published-history change and needs a separate decision. Until merge, `main` itself remains `0.7.1`.
+Deleting a tag that anyone has already fetched is a published-history change and needs a separate decision. After this merge, `main` describes as `0.7.2`. Rolling back means a new commit that restores the `0.7.1` manifests and a new tag; do not move `0.7.2`.
 
 ## Ownership
 
-- Release authorization: the user requested the `0.7.2` identity. Merge to `main` is still a separate authorization.
-- Recovery-time target: minutes, by staying on `0.7.1` or reverting the unmerged branch.
+- Release authorization: the user requested the `0.7.2` identity and then authorized the merge.
+- Recovery-time target: minutes, by publishing a follow-up that restores the `0.7.1` manifests.
 
 ## Deployment record
 
-Pending. Append the merge commit after an authorized merge. Do not treat this dossier as a GO for merge.
+Merged to `main` as `6cf420d64ad65da8f7226e057e2ede5005ebc379`. Tag `0.7.2` remains `531453b9ae9ba47381ac4653c6366029b018874f`.
